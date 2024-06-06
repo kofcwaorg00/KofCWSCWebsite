@@ -1,0 +1,88 @@
+﻿@model KofCWSCWebsite.Models.TblValCouncil
+
+@{
+    ViewData["Title"] = "Create";
+}
+
+<h1>Create</h1>
+
+<h4>TblValCouncil</h4>
+<hr />
+<div class="row">
+    <div class="col-md-4">
+        <form asp-action="Create">
+            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+            <div class="form-group">
+                <label asp-for="CNumber" class="control-label"></label>
+                <input asp-for="CNumber" class="form-control" />
+                <span asp-validation-for="CNumber" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="CLocation" class="control-label"></label>
+                <input asp-for="CLocation" class="form-control" />
+                <span asp-validation-for="CLocation" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="CName" class="control-label"></label>
+                <input asp-for="CName" class="form-control" />
+                <span asp-validation-for="CName" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="District" class="control-label"></label>
+                <input asp-for="District" class="form-control" />
+                <span asp-validation-for="District" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="AddInfo1" class="control-label"></label>
+                <input asp-for="AddInfo1" class="form-control" />
+                <span asp-validation-for="AddInfo1" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="AddInfo2" class="control-label"></label>
+                <input asp-for="AddInfo2" class="form-control" />
+                <span asp-validation-for="AddInfo2" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="AddInfo3" class="control-label"></label>
+                <input asp-for="AddInfo3" class="form-control" />
+                <span asp-validation-for="AddInfo3" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="DioceseId" class="control-label"></label>
+                <input asp-for="DioceseId" class="form-control" />
+                <span asp-validation-for="DioceseId" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="Chartered" class="control-label"></label>
+                <input asp-for="Chartered" class="form-control" />
+                <span asp-validation-for="Chartered" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="WebSiteUrl" class="control-label"></label>
+                <input asp-for="WebSiteUrl" class="form-control" />
+                <span asp-validation-for="WebSiteUrl" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="BulletinUrl" class="control-label"></label>
+                <input asp-for="BulletinUrl" class="form-control" />
+                <span asp-validation-for="BulletinUrl" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="Arbalance" class="control-label"></label>
+                <input asp-for="Arbalance" class="form-control" />
+                <span asp-validation-for="Arbalance" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <input type="submit" value="Create" class="btn btn-primary" />
+            </div>
+        </form>
+    </div>
+</div>
+
+<div>
+    <a asp-action="Index">Back to List</a>
+</div>
+
+@section Scripts {
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+}

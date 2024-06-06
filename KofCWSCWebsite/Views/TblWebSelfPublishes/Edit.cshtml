@@ -1,0 +1,54 @@
+﻿@model KofCWSCWebsite.Models.TblWebSelfPublish
+
+@{
+    ViewData["Title"] = "Edit";
+}
+
+<h1>Edit</h1>
+
+<h4>TblWebSelfPublish</h4>
+<hr />
+<div>
+    @Html.Raw(Model.Data)
+
+</div>
+<div class="row">
+    <div class="col-md-4">
+        <form asp-action="Edit">
+            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+            <input type="hidden" asp-for="Url" />
+            <div class="editor-field">
+                <label asp-for="OID" class="control-label"></label>
+                <input asp-for="OID" class="form-control" type="number" />
+                <span asp-validation-for="OID" class="text-danger"></span>
+            </div>
+            <div class="editor-field">
+                @* <label asp-for="Data" class="control-label"></label> *@
+                @* <input asp-for="Data" class="form-control" type="textarea" style="overflow-y:scroll;overflow-x:scroll;resize:none; height:1000px;width:1000px" /> *@
+                @* had to use style width to get this to work.  cols didn't seem to work*@
+                <label class="control-lable" style="font-weight:bold">Raw HTML - <a href="https://onlinehtmleditor.dev/" target="_blank">Copy/Paste From Editor</a> and Press<br /><span style="color:#0d6efd">Blue SAVE Button</span> at Bottom of Form</label>
+                <textarea asp-for="Data" class="form-control" rows="50" cols="240" style="width:1200px"></textarea>
+                <span asp-validation-for="Data" class="text-danger"></span>
+            </div>
+            <div class="editor-field">
+                @* <label asp-for="OID" class="control-label"></label> *@
+                @* <input asp-for="OID" class="form-control" type="number" /> *@
+                @* <span asp-validation-for="OID" class="text-danger"></span> *@
+                @* <input type="hidden" asp-for="OID" /> *@
+            </div>
+            <div class="form-group">
+                <input type="submit" value="Save" class="btn btn-primary" />
+            </div>
+        </form>
+    </div>
+</div>
+
+<div>
+    <a asp-action="Index">Back to List</a>
+</div>
+
+@section Scripts {
+    @{
+        await Html.RenderPartialAsync("_ValidationScriptsPartial");
+    }
+}

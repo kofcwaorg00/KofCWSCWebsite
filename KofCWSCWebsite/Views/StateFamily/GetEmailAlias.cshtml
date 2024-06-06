@@ -1,0 +1,47 @@
+﻿@model IEnumerable<KofCWSCWebsite.Models.SPGetEmailAlias>
+@*
+    For more information on enabling MVC for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
+    *@
+@{
+}
+<table class="table" style="width:100%">
+    <tr>
+        <td class="MyColHdr" style="text-align:center">
+            <h3> What is and email Alias?</h3>
+        </td>
+    </tr>
+    <tr>
+        <td>
+            <p>
+                An email alias is an easy way to consistently send email to the appropriate individuals in a Domain without knowing their personal email address. For instance, if I want to send email to my District Deputy, I send it to DD12@kofc-wa.org. I can send email to that address all the time and it will always get to the Current District Deputy for District 12 (even when that DD changes) We currently support the following email aliases, all are to be used with the Domain kofc-wa.org, i.e. DD12@kofc-wa.org :
+            </p>
+        </td>
+    </tr>
+</table>
+
+
+<table class="table" style="width:100%">
+    <thead>
+        <tr>
+            <th class="MyColHdr">
+                @Html.DisplayNameFor(model => model.Office)
+            </th>
+            <th class="MyColHdr">
+                @Html.DisplayNameFor(model => model.Alias)
+            </th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var item in Model)
+        {
+            <tr>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Office)
+                </td>
+                <td>
+                    @Html.Raw(item.Alias)
+                </td>
+            </tr>
+        }
+        </tbody>
+    </table>

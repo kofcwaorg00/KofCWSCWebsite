@@ -1,0 +1,5 @@
+﻿@KofCWSCWebsite_HostAddress = https://localhost:7213
+
+GET {{KofCWSCWebsite_HostAddress}}/tblmasmembers/index/{id}
+
+###

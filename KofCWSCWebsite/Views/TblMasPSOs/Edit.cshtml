@@ -1,0 +1,59 @@
+﻿@model KofCWSCWebsite.Models.TblMasPso
+
+@{
+    ViewData["Title"] = "Edit";
+}
+
+<h1>Edit</h1>
+
+<h4>TblMasPso</h4>
+<hr />
+<div class="row">
+    <div class="col-md-4">
+        <form asp-action="Edit">
+            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+            <input type="hidden" asp-for="Id" />
+            <div class="form-group">
+                <label asp-for="Year" class="control-label"></label>
+                <input asp-for="Year" class="form-control" />
+                <span asp-validation-for="Year" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="StateDeputy" class="control-label"></label>
+                <input asp-for="StateDeputy" class="form-control" />
+                <span asp-validation-for="StateDeputy" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="StateSecretary" class="control-label"></label>
+                <input asp-for="StateSecretary" class="form-control" />
+                <span asp-validation-for="StateSecretary" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="StateTreasurer" class="control-label"></label>
+                <input asp-for="StateTreasurer" class="form-control" />
+                <span asp-validation-for="StateTreasurer" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="StateAdvocate" class="control-label"></label>
+                <input asp-for="StateAdvocate" class="form-control" />
+                <span asp-validation-for="StateAdvocate" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="StateWarden" class="control-label"></label>
+                <input asp-for="StateWarden" class="form-control" />
+                <span asp-validation-for="StateWarden" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <input type="submit" value="Save" class="btn btn-primary" />
+            </div>
+        </form>
+    </div>
+</div>
+
+<div>
+    <a asp-action="Index">Back to List</a>
+</div>
+
+@section Scripts {
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+}

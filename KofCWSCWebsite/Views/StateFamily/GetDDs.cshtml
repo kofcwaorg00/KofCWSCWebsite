@@ -1,0 +1,50 @@
+﻿@model IEnumerable<KofCWSCWebsite.Models.SPGetDDs>
+@*
+    For more information on enabling MVC for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
+    *@
+@{
+}
+<table class="table">
+    <tr>
+        <td colspan="4" style="text-align:center">
+            <h3 class="MyPageHdr">State of Washington District Deputies</h3>
+        </td>
+    </tr>
+</table>
+<table class="table">
+    <thead>
+        <tr>
+            <th class="MyColHdr" style="text-align:center">
+                @Html.DisplayNameFor(model => model.DistrictI)
+            </th>
+            <th class="MyColHdr">
+                @Html.DisplayNameFor(model => model.FullName)
+            </th>
+            <th class="MyColHdr">
+                @Html.DisplayNameFor(model => model.AssignedCouncils)
+            </th>
+            <th class="MyColHdr">
+                @Html.DisplayNameFor(model => model.Email)
+            </th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var item in Model)
+        {
+            <tr>
+                <td style="text-align:center">
+                    @Html.DisplayFor(modelItem => item.DistrictI)
+                </td>
+                <td>
+                    @Html.Raw(item.FullName)
+                </td>
+                <td>
+                    @Html.Raw(item.AssignedCouncils)
+                </td>
+                <td>
+                    @Html.Raw(item.Email)
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>

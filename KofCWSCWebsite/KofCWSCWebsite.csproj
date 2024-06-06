@@ -1,0 +1,134 @@
+﻿<Project Sdk="Microsoft.NET.Sdk.Web">
+
+  <PropertyGroup>
+    <TargetFramework>net8.0</TargetFramework>
+    <Nullable>enable</Nullable>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <UserSecretsId>aspnet-KofCWSCWebsite-8a447859-612b-4d14-8db6-3de2955bd6e2</UserSecretsId>
+    <SatelliteResourceLanguages>en</SatelliteResourceLanguages>
+    <AspNetCoreHostingModel>OutOfProcess</AspNetCoreHostingModel>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <Compile Remove="GenOutput\**" />
+    <Compile Remove="Pages\Community\**" />
+    <Compile Remove="Pages\Faith\**" />
+    <Compile Remove="Pages\Family\**" />
+    <Compile Remove="Pages\Home\**" />
+    <Compile Remove="Pages\Life\**" />
+    <Compile Remove="Pages\Membership Pages\**" />
+    <Compile Remove="Pages\Other\**" />
+    <Compile Remove="Pages\StateFamily\**" />
+    <Compile Remove="wwwroot\files\pdf\**" />
+    <Content Remove="GenOutput\**" />
+    <Content Remove="Pages\Community\**" />
+    <Content Remove="Pages\Faith\**" />
+    <Content Remove="Pages\Family\**" />
+    <Content Remove="Pages\Home\**" />
+    <Content Remove="Pages\Life\**" />
+    <Content Remove="Pages\Membership Pages\**" />
+    <Content Remove="Pages\Other\**" />
+    <Content Remove="Pages\StateFamily\**" />
+    <Content Remove="wwwroot\files\pdf\**" />
+    <EmbeddedResource Remove="GenOutput\**" />
+    <EmbeddedResource Remove="Pages\Community\**" />
+    <EmbeddedResource Remove="Pages\Faith\**" />
+    <EmbeddedResource Remove="Pages\Family\**" />
+    <EmbeddedResource Remove="Pages\Home\**" />
+    <EmbeddedResource Remove="Pages\Life\**" />
+    <EmbeddedResource Remove="Pages\Membership Pages\**" />
+    <EmbeddedResource Remove="Pages\Other\**" />
+    <EmbeddedResource Remove="Pages\StateFamily\**" />
+    <EmbeddedResource Remove="wwwroot\files\pdf\**" />
+    <None Remove="GenOutput\**" />
+    <None Remove="Pages\Community\**" />
+    <None Remove="Pages\Faith\**" />
+    <None Remove="Pages\Family\**" />
+    <None Remove="Pages\Home\**" />
+    <None Remove="Pages\Life\**" />
+    <None Remove="Pages\Membership Pages\**" />
+    <None Remove="Pages\Other\**" />
+    <None Remove="Pages\StateFamily\**" />
+    <None Remove="wwwroot\files\pdf\**" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Compile Remove="Pages\Index.cshtml.cs" />
+    <Compile Remove="Services\ConfigureSerilogLogging.cs" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Content Remove="Pages\Index.cshtml" />
+    <Content Remove="Pages\Shared\_Layout.cshtml" />
+    <Content Remove="Pages\Shared\_LoginPartial.cshtml" />
+    <Content Remove="wwwroot\files\Faith\HolyHour.html" />
+    <Content Remove="wwwroot\files\Faith\IntoTheBreach.html" />
+    <Content Remove="wwwroot\files\Faith\Kiosk.html" />
+    <Content Remove="wwwroot\files\Faith\MarianPrayer.html" />
+    <Content Remove="wwwroot\files\Faith\Rosary.html" />
+    <Content Remove="wwwroot\files\Faith\RSVP.html" />
+    <Content Remove="wwwroot\files\Faith\SacNewGifts.html" />
+    <Content Remove="wwwroot\files\Faith\SpiritualReflection.html" />
+    <Content Remove="wwwroot\files\Family\ConsecrationToTheHolyFamily.html" />
+    <Content Remove="wwwroot\files\Family\FamilyFullyAlive.html" />
+    <Content Remove="wwwroot\files\Family\FamilyOfMonthYear.html" />
+    <Content Remove="wwwroot\files\Family\FamilyPrayerNight.html" />
+    <Content Remove="wwwroot\files\Family\FamilyWeek.html" />
+    <Content Remove="wwwroot\files\Family\FoodForFamilies.html" />
+    <Content Remove="wwwroot\files\Family\GoodFridayFamilyPromotion.html" />
+    <Content Remove="wwwroot\files\Family\KeepChristInChristmas.html" />
+    <Content Remove="wwwroot\files\Life\MarchForLife.html" />
+    <Content Remove="wwwroot\files\Life\MassSN.html" />
+    <Content Remove="wwwroot\files\Life\Novena.html" />
+    <Content Remove="wwwroot\files\Life\PCS.html" />
+    <Content Remove="wwwroot\files\Life\Refugee.html" />
+    <Content Remove="wwwroot\files\Life\SilverRose.html" />
+    <Content Remove="wwwroot\files\Life\SpecialOlympics.html" />
+    <Content Remove="wwwroot\files\Life\Ultrasound.html" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <None Remove="Pages\Shared\_Layout.cshtml.css" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <None Include="Pages\Error.cshtml" />
+    <None Include="Pages\Privacy.cshtml" />
+    <None Include="Pages\Shared\_ValidationScriptsPartial.cshtml" />
+    <None Include="Pages\_ViewImports.cshtml" />
+    <None Include="Pages\_ViewStart.cshtml" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Azure.Extensions.AspNetCore.Configuration.Secrets" Version="1.3.1" />
+    <PackageReference Include="Azure.Identity" Version="1.11.2" />
+    <PackageReference Include="Azure.Security.KeyVault.Secrets" Version="4.6.0" />
+    <PackageReference Include="IKVM" Version="8.8.0" />
+    <PackageReference Include="Microsoft.ApplicationInsights.AspNetCore" Version="2.22.0" />
+    <PackageReference Include="Microsoft.AspNetCore.Diagnostics.EntityFrameworkCore" Version="8.0.4" />
+    <PackageReference Include="Microsoft.AspNetCore.Identity.EntityFrameworkCore" Version="8.0.4" />
+    <PackageReference Include="Microsoft.AspNetCore.Identity.UI" Version="8.0.4" />
+    <PackageReference Include="Microsoft.Azure.AppConfiguration.AspNetCore" Version="7.2.0" />
+    <PackageReference Include="Microsoft.Azure.KeyVault" Version="3.0.5" />
+    <PackageReference Include="Microsoft.EntityFrameworkCore.SqlServer" Version="8.0.4" />
+    <PackageReference Include="Microsoft.EntityFrameworkCore.Tools" Version="8.0.4">
+      <PrivateAssets>all</PrivateAssets>
+      <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+    </PackageReference>
+    <PackageReference Include="Microsoft.VisualStudio.Web.CodeGeneration.Design" Version="8.0.2" />
+    <PackageReference Include="Serilog.AspNetCore" Version="8.0.1" />
+    <PackageReference Include="Serilog.Enrichers.Thread" Version="3.1.0" />
+    <PackageReference Include="Serilog.Settings.Configuration" Version="8.0.0" />
+    <PackageReference Include="Serilog.Sinks.ApplicationInsights" Version="4.0.0" />
+    <PackageReference Include="Serilog.Sinks.Slack" Version="2.2.2" />
+    <PackageReference Include="System.Net.Http.Formatting.Extension" Version="5.2.3" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Folder Include="wwwroot\files\Awards\" />
+    <Folder Include="wwwroot\files\Bulletins\2024\" />
+    <Folder Include="wwwroot\files\StateFamily\GK\" />
+    <Folder Include="wwwroot\images\FourthDegOfficers\" />
+  </ItemGroup>
+
+</Project>

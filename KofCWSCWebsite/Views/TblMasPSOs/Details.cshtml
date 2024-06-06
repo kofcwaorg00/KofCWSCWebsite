@@ -1,0 +1,54 @@
+﻿@model KofCWSCWebsite.Models.TblMasPso
+
+@{
+    ViewData["Title"] = "Details";
+}
+
+<h1>Details</h1>
+
+<div>
+    <h4>TblMasPso</h4>
+    <hr />
+    <dl class="row">
+        <dt class = "col-sm-2">
+            @Html.DisplayNameFor(model => model.Year)
+        </dt>
+        <dd class = "col-sm-10">
+            @Html.DisplayFor(model => model.Year)
+        </dd>
+        <dt class = "col-sm-2">
+            @Html.DisplayNameFor(model => model.StateDeputy)
+        </dt>
+        <dd class = "col-sm-10">
+            @Html.DisplayFor(model => model.StateDeputy)
+        </dd>
+        <dt class = "col-sm-2">
+            @Html.DisplayNameFor(model => model.StateSecretary)
+        </dt>
+        <dd class = "col-sm-10">
+            @Html.DisplayFor(model => model.StateSecretary)
+        </dd>
+        <dt class = "col-sm-2">
+            @Html.DisplayNameFor(model => model.StateTreasurer)
+        </dt>
+        <dd class = "col-sm-10">
+            @Html.DisplayFor(model => model.StateTreasurer)
+        </dd>
+        <dt class = "col-sm-2">
+            @Html.DisplayNameFor(model => model.StateAdvocate)
+        </dt>
+        <dd class = "col-sm-10">
+            @Html.DisplayFor(model => model.StateAdvocate)
+        </dd>
+        <dt class = "col-sm-2">
+            @Html.DisplayNameFor(model => model.StateWarden)
+        </dt>
+        <dd class = "col-sm-10">
+            @Html.DisplayFor(model => model.StateWarden)
+        </dd>
+    </dl>
+</div>
+<div>
+    <a asp-action="Edit" asp-route-id="@Model?.Id">Edit</a> |
+    <a asp-action="Index">Back to List</a>
+</div>

@@ -1,0 +1,108 @@
+﻿@model IEnumerable<KofCWSCWebsite.Models.TblValAssy>
+
+@{
+    ViewData["Title"] = "Assemblies";
+}
+
+<h3 class="MyPageHdr">Washington State Assemblies</h3>
+<p>
+    <input type="text" id="myAnumber" onkeyup="myFunction1()" placeholder="Type in an Assembly Number to filter results" title="Type in a number" style="width:25%">
+    <input type="text" id="myAname" onkeyup="myFunction2()" placeholder="Type in an Assembly Name to filter results" title="Type in a name" style="width:25%">
+</p>
+
+@if (User.IsInRole("Admin"))
+{
+    <p>
+        <a asp-action="Create">Create New</a>
+    </p>
+}
+<table class="table" id="myTable">
+    <thead>
+        <tr>
+            <th class="MyColHdr" style="text-align:center">
+                @Html.DisplayNameFor(model => model.ANumber)
+            </th>
+            <th class="MyColHdr">
+                @Html.DisplayNameFor(model => model.ALocation)
+            </th>
+            <th class="MyColHdr">
+                @Html.DisplayNameFor(model => model.AName)
+            </th>
+            <th class="MyColHdr">
+                Meeting Times/Locations
+            </th>
+            <th class="MyColHdr" style="text-align:center">
+                @Html.DisplayNameFor(model => model.MasterLoc)
+            </th>
+            <th class="MyColHdr"></th>
+        </tr>
+    </thead>
+    <tbody>
+@foreach (var item in Model) {
+        <tr>
+            <td style="text-align:center">
+                @Html.DisplayFor(modelItem => item.ANumber)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.ALocation)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.AName)
+            </td>
+            <td>
+                    @Html.DisplayFor(modelItem => item.AddInfo1)@Html.DisplayFor(modelItem => item.AddInfo3)
+            </td>
+            <td style="text-align:center">
+                @Html.DisplayFor(modelItem => item.MasterLoc)
+            </td>
+            <td>
+                    @if (User.IsInRole("Admin"))
+                    {
+                <a asp-action="Edit" asp-route-id="@item.ANumber">Edit</a>
+                <a asp-action="Details" asp-route-id="@item.ANumber">Details</a>
+                <a asp-action="Delete" asp-route-id="@item.ANumber">Delete</a>
+                    }
+            </td>
+        </tr>
+}
+    </tbody>
+</table>
+
+<script>
+    function myFunction1() {
+        var input, filter, table, tr, td, i, txtValue;
+        input = document.getElementById("myAnumber");
+        filter = input.value.toUpperCase();
+        table = document.getElementById("myTable");
+        tr = table.getElementsByTagName("tr");
+        for (i = 0; i < tr.length; i++) {
+            td = tr[i].getElementsByTagName("td")[0];
+            if (td) {
+                txtValue = td.textContent || td.innerText;
+                if (txtValue.toUpperCase().indexOf(filter) > -1) {
+                    tr[i].style.display = "";
+                } else {
+                    tr[i].style.display = "none";
+                }
+            }
+        }
+    }
+    function myFunction2() {
+        var input, filter, table, tr, td, i, txtValue;
+        input = document.getElementById("myAname");
+        filter = input.value.toUpperCase();
+        table = document.getElementById("myTable");
+        tr = table.getElementsByTagName("tr");
+        for (i = 0; i < tr.length; i++) {
+            td = tr[i].getElementsByTagName("td")[2];
+            if (td) {
+                txtValue = td.textContent || td.innerText;
+                if (txtValue.toUpperCase().indexOf(filter) > -1) {
+                    tr[i].style.display = "";
+                } else {
+                    tr[i].style.display = "none";
+                }
+            }
+        }
+    }
+</script>

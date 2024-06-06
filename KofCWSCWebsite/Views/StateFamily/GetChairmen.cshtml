@@ -1,0 +1,52 @@
+﻿@model IEnumerable<KofCWSCWebsite.Models.SPGetChairmen>
+@*
+    For more information on enabling MVC for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
+    *@
+@{
+}
+<table class="table" style="width:75%">
+    <tr>
+        <td style="text-align:center; font-weight:bold">
+            <h3>State Chairmen and Directors 2023-2024</h3>
+        </td>
+    </tr>
+</table>
+
+
+<table class="table" style="width:75%">
+    <thead>
+        <tr>
+            <th class="MyColHdr" style="width:40%">
+                @Html.DisplayNameFor(model => model.Chairmanship)
+            </th>
+            <th class="MyColHdr" style="width:20%">
+                @Html.DisplayNameFor(model => model.FullName)
+            </th>
+            <th class="MyColHdr" style="width:10%">
+                @Html.DisplayNameFor(model => model.Council)
+            </th>
+            <th class="MyColHdr" style="width:30%">
+                @Html.DisplayNameFor(model => model.Email)
+            </th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var item in Model)
+        {
+            <tr>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Chairmanship)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.FullName)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Council)
+                </td>
+                <td>
+                    @Html.Raw(item.Email)
+                </td>
+            </tr>
+        }
+        </tbody>
+    </table>

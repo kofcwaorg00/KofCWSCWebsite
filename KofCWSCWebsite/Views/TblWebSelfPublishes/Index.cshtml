@@ -1,0 +1,68 @@
+﻿@model IEnumerable<KofCWSCWebsite.Models.TblWebSelfPublish>
+
+@{
+    ViewData["Title"] = "Index";
+}
+
+<h1>Index</h1>
+<p>
+    <input type="text" id="myInput" onkeyup="myFunction()" placeholder="Type in a URL text to filter results" title="Type in a name" style="width:25%">
+</p>
+<p>
+    <a asp-action="Create">Create New</a>
+</p>
+<table class="table" id="myTable" style="table-layout:fixed">
+    <thead>
+        <tr>
+            <th style="width:200px">
+                @Html.DisplayNameFor(model => model.Url)
+            </th>
+            <th style="width:700px">
+                @Html.DisplayNameFor(model => model.Data)
+            </th>
+            <th style="width:50px">
+                @Html.DisplayNameFor(model => model.OID)
+            </th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+@foreach (var item in Model) {
+        <tr>
+            <td>
+                @Html.DisplayFor(modelItem => item.Url)
+            </td>
+            <td>
+                @Html.Raw(item.Data)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.OID)
+            </td>
+            <td>
+                    <a asp-action="Edit" asp-route-id="@item.Url">Edit</a>&nbsp;|&nbsp;<a asp-action="Details" asp-route-id="@item.Url">Details</a>&nbsp;|&nbsp;<a asp-action="Delete" asp-route-id="@item.Url">Delete</a>
+            </td>
+        </tr>
+}
+    </tbody>
+</table>
+
+<script>
+    function myFunction() {
+        var input, filter, table, tr, td, i, txtValue;
+        input = document.getElementById("myInput");
+        filter = input.value.toUpperCase();
+        table = document.getElementById("myTable");
+        tr = table.getElementsByTagName("tr");
+        for (i = 0; i < tr.length; i++) {
+            td = tr[i].getElementsByTagName("td")[0];
+            if (td) {
+                txtValue = td.textContent || td.innerText;
+                if (txtValue.toUpperCase().indexOf(filter) > -1) {
+                    tr[i].style.display = "";
+                } else {
+                    tr[i].style.display = "none";
+                }
+            }
+        }
+    }
+</script>

@@ -1,0 +1,53 @@
+﻿@model KofCWSCWebsite.Models.TblMasAward
+
+@{
+    ViewData["Title"] = "Create";
+}
+
+<h1>Create</h1>
+
+<h4>TblMasAward</h4>
+<hr />
+<div class="row">
+    <div class="col-md-4">
+        <form asp-action="Create">
+            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+            <div class="form-group">
+                <label asp-for="AwardName" class="control-label"></label>
+                <input asp-for="AwardName" class="form-control" />
+                <span asp-validation-for="AwardName" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="AwardDescription" class="control-label"></label>
+                <input asp-for="AwardDescription" class="form-control" />
+                <span asp-validation-for="AwardDescription" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="AwardDueDate" class="control-label"></label>
+                <input asp-for="AwardDueDate" class="form-control" />
+                <span asp-validation-for="AwardDueDate" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="LinkToTheAwardForm" class="control-label"></label>
+                <input asp-for="LinkToTheAwardForm" class="form-control" />
+                <span asp-validation-for="LinkToTheAwardForm" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="AwardSubmissionEmailAddress" class="control-label"></label>
+                <input asp-for="AwardSubmissionEmailAddress" class="form-control" />
+                <span asp-validation-for="AwardSubmissionEmailAddress" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <input type="submit" value="Create" class="btn btn-primary" />
+            </div>
+        </form>
+    </div>
+</div>
+
+<div>
+    <a asp-action="Index">Back to List</a>
+</div>
+
+@section Scripts {
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+}

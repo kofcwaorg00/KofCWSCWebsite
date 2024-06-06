@@ -1,0 +1,202 @@
+﻿@using System.Web;
+@using Microsoft.AspNetCore.Html
+
+@model IEnumerable<KofCWSCWebsite.Models.SPGetSOS>
+@{
+    ViewData["Title"] = "Home Page";
+}
+
+<html>
+<head>
+    <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.css" />
+    <link rel="stylesheet" href="~/lib/bootstrap/dist/js/bootstrap.js" />
+
+</head>
+<body>
+    <div class="card-group">
+        <div class="card">
+            <a asp-area="" asp-controller="SP" asp-action="GetChairmanInfoBlock" asp-route-id="9"><img src="~/images/faithfade.png" class="card-img-top" alt="Faith"></a>
+            @*             <a href="~/Faith/Faith"><img src="~/images/faithfade.png" class="card-img-top" alt="Faith"></a> *@
+            <div class="card-body">
+                <p class="card-text"><a class="MyMenuLink" asp-area="" asp-controller="SP" asp-action="GetChairmanInfoBlock" asp-route-id="36">RSVP</a></p>
+                <p class="card-text"><a class="MyMenuLink" asp-area="" asp-controller="SP" asp-action="GetChairmanInfoBlock" asp-route-id="205">Into the Breach</a></p>
+                <p class="card-text"><a class="MyMenuLink" asp-area="" asp-controller="SP" asp-action="GetChairmanInfoBlock" asp-route-id="166">Marian Icon Prayer Program</a></p>
+                <p class="card-text"><a class="MyMenuLink" asp-area="" asp-controller="SP" asp-action="GetChairmanInfoBlock" asp-route-id="207">Building the Domestic Church Kiosk</a></p>
+                <p class="card-text"><a class="MyMenuLink" asp-area="" asp-controller="SP" asp-action="GetChairmanInfoBlock" asp-route-id="208">Rosary Program</a></p>
+                <p class="card-text"><a class="MyMenuLink" asp-area="" asp-controller="SP" asp-action="GetChairmanInfoBlock" asp-route-id="210">Spiritual Reflection</a></p>
+                <p class="card-text"><a class="MyMenuLink" asp-area="" asp-controller="SP" asp-action="GetChairmanInfoBlock" asp-route-id="267">Holy Hour</a></p>
+                <p class="card-text"><a class="MyMenuLink" asp-area="" asp-controller="SP" asp-action="GetChairmanInfoBlock" asp-route-id="266">Sacramental Gifts</a></p>
+            </div>
+        </div>
+        <div class="card">
+            <a asp-area="" asp-controller="SP" asp-action="GetChairmanInfoBlock" asp-route-id="11"><img src="~/images/CommunityFade.png" class="card-img-top" alt="Community"></a>
+            <div class="card-body">
+                <p class="card-text"><a class="MyMenuLink" asp-area="" asp-controller="SP" asp-action="GetChairmanInfoBlock" asp-route-id="231">Coats for Kids</a></p>
+                <p class="card-text"><a class="MyMenuLink" asp-area="" asp-controller="SP" asp-action="GetChairmanInfoBlock" asp-route-id="172">Global Wheelchair Mission</a></p>
+                <p class="card-text"><a class="MyMenuLink" asp-area="" asp-controller="SP" asp-action="GetChairmanInfoBlock" asp-route-id="221">Habitat For Humanity</a></p>
+                <p class="card-text"><a class="MyMenuLink" asp-area="" asp-controller="SP" asp-action="GetChairmanInfoBlock" asp-route-id="269">Disaster Prepardness</a></p>
+                <p class="card-text"><a class="MyMenuLink" asp-area="" asp-controller="SP" asp-action="GetChairmanInfoBlock" asp-route-id="235">Free Throw Championship</a></p>
+                <p class="card-text"><a class="MyMenuLink" asp-area="" asp-controller="SP" asp-action="GetChairmanInfoBlock" asp-route-id="222">Catholic Citizenship Essay Contest</a></p>
+                <p class="card-text"><a class="MyMenuLink" asp-area="" asp-controller="SP" asp-action="GetChairmanInfoBlock" asp-route-id="236">Soccer Challenge</a></p>
+                <p class="card-text"><a class="MyMenuLink" asp-area="" asp-controller="SP" asp-action="GetChairmanInfoBlock" asp-route-id="270">Helping Hands</a></p>
+                <p class="card-text"><a class="MyMenuLink" asp-area="" asp-controller="SP" asp-action="GetChairmanInfoBlock" asp-route-id="271">Catholic Community Services</a></p>
+                <p class="card-text"><a class="MyMenuLink" asp-area="" asp-controller="SP" asp-action="GetChairmanInfoBlock" asp-route-id="257">One Parish One Prisoner</a></p>
+                <p class="card-text"><a class="MyMenuLink" href="https://www.knightscommunityhospitalequipmentloanprogram.com/" target="_blank">KC Help</a></p>
+            </div>
+        </div>
+        <div class="card">
+            <a asp-area="" asp-controller="SP" asp-action="GetChairmanInfoBlock" asp-route-id="15"><img src="~/images/FamilyFade.png" class="card-img-top" alt="Family"></a>
+            <div class="card-body">
+                <p class="card-text"><a class="MyMenuLink" asp-area="" asp-controller="SP" asp-action="GetChairmanInfoBlock" asp-route-id="272">Food For Families</a></p>
+                <p class="card-text"><a class="MyMenuLink" asp-area="" asp-controller="SP" asp-action="GetChairmanInfoBlock" asp-route-id="273">Family of the Month/Year</a></p>
+                <p class="card-text"><a class="MyMenuLink" asp-area="" asp-controller="SP" asp-action="GetChairmanInfoBlock" asp-route-id="68">Keep Christ in Christmas</a></p>
+                <p class="card-text"><a class="MyMenuLink" asp-area="" asp-controller="SP" asp-action="GetChairmanInfoBlock" asp-route-id="274">Family Fully Alive</a></p>
+                <p class="card-text"><a class="MyMenuLink" asp-area="" asp-controller="SP" asp-action="GetChairmanInfoBlock" asp-route-id="275">Family Week</a></p>
+                <p class="card-text"><a class="MyMenuLink" asp-area="" asp-controller="SP" asp-action="GetChairmanInfoBlock" asp-route-id="276">Consecration to the Holy Family</a></p>
+                <p class="card-text"><a class="MyMenuLink" asp-area="" asp-controller="SP" asp-action="GetChairmanInfoBlock" asp-route-id="277">Family Prayer Night</a></p>
+                <p class="card-text"><a class="MyMenuLink" asp-area="" asp-controller="SP" asp-action="GetChairmanInfoBlock" asp-route-id="278">Good Friday Family Promotion</a></p>
+            </div>
+        </div>
+        <div class="card">
+            <a asp-area="" asp-controller="SP" asp-action="GetChairmanInfoBlock" asp-route-id="37"><img src="~/images/LifeFade.png" class="card-img-top" alt="Life"></a>
+            <div class="card-body">
+                <p class="card-text"><a class="MyMenuLink" asp-area="" asp-controller="SP" asp-action="GetChairmanInfoBlock" asp-route-id="279">Marches for Life</a></p>
+                <p class="card-text"><a class="MyMenuLink" asp-area="" asp-controller="SP" asp-action="GetChairmanInfoBlock" asp-route-id="140">Special Olympics</a></p>
+                <p class="card-text"><a class="MyMenuLink" href="https://kofc-wa.org/CCNET/TootsieRollProgram.aspx" target="_blank">Tootsie Roll Program</a></p>
+                <p class="card-text"><a class="MyMenuLink" asp-area="" asp-controller="SP" asp-action="GetChairmanInfoBlock" asp-route-id="280">Ultrasound Initiative</a></p>
+                <p class="card-text"><a class="MyMenuLink" asp-area="" asp-controller="SP" asp-action="GetChairmanInfoBlock" asp-route-id="281">Christian Refugee Relief</a></p>
+                <p class="card-text"><a class="MyMenuLink" asp-area="" asp-controller="SP" asp-action="GetChairmanInfoBlock" asp-route-id="220">Silver Rose</a></p>
+                <p class="card-text"><a class="MyMenuLink" asp-area="" asp-controller="SP" asp-action="GetChairmanInfoBlock" asp-route-id="282">Mass for People with Special Needs</a></p>
+                <p class="card-text"><a class="MyMenuLink" asp-area="" asp-controller="SP" asp-action="GetChairmanInfoBlock" asp-route-id="283">Pregnancy Center Support</a></p>
+                <p class="card-text"><a class="MyMenuLink" asp-area="" asp-controller="SP" asp-action="GetChairmanInfoBlock" asp-route-id="284">Novena for Life</a></p>
+                <p class="card-text"><a class="MyMenuLink" asp-area="" asp-controller="SP" asp-action="GetChairmanInfoBlock" asp-route-id="285">ASAP (Aid and Support After Pregnacy)</a></p>
+                <p class="card-text"><a class="MyMenuLink" href="/files/Life/LAMB1882.pdf" target="_blank">L.A.M.B. 1882</a></p>
+            </div>
+        </div>
+    </div>
+
+
+    <div id="carouselKofC" class="carousel carousel-dark slide" data-bs-ride="true" data-bs-interval="50000">
+        <div class="carousel-indicators">
+            <button type="button" data-bs-target="#carouselExampleDark" data-bs-slide-to="0" class="active" aria-current="true" aria-label="Slide 1"></button>
+            <button type="button" data-bs-target="#carouselExampleDark" data-bs-slide-to="1" aria-label="Slide 2"></button>
+            <button type="button" data-bs-target="#carouselExampleDark" data-bs-slide-to="2" aria-label="Slide 3"></button>
+            <button type="button" data-bs-target="#carouselExampleDark" data-bs-slide-to="3" aria-label="Slide 4"></button>
+            <button type="button" data-bs-target="#carouselExampleDark" data-bs-slide-to="4" aria-label="Slide 5"></button>
+            <button type="button" data-bs-target="#carouselExampleDark" data-bs-slide-to="5" aria-label="Slide 6"></button>
+            <button type="button" data-bs-target="#carouselExampleDark" data-bs-slide-to="6" aria-label="Slide 7"></button>
+        </div>
+        <div class="carousel-inner">
+            @foreach (var item in Model)
+            {
+                <div class="@Html.Raw(item.Class)" style="height:350px">
+                    <div>
+                        <h5>@Html.DisplayFor(modelItem => item.FullName)</h5>
+                    </div>
+                    <img class="d-block" alt="First slide" style="width:200px;float:left; padding:5px" src="@Html.Raw(item.Photo)" />
+                    <div>
+
+                        @* <h5>@Html.DisplayFor(modelItem => item.OfficeDescription)</h5> *@
+                        <div>
+                            @{
+                                var myDataH = new HtmlString(item.Data);
+                                var myURL = new HtmlString(item.URL);
+                                var readMore = "  <a href='/TblWebSelfPublishes/Details/" + myURL + "'>read more</a>...";
+                                string myDataS = myDataH.ToString();
+                                string myDataR;
+                                int foundPipe = myDataS.IndexOf('|');
+                                if (foundPipe < 0)
+                                {
+                                    myDataR = myDataS.Substring(0, 100) + "...";
+                                }
+                                else
+                                {
+                                    myDataR = myDataS.Substring(0, foundPipe) + "...";
+                                }
+                            }
+                            @Html.Raw(myDataR)
+                            <div style="text-align:center">
+                                @Html.Raw(readMore)
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            }
+        </div>
+        <button class="carousel-control-prev" type="button" data-bs-target="#carouselKofC" data-bs-slide="prev">
+            <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+            <span class="visually-hidden">Previous</span>
+        </button>
+        <button class="carousel-control-next" type="button" data-bs-target="#carouselKofC" data-bs-slide="next">
+            <span class="carousel-control-next-icon" aria-hidden="true"></span>
+            <span class="visually-hidden">Next</span>
+        </button>
+    </div>
+
+
+
+    @* <div class="container-calendar">
+    <div class="left">
+    <div class="calendar">
+    <div class="month">
+    <i class="fas fa-angle-left prev"></i>
+    <div class="date">december 2015</div>
+    <i class="fas fa-angle-right next"></i>
+    </div>
+    <div class="weekdays">
+    <div>Sun</div>
+    <div>Mon</div>
+    <div>Tue</div>
+    <div>Wed</div>
+    <div>Thu</div>
+    <div>Fri</div>
+    <div>Sat</div>
+    </div>
+    <div class="days"></div>
+    <div class="goto-today">
+    <div class="goto">
+    <input type="text" placeholder="mm/yyyy" class="date-input" />
+    <button class="goto-btn">Go</button>
+    </div>
+    <button class="today-btn">Today</button>
+    </div>
+    </div>
+    </div>
+    <div class="right">
+    <div class="today-date">
+    <div class="event-day">wed</div>
+    <div class="event-date">12th december 2022</div>
+    </div>
+    <div class="events"></div>
+    <div class="add-event-wrapper">
+    <div class="add-event-header">
+    <div class="title">Add Event</div>
+    <i class="fas fa-times close"></i>
+    </div>
+    <div class="add-event-body">
+    <div class="add-event-input">
+    <input type="text" placeholder="Event Name" class="event-name" />
+    </div>
+    <div class="add-event-input">
+    <input type="text"
+    placeholder="Event Time From"
+    class="event-time-from" />
+    </div>
+    <div class="add-event-input">
+    <input type="text"
+    placeholder="Event Time To"
+    class="event-time-to" />
+    </div>
+    </div>
+    <div class="add-event-footer">
+    <button class="add-event-btn">Add Event</button>
+    </div>
+    </div>
+    </div>
+    <button class="add-event">
+    <i class="fas fa-plus"></i>
+    </button>
+    <script src="~/js/script.js"></script>
+    </div> *@
+</body>
+</html>

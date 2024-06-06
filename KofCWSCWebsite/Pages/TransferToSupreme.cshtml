@@ -1,0 +1,77 @@
+﻿@page "/TransferToSupreme"
+@inject IHttpContextAccessor HttpContextAccessor
+@{
+    Layout = "~/Views/Shared/_layout.cshtml";
+}
+@*
+    this page will allow us to capture a navigation away from our site and warn the user that they are leaving
+*@
+
+@* @{
+    var srcURL = HttpContextAccessor.HttpContext.Request.Query["srcURL"];
+    var destURL = HttpContextAccessor.HttpContext.Request.Query["destURL"];
+    if (!string.IsNullOrWhiteSpace(srcURL) || !string.IsNullOrWhiteSpace(destURL))
+    {
+        // Do something with the value
+    } else
+    {
+        // do something else
+    }
+} *@
+<!-- Button trigger modal -->
+@* <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#exampleModal">
+    Launch demo modal
+</button>
+
+<!-- Modal -->
+<div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="exampleModalLabel">Modal title</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                ...
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                <button type="button" class="btn btn-primary">Save changes</button>
+            </div>
+        </div>
+    </div>
+</div> *@
+<div>
+    <h3>You are about to leave the KofC WSC Website</h3>
+    <p>Do you wish to continue?</p>
+</div>
+<div class="float-container">
+    <div class="float-child">
+        <button class="btn btn-outline-success" onclick="myYes()">Yes</button>
+    </div>
+    <div class="float-child">
+        <button class="btn btn-outline-success" onclick="myNo()">No</button>
+    </div>
+</div>
+
+
+<script>
+    // The querystrings should come over complete.  We just need to extract them and use them in the href
+    const urlParms = new URLSearchParams(window.location.search);
+    const myServer = urlParms.get('servername')
+    const mySrcURL = urlParms.get('srcURL');
+    const myDestURL = urlParms.get('destURL')
+
+    // alert(mySrcURL);
+    // alert(myDestURL);
+
+    function myYes() {
+        // navitgate to destination URL
+        window.location.href = myDestURL;
+    }
+
+    function myNo() {
+        // navigate back to calling URL
+        window.location.href = mySrcURL;
+    }
+</script>

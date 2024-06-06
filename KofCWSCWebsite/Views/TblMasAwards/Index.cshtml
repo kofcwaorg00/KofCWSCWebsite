@@ -1,0 +1,88 @@
+﻿@model IEnumerable<KofCWSCWebsite.Models.TblMasAward>
+
+@{
+    ViewData["Title"] = "Index";
+}
+
+<table class="table" style="width:100%">
+    <thead>
+        <tr>
+            <th colspan="2" style="text-align:center">
+                <h3 class="MyPageHdr">Grand Knight Resources</h3>
+            </th>
+        </tr>
+    </thead>
+    <tbody>
+        <tr>
+            <td>
+                <a href="/files/StateFamily/GK/Handbook.pdf" target="_blank">Grand Knight Handbook</a><br />
+                <a href="http://www.kofc.org/un/en/resources/membership/interest_survey.pdf" target="_blank">Membership Interest Survey</a>
+
+            </td>
+            <td style="text-align:right">
+                <a href="http://www.kofc.org/en/resources/officers/officers.pdf" target="_blank">Officer Duties</a><br />
+                <a href="https://www.kofc.org/en/resources/service/council/method-conducting-council-meetings10318.pdf" target="_blank">Guidelines for Council Meetings</a>
+            </td>
+        </tr>
+    </tbody>
+</table>
+
+
+@if (User.IsInRole("Admin"))
+{
+<p>
+    <a asp-action="Create">Create New</a>
+</p>
+}
+<table class="table">
+    <thead>
+        <tr>
+            <th class="MyColHdr">
+                                @Html.DisplayNameFor(model => model.AwardName)
+            </th>
+            <th class="MyColHdr">
+                                @Html.DisplayNameFor(model => model.AwardDescription)
+            </th>
+            <th class="MyColHdr">
+                                @Html.DisplayNameFor(model => model.AwardDueDate)
+            </th>
+            <th class="MyColHdr">
+                                @Html.DisplayNameFor(model => model.LinkToTheAwardForm)
+            </th>
+            <th class="MyColHdr">
+                                @Html.DisplayNameFor(model => model.AwardSubmissionEmailAddress)
+            </th>
+            <th class="MyColHdr"></th>
+        </tr>
+    </thead>
+    <tbody>
+                        @foreach (var item in Model)
+                        {
+            <tr>
+                <td>
+                                    @Html.DisplayFor(modelItem => item.AwardName)
+                </td>
+                <td>
+                                    @Html.DisplayFor(modelItem => item.AwardDescription)
+                </td>
+                <td>
+                                    @Html.DisplayFor(modelItem => item.AwardDueDate)
+                </td>
+                <td>
+                                    @Html.Raw(item.LinkToTheAwardForm)
+                </td>
+                <td>
+                                    @Html.DisplayFor(modelItem => item.AwardSubmissionEmailAddress)
+                </td>
+                <td>
+                                    @if (User.IsInRole("Admin"))
+                                    {
+                        <a asp-action="Edit" asp-route-id="@item.Id">Edit</a>
+                        <a asp-action="Details" asp-route-id="@item.Id">Details</a>
+                        <a asp-action="Delete" asp-route-id="@item.Id">Delete </a>
+                                    }
+                </td>
+            </tr>
+                        }
+    </tbody>
+</table>

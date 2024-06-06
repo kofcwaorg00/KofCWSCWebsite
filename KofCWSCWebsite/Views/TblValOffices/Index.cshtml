@@ -1,0 +1,93 @@
+﻿@model IEnumerable<KofCWSCWebsite.Models.TblValOffice>
+
+@{
+    ViewData["Title"] = "Index";
+}
+
+<h1>Index</h1>
+<p>
+    <input type="text" id="myInput" onkeyup="myFunction()" placeholder="Type in a Office Name to filter results" title="Type in a name" style="width:25%">
+</p>
+<p>
+    <a asp-action="Create">Create New</a>
+</p>
+<table class="table" id="myTable">
+    <thead>
+        <tr>
+            <th>
+                @Html.DisplayNameFor(model => model.OfficeDescription)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.DirSortOrder)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.AltDescription)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.EmailAlias)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.UseAsFormalTitle)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.WebPageTagLine)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.SupremeUrl)
+            </th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+@foreach (var item in Model) {
+        <tr>
+            <td>
+                @Html.DisplayFor(modelItem => item.OfficeDescription)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.DirSortOrder)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.AltDescription)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.EmailAlias)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.UseAsFormalTitle)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.WebPageTagLine)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.SupremeUrl)
+            </td>
+            <td>
+                <a asp-action="Edit" asp-route-id="@item.OfficeId">Edit</a> |
+                <a asp-action="Details" asp-route-id="@item.OfficeId">Details</a> |
+                <a asp-action="Delete" asp-route-id="@item.OfficeId">Delete</a>
+            </td>
+        </tr>
+}
+    </tbody>
+</table>
+<script>
+    function myFunction() {
+        var input, filter, table, tr, td, i, txtValue;
+        input = document.getElementById("myInput");
+        filter = input.value.toUpperCase();
+        table = document.getElementById("myTable");
+        tr = table.getElementsByTagName("tr");
+        for (i = 0; i < tr.length; i++) {
+            td = tr[i].getElementsByTagName("td")[0];
+            if (td) {
+                txtValue = td.textContent || td.innerText;
+                if (txtValue.toUpperCase().indexOf(filter) > -1) {
+                    tr[i].style.display = "";
+                } else {
+                    tr[i].style.display = "none";
+                }
+            }
+        }
+    }
+</script>

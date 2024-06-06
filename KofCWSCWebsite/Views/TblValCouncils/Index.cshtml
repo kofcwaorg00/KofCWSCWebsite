@@ -1,0 +1,139 @@
+﻿@model IEnumerable<KofCWSCWebsite.Models.TblValCouncil>
+
+@{
+    ViewData["Title"] = "Councils";
+}
+
+<h3 class="MyPageHdr">Washington State Councils</h3>
+<p>
+    <input type="text" id="myCnumber" onkeyup="myFunction1()" placeholder="Type in a Council Number to filter results" title="Type in a number" style="width:25%">
+    <input type="text" id="myCname" onkeyup="myFunction2()" placeholder="Type in a Council Name to filter results" title="Type in a name" style="width:25%">
+</p>
+
+@if (User.IsInRole("Admin"))
+{
+    <p>
+        <a asp-action="Create">Create New</a>
+    </p>
+}
+<table class="table" id="myTable">
+    <thead>
+        <tr>
+            <th class="MyColHdr">
+                @Html.DisplayNameFor(model => model.CNumber)
+            </th>
+            <th class="MyColHdr" style="text-align:center">
+                @Html.DisplayNameFor(model => model.District)
+            </th>
+            <th class="MyColHdr">
+                @Html.DisplayNameFor(model => model.CLocation)
+            </th>
+            <th class="MyColHdr">
+                @Html.DisplayNameFor(model => model.CName)
+            </th>
+            <th class="MyColHdr">
+                Meeting Times/Locations Information
+            </th>
+            <th class="MyColHdr" style="text-align:center">
+                @Html.DisplayNameFor(model => model.DioceseId)
+            </th>
+            <th class="MyColHdr">
+                @Html.DisplayNameFor(model => model.Chartered)
+            </th>
+            @* <th>
+            @Html.DisplayNameFor(model => model.WebSiteUrl)
+            </th>
+            <th>
+            @Html.DisplayNameFor(model => model.BulletinUrl)
+            </th> *@
+            <th class="MyColHdr" style="text-align:center">
+                @Html.DisplayNameFor(model => model.Status)
+            </th>
+            <th class="MyColHdr"></th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var item in Model)
+        {
+            <tr>
+                <td>
+                    @Html.DisplayFor(modelItem => item.CNumber)
+                </td>
+                <td style="text-align:center">
+                    @Html.DisplayFor(modelItem => item.District)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.CLocation)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.CName)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.AddInfo1)@Html.DisplayFor(modelItem => item.AddInfo2)@Html.DisplayFor(modelItem => item.AddInfo3)
+                </td>
+                <td style="text-align:center">
+                    @Html.DisplayFor(modelItem => item.DioceseId)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Chartered)
+                </td>
+                @* <td>
+            @Html.Raw(item.WebSiteUrl)
+            </td>
+            <td>
+            @Html.Raw(item.BulletinUrl)
+            </td> *@
+                <td style="text-align:center">
+                    @Html.DisplayFor(modelItem => item.Status)
+                </td>
+                <td>
+                    @if (User.IsInRole("Admin"))
+                    {
+                        <a asp-action="Edit" asp-route-id="@item.CNumber">Edit</a>
+                        <a asp-action="Details" asp-route-id="@item.CNumber">Details</a>
+                        <a asp-action="Delete" asp-route-id="@item.CNumber">Delete</a>
+                    }
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>
+
+<script>
+    function myFunction1() {
+        var input, filter, table, tr, td, i, txtValue;
+        input = document.getElementById("myCnumber");
+        filter = input.value.toUpperCase();
+        table = document.getElementById("myTable");
+        tr = table.getElementsByTagName("tr");
+        for (i = 0; i < tr.length; i++) {
+            td = tr[i].getElementsByTagName("td")[0];
+            if (td) {
+                txtValue = td.textContent || td.innerText;
+                if (txtValue.toUpperCase().indexOf(filter) > -1) {
+                    tr[i].style.display = "";
+                } else {
+                    tr[i].style.display = "none";
+                }
+            }
+        }
+    }
+    function myFunction2() {
+        var input, filter, table, tr, td, i, txtValue;
+        input = document.getElementById("myCname");
+        filter = input.value.toUpperCase();
+        table = document.getElementById("myTable");
+        tr = table.getElementsByTagName("tr");
+        for (i = 0; i < tr.length; i++) {
+            td = tr[i].getElementsByTagName("td")[3];
+            if (td) {
+                txtValue = td.textContent || td.innerText;
+                if (txtValue.toUpperCase().indexOf(filter) > -1) {
+                    tr[i].style.display = "";
+                } else {
+                    tr[i].style.display = "none";
+                }
+            }
+        }
+    }
+</script>

@@ -1,0 +1,191 @@
+﻿@page
+@model IndexModel
+@{
+    ViewBag.Title = "Home page";
+}
+<html>
+<head>
+    <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.css" />
+    <link rel="stylesheet" href="~/lib/bootstrap/dist/js/bootstrap.js" />
+
+</head>
+<body>
+    <div>
+        put more stuff here
+    </div>
+    <div class="card-group">
+        <div class="card">
+            <a href="~/Faith/Faith"><img src="~/images/faithfade.png" class ="card-img-top" alt="Faith"></a>
+                <div class="card-body">
+                    <p class="card-text"><a href="~/Faith/RSVP">RSVP*</a></p>
+                    <p class="card-text"><a href="~/Faith/IntotheBreach">Into The Breach.</a></p>
+                    <p class="card-text"><a href="~/Faith/MarianPrayer">Marian Icon Prayer Program.</a></p>
+                    <p class="card-text"><a href="~/Faith/Kiosk">Building the Domestic Church Kiosk.</a></p>
+                    <p class="card-text"><a href="~/Faith/Rosary">Rosary Program.</a> </p>
+                    <p class="card-text"><a href="~/Faith/SpiritualReflection">Spiritual Reflection Program.</a> </p>
+                    <p class="card-text"><a href="~/Faith/HolyHour"> Holy Hour.</a></p>
+                    <p class="card-text"><a href="~/Faith/SacNewGifts"> Sacramental Gifts.</a></p>
+                </div>
+        </div>
+        <div class="card">
+            <img src="~/images/communityfade.png" class ="card-img-top" alt="Community">
+                <div class="card-body">
+                    <p class="card-text"><a href="~/Community/Coats">Coats for Kids*</a></p>
+                    <p class="card-text"><a href="~/Community/GlobalWheelchair">Global Wheelchair Mission*</a></p>
+                    <p class="card-text"><a href="~/Community/HabitatforHumanity">Habitat For Humanity*</a></p>
+                    <p class="card-text"><a href="~/Community/DisasterPreparedness">Disaster Prepardedness</a></p>
+                    <p class="card-text"><a href="~/Community/FreeThrowChampionship">Free Throw Championship</a></p>
+                    <p class="card-text"><a href="~/Community/CatholicCitizenEssayContest">Catholic Citizenship Essay Contest</a></p>
+                    <p class="card-text"><a href="~/Community/SoccerChallenge">Soccer Challenge</a></p>
+                    <p class="card-text"><a href="~/Community/HelpingHands">Helping Hands</a></p>
+                    <p class="card-text"><a href="~/Community/CatholicCommunityServices">Catholic Community Services</a></p>
+                    <p class="card-text"><a href="~/Community/OneParishPrisoner">One Parish One Prisoner</a></p>
+                </div>
+        </div>
+        <div class="card">
+            <img src="~/images/familyfade.png" class ="card-img-top" alt="Family">
+                <div class="card-body">
+                    <p class="card-text"><a href="~/Family/FoodForFamilies">Food For Families*</a></p>
+                    <p class="card-text"><a href="~/Family/FamilyofMonthYear">Family of the Month/Year</a></p>
+                    <p class="card-text"><a href="~/Family/KeepChristInChristmas">Keep Christ in Christmas</a></p>
+                    <p class="card-text"><a href="~/Family/FamilyFullyAl  ive">Family Fully Alive</a></p>
+                    <p class="card-text"><a href="~/Family/ConsecrationToTheHolyFamily">Consecration to the Holy Family</a></p>
+                    <p class="card-text"><a href="~/Family/FamilyPrayerNight">Family Prayer Night</a></p>
+                    <p class="card-text"><a href="~/Family/GoodFridayFamilyPromotion">Good Friday Family Promotion</a></p>
+                </div>
+        </div>
+        <div class="card">
+            <img src="~/images/lifefade.png" class ="card-img-top" alt="Life">
+                <div class="card-body">
+                    <p class="card-text"><a href="~/Life/MarchForLife">Marches for Life*</a> </p>
+
+                    <p class="card-text"><a href="~/Life/SpecialOlympics">Special Olympics*</a> </p>
+                    <p class="card-text"><a href="~/Life/Ultrasound">Ultrasound Initiative*</a> </p>
+                    <p class="card-text"><a href="~/Life/Refugee">Christian Refugee Relief</a> </p>
+                    <p class="card-text"><a href="~/Life/SilverRose">Silver Rose</a> </p>
+                    <p class="card-text"><a href="~/Life/MassSN">Mass for People with Special Needs</a> </p>
+                    <p class="card-text"><a href="~/Life/PCS">Pregnancy Center Support</a> </p>
+                    <p class="card-text"><a href="~/Life/Novena">Novena for Life</a> </p>
+                </div>
+        </div>
+    </div>
+
+
+    <div id="carouselKofC" class="carousel carousel-dark slide" data-bs-ride="carousel">
+        <div class="carousel-indicators">
+            <button type="button" data-bs-target="#carouselExampleDark" data-bs-slide-to="0" class="active" aria-current="true" aria-label="Slide 1"></button>
+            <button type="button" data-bs-target="#carouselExampleDark" data-bs-slide-to="1" aria-label="Slide 2"></button>
+            <button type="button" data-bs-target="#carouselExampleDark" data-bs-slide-to="2" aria-label="Slide 3"></button>
+        </div>
+        <div class="carousel-inner">
+            <div class="carousel-item active">
+                <img class="d-block w-100" alt="First slide" src="~/images/field.jpg" />
+                <div class="carousel-caption d-none d-md-block">
+                    <h5>Example header</h5>
+                    <p>
+                        Lorem ipsum dolor sit amet consectetur adipisicing elit.
+                        Et impedit ad temporibus perferendis aperiam, voluptas,
+                        incidunt iusto corrupti quos quam earum id autem error quod. Maiores iure vel delectus cumque!
+                    </p>
+                </div>
+            </div>
+            <div class="carousel-item">
+                <img class="d-block w-100" alt="Second slide" src="~/images/found.jpg" />
+                <div class="carousel-caption d-none d-md-block">
+                    <h5>Header 2</h5>
+                    <p>
+                        Lorem ipsum dolor sit amet consectetur adipisicing elit.
+                        Et impedit ad temporibus perferendis aperiam, voluptas,
+                        incidunt iusto corrupti quos quam earum id autem error quod. Maiores iure vel delectus cumque!
+                    </p>
+                </div>
+            </div>
+            <div class="carousel-item">
+                <img class="d-block w-100" alt="Third slide" src="~/images/priest.jpg" />
+                <div class="carousel-caption d-none d-md-block">
+                    <h5>Header 3</h5>
+                    <p>
+                        Lorem ipsum dolor sit amet consectetur adipisicing elit.
+                        Et impedit ad temporibus perferendis aperiam, voluptas,
+                        incidunt iusto corrupti quos quam earum id autem error quod. Maiores iure vel delectus cumque!
+                    </p>
+                </div>
+            </div>
+        </div>
+        <button class="carousel-control-prev" type="button" data-bs-target="#carouselKofC" data-bs-slide="prev">
+            <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+            <span class="visually-hidden">Previous</span>
+        </button>
+        <button class="carousel-control-next" type="button" data-bs-target="#carouselKofC" data-bs-slide="next">
+            <span class="carousel-control-next-icon" aria-hidden="true"></span>
+            <span class="visually-hidden">Next</span>
+        </button>
+    </div>
+
+
+    <div class="container-calendar">
+        <div class="left">
+            <div class="calendar">
+                <div class="month">
+                    <i class="fas fa-angle-left prev"></i>
+                    <div class="date">december 2015</div>
+                    <i class="fas fa-angle-right next"></i>
+                </div>
+                <div class="weekdays">
+                    <div>Sun</div>
+                    <div>Mon</div>
+                    <div>Tue</div>
+                    <div>Wed</div>
+                    <div>Thu</div>
+                    <div>Fri</div>
+                    <div>Sat</div>
+                </div>
+                <div class="days"></div>
+                <div class="goto-today">
+                    <div class="goto">
+                        <input type="text" placeholder="mm/yyyy" class="date-input" />
+                        <button class="goto-btn">Go</button>
+                    </div>
+                    <button class="today-btn">Today</button>
+                </div>
+            </div>
+        </div>
+        <div class="right">
+            <div class="today-date">
+                <div class="event-day">wed</div>
+                <div class="event-date">12th december 2022</div>
+            </div>
+            <div class="events"></div>
+            <div class="add-event-wrapper">
+                <div class="add-event-header">
+                    <div class="title">Add Event</div>
+                    <i class="fas fa-times close"></i>
+                </div>
+                <div class="add-event-body">
+                    <div class="add-event-input">
+                        <input type="text" placeholder="Event Name" class="event-name" />
+                    </div>
+                    <div class="add-event-input">
+                        <input type="text"
+                               placeholder="Event Time From"
+                               class="event-time-from" />
+                    </div>
+                    <div class="add-event-input">
+                        <input type="text"
+                               placeholder="Event Time To"
+                               class="event-time-to" />
+                    </div>
+                </div>
+                <div class="add-event-footer">
+                    <button class="add-event-btn">Add Event</button>
+                </div>
+            </div>
+        </div>
+        <button class="add-event">
+            <i class="fas fa-plus"></i>
+        </button>
+        <script src="~/js/script.js"></script>
+    </div>
+</body>
+</html>
+

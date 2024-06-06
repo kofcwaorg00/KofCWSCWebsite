@@ -1,0 +1,99 @@
+﻿@model KofCWSCWebsite.Models.TblMasMember
+
+@{
+    ViewData["Title"] = "Details";
+}
+
+<h1>Details</h1>
+
+<div>
+    <h4>Member</h4>
+    <hr />
+
+    <div class="container">
+        <div class="row">
+            <div class="col-sm-2">
+                @Html.DisplayNameFor(model => model.KofCid)
+            </div>
+            <div class="col-sm-10">
+                @Html.DisplayFor(model => model.KofCid)
+            </div>
+            <div class="col-sm-2">
+                @Html.DisplayNameFor(model => model.FirstName)
+            </div>
+            <div class="col-sm-10">
+                @Html.DisplayFor(model => model.FirstName)
+            </div>
+            <div class="col-sm-2">
+                @Html.DisplayNameFor(model => model.Mi)
+            </div>
+            <div class="col-sm-10">
+                @Html.DisplayFor(model => model.Mi)
+            </div>
+            <div class="col-sm-2">
+                @Html.DisplayNameFor(model => model.LastName)
+            </div>
+            <div class="col-sm-10">
+                @Html.DisplayFor(model => model.LastName)
+            </div>
+            <div class="col-sm-2">
+                @Html.DisplayNameFor(model => model.Address)
+            </div>
+            <div class="col-sm-10">
+                @Html.DisplayFor(model => model.Address)
+            </div>
+            <div class="col-sm-2">
+                @Html.DisplayNameFor(model => model.City)
+            </div>
+            <div class="col-sm-10">
+                @Html.DisplayFor(model => model.City)
+            </div>
+            <div class="col-sm-2">
+                @Html.DisplayNameFor(model => model.State)
+            </div>
+            <div class="col-sm-10">
+                @Html.DisplayFor(model => model.State)
+            </div>
+            <div class="col-sm-2">
+                @Html.DisplayNameFor(model => model.PostalCode)
+            </div>
+            <div class="col-sm-10">
+                @Html.DisplayFor(model => model.PostalCode)
+            </div>
+            <div class="col-sm-2">
+                @Html.DisplayNameFor(model => model.Phone)
+            </div>
+            <div class="col-sm-10">
+                @Html.DisplayFor(model => model.Phone)
+            </div>
+            <div class="col-sm-2">
+                @Html.DisplayNameFor(model => model.WifesName)
+            </div>
+            <div class="col-sm-10">
+                @Html.DisplayFor(model => model.WifesName)
+            </div>
+            <div class="col-sm-2">
+                @Html.DisplayNameFor(model => model.Council)
+            </div>
+            <div class="col-sm-10">
+                @Html.DisplayFor(model => model.Council)
+            </div>
+            <div class="col-sm-2">
+                @Html.DisplayNameFor(model => model.Assembly)
+            </div>
+            <div class="col-sm-10">
+                @Html.DisplayFor(model => model.Assembly)
+            </div>
+            <div class="col-sm-2">
+                @Html.DisplayNameFor(model => model.Email)
+            </div>
+            <div class="col-sm-10">
+                @Html.DisplayFor(model => model.Email)
+            </div>
+        </div>
+    </div>
+</div>
+<div>
+    <a asp-action="Edit" asp-route-id="@Model?.MemberId">Edit</a> |
+    <a asp-action="Index">Back to List</a>
+</div>

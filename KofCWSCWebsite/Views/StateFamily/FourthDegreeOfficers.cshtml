@@ -1,0 +1,87 @@
+﻿@model IEnumerable<KofCWSCWebsite.Models.SPGetChairmanInfoBlock>
+@*
+    For more information on enabling MVC for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
+*@
+@{
+}
+
+<table class="table">
+    <tr>
+        <td colspan="2">
+            <h3 class="MyPageHdr">Fourth Degree Officers</h3>
+        </td>
+    </tr>
+    <tr>
+        <td style="width:50%">
+            <div>
+                @foreach (var item in Model)
+                {
+                    if (item.Title == "Supreme Master")
+                    {
+                        <div style="padding:5px">
+                            <img src="@Html.Raw(item.Photo)" style="float:left;padding:5px; width:100px" />
+                            <span>@Html.DisplayFor(modelItem => item.Title)</span>
+                            <br />
+                            <span>@Html.DisplayFor(modelItem => item.FullName)</span>
+                            <br />
+                            <span>@Html.DisplayFor(modelItem => item.Phone)</span>
+                            <br />
+                            <span>@Html.Raw(item.Email)</span>
+                        </div>
+                        continue;
+                    }
+                    if (item.Title.IndexOf("Western") > -1)
+                    {
+                        <div style="padding:5px">
+                            <img src="@Html.Raw(item.Photo)" style="float:left;padding:5px; width:100px" />
+                            <span>@Html.DisplayFor(modelItem => item.Title)</span>
+                            <br />
+                            <span>@Html.DisplayFor(modelItem => item.FullName)</span>
+                            <br />
+                            <span>@Html.DisplayFor(modelItem => item.Phone)</span>
+                            <br />
+                            <span>@Html.Raw(item.Email)</span>
+                        </div>
+                        continue;
+                    }
+
+                }
+            </div>
+        </td>
+        <td style="vertical-align:top; width:50%">
+            <div>
+                @foreach (var item in Model)
+                {
+                    if (item.Title == "Vice Supreme Master")
+                    {
+                        <div style="padding:5px">
+                            <img src="@Html.Raw(item.Photo)" style="float:left;padding:5px; width:100px" />
+                            <span>@Html.DisplayFor(modelItem => item.Title)</span>
+                            <br />
+                            <span>@Html.DisplayFor(modelItem => item.FullName)</span>
+                            <br />
+                            <span>@Html.DisplayFor(modelItem => item.Phone)</span>
+                            <br />
+                            <span>@Html.Raw(item.Email)</span>
+                        </div>
+                        continue;
+                    }
+                    if (item.Title.IndexOf("Eastern") > -1)
+                    {
+                        <div style="padding:5px">
+                            <img src="@Html.Raw(item.Photo)" style="float:left;padding:5px; width:100px" />
+                            <span>@Html.DisplayFor(modelItem => item.Title)</span>
+                            <br />
+                            <span>@Html.DisplayFor(modelItem => item.FullName)</span>
+                            <br />
+                            <span>@Html.DisplayFor(modelItem => item.Phone)</span>
+                            <br />
+                            <span>@Html.Raw(item.Email)</span>
+                        </div>
+                        continue;
+                    }
+                }
+            </div>
+        </td>
+    </tr>
+</table>
