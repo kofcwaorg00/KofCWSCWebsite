@@ -1,12 +1,17 @@
 ﻿using System;
 using System.Collections.Generic;
+using Azure.Identity;
 using KofCWSCWebsite.Models;
+using Microsoft.Data.SqlClient;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Data.SqlClient.AlwaysEncrypted.AzureKeyVaultProvider;
+using Serilog;
 
 namespace KofCWSCWebsite.Data;
 
 public partial class ApplicationDbContext : DbContext
 {
+    private static bool isKVInit;
     public ApplicationDbContext()
     {
     }
@@ -14,6 +19,32 @@ public partial class ApplicationDbContext : DbContext
     public ApplicationDbContext(DbContextOptions<ApplicationDbContext> options)
         : base(options)
     {
+        //*****************************************************************************************************************
+        // 6/14/2024 Tim Philomeno
+        // this is the magic code that allows client permissions for SQL Server to get its master encryption key from KeyVault
+        // the authentication is done using DefaultAzureCredential.  That cycles through multple types
+        // of authentication.  For the develoment environment, it uses the credentials that the developer has used to
+        // login to Visual Studio.  For publised environments, you need to setup Azure Identity to allow
+        // the applicaiton to authenticate and get access to KeyVault
+        // NOTE: THE AZURE DEPENDENCY WILL BE REMOVED WHEN THIS SITE IS FULLY USING THE API
+        //*****************************************************************************************************************
+        try
+        {
+            if (!isKVInit)
+            {
+                SqlColumnEncryptionAzureKeyVaultProvider akvProvider = new SqlColumnEncryptionAzureKeyVaultProvider(new DefaultAzureCredential());
+                SqlConnection.RegisterColumnEncryptionKeyStoreProviders(customProviders: new Dictionary<string, SqlColumnEncryptionKeyStoreProvider>(capacity: 1, comparer: StringComparer.OrdinalIgnoreCase)
+            {
+                    { SqlColumnEncryptionAzureKeyVaultProvider.ProviderName, akvProvider}
+            });
+            }
+            isKVInit = true;
+        }
+        catch (Exception ex)
+        {
+            Log.Error(ex.Message);
+            throw new Exception("SQL Azure Key Vault Initialization Failed");
+        }
     }
 
     public virtual DbSet<TblValCouncil> TblValCouncils { get; set; }

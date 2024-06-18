@@ -82,6 +82,7 @@ public partial class TblMasMember
 
     //public string? PhoneUpdatedBy { get; set; }
     [Display(Name = "Wife")]
+    [StringLength(12)]
     public string? WifesName { get; set; }
 
     //public DateTime? WifesNameUpdated { get; set; }

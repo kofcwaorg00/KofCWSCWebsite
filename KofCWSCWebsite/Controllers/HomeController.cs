@@ -41,6 +41,7 @@ namespace KofCWSCWebsite.Controllers
             {
                 ViewData["ConnectString"] = "Using DASP PRODUCTION DATABASE";
             }
+            ViewData["APIURL"] = "and the APIURL is using AZDEV";
             //*****************************************************************************************************
             var result = _context.Database
                 .SqlQuery<SPGetSOS>($"uspWEB_GetSOS 0")

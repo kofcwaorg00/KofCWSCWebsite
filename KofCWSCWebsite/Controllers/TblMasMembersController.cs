@@ -11,30 +11,40 @@ using System.Net.Http;
 using Microsoft.IdentityModel.Tokens;
 using System.Collections;
 using Newtonsoft.Json;
-using com.sun.xml.@internal.bind.v2.model.core;
+using Serilog;
 
 namespace KofCWSCWebsite.Controllers
 {
     public class TblMasMembersController : Controller
     {
         private readonly ApplicationDbContext _context;
+        private IConfiguration _configuration;
 
-        private string myBaseAddress = "https://dev.kofc-wa.org/API";
+        //private string myBaseAddress = "https://dev.kofc-wa.org/API";
         //private string myBaseAddress = "https://localhost:7078";
-        public TblMasMembersController(ApplicationDbContext context)
+        private string? _myBaseAddress;
+        public TblMasMembersController(ApplicationDbContext context, IConfiguration configuration)
         {
+            Log.Information("Initializing DB Context");
             _context = context;
+            _configuration = configuration;
+            _myBaseAddress = (string?)_configuration.GetSection("APIURL").GetValue(typeof(string), "AZDEV");
+            if (_myBaseAddress.IsNullOrEmpty())
+            {
+                Log.Fatal("No API URI Initialized");
+                throw new Exception("APIURL is not defined");
+            }
         }
 
         public ActionResult Index(string lastname)
         {
-            IEnumerable<TblMasMember> members = null;
-
+            Log.Information("Starting index with Lastname " + lastname);
             if (lastname.IsNullOrEmpty())
             {
                 lastname = "aaa";
             }
-            Uri myURI = new Uri(myBaseAddress + "/GetMembers/ByLastName/" + lastname);
+
+            Uri myURI = new Uri(_myBaseAddress + "/GetMembers/ByLastName/" + lastname);
 
             using (var client = new HttpClient())
             {
@@ -42,11 +52,13 @@ namespace KofCWSCWebsite.Controllers
                 var responseTask = client.GetAsync(myURI);
                 responseTask.Wait();
                 var result = responseTask.Result;
+                IEnumerable<TblMasMember> members;
                 if (result.IsSuccessStatusCode)
                 {
                     var readTask = result.Content.ReadAsAsync<IList<TblMasMember>>();
                     readTask.Wait();
                     members = readTask.Result;
+                    ViewData["NoMembers"] = "Found " + members.Count() + " Members";
                 }
                 else
                 {
@@ -60,12 +72,13 @@ namespace KofCWSCWebsite.Controllers
         // GET: TblMasMembers/Details/5
         public async Task<IActionResult> Details(int? id)
         {
+            Log.Information("Starting Details of " + id);
             if (id == null)
             {
                 return NotFound();
             }
 
-            Uri myURI = new(myBaseAddress + "/GetMember/" + id);
+            Uri myURI = new(_myBaseAddress + "/GetMember/" + id);
 
             using (var client = new HttpClient())
             {
@@ -100,9 +113,10 @@ namespace KofCWSCWebsite.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Create([Bind("MemberId,KofCid,Prefix,PrefixUpdated,PrefixUpdatedBy,FirstName,FirstNameUpdated,FirstNameUpdatedBy,NickName,NickNameUpdated,NickNameUpdatedBy,Mi,Miupdated,MiupdatedBy,LastName,LastNameUpdated,LastNameUpdatedBy,Suffix,SuffixUpdated,SuffixUpdatedBy,AddInfo1,AddInfo1Updated,AddInfo1UpdatedBy,Address,AddressUpdated,AddressUpdatedBy,City,CityUpdated,CityUpdatedBy,State,StateUpdated,StateUpdatedBy,PostalCode,PostalCodeUpdated,PostalCodeUpdatedBy,Phone,PhoneUpdated,PhoneUpdatedBy,WifesName,WifesNameUpdated,WifesNameUpdatedBy,AddInfo2,AddInfo2Updated,AddInfo2UpdatedBy,FaxNumber,FaxNumberUpdated,FaxNumberUpdatedBy,Council,CouncilUpdated,CouncilUpdatedBy,Assembly,AssemblyUpdated,AssemblyUpdatedBy,Circle,CircleUpdated,CircleUpdatedBy,Email,EmailUpdated,EmailUpdatedBy,Deceased,DeceasedUpdated,DeceasedUpdatedBy,CellPhone,CellPhoneUpdated,CellPhoneUpdatedBy,LastUpdated,SeatedDelegateDay1,SeatedDelegateDay2,SeatedDelegateDay3,PaidMpd,Bulletin,BulletinUpdated,BulletinUpdatedBy,UserId,Data,DataChanged,LastLoggedIn,CanEditAdmUi,DoNotEmail,HidePersonalInfo,WhyDoNotEmail")] TblMasMember tblMasMember)
         {
+            Log.Information("STarting Create");
             if (ModelState.IsValid)
             {
-                Uri myURI = new(myBaseAddress + "/NewMember");
+                Uri myURI = new(_myBaseAddress + "/NewMember");
                 string lastname = tblMasMember.LastName;
                 try
                 {
@@ -110,7 +124,7 @@ namespace KofCWSCWebsite.Controllers
                     {
                         client.BaseAddress = myURI;
                         var response = await client.PostAsJsonAsync(myURI, tblMasMember);
-                        var returnValue = await response.Content.ReadAsAsync<List<TblMasMember>>();
+                        //////////////var returnValue = await response.Content.ReadAsAsync<List<TblMasMember>>();
                     }
                 }
                 catch (DbUpdateConcurrencyException)
@@ -137,7 +151,7 @@ namespace KofCWSCWebsite.Controllers
                 return NotFound();
             }
 
-            Uri myURI = new(myBaseAddress + "/GetMember/" + id);
+            Uri myURI = new(_myBaseAddress + "/GetMember/" + id);
 
             using (var client = new HttpClient())
             {
@@ -166,15 +180,17 @@ namespace KofCWSCWebsite.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Edit(int id, [Bind("MemberId,KofCid,Prefix,PrefixUpdated,PrefixUpdatedBy,FirstName,FirstNameUpdated,FirstNameUpdatedBy,NickName,NickNameUpdated,NickNameUpdatedBy,Mi,Miupdated,MiupdatedBy,LastName,LastNameUpdated,LastNameUpdatedBy,Suffix,SuffixUpdated,SuffixUpdatedBy,AddInfo1,AddInfo1Updated,AddInfo1UpdatedBy,Address,AddressUpdated,AddressUpdatedBy,City,CityUpdated,CityUpdatedBy,State,StateUpdated,StateUpdatedBy,PostalCode,PostalCodeUpdated,PostalCodeUpdatedBy,Phone,PhoneUpdated,PhoneUpdatedBy,WifesName,WifesNameUpdated,WifesNameUpdatedBy,AddInfo2,AddInfo2Updated,AddInfo2UpdatedBy,FaxNumber,FaxNumberUpdated,FaxNumberUpdatedBy,Council,CouncilUpdated,CouncilUpdatedBy,Assembly,AssemblyUpdated,AssemblyUpdatedBy,Circle,CircleUpdated,CircleUpdatedBy,Email,EmailUpdated,EmailUpdatedBy,Deceased,DeceasedUpdated,DeceasedUpdatedBy,CellPhone,CellPhoneUpdated,CellPhoneUpdatedBy,LastUpdated,SeatedDelegateDay1,SeatedDelegateDay2,SeatedDelegateDay3,PaidMpd,Bulletin,BulletinUpdated,BulletinUpdatedBy,UserId,Data,DataChanged,LastLoggedIn,CanEditAdmUi,DoNotEmail,HidePersonalInfo,WhyDoNotEmail")] TblMasMember tblMasMember)
         {
+            Log.Information("Starting Edit of " + id);
             if (id != tblMasMember.MemberId)
             {
+                Log.Fatal("Member ID not found " + id);
                 return NotFound();
             }
             // for return
             string lastname = tblMasMember.LastName;
             if (ModelState.IsValid)
             {
-                Uri myURI = new(myBaseAddress + "/UpdMember/" + id);
+                Uri myURI = new(_myBaseAddress + "/UpdMember/" + id);
                 try
                 {
                     using (var client = new HttpClient())
@@ -182,20 +198,28 @@ namespace KofCWSCWebsite.Controllers
                         client.BaseAddress = myURI;
                         var response = await client.PutAsJsonAsync(myURI, tblMasMember);
                         var returnValue = await response.Content.ReadAsAsync<List<TblMasMember>>();
+                        Log.Information("Update of Member ID " + id + "Returned " + returnValue);
                     }
                 }
                 catch (DbUpdateConcurrencyException)
                 {
                     if (!TblMasMemberExists(tblMasMember.MemberId))
                     {
+                        Log.Fatal("Member Not Found " + tblMasMember.MemberId);
                         return NotFound();
                     }
                     else
                     {
+                        Log.Fatal("Concerncy Issue");
                         throw;
                     }
                 }
-                return RedirectToAction(nameof(Index),new { lastname = lastname });
+                catch (Exception ex)
+                {
+                    Log.Fatal(ex.Message);
+                }
+                Log.Information("Update Success Member ID " + id);
+                return RedirectToAction(nameof(Index), new { lastname = lastname });
             }
             return View(tblMasMember);
         }
@@ -203,12 +227,13 @@ namespace KofCWSCWebsite.Controllers
         // GET: TblMasMembers/Delete/5
         public async Task<IActionResult> Delete(int? id)
         {
+            Log.Information("Starting Delete " + id);
             if (id == null)
             {
                 return NotFound();
             }
 
-            Uri myURI = new(myBaseAddress + "/GetMember/" + id);
+            Uri myURI = new(_myBaseAddress + "/GetMember/" + id);
 
             using (var client = new HttpClient())
             {
@@ -235,30 +260,46 @@ namespace KofCWSCWebsite.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> DeleteConfirmed(int id)
         {
+            Log.Information("Starting DeleteConfirmed of " + id);
             if (id == null)
             {
+                Log.Fatal("Delect Member Not found " + id);
                 return NotFound();
             }
 
-            Uri myURI = new(myBaseAddress + "/DelMember/" + id);
+            Uri myURI = new(_myBaseAddress + "/DelMember/" + id);
+            //string myURL = _myBaseAddress + "/DelMember";
 
-            using (var client = new HttpClient())
+            //var content = new StringContent("{\"id\": \""+id+"\"}", System.Text.Encoding.UTF8, "application/json");
+
+            try
             {
-                var responseTask = client.GetAsync(myURI);
-                responseTask.Wait();
-                var result = responseTask.Result;
-                TblMasMember? member;
-                if (result.IsSuccessStatusCode)
+                using (var client = new HttpClient())
                 {
-                    string json = await result.Content.ReadAsStringAsync();
-                    member = JsonConvert.DeserializeObject<TblMasMember>(json);
+                    var responseTask = client.DeleteAsync(myURI);
+                    responseTask.Wait();
+                    var result = responseTask.Result;
+                    TblMasMember? member;
+                    if (result.IsSuccessStatusCode)
+                    {
+                        Log.Information("Delete Member Success " + id);
+                        string json = await result.Content.ReadAsStringAsync();
+                        member = JsonConvert.DeserializeObject<TblMasMember>(json);
+                    }
+                    else
+                    {
+                        Log.Information("Delete Member Failed " + id);
+                        ModelState.AddModelError(string.Empty, "Server Error.  Please contact administrator.");
+                        member = null;
+                    }
+                    return RedirectToAction(nameof(Index));
                 }
-                else
-                {
-                    ModelState.AddModelError(string.Empty, "Server Error.  Please contact administrator.");
-                    member = null;
-                }
-                return RedirectToAction(nameof(Index));
+            }
+            catch (Exception ex)
+            {
+
+                Log.Fatal(ex.Message + " " + ex.InnerException);
+                return NoContent();
             }
         }
 

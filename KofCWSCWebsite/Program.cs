@@ -10,10 +10,18 @@ using Azure.Identity;
 using Microsoft.Azure.KeyVault;
 using Azure.Security.KeyVault.Secrets;
 using Microsoft.AspNetCore.DataProtection;
-
+using Microsoft.IdentityModel.Tokens;
+using Serilog;
 
 var builder = WebApplication.CreateBuilder(args);
 
+Log.Logger = new LoggerConfiguration()
+    .WriteTo.Console()
+    .Enrich.FromLogContext()
+    .WriteTo.File("logs/MyAppLog.txt", retainedFileCountLimit: 21, rollingInterval: RollingInterval.Day)
+    .CreateLogger();
+
+Log.Information("Initialized Serilog and Starting Application");
 //******************************************************************************************************************************
 // 6/6/2024 Tim Philomneo
 //  Getting the connect string.  We have switched from the local appsettings.json to using KeyVault.
@@ -22,13 +30,18 @@ var builder = WebApplication.CreateBuilder(args);
 //  Securtiy to KeyVault is handled by the DefaultAzureCredential.  It will use your VS login if you are running
 //  in Visual Studio or the Azure Application Identity when published.
 //******************************************************************************************************************************
-var kvURL = builder.Configuration.GetSection("KV").GetValue(typeof(string),"KVDev");
+var kvURL = builder.Configuration.GetSection("KV").GetValue(typeof(string), "KVDev");
 var client = new SecretClient(new Uri((string)kvURL), new DefaultAzureCredential());
-var cnString = client.GetSecret("DASPDEV").Value;
-var connectionString = cnString.Value;
-//var connectionString = builder.Configuration.GetConnectionString("DevConnection") ?? throw new InvalidOperationException("Connection string 'DefaultConnection' not found.");
-//******************************************************************************************************************************
+var cnString = client.GetSecret("AZDEV").Value;
+string connectionString = cnString.Value;
 
+Log.Information("Found CS " + connectionString);
+//------------------------------------------------------------------------------------------------------------------------------
+//////////////var connectionString = builder.Configuration.GetConnectionString("DASPDEVConnection") ?? throw new InvalidOperationException("Connection string 'DefaultConnection' not found.");
+//------------------------------------------------------------------------------------------------------------------------------
+// make sure we have a value from KeyVault. if not throw an exception
+if (connectionString.IsNullOrEmpty()) throw new Exception("APIURL is not defined");
+//------------------------------------------------------------------------------------------------------------------------------
 builder.Services.AddDbContext<ApplicationDbContext>(options =>
     options.UseSqlServer(connectionString));
 

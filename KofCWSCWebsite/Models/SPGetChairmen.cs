@@ -12,5 +12,7 @@ namespace KofCWSCWebsite.Models
         public string? FullName { get; set; }
         public string? Email { get; set; }
         public int Council { get; set; }
+
+        public string? Email2 { get; set; }
     }
 }

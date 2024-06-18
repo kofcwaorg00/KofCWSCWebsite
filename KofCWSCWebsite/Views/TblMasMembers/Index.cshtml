@@ -9,7 +9,7 @@
 <input type="text" id="myInput" placeholder="Search by Member Last Name" title="Type in all or part of last name" style="width:25%">
 <button type="button" onclick="getFilteredData()">Search</button>
 @* <a asp-controller="TblMasMembers" asp-action="Index" asp-route-id= >Search</a> *@
-
+@ViewData["NoMembers"]
 
 <p>
     <a asp-action="Create">Create New</a>
