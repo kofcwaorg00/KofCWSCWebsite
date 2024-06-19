@@ -176,7 +176,21 @@
                                 <li><hr class="dropdown-divider"></li>
                             </ul>
                         </li>
-
+                        <li class="nav-item dropdown">
+                            <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown1" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                                Print Labels
+                            </a>
+                            <ul class="dropdown-menu" aria-labelledby="navbarDropdown1">
+                                <li><a class="nav-link text-dark" asp-area="" asp-controller="Reports" asp-action="GetLabelByOffice" asp-route-id="27">Print GKs</a></li>
+                                <li><a class="nav-link text-dark" asp-area="" asp-controller="Reports" asp-action="GetLabelByOffice" asp-route-id="22">Print FSs</a></li>
+                                <li><a class="nav-link text-dark" asp-area="" asp-controller="Reports" asp-action="GetLabelByOffice" asp-route-id="20">Print FNs</a></li>
+                                <li><a class="nav-link text-dark" asp-area="" asp-controller="Reports" asp-action="GetLabelByOffice" asp-route-id="17">Print FCs</a></li>
+                                @*  <li><hr /></li>
+                                <li><a class="nav-link text-dark" asp-area="" asp-controller="Reports" asp-action="GetLabelByGroup" asp-route-id="2">Print State Officers</a></li>
+                                <li><a class="nav-link text-dark" asp-area="" asp-controller="Reports" asp-action="GetLabelByGroup" asp-route-id="5">Print State Chairmen</a></li>
+                                <li><a class="nav-link text-dark" asp-area="" asp-controller="Reports" asp-action="GetLabelByGroup" asp-route-id="3">Print District Deputies</a></li>*@
+                            </ul>
+                        </li>
                         @if (User.IsInRole("Admin"))
                         {
                             <li class="nav-item dropdown">
@@ -191,6 +205,7 @@
                                     <li><a class="dropdown-item MyMenuLink" asp-area="" asp-controller="TblMasMembers" asp-action="Index" asp-route-id="aaa">Members</a></li>
                                 </ul>
                             </li>
+                            
                         }
                     </ul>
                     <form class="d-flex">

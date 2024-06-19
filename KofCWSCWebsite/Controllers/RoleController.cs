@@ -30,7 +30,7 @@ namespace KofCWSCWebsite.Controllers
         [Authorize(Roles = "Admin")]
         public IActionResult Create() => View();
         
-        [Authorize(Roles = "Admin")]
+        //[Authorize(Roles = "Admin")]
         [HttpPost]
         public async Task<IActionResult> Create([Required] string name)
         {

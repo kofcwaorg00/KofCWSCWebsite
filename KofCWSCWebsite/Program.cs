@@ -7,18 +7,20 @@ using KofCWSCWebsite.Services;
 using Microsoft.Extensions.Configuration;
 using Microsoft.AspNetCore;
 using Azure.Identity;
+
 using Microsoft.Azure.KeyVault;
 using Azure.Security.KeyVault.Secrets;
 using Microsoft.AspNetCore.DataProtection;
 using Microsoft.IdentityModel.Tokens;
 using Serilog;
+using Microsoft.AspNet.Identity;
 
 var builder = WebApplication.CreateBuilder(args);
 
 Log.Logger = new LoggerConfiguration()
     .WriteTo.Console()
     .Enrich.FromLogContext()
-    .WriteTo.File("logs/MyAppLog.txt", retainedFileCountLimit: 21, rollingInterval: RollingInterval.Day)
+    .WriteTo.File("logs/MyAppLog.txt", retainedFileCountLimit: 21, rollingInterval: RollingInterval.Day,shared: true)
     .CreateLogger();
 
 Log.Information("Initialized Serilog and Starting Application");
@@ -52,10 +54,8 @@ builder.Services.AddDbContext<IdentityDBContext>(options =>
 builder.Services.AddDefaultIdentity<KofCUser>(options => options.SignIn.RequireConfirmedAccount = true)
     .AddRoles<IdentityRole>().AddEntityFrameworkStores<IdentityDBContext>();
 
-builder.Services.AddDatabaseDeveloperPageExceptionFilter();
 
-//builder.Services.AddApplicationInsightsTelemetry();
-//builder.Host.AddSerilogLogging(builder.Configuration);
+builder.Services.AddDatabaseDeveloperPageExceptionFilter();
 
 builder.Services.AddControllersWithViews();
 

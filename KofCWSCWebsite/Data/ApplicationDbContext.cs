@@ -42,7 +42,7 @@ public partial class ApplicationDbContext : DbContext
         }
         catch (Exception ex)
         {
-            Log.Error(ex.Message);
+            Log.Error(GetType() + " " + ex.Message + " " + ex.InnerException);
             throw new Exception("SQL Azure Key Vault Initialization Failed");
         }
     }
