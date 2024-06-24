@@ -17,6 +17,7 @@ namespace KofCWSCWebsite.Controllers
         {
             roleManager = roleMgr;
             userManager = userMrg;
+            
         }
         [Authorize(Roles = "Admin")]
         public ViewResult Index() => View(roleManager.Roles);

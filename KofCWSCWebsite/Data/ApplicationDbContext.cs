@@ -56,6 +56,7 @@ public partial class ApplicationDbContext : DbContext
     public virtual DbSet<TblMasAward> TblMasAwards { get; set; }
 
     public virtual DbSet<TblMasMember> TblMasMembers { get; set; }
+    public virtual DbSet<KofCMemberIDUsers> KofCMemberIDUsers { get; set; }
     protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
     {
         if (!optionsBuilder.IsConfigured)
@@ -72,6 +73,14 @@ public partial class ApplicationDbContext : DbContext
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
+        //modelBuilder.Entity<KofCMemberIDUsers>(entity =>
+        //{
+        //    entity.HasNoKey();
+        //    entity.ToTable("tbl_MasMembers");
+        //    entity.Property(e => e.KofCID)
+        //       .HasMaxLength(7)
+        //       .HasColumnName("KofCID");
+        //});
 
         modelBuilder.Entity<TblValCouncil>(entity =>
         {

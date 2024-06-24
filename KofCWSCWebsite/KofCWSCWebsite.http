@@ -3,3 +3,19 @@
 GET {{KofCWSCWebsite_HostAddress}}/tblmasmembers/index/{id}
 
 ###
+
+GET {{KofCWSCWebsite_HostAddress}}/users/Ver
+
+###
+
+GET {{KofCWSCWebsite_HostAddress}}/VerifyKofCID?KofCMemberID=11111
+
+###
+
+GET {{KofCWSCWebsite_HostAddress}}/VerifyKofCID/{Input.KofCMemberID}?KofCMemberID=string
+
+###
+
+GET {{KofCWSCWebsite_HostAddress}}/VerifyKofCID/11111
+
+###

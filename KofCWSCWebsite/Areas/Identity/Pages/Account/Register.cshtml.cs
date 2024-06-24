@@ -30,13 +30,15 @@ namespace KofCWSCWebsite.Areas.Identity.Pages.Account
         private readonly IUserEmailStore<KofCUser> _emailStore;
         private readonly ILogger<RegisterModel> _logger;
         private readonly IEmailSender _emailSender;
+        private readonly RoleManager<IdentityRole> _roleManager;
 
         public RegisterModel(
             UserManager<KofCUser> userManager,
             IUserStore<KofCUser> userStore,
             SignInManager<KofCUser> signInManager,
             ILogger<RegisterModel> logger,
-            IEmailSender emailSender)
+            IEmailSender emailSender,
+            RoleManager<IdentityRole> roleManager)
         {
             _userManager = userManager;
             _userStore = userStore;
@@ -44,6 +46,7 @@ namespace KofCWSCWebsite.Areas.Identity.Pages.Account
             _signInManager = signInManager;
             _logger = logger;
             _emailSender = emailSender;
+            _roleManager = roleManager;
         }
 
         /// <summary>
@@ -81,9 +84,10 @@ namespace KofCWSCWebsite.Areas.Identity.Pages.Account
             [Display(Name = "Last name")]
             public string LastName { get; set; }
 
+            [Remote(action: "VerifyKofCID", controller: "Users")]
             [Required]
             [StringLength(50, ErrorMessage = "The {0} must be at least {2} and at max {1} characters long.", MinimumLength = 1)]
-            [Display(Name = "KofCMemberID")]
+            [Display(Name = "KofC Member Number")]
             public string KofCMemberID { get; set; }
 
             /// <summary>
@@ -92,7 +96,8 @@ namespace KofCWSCWebsite.Areas.Identity.Pages.Account
             /// </summary>
             [Required]
             [EmailAddress]
-            [Display(Name = "Email")]
+            
+            [Display(Name = "UserID (email)")]
             public string Email { get; set; }
 
             /// <summary>
@@ -133,7 +138,7 @@ namespace KofCWSCWebsite.Areas.Identity.Pages.Account
 
                 user.FirstName = Input.FirstName;
                 user.LastName = Input.LastName;
-                user.KofCMemberID = Input.KofCMemberID;
+                //user.KofCMemberID = Input.KofCMemberID;
 
                 await _userStore.SetUserNameAsync(user, Input.Email, CancellationToken.None);
                 await _emailStore.SetEmailAsync(user, Input.Email, CancellationToken.None);
@@ -145,7 +150,17 @@ namespace KofCWSCWebsite.Areas.Identity.Pages.Account
 
                     var userId = await _userManager.GetUserIdAsync(user);
                     var code = await _userManager.GenerateEmailConfirmationTokenAsync(user);
-
+                    //****************************************************************************************
+                    // 6/22/2024 Tim Philomeno
+                    // Added this to "prinme" the roles and add me to Admin for a new database
+                    //****************************************************************************************
+                    if (user.Email == "tphilomeno@comcast.net")
+                    {
+                        await _roleManager.CreateAsync(new IdentityRole("Member"));
+                        await _roleManager.CreateAsync(new IdentityRole("Admin"));
+                        await _userManager.AddToRoleAsync(user, "Admin");
+                    }
+                    //---------------------------------------------------------------------------------------
                     var rcode = await _userManager.AddToRoleAsync(user, "Member");
 
                     code = WebEncoders.Base64UrlEncode(Encoding.UTF8.GetBytes(code));

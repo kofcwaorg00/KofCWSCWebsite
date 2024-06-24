@@ -4,6 +4,7 @@ using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Identity;
+using Microsoft.AspNetCore.Mvc;
 
 namespace KofCWSCWebsite.Areas.Identity.Data;
 
@@ -18,6 +19,7 @@ public class KofCUser : IdentityUser
     [MaxLength(100)]
     public string LastName { get; set; } = string.Empty;
 
+    //[Remote(action: "VerifyKofCID", controller: "Users")]
     [Required]
     [MaxLength(100)]
     public string KofCMemberID { get; set; } = string.Empty;

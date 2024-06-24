@@ -25,12 +25,12 @@
             <div class="form-floating mb-3">
                 <input asp-for="Input.KofCMemberID" class="form-control" autocomplete="KofCMemberID" aria-required="true" placeholder="1234567" />
                 <label asp-for="Input.KofCMemberID">KofC Member ID</label>
-                <span asp-validation-for="Input.KofCMemberID" class="text-danger"></span>
+                <span asp-validation-for="Input.KofCMemberID" d class="text-danger"></span>
             </div>
             <div asp-validation-summary="ModelOnly" class="text-danger" role="alert"></div>
             <div class="form-floating mb-3">
                 <input asp-for="Input.Email" class="form-control" autocomplete="username" aria-required="true" placeholder="name@example.com" />
-                <label asp-for="Input.Email">Email</label>
+                <label asp-for="Input.Email">UserID (email)</label>
                 <span asp-validation-for="Input.Email" class="text-danger"></span>
             </div>
             <div class="form-floating mb-3">
