@@ -19,21 +19,14 @@ namespace KofCWSCWebsite.Controllers
     {
         private readonly ApplicationDbContext _context;
         private IConfiguration _configuration;
+        private DataSetService _dataSetService;
 
-        //private string myBaseAddress = "https://dev.kofc-wa.org/API";
-        //private string myBaseAddress = "https://localhost:7078";
-        private string? _myBaseAddress;
-        public TblMasMembersController(ApplicationDbContext context, IConfiguration configuration)
+        public TblMasMembersController(ApplicationDbContext context, IConfiguration configuration, DataSetService dataSetService)
         {
             Log.Information("Initializing DB Context");
             _context = context;
             _configuration = configuration;
-            _myBaseAddress = (string?)_configuration.GetSection("APIURL").GetValue(typeof(string), "AZDEV");
-            if (_myBaseAddress.IsNullOrEmpty())
-            {
-                Log.Fatal("No API URI Initialized");
-                throw new Exception("APIURL is not defined");
-            }
+            _dataSetService = dataSetService;
         }
 
         public ActionResult Index(string lastname)
@@ -44,7 +37,7 @@ namespace KofCWSCWebsite.Controllers
                 lastname = "aaa";
             }
 
-            Uri myURI = new Uri(_myBaseAddress + "/GetMembers/ByLastName/" + lastname);
+            Uri myURI = new Uri(_dataSetService.GetAPIBaseAddress() + "/Members/LastName/" + lastname);
 
             using (var client = new HttpClient())
             {
@@ -78,7 +71,7 @@ namespace KofCWSCWebsite.Controllers
                 return NotFound();
             }
 
-            Uri myURI = new(_myBaseAddress + "/GetMember/" + id);
+            Uri myURI = new(_dataSetService.GetAPIBaseAddress() + "/Member/" + id);
 
             using (var client = new HttpClient())
             {
@@ -113,10 +106,10 @@ namespace KofCWSCWebsite.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Create([Bind("MemberId,KofCid,Prefix,PrefixUpdated,PrefixUpdatedBy,FirstName,FirstNameUpdated,FirstNameUpdatedBy,NickName,NickNameUpdated,NickNameUpdatedBy,Mi,Miupdated,MiupdatedBy,LastName,LastNameUpdated,LastNameUpdatedBy,Suffix,SuffixUpdated,SuffixUpdatedBy,AddInfo1,AddInfo1Updated,AddInfo1UpdatedBy,Address,AddressUpdated,AddressUpdatedBy,City,CityUpdated,CityUpdatedBy,State,StateUpdated,StateUpdatedBy,PostalCode,PostalCodeUpdated,PostalCodeUpdatedBy,Phone,PhoneUpdated,PhoneUpdatedBy,WifesName,WifesNameUpdated,WifesNameUpdatedBy,AddInfo2,AddInfo2Updated,AddInfo2UpdatedBy,FaxNumber,FaxNumberUpdated,FaxNumberUpdatedBy,Council,CouncilUpdated,CouncilUpdatedBy,Assembly,AssemblyUpdated,AssemblyUpdatedBy,Circle,CircleUpdated,CircleUpdatedBy,Email,EmailUpdated,EmailUpdatedBy,Deceased,DeceasedUpdated,DeceasedUpdatedBy,CellPhone,CellPhoneUpdated,CellPhoneUpdatedBy,LastUpdated,SeatedDelegateDay1,SeatedDelegateDay2,SeatedDelegateDay3,PaidMpd,Bulletin,BulletinUpdated,BulletinUpdatedBy,UserId,Data,DataChanged,LastLoggedIn,CanEditAdmUi,DoNotEmail,HidePersonalInfo,WhyDoNotEmail")] TblMasMember tblMasMember)
         {
-            Log.Information("STarting Create");
+            Log.Information("Starting Create");
             if (ModelState.IsValid)
             {
-                Uri myURI = new(_myBaseAddress + "/NewMember");
+                Uri myURI = new(_dataSetService.GetAPIBaseAddress() + "/Members");
                 string lastname = tblMasMember.LastName;
                 try
                 {
@@ -151,7 +144,7 @@ namespace KofCWSCWebsite.Controllers
                 return NotFound();
             }
 
-            Uri myURI = new(_myBaseAddress + "/GetMember/" + id);
+            Uri myURI = new(_dataSetService.GetAPIBaseAddress() + "/Member/" + id);
 
             using (var client = new HttpClient())
             {
@@ -190,7 +183,7 @@ namespace KofCWSCWebsite.Controllers
             string lastname = tblMasMember.LastName;
             if (ModelState.IsValid)
             {
-                Uri myURI = new(_myBaseAddress + "/UpdMember/" + id);
+                Uri myURI = new(_dataSetService.GetAPIBaseAddress() + "/Member/" + id);
                 try
                 {
                     using (var client = new HttpClient())
@@ -233,7 +226,7 @@ namespace KofCWSCWebsite.Controllers
                 return NotFound();
             }
 
-            Uri myURI = new(_myBaseAddress + "/GetMember/" + id);
+            Uri myURI = new(_dataSetService.GetAPIBaseAddress() + "/Member/" + id);
 
             using (var client = new HttpClient())
             {
@@ -267,7 +260,7 @@ namespace KofCWSCWebsite.Controllers
                 return NotFound();
             }
 
-            Uri myURI = new(_myBaseAddress + "/DelMember/" + id);
+            Uri myURI = new(_dataSetService.GetAPIBaseAddress() + "/Member/" + id);
             //string myURL = _myBaseAddress + "/DelMember";
 
             //var content = new StringContent("{\"id\": \""+id+"\"}", System.Text.Encoding.UTF8, "application/json");

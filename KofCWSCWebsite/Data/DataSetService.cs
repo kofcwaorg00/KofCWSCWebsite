@@ -7,26 +7,29 @@ using System.Data;
 using System.Diagnostics;
 using Serilog;
 using com.sun.xml.@internal.rngom.dt;
+using Microsoft.IdentityModel.Tokens;
 
 namespace KofCWSCWebsite.Data
 {
     public class DataSetService
     {
+        private IConfiguration _configuration;
         private readonly ApplicationDbContext _context;
         private IWebHostEnvironment? _hostingEnvironment;
         public string ReportsPath { get; private set; }
         public DataSet DataSet { get; private set; } = new DataSet();
 
-        public DataSetService(ApplicationDbContext context, IWebHostEnvironment hostingEnvironment)
+        public DataSetService(ApplicationDbContext context, IWebHostEnvironment hostingEnvironment,IConfiguration configuration)
         {
             _hostingEnvironment = hostingEnvironment;
             _context = context;
+            _configuration = configuration;
             SetReportsFolder();
-            SetDataSet();
+            //SetDataSet();
         }
 
         private void SetReportsFolder() => ReportsPath = FindReportsFolder(_hostingEnvironment.WebRootPath);
-        private void SetDataSet() => _context.TblMasMembers.ToListAsync().Wait();
+        //private void SetDataSet() => _context.TblMasMembers.ToListAsync().Wait();
 
         private string FindReportsFolder(string startDir)
         {
@@ -83,6 +86,27 @@ namespace KofCWSCWebsite.Data
 
                 Log.Fatal(ex.Message + " " + ex.InnerException);
                 return report;
+            }
+
+        }
+
+        public string GetAPIBaseAddress()
+        {
+            try
+            {
+                string _myBaseAddress;
+                _myBaseAddress = (string)_configuration.GetSection("APIURL").GetValue(typeof(string), "AZDEV");
+
+                if (_myBaseAddress.IsNullOrEmpty())
+                {
+                    Log.Fatal("No API URI Initialized");
+                    throw new Exception("API URI is not set");
+                }
+                return _myBaseAddress;
+            }
+            catch (Exception)
+            {
+                return string.Empty;
             }
 
         }

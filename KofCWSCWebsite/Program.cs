@@ -37,7 +37,7 @@ var client = new SecretClient(new Uri((string)kvURL), new DefaultAzureCredential
 var cnString = client.GetSecret("AZDEV").Value;
 string connectionString = cnString.Value;
 
-Log.Information("Found CS " + connectionString);
+//Log.Information("Found CS " + connectionString);
 //------------------------------------------------------------------------------------------------------------------------------
 //////////////var connectionString = builder.Configuration.GetConnectionString("DASPDEVConnection") ?? throw new InvalidOperationException("Connection string 'DefaultConnection' not found.");
 //------------------------------------------------------------------------------------------------------------------------------
@@ -53,6 +53,8 @@ builder.Services.AddDbContext<IdentityDBContext>(options =>
 // changed this to add IdentiyRole too
 builder.Services.AddDefaultIdentity<KofCUser>(options => options.SignIn.RequireConfirmedAccount = true)
     .AddRoles<IdentityRole>().AddEntityFrameworkStores<IdentityDBContext>();
+
+builder.Services.AddScoped<DataSetService, DataSetService>();
 
 // my attempt at useing userid/email/kofcid...still needed to deal with email and custom validator NOT
 //builder.Services.AddDefaultIdentity<KofCUser>(options =>
