@@ -1,25 +1,35 @@
 ﻿@model IEnumerable<KofCWSCWebsite.Models.TblMasMember>
 
 @{
-    ViewData["Title"] = "Index";
+    ViewData["Title"] = "Manage Members";
 }
 
-<h1>Index</h1>
-
-<input type="text" id="myInput" placeholder="Search by Member Last Name" title="Type in all or part of last name" style="width:25%">
-<button type="button" onclick="getFilteredData()">Search</button>
+<h1>Manage Members</h1>
+<form class="d-flex" style="width:40%">
+    <input class="form-control me-2" type="text" id="myInput" placeholder="Search by Member Last Name" title="Type in all or part of last name">
+    <button class="btn btn-outline-success" type="button" onclick="getFilteredData()">Search</button>
+    <div style="width:50%; vertical-align:central; padding-left:5px; padding-top:7px">
+    @ViewData["NoMembers"]
+    </div>
+</form>
 @* <a asp-controller="TblMasMembers" asp-action="Index" asp-route-id= >Search</a> *@
-@ViewData["NoMembers"]
+
 
 <p>
-    <a asp-action="Create">Create New</a>
+    @* <a asp-action="Create">Create New</a> *@
+    <form asp-controller="TblMasMembers" asp-action="Create" method="get">
+        <button type="submit" class="btn btn-sm btn-success">
+            Create New
+        </button>
+    </form>
 </p>
 <table class="table" style="table-layout:fixed; text-align:left">
     <thead>
         <tr>
-            <th style="width:75px">
-                @Html.DisplayNameFor(model => model.KofCid)
-            </th>
+            <th style="width:150px"></th>
+            @*  <th style="width:75px">
+            @Html.DisplayNameFor(model => model.KofCid)
+            </th> *@
             <th style="width:100px">
                 @Html.DisplayNameFor(model => model.FirstName)
             </th>
@@ -56,7 +66,9 @@
             <th style="width:250px">
                 @Html.DisplayNameFor(model => model.Email)
             </th>
-            <th style="width:200px"></th>
+            <th style="width:40px"></th>
+            <th style="width:60px"></th>
+            <th style="width:40px"></th>
         </tr>
     </thead>
     <tbody>
@@ -64,8 +76,15 @@
         {
             <tr>
                 <td>
-                    @Html.DisplayFor(modelItem => item.KofCid)
+                    <form asp-controller="TblCorrMemberOffices" asp-action="Index" asp-route-id="@item.MemberId" method="get">
+                        <button type="submit" class="btn btn-sm btn-primary">
+                            Manage Offices
+                        </button>
+                    </form>
                 </td>
+                @*  <td>
+            @Html.DisplayFor(modelItem => item.KofCid)
+            </td> *@
                 <td>
                     @Html.DisplayFor(modelItem => item.FirstName)
                 </td>
@@ -103,7 +122,27 @@
                     @Html.DisplayFor(modelItem => item.Email)
                 </td>
                 <td>
-                    <a asp-action="Edit" asp-route-id="@item.MemberId">Edit</a>&nbsp;|&nbsp;<a asp-action="Details" asp-route-id="@item.MemberId">Details</a>&nbsp;|&nbsp;<a asp-action="Delete" asp-route-id="@item.MemberId">Delete</a>
+                    @* <a asp-action="Edit" asp-route-id="@item.MemberId">Edit</a>&nbsp;|&nbsp;<a asp-action="Details" asp-route-id="@item.MemberId">Details</a>&nbsp;|&nbsp;<a asp-action="Delete" asp-route-id="@item.MemberId">Delete</a> *@
+                    <form asp-controller="TblMasMembers" asp-action="Edit" asp-route-id="@item.MemberId" method="get">
+                        <button type="submit" class="btn btn-sm btn-primary">
+                            Edit
+                        </button>
+                    </form>
+                </td>
+                <td>
+                    <form asp-controller="TblMasMembers" asp-action="Details" asp-route-id="@item.MemberId" method="get">
+                        <button type="submit" class="btn btn-sm btn-warning">
+                            Details
+                        </button>
+                    </form>
+                </td>
+                <td>
+                    <form asp-controller="TblMasMembers" asp-action="Delete" asp-route-id="@item.MemberId" method="get">
+                        <button type="submit" class="btn btn-sm btn-danger">
+                            Delete
+                        </button>
+                    </form>
+
                 </td>
             </tr>
         }
@@ -122,8 +161,8 @@
         var host = window.location.host;
         // not pretty but it works
         location.href = "https://" + host + "/tblMasMembers/Index/?lastname=" + filter;
-        
-        // this works to but has the previous parameters stuck on 
+
+        // this works to but has the previous parameters stuck on
         //location.href = '@Url.Action("Index", "tblMasMembers")?lastname=' + filter;
     }
 </script>

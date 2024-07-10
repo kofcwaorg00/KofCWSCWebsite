@@ -1,0 +1,124 @@
+﻿@model IEnumerable<KofCWSCWebsite.Models.TblCorrMemberOfficeVM>
+
+@{
+    ViewData["Title"] = "Manage Offices For " + ViewBag.MemberName;
+}
+
+<h3>Manage Offices for @ViewBag.MemberName (@ViewBag.MemberID)</h3>
+
+<form class="d-flex" style="width:40%">
+    <input class="form-control me-2" type="text" id="myInput" placeholder="Filter by Year" title="Filter by Year" style="width:25%" value="2024" onchange="getFilteredData()">
+    <button class="btn btn-outline-success" type="button" onclick="getFilteredData()">Search</button>
+</form>
+<p>
+    <div style="float:left">
+        <form asp-action="Create" asp-route-id="@ViewBag.MemberID" method="get">
+            <button type="submit" class="btn btn-sm btn-success">
+                Create New
+            </button>
+        </form>
+    </div>
+    <div style="float:right">
+        <form asp-controller="TblMasMembers" asp-action="Index" asp-route-id="aaa" method="get">
+            <button type="submit" class="btn btn-sm btn-secondary">
+                Back to Members
+            </button>
+        </form>
+    </div>
+</p>
+<table id="myTable" class="table">
+    <thead>
+        <tr>
+            @* <th>
+            @Html.DisplayNameFor(model => model.MemberId)
+            </th> *@
+            <th>
+                @Html.DisplayNameFor(model => model.OfficeDescription)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.PrimaryOffice)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Year)
+            </th>
+            <th style="width:50px"></th>
+            <th style="width:60px"></th>
+            <th style="width:60px"></th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var item in Model)
+        {
+            <tr>
+                @*  <td>
+            @Html.DisplayFor(modelItem => item.MemberId)
+            </td> *@
+                <td>
+                    @Html.DisplayFor(modelItem => item.OfficeDescription)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.PrimaryOffice)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Year)
+                </td>
+                @if (User.IsInRole("Admin"))
+                {
+                    <td>
+                        @* <a asp-action="Edit" asp-route-id="@item.MemberId">Edit</a>&nbsp;|&nbsp;<a asp-action="Details" asp-route-id="@item.MemberId">Details</a>&nbsp;|&nbsp;<a asp-action="Delete" asp-route-id="@item.MemberId">Delete</a> *@
+
+                        <form asp-controller="TblCorrMemberOffices" asp-action="Edit" asp-route-id="@item.Id" method="get">
+                            <button type="submit" class="btn btn-sm btn-primary">
+                                Edit
+                            </button>
+                        </form>
+                    </td>
+                    <td>
+                        <form asp-controller="TblCorrMemberOffices" asp-action="Details" asp-route-id="@item.Id" method="get">
+                            <button type="submit" class="btn btn-sm btn-warning">
+                                Details
+                            </button>
+                        </form>
+                    </td>
+                    <td>
+                        <form asp-controller="TblCorrMemberOffices" asp-action="Delete" asp-route-id="@item.Id" method="get">
+                            <button type="submit" class="btn btn-sm btn-danger">
+                                Delete
+                            </button>
+                        </form>
+
+                    </td>
+                }
+                @* <td>
+            @if (User.IsInRole("Admin"))
+            {
+            <a asp-action="Edit" asp-route-id="@item.Id">Edit</a>
+            <a asp-action="Details" asp-route-id="@item.Id">Details</a>
+            <a asp-action="Delete" asp-route-id="@item.Id">Delete </a>
+            }
+            </td> *@
+            </tr>
+        }
+    </tbody>
+</table>
+<script>
+    function getFilteredData() {
+        var input, filter, table, tr, td, i, txtValue;
+        input = document.getElementById("myInput");
+        filter = input.value.toUpperCase();
+        table = document.getElementById("myTable");
+        tr = table.getElementsByTagName("tr");
+        for (i = 0; i < tr.length; i++) {
+            td = tr[i].getElementsByTagName("td")[2];
+            if (td) {
+                txtValue = td.textContent || td.innerText;
+                if (txtValue.toUpperCase().indexOf(filter) > -1) {
+                    tr[i].style.display = "";
+                } else {
+                    tr[i].style.display = "none";
+                }
+            }
+        }
+    }
+    getFilteredData();
+</script>

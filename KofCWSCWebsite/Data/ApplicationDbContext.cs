@@ -57,6 +57,12 @@ public partial class ApplicationDbContext : DbContext
 
     public virtual DbSet<TblMasMember> TblMasMembers { get; set; }
     public virtual DbSet<KofCMemberIDUsers> KofCMemberIDUsers { get; set; }
+    public virtual DbSet<TblCorrMemberOffice> TblCorrMemberOffices { get; set; }
+
+    public virtual DbSet<TblValOffice> TblValOffices { get; set; }
+
+    public virtual DbSet<MemberVM> funSYS_BuildName { get; set; }
+
     protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
     {
         if (!optionsBuilder.IsConfigured)
@@ -73,14 +79,10 @@ public partial class ApplicationDbContext : DbContext
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
-        //modelBuilder.Entity<KofCMemberIDUsers>(entity =>
-        //{
-        //    entity.HasNoKey();
-        //    entity.ToTable("tbl_MasMembers");
-        //    entity.Property(e => e.KofCID)
-        //       .HasMaxLength(7)
-        //       .HasColumnName("KofCID");
-        //});
+        modelBuilder.Entity<MemberVM>(entity =>
+        {
+            entity.HasNoKey();
+        });
 
         modelBuilder.Entity<TblValCouncil>(entity =>
         {
@@ -272,6 +274,43 @@ public partial class ApplicationDbContext : DbContext
             entity.Property(e => e.Phone).HasMaxLength(30);
             entity.Property(e => e.PostalCode).HasMaxLength(20);
             entity.Property(e => e.State).HasMaxLength(20);
+        });
+
+        modelBuilder.Entity<TblCorrMemberOffice>(entity =>
+        {
+            entity.ToTable("tbl_CorrMemberOffice");
+
+            entity.Property(e => e.Id).HasColumnName("ID");
+            entity.Property(e => e.MemberId).HasColumnName("MemberID");
+            entity.Property(e => e.OfficeId).HasColumnName("OfficeID");
+            entity.Property(e => e.Year).HasDefaultValue(2024);
+
+        });
+
+        modelBuilder.Entity<TblValOffice>(entity =>
+        {
+            entity.HasKey(e => e.OfficeId)
+                .HasName("aaaaatbl_ValOffices_PK")
+                .IsClustered(false);
+
+            entity.ToTable("tbl_ValOffices", tb =>
+            {
+                tb.HasTrigger("T_tbl_ValOffices_DTrig");
+                tb.HasTrigger("T_tbl_ValOffices_UTrig");
+            });
+
+            entity.Property(e => e.OfficeId).HasColumnName("OfficeID");
+            entity.Property(e => e.AltDescription).HasMaxLength(75);
+            entity.Property(e => e.ContactUsstring)
+                .HasMaxLength(200)
+                .HasColumnName("ContactUSString");
+            entity.Property(e => e.EmailAlias)
+                .HasMaxLength(50)
+                .IsUnicode(false);
+            entity.Property(e => e.GroupId).HasColumnName("GroupID");
+            entity.Property(e => e.OfficeDescription).HasMaxLength(75);
+            entity.Property(e => e.SupremeUrl).HasColumnName("SupremeURL");
+            entity.Property(e => e.UseAsFormalTitle).HasDefaultValue(false);
         });
 
         OnModelCreatingPartial(modelBuilder);

@@ -97,6 +97,11 @@
     <None Include="Pages\Shared\_ValidationScriptsPartial.cshtml" />
     <None Include="Pages\_ViewImports.cshtml" />
     <None Include="Pages\_ViewStart.cshtml" />
+    <None Include="Views\TblCorrMemberOffices\Create.cshtml" />
+    <None Include="Views\TblCorrMemberOffices\Delete.cshtml" />
+    <None Include="Views\TblCorrMemberOffices\Details.cshtml" />
+    <None Include="Views\TblCorrMemberOffices\Edit.cshtml" />
+    <None Include="Views\TblCorrMemberOffices\Index.cshtml" />
   </ItemGroup>
 
   <ItemGroup>
