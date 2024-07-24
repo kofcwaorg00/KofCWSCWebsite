@@ -43,8 +43,12 @@ namespace KofCWSCWebsite.Controllers
             }
             ViewData["APIURL"] = "and the APIURL is using AZDEV";
             //*****************************************************************************************************
+            //var result = _context.Database
+            //    .SqlQuery<SPGetSOS>($"uspWEB_GetSOS 0")
+            //    .ToList();
+            //return View(result);
             var result = _context.Database
-                .SqlQuery<SPGetSOS>($"uspWEB_GetSOS 0")
+                .SqlQuery<HomePageViewModel>($"uspWEB_GetHomePage")
                 .ToList();
             return View(result);
         }

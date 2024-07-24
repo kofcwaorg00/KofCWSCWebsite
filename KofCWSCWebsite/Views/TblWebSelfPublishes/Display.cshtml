@@ -1,0 +1,15 @@
+﻿@model IEnumerable<KofCWSCWebsite.Models.SPGetSOS>
+
+@{
+    ViewData["Title"] = "Message Details";
+}
+
+<div>
+    @foreach (var item in Model)
+    {
+        <h3>@item.FullName</h3>
+        <img src="@item.Photo" />
+        @Html.Raw(item.Data);
+    }
+    <a href="/">Return Home</a>
+</div>

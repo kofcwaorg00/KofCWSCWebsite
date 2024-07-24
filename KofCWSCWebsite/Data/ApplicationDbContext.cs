@@ -63,6 +63,7 @@ public partial class ApplicationDbContext : DbContext
 
     public virtual DbSet<MemberVM> funSYS_BuildName { get; set; }
 
+    public virtual DbSet<TblWebTrxAoi> TblWebTrxAois { get; set; }
     protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
     {
         if (!optionsBuilder.IsConfigured)
@@ -311,6 +312,28 @@ public partial class ApplicationDbContext : DbContext
             entity.Property(e => e.OfficeDescription).HasMaxLength(75);
             entity.Property(e => e.SupremeUrl).HasColumnName("SupremeURL");
             entity.Property(e => e.UseAsFormalTitle).HasDefaultValue(false);
+        });
+
+        modelBuilder.Entity<TblWebTrxAoi>(entity =>
+        {
+            entity.HasKey(e => e.Id);
+            entity.ToTable("tblWEB_TrxAOI");
+
+            entity.Property(e => e.GraphicUrl)
+                .HasMaxLength(250)
+                .HasColumnName("GraphicURL");
+            entity.Property(e => e.LinkUrl)
+                .HasMaxLength(250)
+                .HasColumnName("LinkURL");
+            entity.Property(e => e.PostedDate).HasColumnType("datetime");
+            entity.Property(e => e.Title).HasMaxLength(250);
+            entity.Property(e => e.Type)
+                .HasMaxLength(2)
+                .IsFixedLength();
+        });
+        modelBuilder.Entity<SPGetSOS>(entity =>
+        {
+            entity.HasNoKey();
         });
 
         OnModelCreatingPartial(modelBuilder);

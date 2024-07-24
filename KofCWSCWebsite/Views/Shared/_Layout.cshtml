@@ -178,17 +178,21 @@
                                 <li><hr class="dropdown-divider"></li>
                             </ul>
                         </li>
+                        <li>
+                            <a class="nav-link text-dark" asp-area="" asp-controller="" asp-action="" asp-route-id="">Contact Us</a>
+                        </li>
+
                         @if (User.IsInRole("Admin"))
                         {
                             <li class="nav-item dropdown">
                                 <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown1" role="button" data-bs-toggle="dropdown" aria-expanded="false">
-                                    Print Labels
+                                    Print
                                 </a>
                                 <ul class="dropdown-menu" aria-labelledby="navbarDropdown1">
-                                    <li><a class="nav-link text-dark" asp-area="" asp-controller="Reports" asp-action="GetLabelByOffice" asp-route-id="27">Print GKs</a></li>
-                                    <li><a class="nav-link text-dark" asp-area="" asp-controller="Reports" asp-action="GetLabelByOffice" asp-route-id="22">Print FSs</a></li>
-                                    <li><a class="nav-link text-dark" asp-area="" asp-controller="Reports" asp-action="GetLabelByOffice" asp-route-id="20">Print FNs</a></li>
-                                    <li><a class="nav-link text-dark" asp-area="" asp-controller="Reports" asp-action="GetLabelByOffice" asp-route-id="17">Print FCs</a></li>
+                                    <li><a class="nav-link text-dark" asp-area="" asp-controller="Reports" asp-action="GetLabelByOffice" asp-route-id="27">Print GK Labels</a></li>
+                                    <li><a class="nav-link text-dark" asp-area="" asp-controller="Reports" asp-action="GetLabelByOffice" asp-route-id="22">Print FS Labels</a></li>
+                                    <li><a class="nav-link text-dark" asp-area="" asp-controller="Reports" asp-action="GetLabelByOffice" asp-route-id="20">Print FN Labels</a></li>
+                                    <li><a class="nav-link text-dark" asp-area="" asp-controller="Reports" asp-action="GetLabelByOffice" asp-route-id="17">Print FC Labels</a></li>
                                     @*  <li><hr /></li>
                                 <li><a class="nav-link text-dark" asp-area="" asp-controller="Reports" asp-action="GetLabelByGroup" asp-route-id="2">Print State Officers</a></li>
                                 <li><a class="nav-link text-dark" asp-area="" asp-controller="Reports" asp-action="GetLabelByGroup" asp-route-id="5">Print State Chairmen</a></li>
@@ -198,7 +202,7 @@
 
                             <li class="nav-item dropdown">
                                 <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
-                                    Management
+                                    Manage
                                 </a>
                                 <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
                                     <li><a class="dropdown-item MyMenuLink" asp-area="" asp-controller="Role" asp-action="Index" asp-route-id="">Roles</a></li>
@@ -206,6 +210,8 @@
                                     <li><a class="dropdown-item MyMenuLink" asp-area="" asp-controller="TblWebSelfPublishes" asp-action="Index" asp-route-id="">Web Page Messages</a></li>
                                     <li><a class="dropdown-item MyMenuLink" asp-area="" asp-controller="TblValOffices" asp-action="Index" asp-route-id="">Offices</a></li>
                                     <li><a class="dropdown-item MyMenuLink" asp-area="" asp-controller="TblMasMembers" asp-action="Index" asp-route-id="aaa">Members</a></li>
+                                    <li><a class="dropdown-item MyMenuLink" asp-area="" asp-controller="TblWebTrxAois" asp-action="Index" asp-route-id="">A/OI</a></li>
+                                    <li><a class="dropdown-item MyMenuLink" href="~/UploadFile">File Upload</a></li>
                                 </ul>
                             </li>
 
@@ -215,11 +221,12 @@
                         <input class="form-control me-2" type="search" placeholder="Search" aria-label="Search">
                         <button class="btn btn-outline-success" type="submit">Search</button>
                     </form>
+                    <div>
+                        <partial name="_LoginPartial" />
+                    </div>
                 </div>
             </div>
-            <div>
-                <partial name="_LoginPartial" />
-            </div>
+
         </nav>
 
     </header>

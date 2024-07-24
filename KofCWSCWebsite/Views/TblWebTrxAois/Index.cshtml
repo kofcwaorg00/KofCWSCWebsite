@@ -1,0 +1,105 @@
+﻿@model IEnumerable<KofCWSCWebsite.Models.TblWebTrxAoi>
+
+@{
+    ViewData["Title"] = "Manage Announcements and Of Interest";
+}
+
+<h1>Manage Announcements and Of Interest</h1>
+<a href="https://kofcwa.sharepoint.com/sites/WebsiteStorage/Shared%20Documents/Forms/AllItems.aspx" target="_blank">Navigate here to store your documents and use the "Copy Link" to get the document linkURL</a>
+<br />
+
+<a href="~/UploadFile">Navigate here to upload your image for GraphicUrl</a>
+<p>
+    <a asp-action="Create">Create New</a>
+</p>
+<table class="table">
+    <thead>
+        <tr>
+            <th>
+                <div style="width:25px">
+                    @Html.DisplayNameFor(model => model.Type)
+                </div>
+            </th>
+            <th>
+                <div style="width:250px">
+                    @Html.DisplayNameFor(model => model.Title)
+                </div>
+            </th>
+            @*<th>
+            <div style="width:250px">
+                @Html.DisplayNameFor(model => model.GraphicUrl)
+            </div>
+        </th>*@
+            @*<th>
+                <div style="width:30%">
+                    @Html.DisplayNameFor(model => model.Text)
+                </div>
+            </th>*@
+            @*<th>
+                <div style="width:20%">
+                    @Html.DisplayNameFor(model => model.LinkUrl)
+                </div>
+            </th>*@
+            <th>
+                <div style="width:10%">
+                    @Html.DisplayNameFor(model => model.PostedDate)
+                </div>
+            </th>
+            <th>
+                <div style="width:10%">
+                    @Html.DisplayNameFor(model => model.Expired)
+                </div>
+            </th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var item in Model)
+        {
+            <tr>
+                <td>
+                    <div style="width:25px">
+                        @Html.DisplayFor(modelItem => item.Type)
+                    </div>
+                </td>
+                <td>
+                    <div style="width:250px">
+                        @Html.DisplayFor(modelItem => item.Title)
+                    </div>
+                </td>
+                @*<td>
+                    <div style="width:250px">
+                        @Html.DisplayFor(modelItem => item.GraphicUrl)
+                    </div>
+                </td>*@
+                @*<td>
+                    <div style="width:30%">
+                        @Html.DisplayFor(modelItem => item.Text)
+                    </div>
+                </td>*@
+                @*<td>
+                    <div style="width:20%">
+                        @Html.DisplayFor(modelItem => item.LinkUrl)
+                    </div>
+                </td>*@
+                <td>
+                    <div style="width:10%">
+                        @Html.DisplayFor(modelItem => item.PostedDate)
+                    </div>
+                </td>
+                <td>
+                    <div style="width:10%">
+                        @Html.DisplayFor(modelItem => item.Expired)
+                    </div>
+                </td>
+                <td>
+                    <div style="width:200px">
+                        <a asp-action="Edit" asp-route-id="@item.Id">Edit</a> |
+                        <a asp-action="Details" asp-route-id="@item.Id">Details</a> |
+                        <a asp-action="Delete" asp-route-id="@item.Id">Delete</a>
+                    </div>
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>

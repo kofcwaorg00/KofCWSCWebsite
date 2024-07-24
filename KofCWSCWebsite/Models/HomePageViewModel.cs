@@ -1,10 +1,11 @@
-﻿using Microsoft.EntityFrameworkCore;
+﻿using com.sun.corba.se.impl.naming.namingutil;
+using Microsoft.EntityFrameworkCore;
 using System.ComponentModel.DataAnnotations;
 
 namespace KofCWSCWebsite.Models
 {
     [Keyless]
-    public class SPGetSOS
+    public class HomePageViewModel
     {
 
         [Display(Name = "Name")]
@@ -17,5 +18,11 @@ namespace KofCWSCWebsite.Models
         public string? Class { get; set; }
         public string? URL { get; set; }
         public int OID { get; set; }
+        public string Type { get; set; }
+        public string Title { get; set; }
+        public string? GraphicURL { get; set; }
+        public string? LinkURL { get; set; }
+		public DateTime PostedDate { get; set; }
+        public bool Expired { get; set; }
     }
 }

@@ -10,23 +10,22 @@ using KofCWSCWebsite.Models;
 
 namespace KofCWSCWebsite.Controllers
 {
-    public class TblValOfficesController : Controller
+    public class TblWebTrxAoisController : Controller
     {
         private readonly ApplicationDbContext _context;
 
-        public TblValOfficesController(ApplicationDbContext context)
+        public TblWebTrxAoisController(ApplicationDbContext context)
         {
             _context = context;
         }
 
-        // GET: TblValOffices
+        // GET: TblWebTrxAois
         public async Task<IActionResult> Index()
         {
-            //changed
-            return View(await _context.TblValOffice.OrderBy(x => x.OfficeDescription).ToListAsync());
+            return View(await _context.TblWebTrxAois.ToListAsync());
         }
 
-        // GET: TblValOffices/Details/5
+        // GET: TblWebTrxAois/Details/5
         public async Task<IActionResult> Details(int? id)
         {
             if (id == null)
@@ -34,39 +33,39 @@ namespace KofCWSCWebsite.Controllers
                 return NotFound();
             }
 
-            var tblValOffice = await _context.TblValOffice
-                .FirstOrDefaultAsync(m => m.OfficeId == id);
-            if (tblValOffice == null)
+            var tblWebTrxAoi = await _context.TblWebTrxAois
+                .FirstOrDefaultAsync(m => m.Id == id);
+            if (tblWebTrxAoi == null)
             {
                 return NotFound();
             }
 
-            return View(tblValOffice);
+            return View(tblWebTrxAoi);
         }
 
-        // GET: TblValOffices/Create
+        // GET: TblWebTrxAois/Create
         public IActionResult Create()
         {
             return View();
         }
 
-        // POST: TblValOffices/Create
+        // POST: TblWebTrxAois/Create
         // To protect from overposting attacks, enable the specific properties you want to bind to.
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("OfficeId,OfficeDescription,DirSortOrder,AltDescription,EmailAlias,UseAsFormalTitle,WebPageTagLine,SupremeUrl")] TblValOffice tblValOffice)
+        public async Task<IActionResult> Create([Bind("Id,Type,Title,GraphicUrl,Text,LinkUrl,PostedDate,Expired")] TblWebTrxAoi tblWebTrxAoi)
         {
             if (ModelState.IsValid)
             {
-                _context.Add(tblValOffice);
+                _context.Add(tblWebTrxAoi);
                 await _context.SaveChangesAsync();
                 return RedirectToAction(nameof(Index));
             }
-            return View(tblValOffice);
+            return View(tblWebTrxAoi);
         }
 
-        // GET: TblValOffices/Edit/5
+        // GET: TblWebTrxAois/Edit/5
         public async Task<IActionResult> Edit(int? id)
         {
             if (id == null)
@@ -74,22 +73,22 @@ namespace KofCWSCWebsite.Controllers
                 return NotFound();
             }
 
-            var tblValOffice = await _context.TblValOffice.FindAsync(id);
-            if (tblValOffice == null)
+            var tblWebTrxAoi = await _context.TblWebTrxAois.FindAsync(id);
+            if (tblWebTrxAoi == null)
             {
                 return NotFound();
             }
-            return View(tblValOffice);
+            return View(tblWebTrxAoi);
         }
 
-        // POST: TblValOffices/Edit/5
+        // POST: TblWebTrxAois/Edit/5
         // To protect from overposting attacks, enable the specific properties you want to bind to.
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("OfficeId,OfficeDescription,DirSortOrder,AltDescription,EmailAlias,UseAsFormalTitle,WebPageTagLine,SupremeUrl")] TblValOffice tblValOffice)
+        public async Task<IActionResult> Edit(int id, [Bind("Id,Type,Title,GraphicUrl,Text,LinkUrl,PostedDate,Expired")] TblWebTrxAoi tblWebTrxAoi)
         {
-            if (id != tblValOffice.OfficeId)
+            if (id != tblWebTrxAoi.Id)
             {
                 return NotFound();
             }
@@ -98,12 +97,12 @@ namespace KofCWSCWebsite.Controllers
             {
                 try
                 {
-                    _context.Update(tblValOffice);
+                    _context.Update(tblWebTrxAoi);
                     await _context.SaveChangesAsync();
                 }
                 catch (DbUpdateConcurrencyException)
                 {
-                    if (!TblValOfficeExists(tblValOffice.OfficeId))
+                    if (!TblWebTrxAoiExists(tblWebTrxAoi.Id))
                     {
                         return NotFound();
                     }
@@ -114,10 +113,10 @@ namespace KofCWSCWebsite.Controllers
                 }
                 return RedirectToAction(nameof(Index));
             }
-            return View(tblValOffice);
+            return View(tblWebTrxAoi);
         }
 
-        // GET: TblValOffices/Delete/5
+        // GET: TblWebTrxAois/Delete/5
         public async Task<IActionResult> Delete(int? id)
         {
             if (id == null)
@@ -125,34 +124,34 @@ namespace KofCWSCWebsite.Controllers
                 return NotFound();
             }
 
-            var tblValOffice = await _context.TblValOffice
-                .FirstOrDefaultAsync(m => m.OfficeId == id);
-            if (tblValOffice == null)
+            var tblWebTrxAoi = await _context.TblWebTrxAois
+                .FirstOrDefaultAsync(m => m.Id == id);
+            if (tblWebTrxAoi == null)
             {
                 return NotFound();
             }
 
-            return View(tblValOffice);
+            return View(tblWebTrxAoi);
         }
 
-        // POST: TblValOffices/Delete/5
+        // POST: TblWebTrxAois/Delete/5
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> DeleteConfirmed(int id)
         {
-            var tblValOffice = await _context.TblValOffice.FindAsync(id);
-            if (tblValOffice != null)
+            var tblWebTrxAoi = await _context.TblWebTrxAois.FindAsync(id);
+            if (tblWebTrxAoi != null)
             {
-                _context.TblValOffice.Remove(tblValOffice);
+                _context.TblWebTrxAois.Remove(tblWebTrxAoi);
             }
 
             await _context.SaveChangesAsync();
             return RedirectToAction(nameof(Index));
         }
 
-        private bool TblValOfficeExists(int id)
+        private bool TblWebTrxAoiExists(int id)
         {
-            return _context.TblValOffice.Any(e => e.OfficeId == id);
+            return _context.TblWebTrxAois.Any(e => e.Id == id);
         }
     }
 }

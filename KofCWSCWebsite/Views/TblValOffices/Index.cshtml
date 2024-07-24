@@ -4,12 +4,17 @@
     ViewData["Title"] = "Index";
 }
 
-<h1>Index</h1>
+<h1>Manage Offices</h1>
 <p>
     <input type="text" id="myInput" onkeyup="myFunction()" placeholder="Type in a Office Name to filter results" title="Type in a name" style="width:25%">
 </p>
 <p>
-    <a asp-action="Create">Create New</a>
+    <form asp-action="Create" method="get">
+        <button type="submit" class="btn btn-sm btn-success">
+            Create New
+        </button>
+    </form>
+
 </p>
 <table class="table" id="myTable">
     <thead>
@@ -20,13 +25,13 @@
             <th>
                 @Html.DisplayNameFor(model => model.DirSortOrder)
             </th>
-            <th>
+           @*  <th>
                 @Html.DisplayNameFor(model => model.AltDescription)
-            </th>
+            </th> *@
             <th>
                 @Html.DisplayNameFor(model => model.EmailAlias)
             </th>
-            <th>
+           @*  <th>
                 @Html.DisplayNameFor(model => model.UseAsFormalTitle)
             </th>
             <th>
@@ -34,8 +39,10 @@
             </th>
             <th>
                 @Html.DisplayNameFor(model => model.SupremeUrl)
-            </th>
-            <th></th>
+            </th> *@
+            <th style="width:50px"></th>
+            <th style="width:60px"></th>
+            <th style="width:60px"></th>
         </tr>
     </thead>
     <tbody>
@@ -47,13 +54,13 @@
             <td>
                 @Html.DisplayFor(modelItem => item.DirSortOrder)
             </td>
-            <td>
+            @* <td>
                 @Html.DisplayFor(modelItem => item.AltDescription)
-            </td>
+            </td> *@
             <td>
                 @Html.DisplayFor(modelItem => item.EmailAlias)
             </td>
-            <td>
+           @*  <td>
                 @Html.DisplayFor(modelItem => item.UseAsFormalTitle)
             </td>
             <td>
@@ -61,12 +68,34 @@
             </td>
             <td>
                 @Html.DisplayFor(modelItem => item.SupremeUrl)
-            </td>
-            <td>
+            </td> *@
+                <td>
+                    <form asp-action="Edit" asp-route-id="@item.OfficeId" method="get">
+                        <button type="submit" class="btn btn-sm btn-primary">
+                            Edit
+                        </button>
+                    </form>
+                </td>
+                <td>
+                    <form asp-action="Details" asp-route-id="@item.OfficeId" method="get">
+                        <button type="submit" class="btn btn-sm btn-warning">
+                            Details
+                        </button>
+                    </form>
+                </td>
+                <td>
+                    <form asp-action="Delete" asp-route-id="@item.OfficeId" method="get">
+                        <button type="submit" class="btn btn-sm btn-danger">
+                            Delete
+                        </button>
+                    </form>
+
+                </td>
+            @* <td>
                 <a asp-action="Edit" asp-route-id="@item.OfficeId">Edit</a> |
                 <a asp-action="Details" asp-route-id="@item.OfficeId">Details</a> |
                 <a asp-action="Delete" asp-route-id="@item.OfficeId">Delete</a>
-            </td>
+            </td> *@
         </tr>
 }
     </tbody>
