@@ -4,17 +4,35 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>@ViewData["Title"]</title>
-    @*     <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" /> *@
+    @*************************************************************************************************@
+    @*Style Sheet Resources*@
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
     <link rel="stylesheet" href="~/css/site.css" asp-append-version="true" />
+    @*------------------------------------------------------------------------------------------------*@
+    @*FullCalendar Support*@
+    <link rel='stylesheet' href='https://cdnjs.cloudflare.com/ajax/libs/fullcalendar/3.9.0/fullcalendar.min.css' />
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/qtip2/3.0.3/jquery.qtip.min.css" rel="stylesheet" />
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/flatpickr/4.5.2/flatpickr.min.css" rel="stylesheet" />
+    @*<link rel="stylesheet" href="~/css/calendar.css" />*@
+    @*************************************************************************************************@
+    @*Script Resources*@
     <script src="~/js/site.js" asp-append-version="true"></script>
-
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz" crossorigin="anonymous"></script>
-    <script src="~/lib/jquery-validation-unobtrusive/jquery.validate.unobtrusive.min.js"></script>
+    @*------------------------------------------------------------------------------------------------
+        These have to be loaded in order*@
     <script src="~/lib/jquery/dist/jquery.min.js"></script>
-
-    @* I dont' think the next line of css exists*@
-    @* <link rel="stylesheet" href="~/KofCWSCWebsite.styles.css" asp-append-version="true" /> *@
+    <script src="~/lib/jquery-validation/dist/jquery.validate.min.js"></script>
+    <script src="~/lib/jquery-validation-unobtrusive/jquery.validate.unobtrusive.min.js"></script>
+    @*------------------------------------------------------------------------------------------------*@
+    @*------------------------------------------------------------------------------------------------*@
+    @*FullCalendar Support*@
+    <script src='https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.22.2/moment.min.js'></script>
+    <script src='https://cdnjs.cloudflare.com/ajax/libs/fullcalendar/3.9.0/fullcalendar.min.js'></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/qtip2/3.0.3/jquery.qtip.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/flatpickr/4.5.2/flatpickr.min.js"></script>
+    <script src="https://unpkg.com/axios/dist/axios.min.js"></script>
+    @*<script src="~/js/calendar.js" asp-append-version="true"></script>*@
+    @*************************************************************************************************@
 </head>
 <body>
     <div>
@@ -47,7 +65,8 @@
                                 <li><hr class="dropdown-divider"></li>
                                 <li><a class="dropdown-item MyMenuLink" asp-area="" asp-controller="TblValCouncils" asp-action="Index" asp-route-id="">Search for a Council</a></li>
                                 <li><a class="dropdown-item MyMenuLink" asp-area="" asp-controller="TblValAssys" asp-action="Index" asp-route-id="">Search for an Assembly</a></li>
-                                @* <li><a class="dropdown-item MyMenuLink" asp-area="" asp-controller="TblMasMembers" asp-action="Index" asp-route-id="aa">Testing Members API</a></li> *@
+                                @*
+                                <li><a class="dropdown-item MyMenuLink" asp-area="" asp-controller="TblMasMembers" asp-action="Index" asp-route-id="aa">Testing Members API</a></li> *@
                             </ul>
                         </li>
                         <li class="nav-item dropdown">
@@ -55,7 +74,7 @@
                                 State Family
                             </a>
                             <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
-                                <li><a class="dropdown-item" href="~/StateFamily/Officers">State Officers</a></li>
+                                <li><a class="dropdown-item MyMenuLink" asp-area="" asp-controller="SP" asp-action="GetSOSView" asp-route-id="">State Officers</a></li>
                                 <li><a class="dropdown-item MyMenuLink" asp-area="" asp-controller="SP" asp-action="GetChairmen" asp-route-id="">State Chairmen</a></li>
                                 <li><a class="dropdown-item MyMenuLink" asp-area="" asp-controller="SP" asp-action="GetChairmanInfoBlock" asp-route-id="8">Ceremonials</a></li>
                                 <li><a class="dropdown-item MyMenuLink" asp-area="" asp-controller="SP" asp-action="GetDDs" asp-route-id="0">District Deputies</a></li>
@@ -179,41 +198,43 @@
                             </ul>
                         </li>
                         <li>
+                            @*<a class="nav-link text-dark" asp-page="/Calendar">Calendar</a>*@
                             <a class="nav-link text-dark" asp-area="" asp-controller="" asp-action="" asp-route-id="">Contact Us</a>
                         </li>
 
                         @if (User.IsInRole("Admin"))
                         {
-                            <li class="nav-item dropdown">
-                                <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown1" role="button" data-bs-toggle="dropdown" aria-expanded="false">
-                                    Print
-                                </a>
-                                <ul class="dropdown-menu" aria-labelledby="navbarDropdown1">
-                                    <li><a class="nav-link text-dark" asp-area="" asp-controller="Reports" asp-action="GetLabelByOffice" asp-route-id="27">Print GK Labels</a></li>
-                                    <li><a class="nav-link text-dark" asp-area="" asp-controller="Reports" asp-action="GetLabelByOffice" asp-route-id="22">Print FS Labels</a></li>
-                                    <li><a class="nav-link text-dark" asp-area="" asp-controller="Reports" asp-action="GetLabelByOffice" asp-route-id="20">Print FN Labels</a></li>
-                                    <li><a class="nav-link text-dark" asp-area="" asp-controller="Reports" asp-action="GetLabelByOffice" asp-route-id="17">Print FC Labels</a></li>
-                                    @*  <li><hr /></li>
+                        <li class="nav-item dropdown">
+                            <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown1" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                                Print
+                            </a>
+                            <ul class="dropdown-menu" aria-labelledby="navbarDropdown1">
+                                <li><a class="nav-link text-dark" asp-area="" asp-controller="Reports" asp-action="GetLabelByOffice" asp-route-id="27">Print GK Labels</a></li>
+                                <li><a class="nav-link text-dark" asp-area="" asp-controller="Reports" asp-action="GetLabelByOffice" asp-route-id="22">Print FS Labels</a></li>
+                                <li><a class="nav-link text-dark" asp-area="" asp-controller="Reports" asp-action="GetLabelByOffice" asp-route-id="20">Print FN Labels</a></li>
+                                <li><a class="nav-link text-dark" asp-area="" asp-controller="Reports" asp-action="GetLabelByOffice" asp-route-id="17">Print FC Labels</a></li>
+                                @*
+                                <li><hr /></li>
                                 <li><a class="nav-link text-dark" asp-area="" asp-controller="Reports" asp-action="GetLabelByGroup" asp-route-id="2">Print State Officers</a></li>
                                 <li><a class="nav-link text-dark" asp-area="" asp-controller="Reports" asp-action="GetLabelByGroup" asp-route-id="5">Print State Chairmen</a></li>
                                 <li><a class="nav-link text-dark" asp-area="" asp-controller="Reports" asp-action="GetLabelByGroup" asp-route-id="3">Print District Deputies</a></li>*@
-                                </ul>
-                            </li>
+                            </ul>
+                        </li>
 
-                            <li class="nav-item dropdown">
-                                <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
-                                    Manage
-                                </a>
-                                <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
-                                    <li><a class="dropdown-item MyMenuLink" asp-area="" asp-controller="Role" asp-action="Index" asp-route-id="">Roles</a></li>
-                                    <li><a class="dropdown-item MyMenuLink" asp-area="" asp-controller="TblMasAwards" asp-action="Index" asp-route-id="">Awards</a></li>
-                                    <li><a class="dropdown-item MyMenuLink" asp-area="" asp-controller="TblWebSelfPublishes" asp-action="Index" asp-route-id="">Web Page Messages</a></li>
-                                    <li><a class="dropdown-item MyMenuLink" asp-area="" asp-controller="TblValOffices" asp-action="Index" asp-route-id="">Offices</a></li>
-                                    <li><a class="dropdown-item MyMenuLink" asp-area="" asp-controller="TblMasMembers" asp-action="Index" asp-route-id="aaa">Members</a></li>
-                                    <li><a class="dropdown-item MyMenuLink" asp-area="" asp-controller="TblWebTrxAois" asp-action="Index" asp-route-id="">A/OI</a></li>
-                                    <li><a class="dropdown-item MyMenuLink" href="~/UploadFile">File Upload</a></li>
-                                </ul>
-                            </li>
+                        <li class="nav-item dropdown">
+                            <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                                Manage
+                            </a>
+                            <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
+                                <li><a class="dropdown-item MyMenuLink" asp-area="" asp-controller="Role" asp-action="Index" asp-route-id="">Roles</a></li>
+                                <li><a class="dropdown-item MyMenuLink" asp-area="" asp-controller="TblMasAwards" asp-action="Index" asp-route-id="">Awards</a></li>
+                                <li><a class="dropdown-item MyMenuLink" asp-area="" asp-controller="TblWebSelfPublishes" asp-action="Index" asp-route-id="">Web Page Messages</a></li>
+                                <li><a class="dropdown-item MyMenuLink" asp-area="" asp-controller="TblValOffices" asp-action="Index" asp-route-id="">Offices</a></li>
+                                <li><a class="dropdown-item MyMenuLink" asp-area="" asp-controller="TblMasMembers" asp-action="Index" asp-route-id="aaa">Members</a></li>
+                                <li><a class="dropdown-item MyMenuLink" asp-area="" asp-controller="TblWebTrxAois" asp-action="Index" asp-route-id="">A/OI</a></li>
+                                <li><a class="dropdown-item MyMenuLink" href="~/UploadFile">File Upload</a></li>
+                            </ul>
+                        </li>
 
                         }
                     </ul>
@@ -237,17 +258,20 @@
     </div>
 
     @* <footer class="border-top footer text-muted">
-    <div class="container-footer">
-    <p>
-    Brought to you by Saint Martin's University and the awesome team of Sunya Chay, Brandon Essary, and William Flores<br>
-    <a href="mailto:teamawesome@example.com">teamawesome@example.com</a>
-    </p>
-    &copy; 2023 - Knights_of_Columbus_Website - <a asp-area="" asp-page="/Privacy">Privacy</a>
-    </div>
+        <div class="container-footer">
+            <p>
+                Brought to you by Saint Martin's University and the awesome team of Sunya Chay, Brandon Essary, and William Flores<br>
+                <a href="mailto:teamawesome@example.com">teamawesome@example.com</a>
+            </p>
+            &copy; 2023 - Knights_of_Columbus_Website - <a asp-area="" asp-page="/Privacy">Privacy</a>
+        </div>
     </footer> *@
-    @* <script src="~/lib/jquery/dist/jquery.min.js"></script> *@
-    @* <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script> *@
-    @* <script src="~/js/site.js" asp-append-version="true"></script> *@
+    @*
+    <script src="~/lib/jquery/dist/jquery.min.js"></script> *@
+    @*
+    <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script> *@
+    @*
+    <script src="~/js/site.js" asp-append-version="true"></script> *@
     @await RenderSectionAsync("Scripts", required: false)
 </body>
 </html>

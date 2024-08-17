@@ -64,6 +64,8 @@ public partial class ApplicationDbContext : DbContext
     public virtual DbSet<MemberVM> funSYS_BuildName { get; set; }
 
     public virtual DbSet<TblWebTrxAoi> TblWebTrxAois { get; set; }
+
+    public virtual DbSet<TblSysTrxEvent> TblSysTrxEvents { get; set; }
     protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
     {
         if (!optionsBuilder.IsConfigured)
@@ -336,6 +338,28 @@ public partial class ApplicationDbContext : DbContext
             entity.HasNoKey();
         });
 
+        modelBuilder.Entity<SPGetSOSView>(entity =>
+        {
+            entity.HasKey(e => e.SortBy);
+        });
+
+        modelBuilder.Entity<TblSysTrxEvent>(entity =>
+        {
+            entity.HasKey(e => e.Id).HasName("PK__tblSYS_t__3214EC07638F8109");
+
+            entity.ToTable("tblSYS_trxEvents");
+
+            entity.Property(e => e.AddedBy).HasMaxLength(50);
+            entity.Property(e => e.AttachUrl)
+                .HasMaxLength(250)
+                .HasColumnName("AttachURL");
+            entity.Property(e => e.Begin).HasColumnType("datetime");
+            entity.Property(e => e.DateAdded).HasColumnType("datetime");
+            entity.Property(e => e.End).HasColumnType("datetime");
+            entity.Property(e => e.Title).HasMaxLength(50);
+            entity.Property(e => e.isAllDay).HasColumnType("boolean");
+        });
+
         OnModelCreatingPartial(modelBuilder);
     }
 
@@ -344,5 +368,7 @@ public partial class ApplicationDbContext : DbContext
 public DbSet<KofCWSCWebsite.Models.TblValAssy> TblValAssy { get; set; } = default!;
 
 public DbSet<KofCWSCWebsite.Models.TblValOffice> TblValOffice { get; set; } = default!;
+
+public DbSet<KofCWSCWebsite.Models.SPGetSOSView> SPGetSOSView { get; set; } = default!;
 }
 

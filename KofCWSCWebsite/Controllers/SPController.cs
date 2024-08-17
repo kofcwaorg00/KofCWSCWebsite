@@ -16,6 +16,19 @@ namespace KofCWSCWebsite.Controllers
             _context = context;
         }
 
+        // GET: GetSOS
+        [Route("GetSOSView")]
+        public IActionResult GetSOSView()
+        {
+            // Run Sproc
+            var result = _context.Database
+                .SqlQuery<SPGetSOSView>($"EXECUTE uspWEB_GetSOSView")
+                .ToList();
+            ViewData["MyHeading"] = result[0].Heading;
+            ViewData["myHost"] = HttpContext.Request.Host.Value;
+            return View("Views/StateFamily/GetSOSView.cshtml", result);
+        }
+
         // GET: Bulletins
         [Route("GetBulletins")]
         public IActionResult GetBulletins()
