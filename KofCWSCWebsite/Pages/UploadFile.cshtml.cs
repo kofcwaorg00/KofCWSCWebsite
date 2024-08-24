@@ -32,7 +32,7 @@ namespace KofCWSCWebsite.Pages
                 using (var fileStream = new FileStream(file, FileMode.Create))
                 {
                     await Upload.CopyToAsync(fileStream);
-                    ViewData["file"] = "~/files/uploads/AOI/" + Upload.FileName;
+                    ViewData["file"] = "/images/AOI/" + Upload.FileName;
                 }
             }
             catch (Exception ex)

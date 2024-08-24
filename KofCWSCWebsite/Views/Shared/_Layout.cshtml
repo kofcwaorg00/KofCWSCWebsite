@@ -200,7 +200,7 @@
                         <li>
                             @*<a class="nav-link text-dark" asp-page="/Calendar">Calendar</a>*@
                         @*<a class="dropdown-item MyMenuLink" asp-page="/Utils/EmailGroups">Email Groups</a><br />*@
-                        <a class="nav-link text-dark" asp-page="/ContactUs">Contact Us</a>
+                            <a class="nav-link text-dark" asp-page="/ContactUs">Contact Us</a>
                         </li>
 
                         @if (User.IsInRole("Admin"))
@@ -234,7 +234,7 @@
                                     <li><a class="dropdown-item MyMenuLink" asp-area="" asp-controller="TblMasMembers" asp-action="Index" asp-route-id="aaa">Members</a></li>
                                     <li><a class="dropdown-item MyMenuLink" asp-area="" asp-controller="TblWebTrxAois" asp-action="Index" asp-route-id="">A/OI</a></li>
                                     <li><a class="dropdown-item MyMenuLink" asp-page="/Utils/EmailGroups">Email Groups</a></li>
-                                    <li><a class="dropdown-item MyMenuLink" href="~/UploadFile">File Upload</a></li>
+                                    <li><a class="dropdown-item MyMenuLink" href="~/UploadFile">AOI Graphic File Upload</a></li>
                                 </ul>
                             </li>
 
