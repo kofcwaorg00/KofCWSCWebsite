@@ -18,5 +18,7 @@ namespace KofCWSCWebsite.Models
         public int OfficeID { get; set; }
         public string? WebPageTagLine {  get; set; } 
         public string? SupremeURL { get; set; }
+        public int MemberID { get; set; }
+        public string Heading { get; set; }
     }
 }

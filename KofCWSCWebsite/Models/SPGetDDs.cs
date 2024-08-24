@@ -19,5 +19,7 @@ namespace KofCWSCWebsite.Models
         public string? AssignedCouncils { get; set; }
         
         public string? Email { get; set; }
+        public int MemberID { get; set; }
+        public string Heading { get; set; }
     }
 }

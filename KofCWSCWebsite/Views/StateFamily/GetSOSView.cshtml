@@ -1,14 +1,13 @@
 ﻿@model IEnumerable<KofCWSCWebsite.Models.SPGetSOSView>
-
+@using KofCWSCWebsite.Services;
 @{
     ViewData["Title"] = "State Officers";
 }
 
-<h3 style="text-align:center">
-    @ViewData["MyHeading"]
-</h3>
-
-
+@{
+    var myHeading = @Model.First();
+    <h1 class="MyPageHdr">@myHeading.Heading</h1>
+}
 
 
 <table class="table">
@@ -22,21 +21,7 @@
                 {
                     <td style="text-align:center">
                         <img src="@Html.DisplayFor(modelItem => item.Photo)" width="200" /><br />
-                        @if (User.Identity.IsAuthenticated)
-                        {
-                            string myHost = "https://" + ViewData["myHost"].ToString()+"/";
-                            string myDir = Html.Raw(item.DirInfo).ToString();
-                            string myMemberID = Html.Raw(item.MemberID).ToString();
-                            var myDirInfo = myHost + myDir + myMemberID;
-                            <a href="@myDirInfo">
-                                @Html.DisplayFor(modelItem => item.FullName)
-                            </a><br />
-                        }
-                        else
-                        {
-                            @Html.DisplayFor(modelItem => item.FullName)<br />
-                        }
-
+                        @Html.Raw(Utils.GetMemberNameLink(item.FullName, item.MemberID, User.Identity.IsAuthenticated, Context.Request.Host.Value, "GetSOSView"))<br />
                         <a href="@Html.DisplayFor(modelItem => item.ContactUs)">@Html.DisplayFor(modelItem => item.OfficeDescription)</a>
                     </td>
 
@@ -51,21 +36,7 @@
                 {
                     <td style="text-align:center">
                         <img src="@Html.DisplayFor(modelItem => item.Photo)" width="200" /><br />
-                        @if (User.Identity.IsAuthenticated)
-                        {
-                            string myHost = "https://" + ViewData["myHost"].ToString() + "/";
-                            string myDir = Html.Raw(item.DirInfo).ToString();
-                            string myMemberID = Html.Raw(item.MemberID).ToString();
-                            var myDirInfo = myHost + myDir + myMemberID;
-                            <a href="@myDirInfo">
-                                @Html.DisplayFor(modelItem => item.FullName)
-                            </a><br />
-                        }
-                        else
-                        {
-                            @Html.DisplayFor(modelItem => item.FullName)<br />
-                        }
-
+                        @Html.Raw(Utils.GetMemberNameLink(item.FullName, item.MemberID, User.Identity.IsAuthenticated, Context.Request.Host.Value, "GetSOSView"))<br />
                         <a href="@Html.DisplayFor(modelItem => item.ContactUs)">@Html.DisplayFor(modelItem => item.OfficeDescription)</a>
                     </td>
 
@@ -78,25 +49,11 @@
 
                 if (item.SortBy > 6 && item.SortBy <= 9)
                 {
-                   <td style="text-align:center">
-                       <img src="@Html.DisplayFor(modelItem => item.Photo)" width="200" /><br />
-                       @if (User.Identity.IsAuthenticated)
-                       {
-                           string myHost = "https://" + ViewData["myHost"].ToString() + "/";
-                           string myDir = Html.Raw(item.DirInfo).ToString();
-                           string myMemberID = Html.Raw(item.MemberID).ToString();
-                           var myDirInfo = myHost + myDir + myMemberID;
-                           <a href="@myDirInfo">
-                               @Html.DisplayFor(modelItem => item.FullName)
-                           </a><br />
-                       }
-                       else
-                       {
-                           @Html.DisplayFor(modelItem => item.FullName)<br />
-                       }
-
-                       <a href="@Html.DisplayFor(modelItem => item.ContactUs)">@Html.DisplayFor(modelItem => item.OfficeDescription)</a>
-                   </td>
+                    <td style="text-align:center">
+                        <img src="@Html.DisplayFor(modelItem => item.Photo)" width="200" /><br />
+                        @Html.Raw(Utils.GetMemberNameLink(item.FullName, item.MemberID, User.Identity.IsAuthenticated, Context.Request.Host.Value, "GetSOSView"))<br />
+                        <a href="@Html.DisplayFor(modelItem => item.ContactUs)">@Html.DisplayFor(modelItem => item.OfficeDescription)</a>
+                    </td>
 
                 }
             }

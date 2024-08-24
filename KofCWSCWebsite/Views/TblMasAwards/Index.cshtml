@@ -1,7 +1,7 @@
 ﻿@model IEnumerable<KofCWSCWebsite.Models.TblMasAward>
 
 @{
-    ViewData["Title"] = "Index";
+    ViewData["Title"] = "Awards";
 }
 
 <table class="table" style="width:100%">
@@ -30,59 +30,87 @@
 
 @if (User.IsInRole("Admin"))
 {
-<p>
-    <a asp-action="Create">Create New</a>
-</p>
+    <p>
+        <a asp-action="Create" class="btn btn-success">Create an Award</a>
+    </p>
 }
-<table class="table">
+<table class="table" width="100%">
     <thead>
         <tr>
             <th class="MyColHdr">
-                                @Html.DisplayNameFor(model => model.AwardName)
+                @Html.DisplayNameFor(model => model.AwardName)
             </th>
             <th class="MyColHdr">
-                                @Html.DisplayNameFor(model => model.AwardDescription)
+                @Html.DisplayNameFor(model => model.AwardDescription)
             </th>
             <th class="MyColHdr">
-                                @Html.DisplayNameFor(model => model.AwardDueDate)
+                @Html.DisplayNameFor(model => model.AwardDueDate)
             </th>
             <th class="MyColHdr">
-                                @Html.DisplayNameFor(model => model.LinkToTheAwardForm)
+                @Html.DisplayNameFor(model => model.LinkToTheAwardForm)
             </th>
             <th class="MyColHdr">
-                                @Html.DisplayNameFor(model => model.AwardSubmissionEmailAddress)
+                @Html.DisplayNameFor(model => model.AwardSubmissionEmailAddress)
             </th>
-            <th class="MyColHdr"></th>
+            @if (User.IsInRole("Admin"))
+            {
+                <th class="MyColHdr"></th>
+                <th class="MyColHdr"></th>
+                <th class="MyColHdr"></th>
+            }
         </tr>
     </thead>
     <tbody>
-                        @foreach (var item in Model)
-                        {
+        @foreach (var item in Model)
+        {
             <tr>
                 <td>
-                                    @Html.DisplayFor(modelItem => item.AwardName)
+                    @Html.DisplayFor(modelItem => item.AwardName)
                 </td>
                 <td>
-                                    @Html.DisplayFor(modelItem => item.AwardDescription)
+                    @Html.DisplayFor(modelItem => item.AwardDescription)
                 </td>
                 <td>
-                                    @Html.DisplayFor(modelItem => item.AwardDueDate)
+                    @Html.DisplayFor(modelItem => item.AwardDueDate)
                 </td>
                 <td>
-                                    @Html.Raw(item.LinkToTheAwardForm)
+                    @Html.Raw(item.LinkToTheAwardForm)
                 </td>
                 <td>
-                                    @Html.DisplayFor(modelItem => item.AwardSubmissionEmailAddress)
+                    @Html.DisplayFor(modelItem => item.AwardSubmissionEmailAddress)
                 </td>
                 <td>
-                                    @if (User.IsInRole("Admin"))
-                                    {
-                        <a asp-action="Edit" asp-route-id="@item.Id">Edit</a>
-                        <a asp-action="Details" asp-route-id="@item.Id">Details</a>
-                        <a asp-action="Delete" asp-route-id="@item.Id">Delete </a>
-                                    }
-                </td>
-            </tr>
-                        }
+                    @if (User.IsInRole("Admin"))
+                    {
+                    <td style="padding-right:0px">
+                        @* <a asp-action="Edit" asp-route-id="@item.MemberId">Edit</a>&nbsp;|&nbsp;<a asp-action="Details" asp-route-id="@item.MemberId">Details</a>&nbsp;|&nbsp;<a asp-action="Delete" asp-route-id="@item.MemberId">Delete</a> *@
+                        <form asp-action="Edit" asp-route-id="@item.Id" method="get">
+                            <button type="submit" class="btn btn-sm btn-primary">
+                                Edit
+                            </button>
+                        </form>
+                    </td>
+                    <td style="padding-left:0px;padding-right:0px">
+                        <form asp-action="Details" asp-route-id="@item.Id" method="get">
+                            <button type="submit" class="btn btn-sm btn-warning">
+                                Details
+                            </button>
+                        </form>
+                    </td>
+                    <td style="padding-left:0px">
+                        <form asp-action="Delete" asp-route-id="@item.Id" method="get">
+                            <button type="submit" class="btn btn-sm btn-danger">
+                                Delete
+                            </button>
+                        </form>
+
+                    </td>
+
+
+
+                }
+                    </td>
+                </tr>
+            }
     </tbody>
 </table>

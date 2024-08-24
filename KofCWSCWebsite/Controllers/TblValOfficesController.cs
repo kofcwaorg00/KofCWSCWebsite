@@ -23,7 +23,7 @@ namespace KofCWSCWebsite.Controllers
         public async Task<IActionResult> Index()
         {
             //changed
-            return View(await _context.TblValOffice.OrderBy(x => x.OfficeDescription).ToListAsync());
+            return View(await _context.TblValOffices.OrderBy(x => x.OfficeDescription).ToListAsync());
         }
 
         // GET: TblValOffices/Details/5
@@ -34,7 +34,7 @@ namespace KofCWSCWebsite.Controllers
                 return NotFound();
             }
 
-            var tblValOffice = await _context.TblValOffice
+            var tblValOffice = await _context.TblValOffices
                 .FirstOrDefaultAsync(m => m.OfficeId == id);
             if (tblValOffice == null)
             {
@@ -74,7 +74,7 @@ namespace KofCWSCWebsite.Controllers
                 return NotFound();
             }
 
-            var tblValOffice = await _context.TblValOffice.FindAsync(id);
+            var tblValOffice = await _context.TblValOffices.FindAsync(id);
             if (tblValOffice == null)
             {
                 return NotFound();
@@ -125,7 +125,7 @@ namespace KofCWSCWebsite.Controllers
                 return NotFound();
             }
 
-            var tblValOffice = await _context.TblValOffice
+            var tblValOffice = await _context.TblValOffices
                 .FirstOrDefaultAsync(m => m.OfficeId == id);
             if (tblValOffice == null)
             {
@@ -140,10 +140,10 @@ namespace KofCWSCWebsite.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> DeleteConfirmed(int id)
         {
-            var tblValOffice = await _context.TblValOffice.FindAsync(id);
+            var tblValOffice = await _context.TblValOffices.FindAsync(id);
             if (tblValOffice != null)
             {
-                _context.TblValOffice.Remove(tblValOffice);
+                _context.TblValOffices.Remove(tblValOffice);
             }
 
             await _context.SaveChangesAsync();
@@ -152,7 +152,7 @@ namespace KofCWSCWebsite.Controllers
 
         private bool TblValOfficeExists(int id)
         {
-            return _context.TblValOffice.Any(e => e.OfficeId == id);
+            return _context.TblValOffices.Any(e => e.OfficeId == id);
         }
     }
 }

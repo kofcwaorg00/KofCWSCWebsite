@@ -22,7 +22,7 @@ namespace KofCWSCWebsite.Controllers
         // GET: TblValAssys
         public async Task<IActionResult> Index()
         {
-            return View(await _context.TblValAssy
+            return View(await _context.TblValAssys
                 .OrderBy(x => x.ANumber)
                 .ToListAsync());
         }
@@ -35,7 +35,7 @@ namespace KofCWSCWebsite.Controllers
                 return NotFound();
             }
 
-            var tblValAssy = await _context.TblValAssy
+            var tblValAssy = await _context.TblValAssys
                 .FirstOrDefaultAsync(m => m.ANumber == id);
             if (tblValAssy == null)
             {
@@ -75,7 +75,7 @@ namespace KofCWSCWebsite.Controllers
                 return NotFound();
             }
 
-            var tblValAssy = await _context.TblValAssy.FindAsync(id);
+            var tblValAssy = await _context.TblValAssys.FindAsync(id);
             if (tblValAssy == null)
             {
                 return NotFound();
@@ -126,7 +126,7 @@ namespace KofCWSCWebsite.Controllers
                 return NotFound();
             }
 
-            var tblValAssy = await _context.TblValAssy
+            var tblValAssy = await _context.TblValAssys
                 .FirstOrDefaultAsync(m => m.ANumber == id);
             if (tblValAssy == null)
             {
@@ -141,10 +141,10 @@ namespace KofCWSCWebsite.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> DeleteConfirmed(int id)
         {
-            var tblValAssy = await _context.TblValAssy.FindAsync(id);
+            var tblValAssy = await _context.TblValAssys.FindAsync(id);
             if (tblValAssy != null)
             {
-                _context.TblValAssy.Remove(tblValAssy);
+                _context.TblValAssys.Remove(tblValAssy);
             }
 
             await _context.SaveChangesAsync();
@@ -153,7 +153,7 @@ namespace KofCWSCWebsite.Controllers
 
         private bool TblValAssyExists(int id)
         {
-            return _context.TblValAssy.Any(e => e.ANumber == id);
+            return _context.TblValAssys.Any(e => e.ANumber == id);
         }
     }
 }

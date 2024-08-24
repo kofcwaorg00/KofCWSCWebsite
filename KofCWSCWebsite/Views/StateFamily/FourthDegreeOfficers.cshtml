@@ -4,13 +4,11 @@
 *@
 @{
 }
-
+@{
+    var myHeading = @Model.First();
+    <h1 class="MyPageHdr">@myHeading.Heading</h1>
+}
 <table class="table">
-    <tr>
-        <td colspan="2">
-            <h3 class="MyPageHdr">Fourth Degree Officers</h3>
-        </td>
-    </tr>
     <tr>
         <td style="width:50%">
             <div>

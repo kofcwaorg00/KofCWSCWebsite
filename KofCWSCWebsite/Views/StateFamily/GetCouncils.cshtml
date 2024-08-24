@@ -1,0 +1,189 @@
+﻿@model IEnumerable<KofCWSCWebsite.Models.SPGetCouncilsView>
+@using KofCWSCWebsite.Services;
+@{
+    ViewData["Title"] = "KofCWSC Councils";
+}
+
+
+@{
+    var myHeading = @Model.First();
+    <h1 class="MyPageHdr">@myHeading.Heading</h1>
+}
+
+
+<p>
+    <input type="text" id="myCnumber" onkeyup="myFunction1()" placeholder="Type in a Council Number to filter results" title="Type in a number" style="width:25%">
+    <input type="text" id="myCname" onkeyup="myFunction2()" placeholder="Type in a Council Name to filter results" title="Type in a name" style="width:25%">
+    <input type="text" id="myCity" onkeyup="myFunction3()" placeholder="Type in a City to filter results" title="Type in a name" style="width:25%">
+</p>
+<table class="table" style="font-size:small" id="myTable">
+    <thead>
+        <tr>
+            <th class="MyColHdr">
+                @Html.DisplayNameFor(model => model.CouncilNo)
+            </th>
+            <th class="MyColHdr" style="max-width:25px" title="District">
+                @Html.DisplayNameFor(model => model.District)
+            </th>
+            <th class="MyColHdr">
+                @Html.DisplayNameFor(model => model.City)
+            </th>
+            <th class="MyColHdr">
+                @Html.DisplayNameFor(model => model.CouncilName)
+            </th>
+            <th class="MyColHdr" style="min-width:150px">
+                @Html.DisplayNameFor(model => model.GrandKnight)
+            </th>
+            @*<th>
+                    @Html.DisplayNameFor(model => model.GKMemberID)
+                </th>*@
+            <th class="MyColHdr" style="min-width:150px">
+                @Html.DisplayNameFor(model => model.FinancialSecretary)
+            </th>
+            @*<th>
+                    @Html.DisplayNameFor(model => model.FSMemberID)
+                </th>*@
+            <th class="MyColHdr" style="min-width:150px">
+                @Html.DisplayNameFor(model => model.Chaplain)
+            </th>
+            @*<th>
+                    @Html.DisplayNameFor(model => model.ChapMemberID)
+                </th>*@
+            <th class="MyColHdr">
+                @Html.DisplayNameFor(model => model.MeetingInfo)
+            </th>
+            <th class="MyColHdr">
+                @Html.DisplayNameFor(model => model.Chartered)
+            </th>
+            <th class="MyColHdr">
+                @Html.DisplayNameFor(model => model.WebSiteUrl)
+            </th>
+            @*<th>
+                    @Html.DisplayNameFor(model => model.Diocese)
+                </th>*@
+            <th class="MyColHdr">
+                @Html.DisplayNameFor(model => model.BulletinUrl)
+            </th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var item in Model)
+        {
+            <tr>
+                <td>
+                    @Html.DisplayFor(modelItem => item.CouncilNo)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.District)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.City)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.CouncilName)
+                </td>
+                <td>
+                    @Html.Raw(Utils.GetMemberNameLink(item.GrandKnight, item.GKMemberID, User.Identity.IsAuthenticated, Context.Request.Host.Value, "GetCouncils"))
+                </td>
+                @*<td>
+                        @Html.DisplayFor(modelItem => item.GKMemberID)
+                    </td>*@
+                <td>
+                    @Html.Raw(Utils.GetMemberNameLink(item.FinancialSecretary, item.FSMemberID, User.Identity.IsAuthenticated, Context.Request.Host.Value, "GetCouncils"))
+                </td>
+                @*<td>
+                        @Html.DisplayFor(modelItem => item.FSMemberID)
+                    </td>*@
+                <td>
+                    @Html.Raw(Utils.GetMemberNameLink(item.Chaplain, item.ChapMemberID, User.Identity.IsAuthenticated, Context.Request.Host.Value, "GetCouncils"))
+                </td>
+                @*<td>
+                        @Html.DisplayFor(modelItem => item.ChapMemberID)
+                    </td>*@
+                <td>
+                    @Html.DisplayFor(modelItem => item.MeetingInfo)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Chartered)
+                </td>
+                <td>
+                    @{
+                        string myUrl = @Html.Raw(item.WebSiteUrl).ToString();
+                        if (myUrl.Length > 0)
+                        {
+                            <a href="@Html.Raw(item.WebSiteUrl)" target="_blank"><img src="~/images/URL.png" width="25" /></a>
+                        }
+                    }
+                </td>
+                @*<td>
+                        @Html.DisplayFor(modelItem => item.Diocese)
+                    </td>*@
+                <td>
+                    @{
+                        string myBul = @Html.Raw(item.BulletinUrl).ToString();
+                        if (myBul.Length > 0)
+                        {
+                            <a href="@Html.Raw(item.BulletinUrl)"><img src="~/images/PDF.png" width="25" /></a>
+                        }
+                    }
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>
+<script>
+    function myFunction1() {
+        var input, filter, table, tr, td, i, txtValue;
+        input = document.getElementById("myCnumber");
+        filter = input.value.toUpperCase();
+        table = document.getElementById("myTable");
+        tr = table.getElementsByTagName("tr");
+        for (i = 0; i < tr.length; i++) {
+            td = tr[i].getElementsByTagName("td")[0];
+            if (td) {
+                txtValue = td.textContent || td.innerText;
+                if (txtValue.toUpperCase().indexOf(filter) > -1) {
+                    tr[i].style.display = "";
+                } else {
+                    tr[i].style.display = "none";
+                }
+            }
+        }
+    }
+    function myFunction2() {
+        var input, filter, table, tr, td, i, txtValue;
+        input = document.getElementById("myCname");
+        filter = input.value.toUpperCase();
+        table = document.getElementById("myTable");
+        tr = table.getElementsByTagName("tr");
+        for (i = 0; i < tr.length; i++) {
+            td = tr[i].getElementsByTagName("td")[3];
+            if (td) {
+                txtValue = td.textContent || td.innerText;
+                if (txtValue.toUpperCase().indexOf(filter) > -1) {
+                    tr[i].style.display = "";
+                } else {
+                    tr[i].style.display = "none";
+                }
+            }
+        }
+    }
+    function myFunction3() {
+        var input, filter, table, tr, td, i, txtValue;
+        input = document.getElementById("myCity");
+        filter = input.value.toUpperCase();
+        table = document.getElementById("myTable");
+        tr = table.getElementsByTagName("tr");
+        for (i = 0; i < tr.length; i++) {
+            td = tr[i].getElementsByTagName("td")[3];
+            if (td) {
+                txtValue = td.textContent || td.innerText;
+                if (txtValue.toUpperCase().indexOf(filter) > -1) {
+                    tr[i].style.display = "";
+                } else {
+                    tr[i].style.display = "none";
+                }
+            }
+        }
+    }
+</script>

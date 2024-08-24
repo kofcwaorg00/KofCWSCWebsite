@@ -48,24 +48,21 @@ public partial class ApplicationDbContext : DbContext
     }
 
     public virtual DbSet<TblValCouncil> TblValCouncils { get; set; }
-
     public virtual DbSet<TblWebSelfPublish> TblWebSelfPublishes { get; set; }
-
     public virtual DbSet<TblMasPso> TblMasPsos { get; set; }
-
     public virtual DbSet<TblMasAward> TblMasAwards { get; set; }
-
     public virtual DbSet<TblMasMember> TblMasMembers { get; set; }
     public virtual DbSet<KofCMemberIDUsers> KofCMemberIDUsers { get; set; }
     public virtual DbSet<TblCorrMemberOffice> TblCorrMemberOffices { get; set; }
-
     public virtual DbSet<TblValOffice> TblValOffices { get; set; }
-
     public virtual DbSet<MemberVM> funSYS_BuildName { get; set; }
-
     public virtual DbSet<TblWebTrxAoi> TblWebTrxAois { get; set; }
-
     public virtual DbSet<TblSysTrxEvent> TblSysTrxEvents { get; set; }
+    public DbSet<KofCWSCWebsite.Models.TblValAssy> TblValAssys { get; set; } = default!;
+    //public DbSet<KofCWSCWebsite.Models.TblValOffice> TblValOffice { get; set; } = default!;
+    public DbSet<KofCWSCWebsite.Models.SPGetSOSView> SPGetSOSViews { get; set; } = default!;
+    public DbSet<KofCWSCWebsite.Models.SPGetCouncilsView> SPGetCouncilsView { get; set; } = default!;
+    public DbSet<KofCWSCWebsite.Models.SPGetAssysView> SPGetAssysView { get; set; } = default!;
     protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
     {
         if (!optionsBuilder.IsConfigured)
@@ -338,9 +335,19 @@ public partial class ApplicationDbContext : DbContext
             entity.HasNoKey();
         });
 
+        modelBuilder.Entity<SPGetCouncilsView>(entity =>
+        {
+            entity.HasKey(e => e.CouncilNo);
+        });
+
         modelBuilder.Entity<SPGetSOSView>(entity =>
         {
             entity.HasKey(e => e.SortBy);
+        });
+
+        modelBuilder.Entity<SPGetAssysView>(entity =>
+        {
+            entity.HasKey(e => e.AssyNo);
         });
 
         modelBuilder.Entity<TblSysTrxEvent>(entity =>
@@ -365,10 +372,5 @@ public partial class ApplicationDbContext : DbContext
 
     partial void OnModelCreatingPartial(ModelBuilder modelBuilder);
 
-public DbSet<KofCWSCWebsite.Models.TblValAssy> TblValAssy { get; set; } = default!;
-
-public DbSet<KofCWSCWebsite.Models.TblValOffice> TblValOffice { get; set; } = default!;
-
-public DbSet<KofCWSCWebsite.Models.SPGetSOSView> SPGetSOSView { get; set; } = default!;
 }
 
