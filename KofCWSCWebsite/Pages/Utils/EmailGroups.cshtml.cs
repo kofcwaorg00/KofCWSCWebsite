@@ -74,15 +74,15 @@ namespace KofCWSCWebsite.Pages.Utils
                 //}
 
                 //Testing
-                if (Services.Utils.SendEmailAuthenticatedAZ("testing@mg.kofc-wa.org", "webmaster@kofc-wa.org", "", "", "testing new site email", "this is a test", null))
-                {
-                    return Page();
-                }
-                else
-                {
-                    return Page();
-                }
-
+                //if (Services.Utils.SendEmailAuthenticatedAZ("testing@mg.kofc-wa.org", "webmaster@kofc-wa.org", "", "", "testing new site email", "this is a test", null))
+                //{
+                //    return Page();
+                //}
+                //else
+                //{
+                //    return Page();
+                //}
+                return Page();
                 // If we got this far, something failed, redisplay form
 
             }

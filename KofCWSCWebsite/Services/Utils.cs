@@ -73,38 +73,38 @@ namespace KofCWSCWebsite.Services
         }
         public static bool SendEmailAuthenticatedAZ(string sTo, string sFrom, string sCC, string sBCC, string sSubject, string sBody, Attachment oAttachment)
         {
+            return true;
 
+            //string smtpAuthUsername = "KofCWSCCom|22875cd2-d6bf-4cb0-8ced-bbbb019a8572|cba846cf-1683-4d63-8c9c-93e37f653c83";
+            //string smtpAuthPassword = "NRU8Q~pkq5Zbt1OPvxNjGKIKPRQ_CMxDs6L~4cbq";
+            //string sender = sFrom;
+            //string recipient = sTo;
+            //string subject = sSubject;
+            //string body = sBody;
 
-            string smtpAuthUsername = "KofCWSCCom|22875cd2-d6bf-4cb0-8ced-bbbb019a8572|cba846cf-1683-4d63-8c9c-93e37f653c83";
-            string smtpAuthPassword = "NRU8Q~pkq5Zbt1OPvxNjGKIKPRQ_CMxDs6L~4cbq";
-            string sender = sFrom;
-            string recipient = sTo;
-            string subject = sSubject;
-            string body = sBody;
+            //string smtpHostUrl = "smtp.azurecomm.net";
+            //var client = new SmtpClient(smtpHostUrl)
+            //{
+            //    Port = 587,
+            //    Credentials = new NetworkCredential(smtpAuthUsername, smtpAuthPassword),
+            //    EnableSsl = true
+            //};
 
-            string smtpHostUrl = "smtp.azurecomm.net";
-            var client = new SmtpClient(smtpHostUrl)
-            {
-                Port = 587,
-                Credentials = new NetworkCredential(smtpAuthUsername, smtpAuthPassword),
-                EnableSsl = true
-            };
+            //var message = new MailMessage(sender, recipient, subject, body);
 
-            var message = new MailMessage(sender, recipient, subject, body);
-
-            try
-            {
-                client.Send(message);
-                Log.Information("Email Sent Success" + " - " + sTo + " - " + sFrom);
-                return true;
-                //Console.WriteLine("The email was successfully sent using Smtp.");
-            }
-            catch (Exception ex)
-            {
-                Log.Error(ex.Message + " - " + ex.InnerException);
-                return false;
-                //Console.WriteLine($"Smtp send failed with the exception: {ex.Message}.");
-            }
+            //try
+            //{
+            //    client.Send(message);
+            //    Log.Information("Email Sent Success" + " - " + sTo + " - " + sFrom);
+            //    return true;
+            //    //Console.WriteLine("The email was successfully sent using Smtp.");
+            //}
+            //catch (Exception ex)
+            //{
+            //    Log.Error(ex.Message + " - " + ex.InnerException);
+            //    return false;
+            //    //Console.WriteLine($"Smtp send failed with the exception: {ex.Message}.");
+            //}
         }
         public static string GetMemberNameLink(string DisplayName, int MemberID, bool isAuth,string ServerName,string ReturnURL)
         {
