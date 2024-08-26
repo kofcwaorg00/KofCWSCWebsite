@@ -17,14 +17,12 @@ namespace KofCWSCWebsite.Controllers
 {
     public class TblMasMembersController : Controller
     {
-        private readonly ApplicationDbContext _context;
         private IConfiguration _configuration;
         private DataSetService _dataSetService;
 
         public TblMasMembersController(ApplicationDbContext context, IConfiguration configuration, DataSetService dataSetService)
         {
-            Log.Information("Initializing DB Context");
-            _context = context;
+            Log.Information("Creating MembersController");
             _configuration = configuration;
             _dataSetService = dataSetService;
         }
@@ -41,7 +39,6 @@ namespace KofCWSCWebsite.Controllers
 
             using (var client = new HttpClient())
             {
-                //client.BaseAddress = new Uri(myURI);
                 var responseTask = client.GetAsync(myURI);
                 responseTask.Wait();
                 var result = responseTask.Result;
@@ -109,29 +106,22 @@ namespace KofCWSCWebsite.Controllers
             Log.Information("Starting Create");
             if (ModelState.IsValid)
             {
-                Uri myURI = new(_dataSetService.GetAPIBaseAddress() + "/Members");
+                Uri myURI = new(_dataSetService.GetAPIBaseAddress() + "/Member");
                 string lastname = tblMasMember.LastName;
-                try
+                using (var client = new HttpClient())
                 {
-                    using (var client = new HttpClient())
+                    client.BaseAddress = myURI;
+                    var response = await client.PostAsJsonAsync(myURI, tblMasMember);
+                    try
                     {
-                        client.BaseAddress = myURI;
-                        var response = await client.PostAsJsonAsync(myURI, tblMasMember);
-                        //////////////var returnValue = await response.Content.ReadAsAsync<List<TblMasMember>>();
+                        response.EnsureSuccessStatusCode();
                     }
+                    catch (Exception ex)
+                    {
+                        Log.Error(ex.Message + ' ' + ex.InnerException);
+                    }
+                    return RedirectToAction(nameof(Index), new { lastname = lastname });
                 }
-                catch (DbUpdateConcurrencyException)
-                {
-                    if (!TblMasMemberExists(tblMasMember.MemberId))
-                    {
-                        return NotFound();
-                    }
-                    else
-                    {
-                        throw;
-                    }
-                }
-                return RedirectToAction(nameof(Index), new { lastname = lastname });
             }
             return View(tblMasMember);
         }
@@ -194,19 +184,6 @@ namespace KofCWSCWebsite.Controllers
                         Log.Information("Update of Member ID " + id + "Returned " + returnValue);
                     }
                 }
-                catch (DbUpdateConcurrencyException)
-                {
-                    if (!TblMasMemberExists(tblMasMember.MemberId))
-                    {
-                        Log.Fatal("Member Not Found " + tblMasMember.MemberId);
-                        return NotFound();
-                    }
-                    else
-                    {
-                        Log.Fatal("Concerncy Issue");
-                        throw;
-                    }
-                }
                 catch (Exception ex)
                 {
                     Log.Fatal(ex.Message);
@@ -261,10 +238,6 @@ namespace KofCWSCWebsite.Controllers
             }
 
             Uri myURI = new(_dataSetService.GetAPIBaseAddress() + "/Member/" + id);
-            //string myURL = _myBaseAddress + "/DelMember";
-
-            //var content = new StringContent("{\"id\": \""+id+"\"}", System.Text.Encoding.UTF8, "application/json");
-
             try
             {
                 using (var client = new HttpClient())
@@ -290,15 +263,9 @@ namespace KofCWSCWebsite.Controllers
             }
             catch (Exception ex)
             {
-
                 Log.Fatal(ex.Message + " " + ex.InnerException);
                 return NoContent();
             }
-        }
-
-        private bool TblMasMemberExists(int id)
-        {
-            return _context.TblMasMembers.Any(e => e.MemberId == id);
         }
     }
 }

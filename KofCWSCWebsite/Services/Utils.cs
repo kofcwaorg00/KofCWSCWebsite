@@ -59,10 +59,10 @@ namespace KofCWSCWebsite.Services
                 mail.Subject = sSubject;
                 mail.Body = sBody;
 
-                SmtpClient client = new SmtpClient("smtp.mailgun.org");
-                NetworkCredential cred = new NetworkCredential("postmaster@mg.kofc-wa.org", "0d794ba965a89f6775ba8d7e963dedde");
-                client.Credentials = cred;
-                client.Send(mail);
+                //SmtpClient client = new SmtpClient("smtp.mailgun.org");
+                //NetworkCredential cred = new NetworkCredential("postmaster@mg.kofc-wa.org", "0d794ba965a89f6775ba8d7e963dedde");
+                //client.Credentials = cred;
+                //client.Send(mail);
                 return true;
             }
             catch (Exception ex)
