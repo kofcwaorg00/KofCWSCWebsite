@@ -48,22 +48,21 @@ public partial class ApplicationDbContext : DbContext
     }
 
     public virtual DbSet<TblValCouncil> TblValCouncils { get; set; }
-
     public virtual DbSet<TblWebSelfPublish> TblWebSelfPublishes { get; set; }
-
     public virtual DbSet<TblMasPso> TblMasPsos { get; set; }
-
     public virtual DbSet<TblMasAward> TblMasAwards { get; set; }
-
     public virtual DbSet<TblMasMember> TblMasMembers { get; set; }
     public virtual DbSet<KofCMemberIDUsers> KofCMemberIDUsers { get; set; }
     public virtual DbSet<TblCorrMemberOffice> TblCorrMemberOffices { get; set; }
-
     public virtual DbSet<TblValOffice> TblValOffices { get; set; }
-
     public virtual DbSet<MemberVM> funSYS_BuildName { get; set; }
-
     public virtual DbSet<TblWebTrxAoi> TblWebTrxAois { get; set; }
+    public virtual DbSet<TblSysTrxEvent> TblSysTrxEvents { get; set; }
+    public DbSet<KofCWSCWebsite.Models.TblValAssy> TblValAssys { get; set; } = default!;
+    //public DbSet<KofCWSCWebsite.Models.TblValOffice> TblValOffice { get; set; } = default!;
+    public DbSet<KofCWSCWebsite.Models.SPGetSOSView> SPGetSOSViews { get; set; } = default!;
+    public DbSet<KofCWSCWebsite.Models.SPGetCouncilsView> SPGetCouncilsView { get; set; } = default!;
+    public DbSet<KofCWSCWebsite.Models.SPGetAssysView> SPGetAssysView { get; set; } = default!;
     protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
     {
         if (!optionsBuilder.IsConfigured)
@@ -336,13 +335,42 @@ public partial class ApplicationDbContext : DbContext
             entity.HasNoKey();
         });
 
+        modelBuilder.Entity<SPGetCouncilsView>(entity =>
+        {
+            entity.HasKey(e => e.CouncilNo);
+        });
+
+        modelBuilder.Entity<SPGetSOSView>(entity =>
+        {
+            entity.HasKey(e => e.SortBy);
+        });
+
+        modelBuilder.Entity<SPGetAssysView>(entity =>
+        {
+            entity.HasKey(e => e.AssyNo);
+        });
+
+        modelBuilder.Entity<TblSysTrxEvent>(entity =>
+        {
+            entity.HasKey(e => e.Id).HasName("PK__tblSYS_t__3214EC07638F8109");
+
+            entity.ToTable("tblSYS_trxEvents");
+
+            entity.Property(e => e.AddedBy).HasMaxLength(50);
+            entity.Property(e => e.AttachUrl)
+                .HasMaxLength(250)
+                .HasColumnName("AttachURL");
+            entity.Property(e => e.Begin).HasColumnType("datetime");
+            entity.Property(e => e.DateAdded).HasColumnType("datetime");
+            entity.Property(e => e.End).HasColumnType("datetime");
+            entity.Property(e => e.Title).HasMaxLength(50);
+            entity.Property(e => e.isAllDay).HasColumnType("boolean");
+        });
+
         OnModelCreatingPartial(modelBuilder);
     }
 
     partial void OnModelCreatingPartial(ModelBuilder modelBuilder);
 
-public DbSet<KofCWSCWebsite.Models.TblValAssy> TblValAssy { get; set; } = default!;
-
-public DbSet<KofCWSCWebsite.Models.TblValOffice> TblValOffice { get; set; } = default!;
 }
 

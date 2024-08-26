@@ -7,26 +7,38 @@ using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using KofCWSCWebsite.Data;
 using KofCWSCWebsite.Models;
+using System.Text.Json;
 
 namespace KofCWSCWebsite.Controllers
 {
-    public class TblValOfficesController : Controller
+    public class TblSysTrxEventsController : Controller
     {
         private readonly ApplicationDbContext _context;
 
-        public TblValOfficesController(ApplicationDbContext context)
+        public TblSysTrxEventsController(ApplicationDbContext context)
         {
             _context = context;
         }
 
-        // GET: TblValOffices
+        // GET: TblSysTrxEvents
         public async Task<IActionResult> Index()
         {
-            //changed
-            return View(await _context.TblValOffices.OrderBy(x => x.OfficeDescription).ToListAsync());
+            return View(await _context.TblSysTrxEvents.ToListAsync());
         }
 
-        // GET: TblValOffices/Details/5
+        public IActionResult GetCalendarEvents(string start, string end)
+        {
+            DateTime startdate = DateTime.Parse(start);
+            DateTime enddate = DateTime.Parse(end);
+            List<TblSysTrxEvent> events = _context
+                .TblSysTrxEvents
+                .Where(l => l.Begin >= startdate && l.End <= enddate)
+                .ToList();
+            
+            return Json(events);
+        }
+
+        // GET: TblSysTrxEvents/Details/5
         public async Task<IActionResult> Details(int? id)
         {
             if (id == null)
@@ -34,39 +46,39 @@ namespace KofCWSCWebsite.Controllers
                 return NotFound();
             }
 
-            var tblValOffice = await _context.TblValOffices
-                .FirstOrDefaultAsync(m => m.OfficeId == id);
-            if (tblValOffice == null)
+            var tblSysTrxEvent = await _context.TblSysTrxEvents
+                .FirstOrDefaultAsync(m => m.Id == id);
+            if (tblSysTrxEvent == null)
             {
                 return NotFound();
             }
 
-            return View(tblValOffice);
+            return View(tblSysTrxEvent);
         }
 
-        // GET: TblValOffices/Create
+        // GET: TblSysTrxEvents/Create
         public IActionResult Create()
         {
             return View();
         }
 
-        // POST: TblValOffices/Create
+        // POST: TblSysTrxEvents/Create
         // To protect from overposting attacks, enable the specific properties you want to bind to.
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("OfficeId,OfficeDescription,DirSortOrder,AltDescription,EmailAlias,UseAsFormalTitle,WebPageTagLine,SupremeUrl")] TblValOffice tblValOffice)
+        public async Task<IActionResult> Create([Bind("Id,Title,Description,Begin,End,isAllDay,AttachUrl,AddedBy,DateAdded")] TblSysTrxEvent tblSysTrxEvent)
         {
             if (ModelState.IsValid)
             {
-                _context.Add(tblValOffice);
+                _context.Add(tblSysTrxEvent);
                 await _context.SaveChangesAsync();
                 return RedirectToAction(nameof(Index));
             }
-            return View(tblValOffice);
+            return View(tblSysTrxEvent);
         }
 
-        // GET: TblValOffices/Edit/5
+        // GET: TblSysTrxEvents/Edit/5
         public async Task<IActionResult> Edit(int? id)
         {
             if (id == null)
@@ -74,22 +86,22 @@ namespace KofCWSCWebsite.Controllers
                 return NotFound();
             }
 
-            var tblValOffice = await _context.TblValOffices.FindAsync(id);
-            if (tblValOffice == null)
+            var tblSysTrxEvent = await _context.TblSysTrxEvents.FindAsync(id);
+            if (tblSysTrxEvent == null)
             {
                 return NotFound();
             }
-            return View(tblValOffice);
+            return View(tblSysTrxEvent);
         }
 
-        // POST: TblValOffices/Edit/5
+        // POST: TblSysTrxEvents/Edit/5
         // To protect from overposting attacks, enable the specific properties you want to bind to.
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("OfficeId,OfficeDescription,DirSortOrder,AltDescription,EmailAlias,UseAsFormalTitle,WebPageTagLine,SupremeUrl")] TblValOffice tblValOffice)
+        public async Task<IActionResult> Edit(int id, [Bind("Id,Title,Description,Begin,End,isAllDay,AttachUrl,AddedBy,DateAdded")] TblSysTrxEvent tblSysTrxEvent)
         {
-            if (id != tblValOffice.OfficeId)
+            if (id != tblSysTrxEvent.Id)
             {
                 return NotFound();
             }
@@ -98,12 +110,12 @@ namespace KofCWSCWebsite.Controllers
             {
                 try
                 {
-                    _context.Update(tblValOffice);
+                    _context.Update(tblSysTrxEvent);
                     await _context.SaveChangesAsync();
                 }
                 catch (DbUpdateConcurrencyException)
                 {
-                    if (!TblValOfficeExists(tblValOffice.OfficeId))
+                    if (!TblSysTrxEventExists(tblSysTrxEvent.Id))
                     {
                         return NotFound();
                     }
@@ -114,10 +126,10 @@ namespace KofCWSCWebsite.Controllers
                 }
                 return RedirectToAction(nameof(Index));
             }
-            return View(tblValOffice);
+            return View(tblSysTrxEvent);
         }
 
-        // GET: TblValOffices/Delete/5
+        // GET: TblSysTrxEvents/Delete/5
         public async Task<IActionResult> Delete(int? id)
         {
             if (id == null)
@@ -125,34 +137,34 @@ namespace KofCWSCWebsite.Controllers
                 return NotFound();
             }
 
-            var tblValOffice = await _context.TblValOffices
-                .FirstOrDefaultAsync(m => m.OfficeId == id);
-            if (tblValOffice == null)
+            var tblSysTrxEvent = await _context.TblSysTrxEvents
+                .FirstOrDefaultAsync(m => m.Id == id);
+            if (tblSysTrxEvent == null)
             {
                 return NotFound();
             }
 
-            return View(tblValOffice);
+            return View(tblSysTrxEvent);
         }
 
-        // POST: TblValOffices/Delete/5
+        // POST: TblSysTrxEvents/Delete/5
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> DeleteConfirmed(int id)
         {
-            var tblValOffice = await _context.TblValOffices.FindAsync(id);
-            if (tblValOffice != null)
+            var tblSysTrxEvent = await _context.TblSysTrxEvents.FindAsync(id);
+            if (tblSysTrxEvent != null)
             {
-                _context.TblValOffices.Remove(tblValOffice);
+                _context.TblSysTrxEvents.Remove(tblSysTrxEvent);
             }
 
             await _context.SaveChangesAsync();
             return RedirectToAction(nameof(Index));
         }
 
-        private bool TblValOfficeExists(int id)
+        private bool TblSysTrxEventExists(int id)
         {
-            return _context.TblValOffices.Any(e => e.OfficeId == id);
+            return _context.TblSysTrxEvents.Any(e => e.Id == id);
         }
     }
 }

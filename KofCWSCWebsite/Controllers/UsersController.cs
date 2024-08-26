@@ -14,17 +14,13 @@ namespace KofCWSCWebsite.Controllers
         private readonly ApplicationDbContext _context;
         private string? _myBaseAddress;
         private IConfiguration _configuration;
+        private DataSetService _dataSetService;
 
-        public UsersController(ApplicationDbContext context, IConfiguration configuration)
+        public UsersController(ApplicationDbContext context, IConfiguration configuration, DataSetService dataSetService)
         {
             _context = context;
             _configuration = configuration;
-            _myBaseAddress = (string?)_configuration.GetSection("APIURL").GetValue(typeof(string), "LOCAL");
-            if (_myBaseAddress.IsNullOrEmpty())
-            {
-                Log.Fatal("No API URI Initialized");
-                throw new Exception("APIURL is not defined");
-            }
+            _dataSetService = dataSetService;
         }
 
 
@@ -52,8 +48,7 @@ namespace KofCWSCWebsite.Controllers
                 //    //.Where(k => k.KofCID == KofCMemberID)
                 //    .ToListAsync();
 
-
-                Uri myURI = new Uri(_myBaseAddress + "/VerifyKofCID/" + KofCMemberID);
+                Uri myURI = new Uri(_dataSetService.GetAPIBaseAddress() + "/VerifyKofCID/" + KofCMemberID);
                 using (var client = new HttpClient())
                 {
                     var responseTask = client.GetAsync(myURI);
@@ -64,7 +59,7 @@ namespace KofCWSCWebsite.Controllers
 
                     if (myAns == "false")
                     {
-                        return Json($"Member Number {KofCMemberID} is not found in our database. Please email mailto:webmaster@kofc-wa.org with your member number, full name, email address and council.");
+                        return Json($"Member Number {KofCMemberID} is not found in our database. Please email webmaster@kofc-wa.org with your member number, full name, email address and council.");
                     }
                     else
                     {

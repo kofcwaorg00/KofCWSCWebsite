@@ -1,0 +1,62 @@
+﻿@model IEnumerable<KofCWSCWebsite.Models.SPGetSOSView>
+@using KofCWSCWebsite.Services;
+@{
+    ViewData["Title"] = "State Officers";
+}
+
+@{
+    var myHeading = @Model.First();
+    <h1 class="MyPageHdr">@myHeading.Heading</h1>
+}
+
+
+<table class="table">
+    <tbody>
+
+        <tr>
+            @foreach (var item in Model)
+            {
+
+                if (item.SortBy <= 3)
+                {
+                    <td style="text-align:center">
+                        <img src="@Html.DisplayFor(modelItem => item.Photo)" width="200" /><br />
+                        @Html.Raw(Utils.GetMemberNameLink(item.FullName, item.MemberID, User.Identity.IsAuthenticated, Context.Request.Host.Value, "GetSOSView"))<br />
+                        <a href="@Html.DisplayFor(modelItem => item.ContactUs)">@Html.DisplayFor(modelItem => item.OfficeDescription)</a>
+                    </td>
+
+                }
+            }
+        </tr>
+        <tr>
+            @foreach (var item in Model)
+            {
+
+                if (item.SortBy > 3 && item.SortBy <= 6)
+                {
+                    <td style="text-align:center">
+                        <img src="@Html.DisplayFor(modelItem => item.Photo)" width="200" /><br />
+                        @Html.Raw(Utils.GetMemberNameLink(item.FullName, item.MemberID, User.Identity.IsAuthenticated, Context.Request.Host.Value, "GetSOSView"))<br />
+                        <a href="@Html.DisplayFor(modelItem => item.ContactUs)">@Html.DisplayFor(modelItem => item.OfficeDescription)</a>
+                    </td>
+
+                }
+            }
+        </tr>
+        <tr>
+            @foreach (var item in Model)
+            {
+
+                if (item.SortBy > 6 && item.SortBy <= 9)
+                {
+                    <td style="text-align:center">
+                        <img src="@Html.DisplayFor(modelItem => item.Photo)" width="200" /><br />
+                        @Html.Raw(Utils.GetMemberNameLink(item.FullName, item.MemberID, User.Identity.IsAuthenticated, Context.Request.Host.Value, "GetSOSView"))<br />
+                        <a href="@Html.DisplayFor(modelItem => item.ContactUs)">@Html.DisplayFor(modelItem => item.OfficeDescription)</a>
+                    </td>
+
+                }
+            }
+        </tr>
+    </tbody>
+</table>

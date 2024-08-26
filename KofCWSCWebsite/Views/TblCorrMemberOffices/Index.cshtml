@@ -14,7 +14,7 @@
     <div style="float:left">
         <form asp-action="Create" asp-route-id="@ViewBag.MemberID" method="get">
             <button type="submit" class="btn btn-sm btn-success">
-                Create New
+                Add An Office to this User
             </button>
         </form>
     </div>
@@ -41,8 +41,8 @@
             <th>
                 @Html.DisplayNameFor(model => model.Year)
             </th>
-            <th style="width:50px"></th>
-            <th style="width:60px"></th>
+            @*<th style="width:50px"></th>
+            <th style="width:60px"></th>*@
             <th style="width:60px"></th>
         </tr>
     </thead>
@@ -64,10 +64,10 @@
                 </td>
                 @if (User.IsInRole("Admin"))
                 {
-                    <td>
+                    <!--<td>-->
                         @* <a asp-action="Edit" asp-route-id="@item.MemberId">Edit</a>&nbsp;|&nbsp;<a asp-action="Details" asp-route-id="@item.MemberId">Details</a>&nbsp;|&nbsp;<a asp-action="Delete" asp-route-id="@item.MemberId">Delete</a> *@
 
-                        <form asp-controller="TblCorrMemberOffices" asp-action="Edit" asp-route-id="@item.Id" method="get">
+                        <!--<form asp-controller="TblCorrMemberOffices" asp-action="Edit" asp-route-id="@item.Id" method="get">
                             <button type="submit" class="btn btn-sm btn-primary">
                                 Edit
                             </button>
@@ -79,7 +79,7 @@
                                 Details
                             </button>
                         </form>
-                    </td>
+                    </td>-->
                     <td>
                         <form asp-controller="TblCorrMemberOffices" asp-action="Delete" asp-route-id="@item.Id" method="get">
                             <button type="submit" class="btn btn-sm btn-danger">

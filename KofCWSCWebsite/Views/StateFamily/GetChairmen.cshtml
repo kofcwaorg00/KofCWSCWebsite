@@ -1,17 +1,12 @@
 ﻿@model IEnumerable<KofCWSCWebsite.Models.SPGetChairmen>
+@using KofCWSCWebsite.Services;
 @*
     For more information on enabling MVC for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
-    *@
+*@
 @{
+    var myHeading = @Model.First();
+    <h1 style="width:75%" class="MyPageHdr">@myHeading.Heading</h1>
 }
-<table class="table" style="width:75%">
-    <tr>
-        <td style="text-align:center; font-weight:bold">
-            <h3>State Chairmen and Directors 2023-2024</h3>
-        </td>
-    </tr>
-</table>
-
 
 <table class="table" style="width:75%">
     <thead>
@@ -38,7 +33,9 @@
                     @Html.DisplayFor(modelItem => item.Chairmanship)
                 </td>
                 <td>
-                    @Html.DisplayFor(modelItem => item.FullName)
+                    @Html.Raw(Utils.GetMemberNameLink(item.FullName, item.MemberID, User.Identity.IsAuthenticated, Context.Request.Host.Value, "GetChairmen"))
+                    @*@Utils.GetMemberNameLink(item.FullName,item.MemberID,User.Identity.IsAuthenticated)*@
+                    @*@Html.DisplayFor(modelItem => item.FullName)*@
                 </td>
                 <td>
                     @Html.DisplayFor(modelItem => item.Council)
@@ -48,5 +45,5 @@
                 </td>
             </tr>
         }
-        </tbody>
-    </table>
+    </tbody>
+</table>

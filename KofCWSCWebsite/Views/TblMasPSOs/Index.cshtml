@@ -1,7 +1,7 @@
 ﻿@model IEnumerable<KofCWSCWebsite.Models.TblMasPso>
 
 @{
-    ViewData["Title"] = "Index";
+    ViewData["Title"] = "Past State Officers";
 }
 <table class="table">
     <tr>
@@ -17,7 +17,7 @@
 @if (User.IsInRole("Admin"))
 {
     <p>
-        <a asp-action="Create">Create New</a>
+        <a asp-action="Create" class="btn btn-success">Create an New Past State Officer</a>
     </p>
 }
 <table class="table" id="myTable">
@@ -41,7 +41,12 @@
             <th class="MyColHdr">
                 @Html.DisplayNameFor(model => model.StateWarden)
             </th>
+            @if (User.IsInRole("Admin"))
+            {
+                <th class="MyColHdr"></th>
             <th class="MyColHdr"></th>
+            <th class="MyColHdr"></th>
+            }
         </tr>
     </thead>
     <tbody>
@@ -66,13 +71,31 @@
                 <td>
                     @Html.DisplayFor(modelItem => item.StateWarden)
                 </td>
-                <td>
-                    @if (User.IsInRole("Admin")) {
-                        <a asp-action="Edit" asp-route-id="@item.Id">Edit</a>
-                        <a asp-action = "Details" asp-route-id = "@item.Id" > Details </a>
-                        <a asp-action = "Delete" asp-route-id = "@item.Id" > Delete </a>
-                        }
-                </td>
+                @if (User.IsInRole("Admin"))
+                {
+                    <td style="padding-right:0px">
+                        <form asp-action="Edit" asp-route-id="@item.Id" method="get">
+                            <button type="submit" class="btn btn-sm btn-primary">
+                                Edit
+                            </button>
+                        </form>
+                    </td>
+                    <td style="padding-left:0px;padding-right:0px">
+                        <form asp-action="Details" asp-route-id="@item.Id" method="get">
+                            <button type="submit" class="btn btn-sm btn-warning">
+                                Details
+                            </button>
+                        </form>
+                    </td>
+                    <td style="padding-left:0px">
+                        <form asp-action="Delete" asp-route-id="@item.Id" method="get">
+                            <button type="submit" class="btn btn-sm btn-danger">
+                                Delete
+                            </button>
+                        </form>
+
+                    </td>
+                }
             </tr>
         }
     </tbody>

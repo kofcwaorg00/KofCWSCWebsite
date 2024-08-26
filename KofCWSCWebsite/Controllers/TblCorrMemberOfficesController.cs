@@ -7,16 +7,24 @@ using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using KofCWSCWebsite.Models;
 using KofCWSCWebsite.Data;
+using Serilog;
+using Newtonsoft.Json;
+using Microsoft.EntityFrameworkCore.Metadata.Internal;
 
 namespace KofCWSCWebsite.Controllers
 {
     public class TblCorrMemberOfficesController : Controller
     {
-        private readonly ApplicationDbContext _context;
-
-        public TblCorrMemberOfficesController(ApplicationDbContext context)
+        //private readonly ApplicationDbContext _context;
+        private DataSetService _dataSetService;
+        //*********************************************************************************
+        // 8/25/2024 Tim Philomeno
+        // NOTE: the API equivelent is just MemberOffices
+        //*********************************************************************************
+        public TblCorrMemberOfficesController(ApplicationDbContext context, DataSetService dataSetService)
         {
-            _context = context;
+            //_context = context;
+            _dataSetService = dataSetService;
         }
 
         // GET: TblCorrMemberOffices
@@ -24,57 +32,126 @@ namespace KofCWSCWebsite.Controllers
         {
             try
             {
-                // Run Sproc
-                var CMO = _context.Database
-                    .SqlQuery<TblCorrMemberOfficeVM>($"EXECUTE uspSYS_GetOfficesForMemberID {id}")
-                    .ToList();
+                Uri myURIMO = new Uri(_dataSetService.GetAPIBaseAddress() + "/MemberOffice/" + id.ToString());
+                IEnumerable<TblCorrMemberOfficeVM> CMO;
+                using (var client = new HttpClient())
+                {
+                    //client.BaseAddress = new Uri(myURI);
+                    var responseTask = client.GetAsync(myURIMO);
+                    responseTask.Wait();
+                    var result = responseTask.Result;
 
-                //var CMO = await _context.TblCorrMemberOffices
-                //    .Where(x => x.MemberId == id)
-                //    .ToListAsync();
-                //var member = await _context.TblMasMembers.FindAsync(id);
+                    if (result.IsSuccessStatusCode)
+                    {
+                        var readTask = result.Content.ReadAsAsync<IList<TblCorrMemberOfficeVM>>();
+                        readTask.Wait();
+                        CMO = readTask.Result;
+                    }
+                    else
+                    {
+                        CMO = Enumerable.Empty<TblCorrMemberOfficeVM>();
+                        ModelState.AddModelError(string.Empty, "Server Error.  Please contact administrator.");
+                    }
+                }
 
                 ViewBag.MemberID = id;
-                ViewBag.MemberName = _context.funSYS_BuildName.FromSqlInterpolated($"SELECT dbo.funSYS_BuildName({id},0,'N') as MemberName").FirstOrDefault().MemberName;
 
-                //ViewBag.MemberName = member.FirstName + " " + member.LastName;
+                // Setup to get the mameber name
+                Uri myURI = new Uri(_dataSetService.GetAPIBaseAddress() + "/GetMemberName/" + id.ToString());
+
+                using (var client = new HttpClient())
+                {
+                    //client.BaseAddress = new Uri(myURI);
+                    var responseTask = client.GetAsync(myURI);
+                    responseTask.Wait();
+                    var result = responseTask.Result;
+                    if (result.IsSuccessStatusCode)
+                    {
+                        var readTask = result.Content.ReadAsStringAsync();
+                        readTask.Wait();
+                        ViewBag.MemberName = readTask.Result.ToString();
+                    }
+                    else
+                    {
+                        ViewBag.MemberName = "Member Not Found";
+                        ModelState.AddModelError(string.Empty, "Server Error.  Please contact administrator.");
+                    }
+                }
 
                 return View(CMO);
             }
             catch (Exception ex)
             {
-
-                throw new Exception(ex.Message);
+                Log.Error(string.Concat("Error getting Member Name from ", id.ToString(), " - ", ex.Message, ex.InnerException));
+                throw new Exception("Error getting Member Name");
             }
         }
 
         // GET: TblCorrMemberOffices/Details/5
-        public async Task<ActionResult> Details(int? id)
+        //******************************************************************************
+        // 8/24/2024 Tim Philomeno
+        // in our current application Details never gets called.  Only Index, Create and Delete
+        //******************************************************************************
+        public async Task<TblCorrMemberOffice> Details(int? id)
         {
             if (id == null)
             {
-                return NotFound();
+                return null;
             }
 
-            var tblCorrMemberOffice = await _context.TblCorrMemberOffices
-                .FirstOrDefaultAsync(m => m.Id == id);
-            //var CMO = _context.Database
-            //        .SqlQuery<TblCorrMemberOfficeVM>($"EXECUTE uspSYS_GetOfficesForMemberID {id}")
-            //        .ToList();
+            Uri myURI = new Uri(_dataSetService.GetAPIBaseAddress() + "/MemberOffice/Details/" + id.ToString());
 
-            if (tblCorrMemberOffice == null)
+            using (var client = new HttpClient())
             {
-                return NotFound();
+                //client.BaseAddress = new Uri(myURI);
+                var responseTask = client.GetAsync(myURI);
+                responseTask.Wait();
+                var result = responseTask.Result;
+                TblCorrMemberOffice? CMO;
+                if (result.IsSuccessStatusCode)
+                {
+                    string json = await result.Content.ReadAsStringAsync();
+                    CMO = JsonConvert.DeserializeObject<TblCorrMemberOffice>(json);
+                }
+                else
+                {
+                    CMO = null;
+                    ModelState.AddModelError(string.Empty, "Server Error.  Please contact administrator.");
+                }
+                return CMO;
             }
-
-            return View(tblCorrMemberOffice);
         }
 
         // GET: TblCorrMemberOffices/Create
         public IActionResult Create(int id)
         {
-            ViewBag.MemberID = id;
-            ViewBag.ListOfOffices = new SelectList(_context.TblValOffices.OrderBy(x => x.OfficeDescription).ToList(), "OfficeId", "OfficeDescription");
+            //******************************************************************************
+            // 8/24/2024 Tim Philomeno
+            // in our current application this Create gets called to fill the Offices List
+            //******************************************************************************
+            Uri myURI = new Uri(_dataSetService.GetAPIBaseAddress() + "/Offices");
+            IEnumerable<TblValOffice> offices;
+            using (var client = new HttpClient())
+            {
+                //client.BaseAddress = new Uri(myURI);
+                var responseTask = client.GetAsync(myURI);
+                responseTask.Wait();
+                var result = responseTask.Result;
+
+                if (result.IsSuccessStatusCode)
+                {
+                    var readTask = result.Content.ReadAsAsync<IList<TblValOffice>>();
+                    readTask.Wait();
+                    offices = readTask.Result;
+                }
+                else
+                {
+                    offices = Enumerable.Empty<TblValOffice>();
+                    ModelState.AddModelError(string.Empty, "Server Error.  Please contact administrator.");
+                }
+                ViewBag.MemberID = id;
+                ViewBag.ListOfOffices = new SelectList(offices.OrderBy(x => x.OfficeDescription).ToList(), "OfficeId", "OfficeDescription");
+            }
             return View();
         }
 
@@ -83,43 +160,47 @@ namespace KofCWSCWebsite.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
+        //******************************************************************************
+        // 8/24/2024 Tim Philomeno
+        //******************************************************************************
         public async Task<IActionResult> Create([Bind("MemberId,OfficeId,PrimaryOffice,Year")] TblCorrMemberOffice tblCorrMemberOffice)
         {
             if (ModelState.IsValid)
             {
-                _context.Add(tblCorrMemberOffice);
-                await _context.SaveChangesAsync();
-                return RedirectToAction(nameof(Index),new { id = tblCorrMemberOffice.MemberId });
+                Uri myURI = new(_dataSetService.GetAPIBaseAddress() + "/MemberOffice");
+                using (var client = new HttpClient())
+                {
+                    client.BaseAddress = myURI;
+                    var response = await client.PostAsJsonAsync(myURI, tblCorrMemberOffice);
+                }
+                
             }
-            return View(tblCorrMemberOffice);
+            return RedirectToAction(nameof(Index), new { id = tblCorrMemberOffice.MemberId });
+            //return View(tblCorrMemberOffice);
         }
 
         // GET: TblCorrMemberOffices/Edit/5
+        //***********************************************************************************************
+        // 8/25/2024 Tim Philomeno
+        // we will never call edit on this table
+        //***********************************************************************************************
         public async Task<IActionResult> Edit(int? id)
         {
-            if (id == null)
-            {
-                return NotFound();
-            }
-           
-            List<TblValOffice> officeList = new List<TblValOffice>();
-            //officeList = (from OfficeID,OfficeDescription in _context.TblValOffices select OfficeID,OfficeDescription).ToList();
-            //officeList = (from offices in _context.TblValOffices select offices).ToList();
-            //var officeList = _context.TblValOffices.ToList(); ;
-            
-            //officeList.Insert(0, new TblValOffice { OfficeId = 0, OfficeDescription = "Select" });
-            
+            return NotFound();
+            ////////////if (id == null)
+            ////////////{
+            ////////////    return NotFound();
+            ////////////}
 
-            ViewBag.ListOfOffices =  new SelectList(_context.TblValOffices.ToList(), "OfficeId", "OfficeDescription");
-            
-                       
+            ////////////List<TblValOffice> officeList = new List<TblValOffice>();
+            ////////////ViewBag.ListOfOffices = new SelectList(_context.TblValOffices.ToList(), "OfficeId", "OfficeDescription");
 
-            var tblCorrMemberOffice = await _context.TblCorrMemberOffices.FindAsync(id);
-            if (tblCorrMemberOffice == null)
-            {
-                return NotFound();
-            }
-            return View(tblCorrMemberOffice);
+            ////////////var tblCorrMemberOffice = await _context.TblCorrMemberOffices.FindAsync(id);
+            ////////////if (tblCorrMemberOffice == null)
+            ////////////{
+            ////////////    return NotFound();
+            ////////////}
+            ////////////return View(tblCorrMemberOffice);
         }
 
         // POST: TblCorrMemberOffices/Edit/5
@@ -127,72 +208,121 @@ namespace KofCWSCWebsite.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
+        //***********************************************************************************************
+        // 8/25/2024 Tim Philomeno
+        // we will never call edit on this table
+        //***********************************************************************************************
         public async Task<IActionResult> Edit(int id, [Bind("Id,MemberId,OfficeId,PrimaryOffice,Year")] TblCorrMemberOffice tblCorrMemberOffice)
         {
-            if (id != tblCorrMemberOffice.Id)
-            {
-                return NotFound();
-            }
-
-            if (ModelState.IsValid)
-            {
-                try
-                {
-                    _context.Update(tblCorrMemberOffice);
-                    await _context.SaveChangesAsync();
-                }
-                catch (DbUpdateConcurrencyException)
-                {
-                    if (!TblCorrMemberOfficeExists(tblCorrMemberOffice.Id))
-                    {
-                        return NotFound();
-                    }
-                    else
-                    {
-                        throw;
-                    }
-                }
-                return RedirectToAction(nameof(Index), new { id = tblCorrMemberOffice.MemberId });
-            }
             return View(tblCorrMemberOffice);
+            ////////////if (id != tblCorrMemberOffice.Id)
+            ////////////{
+            ////////////    return NotFound();
+            ////////////}
+
+            ////////////if (ModelState.IsValid)
+            ////////////{
+            ////////////    try
+            ////////////    {
+            ////////////        _context.Update(tblCorrMemberOffice);
+            ////////////        await _context.SaveChangesAsync();
+            ////////////    }
+            ////////////    catch (DbUpdateConcurrencyException)
+            ////////////    {
+            ////////////        if (!TblCorrMemberOfficeExists(tblCorrMemberOffice.Id))
+            ////////////        {
+            ////////////            return NotFound();
+            ////////////        }
+            ////////////        else
+            ////////////        {
+            ////////////            throw;
+            ////////////        }
+            ////////////    }
+            ////////////    return RedirectToAction(nameof(Index), new { id = tblCorrMemberOffice.MemberId });
+            ////////////}
+            ////////////return View(tblCorrMemberOffice);
         }
 
         // GET: TblCorrMemberOffices/Delete/5
-        public async Task<IActionResult> Delete(int? id)
+        //**********************************************************************************************
+        // 8/25/2024 Tim Philomeno
+        // this delete runs and gets the details and presents them in a view to then be deleted
+        //**********************************************************************************************
+        public async Task<IActionResult> Delete(int? id,int MemberId)
         {
             if (id == null)
             {
                 return NotFound();
             }
 
-            var tblCorrMemberOffice = await _context.TblCorrMemberOffices
-                .FirstOrDefaultAsync(m => m.Id == id);
-            if (tblCorrMemberOffice == null)
+            Uri myURI = new(_dataSetService.GetAPIBaseAddress() + "/MemberOffice/Details/" + id);
+            TblCorrMemberOffice? CMO;
+            using (var client = new HttpClient())
             {
-                return NotFound();
+                var responseTask = client.GetAsync(myURI);
+                responseTask.Wait();
+                var result = responseTask.Result;
+                
+                if (result.IsSuccessStatusCode)
+                {
+                    string json = await result.Content.ReadAsStringAsync();
+                    CMO = JsonConvert.DeserializeObject<TblCorrMemberOffice>(json);
+                }
+                else
+                {
+                    ModelState.AddModelError(string.Empty, "Server Error.  Please contact administrator.");
+                    CMO = null;
+                }
             }
-
-            return View(tblCorrMemberOffice);
+                return View(CMO);
         }
 
         // POST: TblCorrMemberOffices/Delete/5
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> DeleteConfirmed(int id)
+        //**********************************************************************************************
+        // 8/25/2024 Tim Philomeno
+        // this delete runs the actual delete
+        //**********************************************************************************************
+        public async Task<IActionResult> DeleteConfirmed(int id,int MemberId)
         {
-            var tblCorrMemberOffice = await _context.TblCorrMemberOffices.FindAsync(id);
-            if (tblCorrMemberOffice != null)
+            try
             {
-                _context.TblCorrMemberOffices.Remove(tblCorrMemberOffice);
+                var myCMO = Details(id);
+                
+                Uri myURI = new(_dataSetService.GetAPIBaseAddress() + "/MemberOffice/" + id);
+                using (var client = new HttpClient())
+                {
+                    var responseTask = client.DeleteAsync(myURI);
+                    responseTask.Wait();
+                    var result = responseTask.Result;
+                    TblCorrMemberOffice? CMO;
+                    if (result.IsSuccessStatusCode)
+                    {
+                        Log.Information("Delete MemberOffice Success " + id);
+                        string json = await result.Content.ReadAsStringAsync();
+                        CMO = JsonConvert.DeserializeObject<TblCorrMemberOffice>(json);
+                    }
+                    else
+                    {
+                        Log.Information("Delete MemberOffice Failed " + id);
+                        ModelState.AddModelError(string.Empty, "Server Error.  Please contact administrator.");
+                        CMO = null;
+                    }
+                    return RedirectToAction(nameof(Index), new { id = myCMO.Result.MemberId });
+                }
             }
+            catch (Exception ex)
+            {
 
-            await _context.SaveChangesAsync();
-            return RedirectToAction(nameof(Index), new { id = tblCorrMemberOffice.MemberId });
+                Log.Fatal(ex.Message + " " + ex.InnerException);
+                return NoContent();
+            }
         }
 
         private bool TblCorrMemberOfficeExists(int id)
         {
-            return _context.TblCorrMemberOffices.Any(e => e.Id == id);
+            return true; // _context.TblCorrMemberOffices.Any(e => e.Id == id);
         }
     }
 }
