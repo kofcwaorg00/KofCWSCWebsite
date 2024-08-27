@@ -172,7 +172,7 @@ namespace KofCWSCWebsite.Controllers
                 }
                 Log.Information("Update Success Member ID " + id);
             }
-            return View(tblMasAward);
+            return RedirectToAction(nameof(Index));
         }
 
         // GET: TblMasAwards/Delete/5
