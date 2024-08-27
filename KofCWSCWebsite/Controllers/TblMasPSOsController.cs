@@ -7,22 +7,44 @@ using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using KofCWSCWebsite.Data;
 using KofCWSCWebsite.Models;
+using Newtonsoft.Json;
+using Serilog;
 
 namespace KofCWSCWebsite.Controllers
 {
     public class TblMasPSOsController : Controller
     {
-        private readonly ApplicationDbContext _context;
+        private DataSetService _dataSetService;
 
-        public TblMasPSOsController(ApplicationDbContext context)
+        public TblMasPSOsController(ApplicationDbContext context,DataSetService dataSetService)
         {
-            _context = context;
+            _dataSetService = dataSetService;
         }
 
         // GET: TblMasPSOs
         public async Task<IActionResult> Index()
         {
-            return View(await _context.TblMasPsos.ToListAsync());
+            Uri myURI = new Uri(_dataSetService.GetAPIBaseAddress() + "/PSOs");
+
+            using (var client = new HttpClient())
+            {
+                var responseTask = client.GetAsync(myURI);
+                responseTask.Wait();
+                var result = responseTask.Result;
+                IEnumerable<TblMasPso> PSOs;
+                if (result.IsSuccessStatusCode)
+                {
+                    var readTask = result.Content.ReadAsAsync<IList<TblMasPso>>();
+                    readTask.Wait();
+                    PSOs = readTask.Result;
+                }
+                else
+                {
+                    PSOs = Enumerable.Empty<TblMasPso>();
+                    ModelState.AddModelError(string.Empty, "Server Error.  Please contact administrator.");
+                }
+                return View(PSOs);
+            }
         }
 
         // GET: TblMasPSOs/Details/5
@@ -32,15 +54,26 @@ namespace KofCWSCWebsite.Controllers
             {
                 return NotFound();
             }
+            Uri myURI = new Uri(_dataSetService.GetAPIBaseAddress() + "/PSO/" + id.ToString());
 
-            var tblMasPso = await _context.TblMasPsos
-                .FirstOrDefaultAsync(m => m.Id == id);
-            if (tblMasPso == null)
+            using (var client = new HttpClient())
             {
-                return NotFound();
+                var responseTask = client.GetAsync(myURI);
+                responseTask.Wait();
+                var result = responseTask.Result;
+                TblMasPso? PSO;
+                if (result.IsSuccessStatusCode)
+                {
+                    string json = await result.Content.ReadAsStringAsync();
+                    PSO = JsonConvert.DeserializeObject<TblMasPso>(json);
+                }
+                else
+                {
+                    ModelState.AddModelError(string.Empty, "Server Error.  Please contact administrator.");
+                    PSO = null;
+                }
+                return View(PSO);
             }
-
-            return View(tblMasPso);
         }
 
         // GET: TblMasPSOs/Create
@@ -58,11 +91,23 @@ namespace KofCWSCWebsite.Controllers
         {
             if (ModelState.IsValid)
             {
-                _context.Add(tblMasPso);
-                await _context.SaveChangesAsync();
-                return RedirectToAction(nameof(Index));
+                Uri myURI = new(_dataSetService.GetAPIBaseAddress() + "/PSO");
+                using (var client = new HttpClient())
+                {
+                    client.BaseAddress = myURI;
+                    var response = await client.PostAsJsonAsync(myURI, tblMasPso);
+                    try
+                    {
+                        response.EnsureSuccessStatusCode();
+                    }
+                    catch (Exception ex)
+                    {
+                        Log.Error(ex.Message + ' ' + ex.InnerException);
+                        return View(tblMasPso);
+                    }
+                }
             }
-            return View(tblMasPso);
+            return RedirectToAction(nameof(Index));
         }
 
         // GET: TblMasPSOs/Edit/5
@@ -72,13 +117,26 @@ namespace KofCWSCWebsite.Controllers
             {
                 return NotFound();
             }
+            Uri myURI = new(_dataSetService.GetAPIBaseAddress() + "/PSO/" + id);
 
-            var tblMasPso = await _context.TblMasPsos.FindAsync(id);
-            if (tblMasPso == null)
+            using (var client = new HttpClient())
             {
-                return NotFound();
+                var responseTask = client.GetAsync(myURI);
+                responseTask.Wait();
+                var result = responseTask.Result;
+                TblMasPso? PSO;
+                if (result.IsSuccessStatusCode)
+                {
+                    string json = await result.Content.ReadAsStringAsync();
+                    PSO = JsonConvert.DeserializeObject<TblMasPso>(json);
+                }
+                else
+                {
+                    ModelState.AddModelError(string.Empty, "Server Error.  Please contact administrator.");
+                    PSO = null;
+                }
+                return View(PSO);
             }
-            return View(tblMasPso);
         }
 
         // POST: TblMasPSOs/Edit/5
@@ -92,28 +150,26 @@ namespace KofCWSCWebsite.Controllers
             {
                 return NotFound();
             }
-
             if (ModelState.IsValid)
             {
+                Uri myURI = new(_dataSetService.GetAPIBaseAddress() + "/PSO/" + id);
                 try
                 {
-                    _context.Update(tblMasPso);
-                    await _context.SaveChangesAsync();
+                    using (var client = new HttpClient())
+                    {
+                        client.BaseAddress = myURI;
+                        var response = await client.PutAsJsonAsync(myURI, tblMasPso);
+                        var returnValue = await response.Content.ReadAsAsync<List<TblMasPso>>();
+                        Log.Information("Update of Award ID " + id + "Returned " + returnValue);
+                    }
                 }
-                catch (DbUpdateConcurrencyException)
+                catch (Exception ex)
                 {
-                    if (!TblMasPsoExists(tblMasPso.Id))
-                    {
-                        return NotFound();
-                    }
-                    else
-                    {
-                        throw;
-                    }
+                    Log.Fatal(ex.Message);
                 }
-                return RedirectToAction(nameof(Index));
+                Log.Information("Update Success Member ID " + id);
             }
-            return View(tblMasPso);
+            return RedirectToAction(nameof(Index));
         }
 
         // GET: TblMasPSOs/Delete/5
@@ -123,15 +179,26 @@ namespace KofCWSCWebsite.Controllers
             {
                 return NotFound();
             }
+            Uri myURI = new(_dataSetService.GetAPIBaseAddress() + "/PSO/" + id);
 
-            var tblMasPso = await _context.TblMasPsos
-                .FirstOrDefaultAsync(m => m.Id == id);
-            if (tblMasPso == null)
+            using (var client = new HttpClient())
             {
-                return NotFound();
+                var responseTask = client.GetAsync(myURI);
+                responseTask.Wait();
+                var result = responseTask.Result;
+                TblMasPso? PSO;
+                if (result.IsSuccessStatusCode)
+                {
+                    string json = await result.Content.ReadAsStringAsync();
+                    PSO = JsonConvert.DeserializeObject<TblMasPso>(json);
+                }
+                else
+                {
+                    ModelState.AddModelError(string.Empty, "Server Error.  Please contact administrator.");
+                    PSO = null;
+                }
+                return View(PSO);
             }
-
-            return View(tblMasPso);
         }
 
         // POST: TblMasPSOs/Delete/5
@@ -139,19 +206,40 @@ namespace KofCWSCWebsite.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> DeleteConfirmed(int id)
         {
-            var tblMasPso = await _context.TblMasPsos.FindAsync(id);
-            if (tblMasPso != null)
+            Uri myURI = new(_dataSetService.GetAPIBaseAddress() + "/PSO/" + id);
+            try
             {
-                _context.TblMasPsos.Remove(tblMasPso);
+                using (var client = new HttpClient())
+                {
+                    var responseTask = client.DeleteAsync(myURI);
+                    responseTask.Wait();
+                    var result = responseTask.Result;
+                    TblMasPso? PSO;
+                    if (result.IsSuccessStatusCode)
+                    {
+                        Log.Information("Delete Member Success " + id);
+                        string json = await result.Content.ReadAsStringAsync();
+                        PSO = JsonConvert.DeserializeObject<TblMasPso>(json);
+                    }
+                    else
+                    {
+                        Log.Information("Delete Member Failed " + id);
+                        ModelState.AddModelError(string.Empty, "Server Error.  Please contact administrator.");
+                        PSO = null;
+                    }
+                    return RedirectToAction(nameof(Index));
+                }
             }
-
-            await _context.SaveChangesAsync();
-            return RedirectToAction(nameof(Index));
+            catch (Exception ex)
+            {
+                Log.Fatal(ex.Message + " " + ex.InnerException);
+                return NoContent();
+            }
         }
 
-        private bool TblMasPsoExists(int id)
-        {
-            return _context.TblMasPsos.Any(e => e.Id == id);
-        }
+        //private bool TblMasPsoExists(int id)
+        //{
+        //    return _context.TblMasPsos.Any(e => e.Id == id);
+        //}
     }
 }

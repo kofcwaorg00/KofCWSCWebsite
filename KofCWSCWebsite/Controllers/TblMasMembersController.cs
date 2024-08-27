@@ -17,13 +17,11 @@ namespace KofCWSCWebsite.Controllers
 {
     public class TblMasMembersController : Controller
     {
-        private IConfiguration _configuration;
         private DataSetService _dataSetService;
 
         public TblMasMembersController(ApplicationDbContext context, IConfiguration configuration, DataSetService dataSetService)
         {
             Log.Information("Creating MembersController");
-            _configuration = configuration;
             _dataSetService = dataSetService;
         }
 
