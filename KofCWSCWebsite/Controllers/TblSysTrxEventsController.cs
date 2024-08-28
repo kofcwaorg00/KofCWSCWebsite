@@ -8,34 +8,70 @@ using Microsoft.EntityFrameworkCore;
 using KofCWSCWebsite.Data;
 using KofCWSCWebsite.Models;
 using System.Text.Json;
+using Newtonsoft.Json;
+using Microsoft.CodeAnalysis.VisualBasic.Syntax;
+using Serilog;
 
 namespace KofCWSCWebsite.Controllers
 {
     public class TblSysTrxEventsController : Controller
     {
-        private readonly ApplicationDbContext _context;
+        private DataSetService _dataSetService;
 
-        public TblSysTrxEventsController(ApplicationDbContext context)
+        public TblSysTrxEventsController(DataSetService dataSetService)
         {
-            _context = context;
+            _dataSetService = dataSetService;
         }
 
         // GET: TblSysTrxEvents
         public async Task<IActionResult> Index()
         {
-            return View(await _context.TblSysTrxEvents.ToListAsync());
+            Uri myURI = new Uri(_dataSetService.GetAPIBaseAddress() + "/Events");
+
+            using (var client = new HttpClient())
+            {
+                var responseTask = client.GetAsync(myURI);
+                responseTask.Wait();
+                var result = responseTask.Result;
+                IEnumerable<TblSysTrxEvent> events;
+                if (result.IsSuccessStatusCode)
+                {
+                    var readTask = result.Content.ReadAsAsync<IList<TblSysTrxEvent>>();
+                    readTask.Wait();
+                    events = readTask.Result;
+                }
+                else
+                {
+                    events = Enumerable.Empty<TblSysTrxEvent>();
+                    ModelState.AddModelError(string.Empty, "Server Error.  Please contact administrator.");
+                }
+                return View(events);
+            }
         }
 
         public IActionResult GetCalendarEvents(string start, string end)
         {
-            DateTime startdate = DateTime.Parse(start);
-            DateTime enddate = DateTime.Parse(end);
-            List<TblSysTrxEvent> events = _context
-                .TblSysTrxEvents
-                .Where(l => l.Begin >= startdate && l.End <= enddate)
-                .ToList();
-            
-            return Json(events);
+            Uri myURI = new Uri(_dataSetService.GetAPIBaseAddress() + "/Events/" + start + "/" + end );
+
+            using (var client = new HttpClient())
+            {
+                var responseTask = client.GetAsync(myURI);
+                responseTask.Wait();
+                var result = responseTask.Result;
+                IEnumerable<TblSysTrxEvent> calevents;
+                if (result.IsSuccessStatusCode)
+                {
+                    var readTask = result.Content.ReadAsAsync<IList<TblSysTrxEvent>>();
+                    readTask.Wait();
+                    calevents = readTask.Result;
+                }
+                else
+                {
+                    calevents = Enumerable.Empty<TblSysTrxEvent>();
+                    ModelState.AddModelError(string.Empty, "Server Error.  Please contact administrator.");
+                }
+                return View(calevents);
+            }
         }
 
         // GET: TblSysTrxEvents/Details/5
@@ -45,15 +81,26 @@ namespace KofCWSCWebsite.Controllers
             {
                 return NotFound();
             }
-
-            var tblSysTrxEvent = await _context.TblSysTrxEvents
-                .FirstOrDefaultAsync(m => m.Id == id);
-            if (tblSysTrxEvent == null)
+            Uri myURI = new(_dataSetService.GetAPIBaseAddress() + "/Event/" + id);
+            TblSysTrxEvent? myevent;
+            using (var client = new HttpClient())
             {
-                return NotFound();
+                var responseTask = client.GetAsync(myURI);
+                responseTask.Wait();
+                var result = responseTask.Result;
+                
+                if (result.IsSuccessStatusCode)
+                {
+                    string json = await result.Content.ReadAsStringAsync();
+                    myevent = JsonConvert.DeserializeObject<TblSysTrxEvent>(json);
+                }
+                else
+                {
+                    ModelState.AddModelError(string.Empty, "Server Error.  Please contact administrator.");
+                    myevent = null;
+                }
+                return View(myevent);
             }
-
-            return View(tblSysTrxEvent);
         }
 
         // GET: TblSysTrxEvents/Create
@@ -71,11 +118,22 @@ namespace KofCWSCWebsite.Controllers
         {
             if (ModelState.IsValid)
             {
-                _context.Add(tblSysTrxEvent);
-                await _context.SaveChangesAsync();
-                return RedirectToAction(nameof(Index));
+                Uri myURI = new(_dataSetService.GetAPIBaseAddress() + "/Event");
+                using (var client = new HttpClient())
+                {
+                    client.BaseAddress = myURI;
+                    var response = await client.PostAsJsonAsync(myURI, tblSysTrxEvent);
+                    try
+                    {
+                        response.EnsureSuccessStatusCode();
+                    }
+                    catch (Exception ex)
+                    {
+                        Log.Error(ex.Message + ' ' + ex.InnerException);
+                    }
+                }
             }
-            return View(tblSysTrxEvent);
+            return RedirectToAction(nameof(Index));
         }
 
         // GET: TblSysTrxEvents/Edit/5
@@ -86,12 +144,26 @@ namespace KofCWSCWebsite.Controllers
                 return NotFound();
             }
 
-            var tblSysTrxEvent = await _context.TblSysTrxEvents.FindAsync(id);
-            if (tblSysTrxEvent == null)
+            Uri myURI = new(_dataSetService.GetAPIBaseAddress() + "/Event/" + id);
+
+            using (var client = new HttpClient())
             {
-                return NotFound();
+                var responseTask = client.GetAsync(myURI);
+                responseTask.Wait();
+                var result = responseTask.Result;
+                TblSysTrxEvent? edevent;
+                if (result.IsSuccessStatusCode)
+                {
+                    string json = await result.Content.ReadAsStringAsync();
+                    edevent = JsonConvert.DeserializeObject<TblSysTrxEvent>(json);
+                }
+                else
+                {
+                    ModelState.AddModelError(string.Empty, "Server Error.  Please contact administrator.");
+                    edevent = null;
+                }
+                return View(edevent);
             }
-            return View(tblSysTrxEvent);
         }
 
         // POST: TblSysTrxEvents/Edit/5
@@ -105,28 +177,27 @@ namespace KofCWSCWebsite.Controllers
             {
                 return NotFound();
             }
-
             if (ModelState.IsValid)
             {
+                Uri myURI = new(_dataSetService.GetAPIBaseAddress() + "/Event/" + id.ToString());
                 try
                 {
-                    _context.Update(tblSysTrxEvent);
-                    await _context.SaveChangesAsync();
+                    using (var client = new HttpClient())
+                    {
+                        client.BaseAddress = myURI;
+                        var response = await client.PutAsJsonAsync(myURI, tblSysTrxEvent);
+                        var returnValue = await response.Content.ReadAsAsync<List<TblSysTrxEvent>>();
+                        Log.Information("Update of Event ID " + id + "Returned " + returnValue);
+                    }
                 }
-                catch (DbUpdateConcurrencyException)
+                catch (Exception ex)
                 {
-                    if (!TblSysTrxEventExists(tblSysTrxEvent.Id))
-                    {
-                        return NotFound();
-                    }
-                    else
-                    {
-                        throw;
-                    }
+                    Log.Fatal(ex.Message);
                 }
+                Log.Information("Update Success Event ID " + id);
                 return RedirectToAction(nameof(Index));
             }
-            return View(tblSysTrxEvent);
+            return RedirectToAction(nameof(Index));
         }
 
         // GET: TblSysTrxEvents/Delete/5
@@ -137,14 +208,26 @@ namespace KofCWSCWebsite.Controllers
                 return NotFound();
             }
 
-            var tblSysTrxEvent = await _context.TblSysTrxEvents
-                .FirstOrDefaultAsync(m => m.Id == id);
-            if (tblSysTrxEvent == null)
-            {
-                return NotFound();
-            }
+            Uri myURI = new(_dataSetService.GetAPIBaseAddress() + "/Event/" + id);
 
-            return View(tblSysTrxEvent);
+            using (var client = new HttpClient())
+            {
+                var responseTask = client.GetAsync(myURI);
+                responseTask.Wait();
+                var result = responseTask.Result;
+                TblSysTrxEvent? devent;
+                if (result.IsSuccessStatusCode)
+                {
+                    string json = await result.Content.ReadAsStringAsync();
+                    devent = JsonConvert.DeserializeObject<TblSysTrxEvent>(json);
+                }
+                else
+                {
+                    ModelState.AddModelError(string.Empty, "Server Error.  Please contact administrator.");
+                    devent = null;
+                }
+                return View(devent);
+            }
         }
 
         // POST: TblSysTrxEvents/Delete/5
@@ -152,19 +235,40 @@ namespace KofCWSCWebsite.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> DeleteConfirmed(int id)
         {
-            var tblSysTrxEvent = await _context.TblSysTrxEvents.FindAsync(id);
-            if (tblSysTrxEvent != null)
+            Uri myURI = new(_dataSetService.GetAPIBaseAddress() + "/Event/" + id);
+            try
             {
-                _context.TblSysTrxEvents.Remove(tblSysTrxEvent);
+                using (var client = new HttpClient())
+                {
+                    var responseTask = client.DeleteAsync(myURI);
+                    responseTask.Wait();
+                    var result = responseTask.Result;
+                    TblSysTrxEvent? devent;
+                    if (result.IsSuccessStatusCode)
+                    {
+                        Log.Information("Delete Event Success " + id);
+                        string json = await result.Content.ReadAsStringAsync();
+                        devent = JsonConvert.DeserializeObject<TblSysTrxEvent>(json);
+                    }
+                    else
+                    {
+                        Log.Information("Delete Event Failed " + id);
+                        ModelState.AddModelError(string.Empty, "Server Error.  Please contact administrator.");
+                        devent = null;
+                    }
+                    return RedirectToAction(nameof(Index));
+                }
             }
-
-            await _context.SaveChangesAsync();
-            return RedirectToAction(nameof(Index));
+            catch (Exception ex)
+            {
+                Log.Fatal(ex.Message + " " + ex.InnerException);
+                return NoContent();
+            }
         }
 
-        private bool TblSysTrxEventExists(int id)
-        {
-            return _context.TblSysTrxEvents.Any(e => e.Id == id);
-        }
+        //////private bool TblSysTrxEventExists(int id)
+        //////{
+        //////    return _context.TblSysTrxEvents.Any(e => e.Id == id);
+        //////}
     }
 }

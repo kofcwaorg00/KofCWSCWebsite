@@ -95,7 +95,7 @@ namespace KofCWSCWebsite.Data
             try
             {
                 string _myBaseAddress;
-                _myBaseAddress = (string)_configuration.GetSection("APIURL").GetValue(typeof(string), "LOCAL");
+                _myBaseAddress = (string)_configuration.GetSection("APIURL").GetValue(typeof(string), "AZDEV");
 
                 if (_myBaseAddress.IsNullOrEmpty())
                 {

@@ -19,7 +19,7 @@ namespace KofCWSCWebsite.Controllers
     {
         private DataSetService _dataSetService;
 
-        public TblMasMembersController(ApplicationDbContext context, IConfiguration configuration, DataSetService dataSetService)
+        public TblMasMembersController(DataSetService dataSetService)
         {
             Log.Information("Creating MembersController");
             _dataSetService = dataSetService;

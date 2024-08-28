@@ -4,10 +4,14 @@
     ViewData["Title"] = "Index";
 }
 
-<h1>Index</h1>
+<h1>Calendar Items</h1>
 
 <p>
-    <a asp-action="Create">Create New</a>
+    <form asp-controller="TblSysTrxEvents" asp-action="Create" method="get">
+        <button type="submit" class="btn btn-sm btn-success">
+            Create A New Event
+        </button>
+    </form>
 </p>
 <table class="table">
     <thead>
@@ -36,6 +40,8 @@
             <th>
                 @Html.DisplayNameFor(model => model.DateAdded)
             </th>
+            <th></th>
+            <th></th>
             <th></th>
         </tr>
     </thead>
@@ -66,11 +72,32 @@
             <td>
                 @Html.DisplayFor(modelItem => item.DateAdded)
             </td>
-            <td>
-                <a asp-action="Edit" asp-route-id="@item.Id">Edit</a> |
-                <a asp-action="Details" asp-route-id="@item.Id">Details</a> |
-                <a asp-action="Delete" asp-route-id="@item.Id">Delete</a>
-            </td>
+            @if (User.IsInRole("Admin"))
+            {
+                <td style="padding-right:0px">
+                    @* <a asp-action="Edit" asp-route-id="@item.MemberId">Edit</a>&nbsp;|&nbsp;<a asp-action="Details" asp-route-id="@item.MemberId">Details</a>&nbsp;|&nbsp;<a asp-action="Delete" asp-route-id="@item.MemberId">Delete</a> *@
+                    <form asp-action="Edit" asp-route-id="@item.Id" method="get">
+                        <button type="submit" class="btn btn-sm btn-primary">
+                            Edit
+                        </button>
+                    </form>
+                </td>
+                <td style="padding-left:0px;padding-right:0px">
+                    <form asp-action="Details" asp-route-id="@item.Id" method="get">
+                        <button type="submit" class="btn btn-sm btn-warning">
+                            Details
+                        </button>
+                    </form>
+                </td>
+                <td style="padding-left:0px">
+                    <form asp-action="Delete" asp-route-id="@item.Id" method="get">
+                        <button type="submit" class="btn btn-sm btn-danger">
+                            Delete
+                        </button>
+                    </form>
+
+                </td>
+            }
         </tr>
 }
     </tbody>
