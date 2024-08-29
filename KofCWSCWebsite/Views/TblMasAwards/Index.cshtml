@@ -31,7 +31,11 @@
 @if (User.IsInRole("Admin"))
 {
     <p>
-        <a asp-action="Create" class="btn btn-success">Create an Award</a>
+        <form asp-controller="TblMasAwards" asp-action="Create" method="get">
+            <button type="submit" class="btn btn-sm btn-success">
+                Create An Award
+            </button>
+        </form>
     </p>
 }
 <table class="table" width="100%">
@@ -79,7 +83,6 @@
                 <td>
                     @Html.DisplayFor(modelItem => item.AwardSubmissionEmailAddress)
                 </td>
-                <td>
                     @if (User.IsInRole("Admin"))
                     {
                     <td style="padding-right:0px">
@@ -105,11 +108,7 @@
                         </form>
 
                     </td>
-
-
-
                 }
-                    </td>
                 </tr>
             }
     </tbody>

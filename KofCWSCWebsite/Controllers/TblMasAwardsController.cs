@@ -7,22 +7,45 @@ using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using KofCWSCWebsite.Data;
 using KofCWSCWebsite.Models;
+using KofCWSCWebsite.Data;
+using Serilog;
+using Newtonsoft.Json;
 
 namespace KofCWSCWebsite.Controllers
 {
     public class TblMasAwardsController : Controller
     {
-        private readonly ApplicationDbContext _context;
+        private DataSetService _dataSetService;
 
-        public TblMasAwardsController(ApplicationDbContext context)
+        public TblMasAwardsController(ApplicationDbContext context, DataSetService dataSetService)
         {
-            _context = context;
+            _dataSetService = dataSetService;
         }
 
         // GET: TblMasAwards
         public async Task<IActionResult> Index()
         {
-            return View(await _context.TblMasAwards.ToListAsync());
+            Uri myURI = new Uri(_dataSetService.GetAPIBaseAddress() + "/Awards");
+
+            using (var client = new HttpClient())
+            {
+                var responseTask = client.GetAsync(myURI);
+                responseTask.Wait();
+                var result = responseTask.Result;
+                IEnumerable<TblMasAward> awards;
+                if (result.IsSuccessStatusCode)
+                {
+                    var readTask = result.Content.ReadAsAsync<IList<TblMasAward>>();
+                    readTask.Wait();
+                    awards = readTask.Result;
+                }
+                else
+                {
+                    awards = Enumerable.Empty<TblMasAward>();
+                    ModelState.AddModelError(string.Empty, "Server Error.  Please contact administrator.");
+                }
+                return View(awards);
+            }
         }
 
         // GET: TblMasAwards/Details/5
@@ -33,14 +56,26 @@ namespace KofCWSCWebsite.Controllers
                 return NotFound();
             }
 
-            var tblMasAward = await _context.TblMasAwards
-                .FirstOrDefaultAsync(m => m.Id == id);
-            if (tblMasAward == null)
-            {
-                return NotFound();
-            }
+            Uri myURI = new Uri(_dataSetService.GetAPIBaseAddress() + "/Award/" + id.ToString());
 
-            return View(tblMasAward);
+            using (var client = new HttpClient())
+            {
+                var responseTask = client.GetAsync(myURI);
+                responseTask.Wait();
+                var result = responseTask.Result;
+                TblMasAward? award;
+                if (result.IsSuccessStatusCode)
+                {
+                    string json = await result.Content.ReadAsStringAsync();
+                    award = JsonConvert.DeserializeObject<TblMasAward>(json);
+                }
+                else
+                {
+                    ModelState.AddModelError(string.Empty, "Server Error.  Please contact administrator.");
+                    award = null;
+                }
+                return View(award);
+            }
         }
 
         // GET: TblMasAwards/Create
@@ -58,11 +93,23 @@ namespace KofCWSCWebsite.Controllers
         {
             if (ModelState.IsValid)
             {
-                _context.Add(tblMasAward);
-                await _context.SaveChangesAsync();
-                return RedirectToAction(nameof(Index));
+                Uri myURI = new(_dataSetService.GetAPIBaseAddress() + "/Award");
+                using (var client = new HttpClient())
+                {
+                    client.BaseAddress = myURI;
+                    var response = await client.PostAsJsonAsync(myURI, tblMasAward);
+                    try
+                    {
+                        response.EnsureSuccessStatusCode();
+                    }
+                    catch (Exception ex)
+                    {
+                        Log.Error(ex.Message + ' ' + ex.InnerException);
+                        return View(tblMasAward);
+                    }
+                }
             }
-            return View(tblMasAward);
+            return RedirectToAction(nameof(Index));
         }
 
         // GET: TblMasAwards/Edit/5
@@ -73,12 +120,26 @@ namespace KofCWSCWebsite.Controllers
                 return NotFound();
             }
 
-            var tblMasAward = await _context.TblMasAwards.FindAsync(id);
-            if (tblMasAward == null)
+            Uri myURI = new(_dataSetService.GetAPIBaseAddress() + "/Award/" + id);
+
+            using (var client = new HttpClient())
             {
-                return NotFound();
+                var responseTask = client.GetAsync(myURI);
+                responseTask.Wait();
+                var result = responseTask.Result;
+                TblMasAward? award;
+                if (result.IsSuccessStatusCode)
+                {
+                    string json = await result.Content.ReadAsStringAsync();
+                    award = JsonConvert.DeserializeObject<TblMasAward>(json);
+                }
+                else
+                {
+                    ModelState.AddModelError(string.Empty, "Server Error.  Please contact administrator.");
+                    award = null;
+                }
+                return View(award);
             }
-            return View(tblMasAward);
         }
 
         // POST: TblMasAwards/Edit/5
@@ -92,28 +153,26 @@ namespace KofCWSCWebsite.Controllers
             {
                 return NotFound();
             }
-
             if (ModelState.IsValid)
             {
+                Uri myURI = new(_dataSetService.GetAPIBaseAddress() + "/Award/" + id);
                 try
                 {
-                    _context.Update(tblMasAward);
-                    await _context.SaveChangesAsync();
+                    using (var client = new HttpClient())
+                    {
+                        client.BaseAddress = myURI;
+                        var response = await client.PutAsJsonAsync(myURI, tblMasAward);
+                        var returnValue = await response.Content.ReadAsAsync<List<TblMasMember>>();
+                        Log.Information("Update of Award ID " + id + "Returned " + returnValue);
+                    }
                 }
-                catch (DbUpdateConcurrencyException)
+                catch (Exception ex)
                 {
-                    if (!TblMasAwardExists(tblMasAward.Id))
-                    {
-                        return NotFound();
-                    }
-                    else
-                    {
-                        throw;
-                    }
+                    Log.Fatal(ex.Message);
                 }
-                return RedirectToAction(nameof(Index));
+                Log.Information("Update Success Member ID " + id);
             }
-            return View(tblMasAward);
+            return RedirectToAction(nameof(Index));
         }
 
         // GET: TblMasAwards/Delete/5
@@ -124,14 +183,26 @@ namespace KofCWSCWebsite.Controllers
                 return NotFound();
             }
 
-            var tblMasAward = await _context.TblMasAwards
-                .FirstOrDefaultAsync(m => m.Id == id);
-            if (tblMasAward == null)
-            {
-                return NotFound();
-            }
+            Uri myURI = new(_dataSetService.GetAPIBaseAddress() + "/Award/" + id);
 
-            return View(tblMasAward);
+            using (var client = new HttpClient())
+            {
+                var responseTask = client.GetAsync(myURI);
+                responseTask.Wait();
+                var result = responseTask.Result;
+                TblMasAward? award;
+                if (result.IsSuccessStatusCode)
+                {
+                    string json = await result.Content.ReadAsStringAsync();
+                    award = JsonConvert.DeserializeObject<TblMasAward>(json);
+                }
+                else
+                {
+                    ModelState.AddModelError(string.Empty, "Server Error.  Please contact administrator.");
+                    award = null;
+                }
+                return View(award);
+            }
         }
 
         // POST: TblMasAwards/Delete/5
@@ -139,19 +210,40 @@ namespace KofCWSCWebsite.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> DeleteConfirmed(int id)
         {
-            var tblMasAward = await _context.TblMasAwards.FindAsync(id);
-            if (tblMasAward != null)
+            Uri myURI = new(_dataSetService.GetAPIBaseAddress() + "/Award/" + id);
+            try
             {
-                _context.TblMasAwards.Remove(tblMasAward);
+                using (var client = new HttpClient())
+                {
+                    var responseTask = client.DeleteAsync(myURI);
+                    responseTask.Wait();
+                    var result = responseTask.Result;
+                    TblMasAward? award;
+                    if (result.IsSuccessStatusCode)
+                    {
+                        Log.Information("Delete Member Success " + id);
+                        string json = await result.Content.ReadAsStringAsync();
+                        award = JsonConvert.DeserializeObject<TblMasAward>(json);
+                    }
+                    else
+                    {
+                        Log.Information("Delete Member Failed " + id);
+                        ModelState.AddModelError(string.Empty, "Server Error.  Please contact administrator.");
+                        award = null;
+                    }
+                    return RedirectToAction(nameof(Index));
+                }
             }
-
-            await _context.SaveChangesAsync();
-            return RedirectToAction(nameof(Index));
+            catch (Exception ex)
+            {
+                Log.Fatal(ex.Message + " " + ex.InnerException);
+                return NoContent();
+            }
         }
 
-        private bool TblMasAwardExists(int id)
-        {
-            return _context.TblMasAwards.Any(e => e.Id == id);
-        }
+        //private bool TblMasAwardExists(int id)
+        //{
+        //    return _context.TblMasAwards.Any(e => e.Id == id);
+        //}
     }
 }
