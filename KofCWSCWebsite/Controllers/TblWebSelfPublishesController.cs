@@ -7,39 +7,69 @@ using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using KofCWSCWebsite.Data;
 using KofCWSCWebsite.Models;
+using Newtonsoft.Json;
+using Serilog;
 
 namespace KofCWSCWebsite.Controllers
 {
     public class TblWebSelfPublishesController : Controller
     {
-        private readonly ApplicationDbContext _context;
+        private DataSetService _dataSetService;
 
-        public TblWebSelfPublishesController(ApplicationDbContext context)
+        public TblWebSelfPublishesController(ApplicationDbContext context, DataSetService dataSetService)
         {
-            _context = context;
+            _dataSetService = dataSetService;
         }
 
         // GET: TblWebSelfPublishes
         public async Task<IActionResult> Index()
         {
-            return View(await _context.TblWebSelfPublishes.ToListAsync());
+            Uri myURI = new Uri(_dataSetService.GetAPIBaseAddress() + "/SelfPubs");
+
+            using (var client = new HttpClient())
+            {
+                var responseTask = client.GetAsync(myURI);
+                responseTask.Wait();
+                var result = responseTask.Result;
+                IEnumerable<TblWebSelfPublish> selfpubs;
+                if (result.IsSuccessStatusCode)
+                {
+                    var readTask = result.Content.ReadAsAsync<IList<TblWebSelfPublish>>();
+                    readTask.Wait();
+                    selfpubs = readTask.Result;
+                }
+                else
+                {
+                    selfpubs = Enumerable.Empty<TblWebSelfPublish>();
+                    ModelState.AddModelError(string.Empty, "Server Error.  Please contact administrator.");
+                }
+                return View(selfpubs);
+            }
         }
 
         // GET: TblWebSelfPublishes/Details/5
         public async Task<IActionResult> Details(string id)
         {
-            ////////if (id == null)
-            ////////{
-            ////////    return NotFound();
-            ////////}
+            Uri myURI = new(_dataSetService.GetAPIBaseAddress() + "/SelfPub/" + id);
 
-            var tblWebSelfPublish = await _context.TblWebSelfPublishes
-                .FirstOrDefaultAsync(m => m.Url == id);
-            if (tblWebSelfPublish == null)
+            using (var client = new HttpClient())
             {
-                return NotFound();
+                var responseTask = client.GetAsync(myURI);
+                responseTask.Wait();
+                var result = responseTask.Result;
+                TblWebSelfPublish? selfpub;
+                if (result.IsSuccessStatusCode)
+                {
+                    string json = await result.Content.ReadAsStringAsync();
+                    selfpub = JsonConvert.DeserializeObject<TblWebSelfPublish>(json);
+                }
+                else
+                {
+                    ModelState.AddModelError(string.Empty, "Server Error.  Please contact administrator.");
+                    selfpub = null;
+                }
+                return View(selfpub);
             }
-            return View(tblWebSelfPublish);
         }
 
         /// <summary>
@@ -49,12 +79,28 @@ namespace KofCWSCWebsite.Controllers
         /// </summary>
         /// <param name="id"></param>
         /// <returns></returns>
-        public IActionResult Display(int id)
+        public async Task<IActionResult> DisplayAsync(int id)
         {
-            var result = _context.Database
-                .SqlQuery<SPGetSOS>($"uspWEB_GetSOS {id}")
-                .ToList();
-            return View(result);
+            Uri myURI = new(_dataSetService.GetAPIBaseAddress() + "/SelfPub/Display" + id);
+
+            using (var client = new HttpClient())
+            {
+                var responseTask = client.GetAsync(myURI);
+                responseTask.Wait();
+                var myresult = responseTask.Result;
+                TblWebSelfPublish? selfpub;
+                if (myresult.IsSuccessStatusCode)
+                {
+                    string json = await myresult.Content.ReadAsStringAsync();
+                    selfpub = JsonConvert.DeserializeObject<TblWebSelfPublish>(json);
+                }
+                else
+                {
+                    ModelState.AddModelError(string.Empty, "Server Error.  Please contact administrator.");
+                    selfpub = null;
+                }
+                return View(selfpub);
+            }
         }
 
         // GET: TblWebSelfPublishes/Create
@@ -72,11 +118,22 @@ namespace KofCWSCWebsite.Controllers
         {
             if (ModelState.IsValid)
             {
-                _context.Add(tblWebSelfPublish);
-                await _context.SaveChangesAsync();
-                return RedirectToAction(nameof(Index));
+                Uri myURI = new(_dataSetService.GetAPIBaseAddress() + "/SelfPub");
+                using (var client = new HttpClient())
+                {
+                    client.BaseAddress = myURI;
+                    var response = await client.PostAsJsonAsync(myURI, tblWebSelfPublish);
+                    try
+                    {
+                        response.EnsureSuccessStatusCode();
+                    }
+                    catch (Exception ex)
+                    {
+                        Log.Error(ex.Message + ' ' + ex.InnerException);
+                    }
+                }
             }
-            return View(tblWebSelfPublish);
+            return RedirectToAction(nameof(Index));
         }
 
         // GET: TblWebSelfPublishes/Edit/5
@@ -86,13 +143,26 @@ namespace KofCWSCWebsite.Controllers
             {
                 return NotFound();
             }
+            Uri myURI = new(_dataSetService.GetAPIBaseAddress() + "/SelfPub/" + id);
 
-            var tblWebSelfPublish = await _context.TblWebSelfPublishes.FindAsync(id);
-            if (tblWebSelfPublish == null)
+            using (var client = new HttpClient())
             {
-                return NotFound();
+                var responseTask = client.GetAsync(myURI);
+                responseTask.Wait();
+                var result = responseTask.Result;
+                TblWebSelfPublish? selfpub;
+                if (result.IsSuccessStatusCode)
+                {
+                    string json = await result.Content.ReadAsStringAsync();
+                    selfpub = JsonConvert.DeserializeObject<TblWebSelfPublish>(json);
+                }
+                else
+                {
+                    ModelState.AddModelError(string.Empty, "Server Error.  Please contact administrator.");
+                    selfpub = null;
+                }
+                return View(selfpub);
             }
-            return View(tblWebSelfPublish);
         }
 
         // POST: TblWebSelfPublishes/Edit/5
@@ -106,28 +176,26 @@ namespace KofCWSCWebsite.Controllers
             {
                 return NotFound();
             }
-
             if (ModelState.IsValid)
             {
+                Uri myURI = new(_dataSetService.GetAPIBaseAddress() + "/SelfPub/" + id);
                 try
                 {
-                    _context.Update(tblWebSelfPublish);
-                    await _context.SaveChangesAsync();
+                    using (var client = new HttpClient())
+                    {
+                        client.BaseAddress = myURI;
+                        var response = await client.PutAsJsonAsync(myURI, tblWebSelfPublish);
+                        var returnValue = await response.Content.ReadAsAsync<List<TblWebSelfPublish>>();
+                        Log.Information("Update of Message ID " + id + "Returned " + returnValue);
+                    }
                 }
-                catch (DbUpdateConcurrencyException)
+                catch (Exception ex)
                 {
-                    if (!TblWebSelfPublishExists(tblWebSelfPublish.Url))
-                    {
-                        return NotFound();
-                    }
-                    else
-                    {
-                        throw;
-                    }
+                    Log.Fatal(ex.Message);
                 }
-                return RedirectToAction(nameof(Index));
+                Log.Information("Update Success Message ID " + id);
             }
-            return View(tblWebSelfPublish);
+            return RedirectToAction(nameof(Index));
         }
 
         // GET: TblWebSelfPublishes/Delete/5
@@ -137,15 +205,26 @@ namespace KofCWSCWebsite.Controllers
             {
                 return NotFound();
             }
+            Uri myURI = new(_dataSetService.GetAPIBaseAddress() + "/SelfPub/" + id);
 
-            var tblWebSelfPublish = await _context.TblWebSelfPublishes
-                .FirstOrDefaultAsync(m => m.Url == id);
-            if (tblWebSelfPublish == null)
+            using (var client = new HttpClient())
             {
-                return NotFound();
+                var responseTask = client.GetAsync(myURI);
+                responseTask.Wait();
+                var result = responseTask.Result;
+                TblWebSelfPublish? selfpub;
+                if (result.IsSuccessStatusCode)
+                {
+                    string json = await result.Content.ReadAsStringAsync();
+                    selfpub = JsonConvert.DeserializeObject<TblWebSelfPublish>(json);
+                }
+                else
+                {
+                    ModelState.AddModelError(string.Empty, "Server Error.  Please contact administrator.");
+                    selfpub = null;
+                }
+                return View(selfpub);
             }
-
-            return View(tblWebSelfPublish);
         }
 
         // POST: TblWebSelfPublishes/Delete/5
@@ -153,19 +232,40 @@ namespace KofCWSCWebsite.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> DeleteConfirmed(string id)
         {
-            var tblWebSelfPublish = await _context.TblWebSelfPublishes.FindAsync(id);
-            if (tblWebSelfPublish != null)
+            Uri myURI = new(_dataSetService.GetAPIBaseAddress() + "/SelfPub/" + id);
+            try
             {
-                _context.TblWebSelfPublishes.Remove(tblWebSelfPublish);
+                using (var client = new HttpClient())
+                {
+                    var responseTask = client.DeleteAsync(myURI);
+                    responseTask.Wait();
+                    var result = responseTask.Result;
+                    TblWebSelfPublish? assy;
+                    if (result.IsSuccessStatusCode)
+                    {
+                        Log.Information("Delete Message Success " + id);
+                        string json = await result.Content.ReadAsStringAsync();
+                        assy = JsonConvert.DeserializeObject<TblWebSelfPublish>(json);
+                    }
+                    else
+                    {
+                        Log.Information("Delete Message Failed " + id);
+                        ModelState.AddModelError(string.Empty, "Server Error.  Please contact administrator.");
+                        assy = null;
+                    }
+                    return RedirectToAction(nameof(Index));
+                }
             }
-
-            await _context.SaveChangesAsync();
-            return RedirectToAction(nameof(Index));
+            catch (Exception ex)
+            {
+                Log.Fatal(ex.Message + " " + ex.InnerException);
+                return NoContent();
+            }
         }
 
-        private bool TblWebSelfPublishExists(string id)
-        {
-            return _context.TblWebSelfPublishes.Any(e => e.Url == id);
-        }
+        //private bool TblWebSelfPublishExists(string id)
+        //{
+        //    return _context.TblWebSelfPublishes.Any(e => e.Url == id);
+        //}
     }
 }

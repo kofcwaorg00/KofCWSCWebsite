@@ -11,11 +11,13 @@ namespace KofCWSCWebsite.Controllers
         private readonly ILogger<HomeController> _logger;
 
         private readonly ApplicationDbContext _context;
+        private DataSetService _dataSetService;
 
-        public HomeController(ApplicationDbContext context, ILogger<HomeController> logger)
+        public HomeController(ApplicationDbContext context, ILogger<HomeController> logger, DataSetService dataSetService)
         {
             _context = context;
             _logger = logger;
+            _dataSetService = dataSetService;   
         }
 
         public IActionResult Index()
@@ -43,10 +45,33 @@ namespace KofCWSCWebsite.Controllers
             }
             ViewData["APIURL"] = "and the APIURL is using AZDEV";
             //*****************************************************************************************************
-            //var result = _context.Database
-            //    .SqlQuery<SPGetSOS>($"uspWEB_GetSOS 0")
-            //    .ToList();
-            //return View(result);
+            Uri myURI = new Uri(_dataSetService.GetAPIBaseAddress() + "/Home");
+
+            using (var client = new HttpClient())
+            {
+                var responseTask = client.GetAsync(myURI);
+                responseTask.Wait();
+                var myresult = responseTask.Result;
+                IEnumerable<HomePageViewModel> home;
+                if (myresult.IsSuccessStatusCode)
+                {
+                    var readTask = myresult.Content.ReadAsAsync<IList<HomePageViewModel>>();
+                    readTask.Wait();
+                    home = readTask.Result;
+                }
+                else
+                {
+                    home = Enumerable.Empty<HomePageViewModel>();
+                    ModelState.AddModelError(string.Empty, "Server Error.  Please contact administrator.");
+                }
+                return View(home);
+            }
+
+
+
+
+
+
             var result = _context.Database
                 .SqlQuery<HomePageViewModel>($"uspWEB_GetHomePage")
                 .ToList();
