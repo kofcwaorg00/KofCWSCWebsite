@@ -7,27 +7,44 @@ using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using KofCWSCWebsite.Data;
 using KofCWSCWebsite.Models;
+using Newtonsoft.Json;
+using Serilog;
 
 namespace KofCWSCWebsite.Controllers
 {
     public class TblValCouncilsController : Controller
     {
-        private readonly ApplicationDbContext _context;
+        private DataSetService _dataSetService;
 
-        public TblValCouncilsController(ApplicationDbContext context)
+        public TblValCouncilsController(DataSetService dataSetService)
         {
-            _context = context;
+            _dataSetService = dataSetService;
         }
 
         // GET: TblValCouncils
         public async Task<IActionResult> Index()
         {
-            var filteredSortedList = await _context.TblValCouncils
-                .Where(x => x.CNumber > 0)
-                .OrderBy(x => x.CNumber)
-                .ToListAsync();
-            return View(filteredSortedList);
-            //return View(await _context.TblValCouncils.OrderBy(x => x.CNumber).ToListAsync());
+            Uri myURI = new Uri(_dataSetService.GetAPIBaseAddress() + "/Councils");
+
+            using (var client = new HttpClient())
+            {
+                var responseTask = client.GetAsync(myURI);
+                responseTask.Wait();
+                var result = responseTask.Result;
+                IEnumerable<TblValCouncil> councils;
+                if (result.IsSuccessStatusCode)
+                {
+                    var readTask = result.Content.ReadAsAsync<IList<TblValCouncil>>();
+                    readTask.Wait();
+                    councils = readTask.Result;
+                }
+                else
+                {
+                    councils = Enumerable.Empty<TblValCouncil>();
+                    ModelState.AddModelError(string.Empty, "Server Error.  Please contact administrator.");
+                }
+                return View(councils);
+            }
         }
 
         // GET: TblValCouncils/Details/5
@@ -37,15 +54,26 @@ namespace KofCWSCWebsite.Controllers
             {
                 return NotFound();
             }
+            Uri myURI = new Uri(_dataSetService.GetAPIBaseAddress() + "/Council/" + id.ToString());
 
-            var tblValCouncil = await _context.TblValCouncils
-                .FirstOrDefaultAsync(m => m.CNumber == id);
-            if (tblValCouncil == null)
+            using (var client = new HttpClient())
             {
-                return NotFound();
+                var responseTask = client.GetAsync(myURI);
+                responseTask.Wait();
+                var result = responseTask.Result;
+                TblValCouncil? council;
+                if (result.IsSuccessStatusCode)
+                {
+                    string json = await result.Content.ReadAsStringAsync();
+                    council = JsonConvert.DeserializeObject<TblValCouncil>(json);
+                }
+                else
+                {
+                    ModelState.AddModelError(string.Empty, "Server Error.  Please contact administrator.");
+                    council = null;
+                }
+                return View(council);
             }
-
-            return View(tblValCouncil);
         }
 
         // GET: TblValCouncils/Create
@@ -63,11 +91,22 @@ namespace KofCWSCWebsite.Controllers
         {
             if (ModelState.IsValid)
             {
-                _context.Add(tblValCouncil);
-                await _context.SaveChangesAsync();
-                return RedirectToAction(nameof(Index));
+                Uri myURI = new(_dataSetService.GetAPIBaseAddress() + "/Council");
+                using (var client = new HttpClient())
+                {
+                    client.BaseAddress = myURI;
+                    var response = await client.PostAsJsonAsync(myURI, tblValCouncil);
+                    try
+                    {
+                        response.EnsureSuccessStatusCode();
+                    }
+                    catch (Exception ex)
+                    {
+                        Log.Error(ex.Message + ' ' + ex.InnerException);
+                    }
+                }
             }
-            return View(tblValCouncil);
+            return RedirectToAction(nameof(Index));
         }
 
         // GET: TblValCouncils/Edit/5
@@ -77,13 +116,26 @@ namespace KofCWSCWebsite.Controllers
             {
                 return NotFound();
             }
+            Uri myURI = new(_dataSetService.GetAPIBaseAddress() + "/Council/" + id);
 
-            var tblValCouncil = await _context.TblValCouncils.FindAsync(id);
-            if (tblValCouncil == null)
+            using (var client = new HttpClient())
             {
-                return NotFound();
+                var responseTask = client.GetAsync(myURI);
+                responseTask.Wait();
+                var result = responseTask.Result;
+                TblValCouncil? council;
+                if (result.IsSuccessStatusCode)
+                {
+                    string json = await result.Content.ReadAsStringAsync();
+                    council = JsonConvert.DeserializeObject<TblValCouncil>(json);
+                }
+                else
+                {
+                    ModelState.AddModelError(string.Empty, "Server Error.  Please contact administrator.");
+                    council = null;
+                }
+                return View(council);
             }
-            return View(tblValCouncil);
         }
 
         // POST: TblValCouncils/Edit/5
@@ -97,28 +149,26 @@ namespace KofCWSCWebsite.Controllers
             {
                 return NotFound();
             }
-
             if (ModelState.IsValid)
             {
+                Uri myURI = new(_dataSetService.GetAPIBaseAddress() + "/Council/" + id);
                 try
                 {
-                    _context.Update(tblValCouncil);
-                    await _context.SaveChangesAsync();
+                    using (var client = new HttpClient())
+                    {
+                        client.BaseAddress = myURI;
+                        var response = await client.PutAsJsonAsync(myURI, tblValCouncil);
+                        var returnValue = await response.Content.ReadAsAsync<List<TblValCouncil>>();
+                        Log.Information("Update of Council ID " + id + "Returned " + returnValue);
+                    }
                 }
-                catch (DbUpdateConcurrencyException)
+                catch (Exception ex)
                 {
-                    if (!TblValCouncilExists(tblValCouncil.CNumber))
-                    {
-                        return NotFound();
-                    }
-                    else
-                    {
-                        throw;
-                    }
+                    Log.Fatal(ex.Message);
                 }
-                return RedirectToAction(nameof(Index));
+                Log.Information("Update Success Council ID " + id);
             }
-            return View(tblValCouncil);
+            return RedirectToAction(nameof(Index));
         }
 
         // GET: TblValCouncils/Delete/5
@@ -128,15 +178,26 @@ namespace KofCWSCWebsite.Controllers
             {
                 return NotFound();
             }
+            Uri myURI = new(_dataSetService.GetAPIBaseAddress() + "/Council/" + id);
 
-            var tblValCouncil = await _context.TblValCouncils
-                .FirstOrDefaultAsync(m => m.CNumber == id);
-            if (tblValCouncil == null)
+            using (var client = new HttpClient())
             {
-                return NotFound();
+                var responseTask = client.GetAsync(myURI);
+                responseTask.Wait();
+                var result = responseTask.Result;
+                TblValCouncil? council;
+                if (result.IsSuccessStatusCode)
+                {
+                    string json = await result.Content.ReadAsStringAsync();
+                    council = JsonConvert.DeserializeObject<TblValCouncil>(json);
+                }
+                else
+                {
+                    ModelState.AddModelError(string.Empty, "Server Error.  Please contact administrator.");
+                    council = null;
+                }
+                return View(council);
             }
-
-            return View(tblValCouncil);
         }
 
         // POST: TblValCouncils/Delete/5
@@ -144,19 +205,40 @@ namespace KofCWSCWebsite.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> DeleteConfirmed(int id)
         {
-            var tblValCouncil = await _context.TblValCouncils.FindAsync(id);
-            if (tblValCouncil != null)
+            Uri myURI = new(_dataSetService.GetAPIBaseAddress() + "/Council/" + id);
+            try
             {
-                _context.TblValCouncils.Remove(tblValCouncil);
+                using (var client = new HttpClient())
+                {
+                    var responseTask = client.DeleteAsync(myURI);
+                    responseTask.Wait();
+                    var result = responseTask.Result;
+                    TblValCouncil? council;
+                    if (result.IsSuccessStatusCode)
+                    {
+                        Log.Information("Delete Member Success " + id);
+                        string json = await result.Content.ReadAsStringAsync();
+                        council = JsonConvert.DeserializeObject<TblValCouncil>(json);
+                    }
+                    else
+                    {
+                        Log.Information("Delete Member Failed " + id);
+                        ModelState.AddModelError(string.Empty, "Server Error.  Please contact administrator.");
+                        council = null;
+                    }
+                    return RedirectToAction(nameof(Index));
+                }
             }
-
-            await _context.SaveChangesAsync();
-            return RedirectToAction(nameof(Index));
+            catch (Exception ex)
+            {
+                Log.Fatal(ex.Message + " " + ex.InnerException);
+                return NoContent();
+            }
         }
 
-        private bool TblValCouncilExists(int id)
-        {
-            return _context.TblValCouncils.Any(e => e.CNumber == id);
-        }
+        //private bool TblValCouncilExists(int id)
+        //{
+        //    return _context.TblValCouncils.Any(e => e.CNumber == id);
+        //}
     }
 }

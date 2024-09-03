@@ -7,24 +7,44 @@ using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using KofCWSCWebsite.Data;
 using KofCWSCWebsite.Models;
+using Newtonsoft.Json;
+using Serilog;
 
 namespace KofCWSCWebsite.Controllers
 {
     public class TblValAssysController : Controller
     {
-        private readonly ApplicationDbContext _context;
+        private DataSetService _dataSetService;
 
-        public TblValAssysController(ApplicationDbContext context)
+        public TblValAssysController(ApplicationDbContext context, DataSetService dataSetService)
         {
-            _context = context;
+            _dataSetService = dataSetService;   
         }
 
         // GET: TblValAssys
         public async Task<IActionResult> Index()
         {
-            return View(await _context.TblValAssys
-                .OrderBy(x => x.ANumber)
-                .ToListAsync());
+            Uri myURI = new Uri(_dataSetService.GetAPIBaseAddress() + "/Assys");
+
+            using (var client = new HttpClient())
+            {
+                var responseTask = client.GetAsync(myURI);
+                responseTask.Wait();
+                var result = responseTask.Result;
+                IEnumerable<TblValAssy> assys;
+                if (result.IsSuccessStatusCode)
+                {
+                    var readTask = result.Content.ReadAsAsync<IList<TblValAssy>>();
+                    readTask.Wait();
+                    assys = readTask.Result;
+                }
+                else
+                {
+                    assys = Enumerable.Empty<TblValAssy>();
+                    ModelState.AddModelError(string.Empty, "Server Error.  Please contact administrator.");
+                }
+                return View(assys);
+            }
         }
 
         // GET: TblValAssys/Details/5
@@ -34,15 +54,26 @@ namespace KofCWSCWebsite.Controllers
             {
                 return NotFound();
             }
+            Uri myURI = new(_dataSetService.GetAPIBaseAddress() + "/Assy/" + id);
 
-            var tblValAssy = await _context.TblValAssys
-                .FirstOrDefaultAsync(m => m.ANumber == id);
-            if (tblValAssy == null)
+            using (var client = new HttpClient())
             {
-                return NotFound();
+                var responseTask = client.GetAsync(myURI);
+                responseTask.Wait();
+                var result = responseTask.Result;
+                TblValAssy? assy;
+                if (result.IsSuccessStatusCode)
+                {
+                    string json = await result.Content.ReadAsStringAsync();
+                    assy = JsonConvert.DeserializeObject<TblValAssy>(json);
+                }
+                else
+                {
+                    ModelState.AddModelError(string.Empty, "Server Error.  Please contact administrator.");
+                    assy = null;
+                }
+                return View(assy);
             }
-
-            return View(tblValAssy);
         }
 
         // GET: TblValAssys/Create
@@ -60,11 +91,22 @@ namespace KofCWSCWebsite.Controllers
         {
             if (ModelState.IsValid)
             {
-                _context.Add(tblValAssy);
-                await _context.SaveChangesAsync();
-                return RedirectToAction(nameof(Index));
+                Uri myURI = new(_dataSetService.GetAPIBaseAddress() + "/Assy");
+                using (var client = new HttpClient())
+                {
+                    client.BaseAddress = myURI;
+                    var response = await client.PostAsJsonAsync(myURI, tblValAssy);
+                    try
+                    {
+                        response.EnsureSuccessStatusCode();
+                    }
+                    catch (Exception ex)
+                    {
+                        Log.Error(ex.Message + ' ' + ex.InnerException);
+                    }
+                }
             }
-            return View(tblValAssy);
+            return RedirectToAction(nameof(Index));
         }
 
         // GET: TblValAssys/Edit/5
@@ -74,13 +116,26 @@ namespace KofCWSCWebsite.Controllers
             {
                 return NotFound();
             }
+            Uri myURI = new(_dataSetService.GetAPIBaseAddress() + "/Assy/" + id);
 
-            var tblValAssy = await _context.TblValAssys.FindAsync(id);
-            if (tblValAssy == null)
+            using (var client = new HttpClient())
             {
-                return NotFound();
+                var responseTask = client.GetAsync(myURI);
+                responseTask.Wait();
+                var result = responseTask.Result;
+                TblValAssy? assy;
+                if (result.IsSuccessStatusCode)
+                {
+                    string json = await result.Content.ReadAsStringAsync();
+                    assy = JsonConvert.DeserializeObject<TblValAssy>(json);
+                }
+                else
+                {
+                    ModelState.AddModelError(string.Empty, "Server Error.  Please contact administrator.");
+                    assy = null;
+                }
+                return View(assy);
             }
-            return View(tblValAssy);
         }
 
         // POST: TblValAssys/Edit/5
@@ -94,28 +149,26 @@ namespace KofCWSCWebsite.Controllers
             {
                 return NotFound();
             }
-
             if (ModelState.IsValid)
             {
+                Uri myURI = new(_dataSetService.GetAPIBaseAddress() + "/Assy/" + id);
                 try
                 {
-                    _context.Update(tblValAssy);
-                    await _context.SaveChangesAsync();
+                    using (var client = new HttpClient())
+                    {
+                        client.BaseAddress = myURI;
+                        var response = await client.PutAsJsonAsync(myURI, tblValAssy);
+                        var returnValue = await response.Content.ReadAsAsync<List<TblValAssy>>();
+                        Log.Information("Update of Assembly ID " + id + "Returned " + returnValue);
+                    }
                 }
-                catch (DbUpdateConcurrencyException)
+                catch (Exception ex)
                 {
-                    if (!TblValAssyExists(tblValAssy.ANumber))
-                    {
-                        return NotFound();
-                    }
-                    else
-                    {
-                        throw;
-                    }
+                    Log.Fatal(ex.Message);
                 }
-                return RedirectToAction(nameof(Index));
+                Log.Information("Update Success Assembly ID " + id);
             }
-            return View(tblValAssy);
+            return RedirectToAction(nameof(Index));
         }
 
         // GET: TblValAssys/Delete/5
@@ -125,15 +178,26 @@ namespace KofCWSCWebsite.Controllers
             {
                 return NotFound();
             }
+            Uri myURI = new(_dataSetService.GetAPIBaseAddress() + "/Assy/" + id);
 
-            var tblValAssy = await _context.TblValAssys
-                .FirstOrDefaultAsync(m => m.ANumber == id);
-            if (tblValAssy == null)
+            using (var client = new HttpClient())
             {
-                return NotFound();
+                var responseTask = client.GetAsync(myURI);
+                responseTask.Wait();
+                var result = responseTask.Result;
+                TblValAssy? assy;
+                if (result.IsSuccessStatusCode)
+                {
+                    string json = await result.Content.ReadAsStringAsync();
+                    assy = JsonConvert.DeserializeObject<TblValAssy>(json);
+                }
+                else
+                {
+                    ModelState.AddModelError(string.Empty, "Server Error.  Please contact administrator.");
+                    assy = null;
+                }
+                return View(assy);
             }
-
-            return View(tblValAssy);
         }
 
         // POST: TblValAssys/Delete/5
@@ -141,19 +205,40 @@ namespace KofCWSCWebsite.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> DeleteConfirmed(int id)
         {
-            var tblValAssy = await _context.TblValAssys.FindAsync(id);
-            if (tblValAssy != null)
+            Uri myURI = new(_dataSetService.GetAPIBaseAddress() + "/Assy/" + id);
+            try
             {
-                _context.TblValAssys.Remove(tblValAssy);
+                using (var client = new HttpClient())
+                {
+                    var responseTask = client.DeleteAsync(myURI);
+                    responseTask.Wait();
+                    var result = responseTask.Result;
+                    TblValAssy? assy;
+                    if (result.IsSuccessStatusCode)
+                    {
+                        Log.Information("Delete Member Success " + id);
+                        string json = await result.Content.ReadAsStringAsync();
+                        assy = JsonConvert.DeserializeObject<TblValAssy>(json);
+                    }
+                    else
+                    {
+                        Log.Information("Delete Member Failed " + id);
+                        ModelState.AddModelError(string.Empty, "Server Error.  Please contact administrator.");
+                        assy = null;
+                    }
+                    return RedirectToAction(nameof(Index));
+                }
             }
-
-            await _context.SaveChangesAsync();
-            return RedirectToAction(nameof(Index));
+            catch (Exception ex)
+            {
+                Log.Fatal(ex.Message + " " + ex.InnerException);
+                return NoContent();
+            }
         }
 
-        private bool TblValAssyExists(int id)
-        {
-            return _context.TblValAssys.Any(e => e.ANumber == id);
-        }
+        //private bool TblValAssyExists(int id)
+        //{
+        //    return _context.TblValAssys.Any(e => e.ANumber == id);
+        //}
     }
 }

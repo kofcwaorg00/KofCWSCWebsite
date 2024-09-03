@@ -7,22 +7,44 @@ using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using KofCWSCWebsite.Data;
 using KofCWSCWebsite.Models;
+using Newtonsoft.Json;
+using Serilog;
 
 namespace KofCWSCWebsite.Controllers
 {
     public class TblWebTrxAoisController : Controller
     {
-        private readonly ApplicationDbContext _context;
+        private DataSetService _dataSetService;
 
-        public TblWebTrxAoisController(ApplicationDbContext context)
+        public TblWebTrxAoisController(DataSetService dataSetService)
         {
-            _context = context;
+            _dataSetService = dataSetService;
         }
 
         // GET: TblWebTrxAois
         public async Task<IActionResult> Index()
         {
-            return View(await _context.TblWebTrxAois.ToListAsync());
+            Uri myURI = new Uri(_dataSetService.GetAPIBaseAddress() + "/Aois");
+
+            using (var client = new HttpClient())
+            {
+                var responseTask = client.GetAsync(myURI);
+                responseTask.Wait();
+                var result = responseTask.Result;
+                IEnumerable<TblWebTrxAoi> aois;
+                if (result.IsSuccessStatusCode)
+                {
+                    var readTask = result.Content.ReadAsAsync<IList<TblWebTrxAoi>>();
+                    readTask.Wait();
+                    aois = readTask.Result;
+                }
+                else
+                {
+                    aois = Enumerable.Empty<TblWebTrxAoi>();
+                    ModelState.AddModelError(string.Empty, "Server Error.  Please contact administrator.");
+                }
+                return View(aois);
+            }
         }
 
         // GET: TblWebTrxAois/Details/5
@@ -32,15 +54,26 @@ namespace KofCWSCWebsite.Controllers
             {
                 return NotFound();
             }
+            Uri myURI = new(_dataSetService.GetAPIBaseAddress() + "/Aoi/" + id);
 
-            var tblWebTrxAoi = await _context.TblWebTrxAois
-                .FirstOrDefaultAsync(m => m.Id == id);
-            if (tblWebTrxAoi == null)
+            using (var client = new HttpClient())
             {
-                return NotFound();
+                var responseTask = client.GetAsync(myURI);
+                responseTask.Wait();
+                var result = responseTask.Result;
+                TblWebTrxAoi? aoi;
+                if (result.IsSuccessStatusCode)
+                {
+                    string json = await result.Content.ReadAsStringAsync();
+                    aoi = JsonConvert.DeserializeObject<TblWebTrxAoi>(json);
+                }
+                else
+                {
+                    ModelState.AddModelError(string.Empty, "Server Error.  Please contact administrator.");
+                    aoi = null;
+                }
+                return View(aoi);
             }
-
-            return View(tblWebTrxAoi);
         }
 
         // GET: TblWebTrxAois/Create
@@ -58,11 +91,22 @@ namespace KofCWSCWebsite.Controllers
         {
             if (ModelState.IsValid)
             {
-                _context.Add(tblWebTrxAoi);
-                await _context.SaveChangesAsync();
-                return RedirectToAction(nameof(Index));
+                Uri myURI = new(_dataSetService.GetAPIBaseAddress() + "/Aoi");
+                using (var client = new HttpClient())
+                {
+                    client.BaseAddress = myURI;
+                    var response = await client.PostAsJsonAsync(myURI, tblWebTrxAoi);
+                    try
+                    {
+                        response.EnsureSuccessStatusCode();
+                    }
+                    catch (Exception ex)
+                    {
+                        Log.Error(ex.Message + ' ' + ex.InnerException);
+                    }
+                }
             }
-            return View(tblWebTrxAoi);
+            return RedirectToAction(nameof(Index));
         }
 
         // GET: TblWebTrxAois/Edit/5
@@ -72,13 +116,26 @@ namespace KofCWSCWebsite.Controllers
             {
                 return NotFound();
             }
+            Uri myURI = new(_dataSetService.GetAPIBaseAddress() + "/Aoi/" + id);
 
-            var tblWebTrxAoi = await _context.TblWebTrxAois.FindAsync(id);
-            if (tblWebTrxAoi == null)
+            using (var client = new HttpClient())
             {
-                return NotFound();
+                var responseTask = client.GetAsync(myURI);
+                responseTask.Wait();
+                var result = responseTask.Result;
+                TblWebTrxAoi? aoi;
+                if (result.IsSuccessStatusCode)
+                {
+                    string json = await result.Content.ReadAsStringAsync();
+                    aoi = JsonConvert.DeserializeObject<TblWebTrxAoi>(json);
+                }
+                else
+                {
+                    ModelState.AddModelError(string.Empty, "Server Error.  Please contact administrator.");
+                    aoi = null;
+                }
+                return View(aoi);
             }
-            return View(tblWebTrxAoi);
         }
 
         // POST: TblWebTrxAois/Edit/5
@@ -92,28 +149,26 @@ namespace KofCWSCWebsite.Controllers
             {
                 return NotFound();
             }
-
             if (ModelState.IsValid)
             {
+                Uri myURI = new(_dataSetService.GetAPIBaseAddress() + "/Aoi/" + id);
                 try
                 {
-                    _context.Update(tblWebTrxAoi);
-                    await _context.SaveChangesAsync();
+                    using (var client = new HttpClient())
+                    {
+                        client.BaseAddress = myURI;
+                        var response = await client.PutAsJsonAsync(myURI, tblWebTrxAoi);
+                        var returnValue = await response.Content.ReadAsAsync<List<TblWebTrxAoi>>();
+                        Log.Information("Update of AOI ID " + id + "Returned " + returnValue);
+                    }
                 }
-                catch (DbUpdateConcurrencyException)
+                catch (Exception ex)
                 {
-                    if (!TblWebTrxAoiExists(tblWebTrxAoi.Id))
-                    {
-                        return NotFound();
-                    }
-                    else
-                    {
-                        throw;
-                    }
+                    Log.Fatal(ex.Message);
                 }
-                return RedirectToAction(nameof(Index));
+                Log.Information("Update Success AOI ID " + id);
             }
-            return View(tblWebTrxAoi);
+            return RedirectToAction(nameof(Index));
         }
 
         // GET: TblWebTrxAois/Delete/5
@@ -123,15 +178,26 @@ namespace KofCWSCWebsite.Controllers
             {
                 return NotFound();
             }
+            Uri myURI = new(_dataSetService.GetAPIBaseAddress() + "/Aoi/" + id);
 
-            var tblWebTrxAoi = await _context.TblWebTrxAois
-                .FirstOrDefaultAsync(m => m.Id == id);
-            if (tblWebTrxAoi == null)
+            using (var client = new HttpClient())
             {
-                return NotFound();
+                var responseTask = client.GetAsync(myURI);
+                responseTask.Wait();
+                var result = responseTask.Result;
+                TblWebTrxAoi? aoi;
+                if (result.IsSuccessStatusCode)
+                {
+                    string json = await result.Content.ReadAsStringAsync();
+                    aoi = JsonConvert.DeserializeObject<TblWebTrxAoi>(json);
+                }
+                else
+                {
+                    ModelState.AddModelError(string.Empty, "Server Error.  Please contact administrator.");
+                    aoi = null;
+                }
+                return View(aoi);
             }
-
-            return View(tblWebTrxAoi);
         }
 
         // POST: TblWebTrxAois/Delete/5
@@ -139,19 +205,40 @@ namespace KofCWSCWebsite.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> DeleteConfirmed(int id)
         {
-            var tblWebTrxAoi = await _context.TblWebTrxAois.FindAsync(id);
-            if (tblWebTrxAoi != null)
+            Uri myURI = new(_dataSetService.GetAPIBaseAddress() + "/Aoi/" + id);
+            try
             {
-                _context.TblWebTrxAois.Remove(tblWebTrxAoi);
+                using (var client = new HttpClient())
+                {
+                    var responseTask = client.DeleteAsync(myURI);
+                    responseTask.Wait();
+                    var result = responseTask.Result;
+                    TblWebTrxAoi? aoi;
+                    if (result.IsSuccessStatusCode)
+                    {
+                        Log.Information("Delete AOI Success " + id);
+                        string json = await result.Content.ReadAsStringAsync();
+                        aoi = JsonConvert.DeserializeObject<TblWebTrxAoi>(json);
+                    }
+                    else
+                    {
+                        Log.Information("Delete AOI Failed " + id);
+                        ModelState.AddModelError(string.Empty, "Server Error.  Please contact administrator.");
+                        aoi = null;
+                    }
+                    return RedirectToAction(nameof(Index));
+                }
             }
-
-            await _context.SaveChangesAsync();
-            return RedirectToAction(nameof(Index));
+            catch (Exception ex)
+            {
+                Log.Fatal(ex.Message + " " + ex.InnerException);
+                return NoContent();
+            }
         }
 
-        private bool TblWebTrxAoiExists(int id)
-        {
-            return _context.TblWebTrxAois.Any(e => e.Id == id);
-        }
+        //private bool TblWebTrxAoiExists(int id)
+        //{
+        //    return _context.TblWebTrxAois.Any(e => e.Id == id);
+        //}
     }
 }

@@ -13,8 +13,8 @@
 @foreach (var item in Model)
 {
  
-        string myTitle = Utils.GetString(@Html.DisplayFor(modelItem => item.Title));
-        myTitle = myTitle + myFratYear;
+        string myTitle = Utils.GetString(@Html.DisplayFor(modelItem => item.Heading));
+        
  
     <table class="table">
         <tr>

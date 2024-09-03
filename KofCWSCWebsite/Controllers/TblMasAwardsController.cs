@@ -17,7 +17,7 @@ namespace KofCWSCWebsite.Controllers
     {
         private DataSetService _dataSetService;
 
-        public TblMasAwardsController(ApplicationDbContext context, DataSetService dataSetService)
+        public TblMasAwardsController(DataSetService dataSetService)
         {
             _dataSetService = dataSetService;
         }
