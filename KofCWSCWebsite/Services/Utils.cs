@@ -6,6 +6,9 @@ using System.Text.Encodings.Web;
 using Serilog;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNet.Identity;
+using Azure.Identity;
+using Azure.Security.KeyVault.Secrets;
+using System.Configuration;
 
 namespace KofCWSCWebsite.Services
 {
@@ -44,8 +47,9 @@ namespace KofCWSCWebsite.Services
             }
             return " " + FratYearString;
         }
-     
-        public static bool SendEmailAuthenticatedMG(string sTo, string sFrom,string sCC, string sBCC, string sSubject,string sBody, Attachment oAttachment)
+
+        public static bool SendEmailAuthenticatedDASP(string sTo, string sFrom, string sCC, string sBCC, string sSubject, string sBody, 
+            Attachment oAttachment,IConfiguration _config)
         {
             try
             {
@@ -59,10 +63,57 @@ namespace KofCWSCWebsite.Services
                 mail.Subject = sSubject;
                 mail.Body = sBody;
 
-                //SmtpClient client = new SmtpClient("smtp.mailgun.org");
-                //NetworkCredential cred = new NetworkCredential("postmaster@mg.kofc-wa.org", "0d794ba965a89f6775ba8d7e963dedde");
-                //client.Credentials = cred;
-                //client.Send(mail);
+                string kvURL = _config["KV:VAULTURL"];
+                var kvclient = new SecretClient(new Uri((string)kvURL), new DefaultAzureCredential());
+                var vPassword = kvclient.GetSecret("DASPEMAILPWD").Value;
+                string Password = vPassword.Value;
+                var vFromEmail = kvclient.GetSecret("DASPEMAILUSER").Value;
+                string FromEmail = vFromEmail.Value;
+
+                string MailServer = _config["DASPEmailSettings:MailServer"];
+                int Port = int.Parse(_config["DASPEmailSettings:MailPort"]);
+
+                SmtpClient client = new SmtpClient(MailServer,Port);
+                NetworkCredential cred = new NetworkCredential(FromEmail, Password);
+                client.Credentials = cred;
+                client.Send(mail);
+                return true;
+            }
+            catch (Exception ex)
+            {
+                Log.Error("Email Failed" + ex.Message + " - " + ex.InnerException);
+                return false;
+            }
+        }
+        public static bool SendEmailAuthenticatedMG(string sTo, string sFrom,string sCC, string sBCC, string sSubject,string sBody, 
+            Attachment oAttachment, IConfiguration _config)
+        {
+            try
+            {
+                MailMessage mail = new MailMessage();
+                mail.From = new MailAddress(sFrom);
+                mail.To.Add(sTo);
+                if (sCC.Length > 0) { mail.CC.Add(sCC); }
+                if (sBCC.Length > 0) { mail.Bcc.Add(sBCC); }
+                if (oAttachment is not null) { mail.Attachments.Add(oAttachment); }
+                mail.IsBodyHtml = true;
+                mail.Subject = sSubject;
+                mail.Body = sBody;
+
+                string kvURL = _config["KV:VAULTURL"];
+                var kvclient = new SecretClient(new Uri((string)kvURL), new DefaultAzureCredential());
+                var vPassword = kvclient.GetSecret("MGEMAILPWD").Value;
+                string Password = vPassword.Value;
+                var vFromEmail = kvclient.GetSecret("MGEMAILUSER").Value;
+                string FromEmail = vFromEmail.Value;
+
+                string MailServer = _config["MGEmailSettings:MailServer"];
+                int Port = int.Parse(_config["MGEmailSettings:MailPort"]);
+
+                SmtpClient client = new SmtpClient(MailServer,Port);
+                NetworkCredential cred = new NetworkCredential(FromEmail, Password);
+                client.Credentials = cred;
+                client.Send(mail);
                 return true;
             }
             catch (Exception ex)

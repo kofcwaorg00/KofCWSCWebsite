@@ -9,8 +9,10 @@ namespace KofCWSCWebsite.Pages.Utils
 {
     public class EmailGroupsModel : PageModel
     {
-        public EmailGroupsModel()
+        private readonly IConfiguration _configuration;
+        public EmailGroupsModel(IConfiguration configuration)
         {
+            _configuration = configuration; 
         }
 
         [BindProperty]
@@ -40,49 +42,58 @@ namespace KofCWSCWebsite.Pages.Utils
                 bool mysuccess = false;
                 returnUrl ??= Url.Content("~/");
                 //check to see that at least one is checked
-                //if (!(Input.cFN || Input.cFN || Input.cGK || Input.cFC || Input.cAll))
-                //{
-                //    throw new Exception("You must select at least one group");
-                //}
-                //if (Input.cFS)
-                //{
-                //    mysuccess = true;// Services.Utils.SendEmailAuthenticatedMG("AllFSs@mg.kofc-wa.org", Input.sFrom, "", "", Input.sSubject, Input.sBody, null);
-                //}
-                //if (Input.cGK)
-                //{
-                //    mysuccess = true;//Services.Utils.SendEmailAuthenticatedMG("AllGKs@mg.kofc-wa.org", Input.sFrom, "", "", Input.sSubject, Input.sBody, null);
-                //}
-                //if (Input.cFN)
-                //{
-                //    mysuccess = true;//Services.Utils.SendEmailAuthenticatedMG("AllFNs@mg.kofc-wa.org", Input.sFrom, "", "", Input.sSubject, Input.sBody, null);
-                //}
-                //if (Input.cFC)
-                //{
-                //    mysuccess = true;//Services.Utils.SendEmailAuthenticatedMG("AllFCs@mg.kofc-wa.org", Input.sFrom, "", "", Input.sSubject, Input.sBody, null);
-                //}
-                //if (Input.cAll)
-                //{
-                //    mysuccess = true;//Services.Utils.SendEmailAuthenticatedMG("AllMembers@mg.kofc-wa.org", Input.sFrom, "", "", Input.sSubject, Input.sBody, null);
-                //}
-                //if (mysuccess)
-                //{
-                //    return Redirect(returnUrl);
-                //}
-                //else
-                //{
-                //    return Page();
-                //}
+                if (!(Input.cFN || Input.cFN || Input.cGK || Input.cFC || Input.cAll))
+                {
+                    ModelState.AddModelError(string.Empty, "You must select at least one group");
+                    //throw new Exception("You must select at least one group");
+                }
+                if (Input.cFS)
+                {
+                    mysuccess = Services.Utils.SendEmailAuthenticatedMG("AllFSs@mg.kofc-wa.org", Input.sFrom, "", "", Input.sSubject, Input.sBody, null, _configuration);
+                    //mysuccess = Services.Utils.SendEmailAuthenticatedMG("testing@mg.kofc-wa.org", Input.sFrom, "", "", Input.sSubject, "To FSs", null, _configuration);
+                }
+                if (Input.cGK)
+                {
+                    mysuccess = Services.Utils.SendEmailAuthenticatedMG("AllGKs@mg.kofc-wa.org", Input.sFrom, "", "", Input.sSubject, Input.sBody, null,_configuration);
+                    //mysuccess = Services.Utils.SendEmailAuthenticatedMG("testing@mg.kofc-wa.org", Input.sFrom, "", "", Input.sSubject, "To GKs", null, _configuration);
+                }
+                if (Input.cFN)
+                {
+                    mysuccess = Services.Utils.SendEmailAuthenticatedMG("AllFNs@mg.kofc-wa.org", Input.sFrom, "", "", Input.sSubject, Input.sBody, null,_configuration);
+                    //mysuccess = Services.Utils.SendEmailAuthenticatedMG("testing@mg.kofc-wa.org", Input.sFrom, "", "", Input.sSubject, "To FNs", null, _configuration);
+                }
+                if (Input.cFC)
+                {
+                    mysuccess = Services.Utils.SendEmailAuthenticatedMG("AllFCs@mg.kofc-wa.org", Input.sFrom, "", "", Input.sSubject, Input.sBody, null,_configuration);
+                    //mysuccess = Services.Utils.SendEmailAuthenticatedMG("testing@mg.kofc-wa.org", Input.sFrom, "", "", Input.sSubject, "To FCs", null, _configuration);
+                }
+                if (Input.cAll)
+                {
+                    mysuccess = Services.Utils.SendEmailAuthenticatedMG("AllMembers@mg.kofc-wa.org", Input.sFrom, "", "", Input.sSubject, Input.sBody, null,_configuration);
+                    //mysuccess = Services.Utils.SendEmailAuthenticatedMG("testing@mg.kofc-wa.org", Input.sFrom, "", "", Input.sSubject, "To All", null, _configuration);
+                }
+                if (mysuccess)
+                {
+                    return RedirectToPage("EmailGroupsConfirm");
+                }
+                else
+                {
+                    ModelState.AddModelError(string.Empty, "Email failed.");
+                    return Page();
+                }
 
                 //Testing
-                //if (Services.Utils.SendEmailAuthenticatedAZ("testing@mg.kofc-wa.org", "webmaster@kofc-wa.org", "", "", "testing new site email", "this is a test", null))
-                //{
-                //    return Page();
-                //}
-                //else
-                //{
-                //    return Page();
-                //}
-                return Page();
+                //////////if (Services.Utils.SendEmailAuthenticatedMG("testing@mg.kofc-wa.org", Input.sFrom, "", "", Input.sSubject, Input.sBody, null, _configuration))
+                //////////{
+                //////////    ModelState.AddModelError(string.Empty, "Your email has been sent to the selected groups!");
+                //////////    return RedirectToPage("EmailGroupsConfirm");
+                //////////}
+                //////////else
+                //////////{
+                //////////    ModelState.AddModelError(string.Empty, "Email failed.");
+                //////////    return Page();
+                //////////}
+                //return Page();
                 // If we got this far, something failed, redisplay form
 
             }

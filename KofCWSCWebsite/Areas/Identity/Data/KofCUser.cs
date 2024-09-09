@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using System.Threading.Tasks;
@@ -22,6 +23,7 @@ public class KofCUser : IdentityUser
     //[Remote(action: "VerifyKofCID", controller: "Users")]
     [Required]
     [MaxLength(100)]
+    [DisplayName("KofC Member Number")]
     public string KofCMemberID { get; set; } = string.Empty;
 }
 

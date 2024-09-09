@@ -81,23 +81,24 @@ namespace KofCWSCWebsite.Controllers
         /// <returns></returns>
         public async Task<IActionResult> DisplayAsync(int id)
         {
-            Uri myURI = new(_dataSetService.GetAPIBaseAddress() + "/SelfPub/Display" + id);
+            Uri myURI = new(_dataSetService.GetAPIBaseAddress() + "/SelfPub/Display/" + id);
 
             using (var client = new HttpClient())
             {
                 var responseTask = client.GetAsync(myURI);
                 responseTask.Wait();
                 var myresult = responseTask.Result;
-                TblWebSelfPublish? selfpub;
+                IEnumerable<SPGetSOS> selfpub;
                 if (myresult.IsSuccessStatusCode)
                 {
-                    string json = await myresult.Content.ReadAsStringAsync();
-                    selfpub = JsonConvert.DeserializeObject<TblWebSelfPublish>(json);
+                    var readTask = myresult.Content.ReadAsAsync<IList<SPGetSOS>>();
+                    readTask.Wait();
+                    selfpub = readTask.Result;
                 }
                 else
                 {
+                    selfpub = Enumerable.Empty<SPGetSOS>();
                     ModelState.AddModelError(string.Empty, "Server Error.  Please contact administrator.");
-                    selfpub = null;
                 }
                 return View(selfpub);
             }

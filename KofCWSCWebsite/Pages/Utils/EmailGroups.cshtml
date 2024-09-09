@@ -4,6 +4,7 @@
 }
 
 <form id="registerForm" asp-route-returnUrl="@Model.ReturnUrl" method="post">
+    <div asp-validation-summary="All" class="text-danger" role="alert"></div>
     <table class="table">
         <tr>
             <td style="text-align:center">

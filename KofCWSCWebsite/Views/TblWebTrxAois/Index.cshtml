@@ -12,7 +12,10 @@
 <p>
     <a asp-action="Create" class="btn btn-success">Create an A or OI</a>
 </p>
-<table class="table">
+<p>
+    <input type="text" id="myTitleText" onkeyup="myFunction1()" placeholder="Type in Title Text to filter results" title="Type in a number" style="width:25%">
+</p>
+<table class="table" id="myTable">
     <thead>
         <tr>
             <th class="MyColHdr">
@@ -26,21 +29,21 @@
                 </div>
             </th>
             @*<th>
-            <div style="width:250px">
-                @Html.DisplayNameFor(model => model.GraphicUrl)
-            </div>
-        </th>*@
+                    <div style="width:250px">
+                        @Html.DisplayNameFor(model => model.GraphicUrl)
+                    </div>
+                </th>*@
             @*<th>
-            <div style="width:30%">
-                @Html.DisplayNameFor(model => model.Text)
-            </div>
-        </th>*@
+                    <div style="width:30%">
+                        @Html.DisplayNameFor(model => model.Text)
+                    </div>
+                </th>*@
             @*<th>
-            <div style="width:20%">
-                @Html.DisplayNameFor(model => model.LinkUrl)
-            </div>
-        </th>*@
-            <th class="MyColHdr" >
+                    <div style="width:20%">
+                        @Html.DisplayNameFor(model => model.LinkUrl)
+                    </div>
+                </th>*@
+            <th class="MyColHdr">
                 <div style="width:30%">
                     @Html.DisplayNameFor(model => model.PostedDate)
                 </div>
@@ -70,20 +73,20 @@
                     </div>
                 </td>
                 @*<td>
-            <div style="width:250px">
-                @Html.DisplayFor(modelItem => item.GraphicUrl)
-            </div>
-        </td>*@
+                        <div style="width:250px">
+                            @Html.DisplayFor(modelItem => item.GraphicUrl)
+                        </div>
+                    </td>*@
                 @*<td>
-            <div style="width:30%">
-                @Html.DisplayFor(modelItem => item.Text)
-            </div>
-        </td>*@
+                        <div style="width:30%">
+                            @Html.DisplayFor(modelItem => item.Text)
+                        </div>
+                    </td>*@
                 @*<td>
-            <div style="width:20%">
-                @Html.DisplayFor(modelItem => item.LinkUrl)
-            </div>
-        </td>*@
+                        <div style="width:20%">
+                            @Html.DisplayFor(modelItem => item.LinkUrl)
+                        </div>
+                    </td>*@
                 <td>
                     <div style="width:10%">
                         @Html.DisplayFor(modelItem => item.PostedDate)
@@ -121,3 +124,23 @@
         }
     </tbody>
 </table>
+<script>
+    function myFunction1() {
+        var input, filter, table, tr, td, i, txtValue;
+        input = document.getElementById("myTitleText");
+        filter = input.value.toUpperCase();
+        table = document.getElementById("myTable");
+        tr = table.getElementsByTagName("tr");
+        for (i = 0; i < tr.length; i++) {
+            td = tr[i].getElementsByTagName("td")[1];
+            if (td) {
+                txtValue = td.textContent || td.innerText;
+                if (txtValue.toUpperCase().indexOf(filter) > -1) {
+                    tr[i].style.display = "";
+                } else {
+                    tr[i].style.display = "none";
+                }
+            }
+        }
+    }
+</script>

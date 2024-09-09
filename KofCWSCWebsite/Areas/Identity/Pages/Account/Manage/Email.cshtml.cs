@@ -8,6 +8,7 @@ using System.Text;
 using System.Text.Encodings.Web;
 using System.Threading.Tasks;
 using KofCWSCWebsite.Areas.Identity.Data;
+using KofCWSCWebsite.Services;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Identity.UI.Services;
 using Microsoft.AspNetCore.Mvc;
@@ -20,12 +21,12 @@ namespace KofCWSCWebsite.Areas.Identity.Pages.Account.Manage
     {
         private readonly UserManager<KofCUser> _userManager;
         private readonly SignInManager<KofCUser> _signInManager;
-        private readonly IEmailSender _emailSender;
+        private readonly ISenderEmail _emailSender;
 
         public EmailModel(
             UserManager<KofCUser> userManager,
             SignInManager<KofCUser> signInManager,
-            IEmailSender emailSender)
+            ISenderEmail emailSender)
         {
             _userManager = userManager;
             _signInManager = signInManager;

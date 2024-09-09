@@ -61,30 +61,6 @@
     <Content Remove="Pages\Index.cshtml" />
     <Content Remove="Pages\Shared\_Layout.cshtml" />
     <Content Remove="Pages\Shared\_LoginPartial.cshtml" />
-    <Content Remove="wwwroot\files\Faith\HolyHour.html" />
-    <Content Remove="wwwroot\files\Faith\IntoTheBreach.html" />
-    <Content Remove="wwwroot\files\Faith\Kiosk.html" />
-    <Content Remove="wwwroot\files\Faith\MarianPrayer.html" />
-    <Content Remove="wwwroot\files\Faith\Rosary.html" />
-    <Content Remove="wwwroot\files\Faith\RSVP.html" />
-    <Content Remove="wwwroot\files\Faith\SacNewGifts.html" />
-    <Content Remove="wwwroot\files\Faith\SpiritualReflection.html" />
-    <Content Remove="wwwroot\files\Family\ConsecrationToTheHolyFamily.html" />
-    <Content Remove="wwwroot\files\Family\FamilyFullyAlive.html" />
-    <Content Remove="wwwroot\files\Family\FamilyOfMonthYear.html" />
-    <Content Remove="wwwroot\files\Family\FamilyPrayerNight.html" />
-    <Content Remove="wwwroot\files\Family\FamilyWeek.html" />
-    <Content Remove="wwwroot\files\Family\FoodForFamilies.html" />
-    <Content Remove="wwwroot\files\Family\GoodFridayFamilyPromotion.html" />
-    <Content Remove="wwwroot\files\Family\KeepChristInChristmas.html" />
-    <Content Remove="wwwroot\files\Life\MarchForLife.html" />
-    <Content Remove="wwwroot\files\Life\MassSN.html" />
-    <Content Remove="wwwroot\files\Life\Novena.html" />
-    <Content Remove="wwwroot\files\Life\PCS.html" />
-    <Content Remove="wwwroot\files\Life\Refugee.html" />
-    <Content Remove="wwwroot\files\Life\SilverRose.html" />
-    <Content Remove="wwwroot\files\Life\SpecialOlympics.html" />
-    <Content Remove="wwwroot\files\Life\Ultrasound.html" />
   </ItemGroup>
 
   <ItemGroup>
@@ -139,10 +115,7 @@
 
   <ItemGroup>
     <Folder Include="Scripts\" />
-    <Folder Include="wwwroot\files\Awards\" />
-    <Folder Include="wwwroot\files\Bulletins\2024\" />
     <Folder Include="wwwroot\files\uploads\" />
-    <Folder Include="wwwroot\files\StateFamily\GK\" />
     <Folder Include="wwwroot\images\FourthDegOfficers\" />
   </ItemGroup>
 

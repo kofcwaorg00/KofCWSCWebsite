@@ -18,6 +18,7 @@ using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.AspNetCore.WebUtilities;
 using Microsoft.Extensions.Logging;
 using KofCWSCWebsite.Areas.Identity.Data;
+using KofCWSCWebsite.Services;
 
 namespace KofCWSCWebsite.Areas.Identity.Pages.Account
 {
@@ -28,7 +29,7 @@ namespace KofCWSCWebsite.Areas.Identity.Pages.Account
         private readonly UserManager<KofCUser> _userManager;
         private readonly IUserStore<KofCUser> _userStore;
         private readonly IUserEmailStore<KofCUser> _emailStore;
-        private readonly IEmailSender _emailSender;
+        private readonly ISenderEmail _emailSender;
         private readonly ILogger<ExternalLoginModel> _logger;
 
         public ExternalLoginModel(
@@ -36,7 +37,7 @@ namespace KofCWSCWebsite.Areas.Identity.Pages.Account
             UserManager<KofCUser> userManager,
             IUserStore<KofCUser> userStore,
             ILogger<ExternalLoginModel> logger,
-            IEmailSender emailSender)
+            ISenderEmail emailSender)
         {
             _signInManager = signInManager;
             _userManager = userManager;

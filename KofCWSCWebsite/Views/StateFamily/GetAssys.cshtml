@@ -9,10 +9,11 @@
     <h1 class="MyPageHdr">@myHeading.Heading</h1>
 }
 
-<p>
+<p style="text-align:center">
     <input type="text" id="myAnumber" onkeyup="SearchByNumber()" placeholder="Type in a Assembly Number to filter results" title="Type in a number" style="width:25%">
     <input type="text" id="myAname" onkeyup="SearchByName()" placeholder="Type in a Assembly Name to filter results" title="Type in a name" style="width:25%">
-    <input type="text" id="myAcity" onkeyup="SearchByCity()" placeholder="Type in a City to filter results" title="Type in a name" style="width:25%">
+    <input type="text" id="myAcity" onkeyup="SearchByCity()" placeholder="Type in a City to filter results" title="Type in a name" style="width:20%">
+    <input type="text" id="myWE" onkeyup="SearchByWE()" placeholder="Type in a Master Region W or E to filter results" title="Type in a W or E" style="width:26%">
 </p>
 <table class="table" id="myTable" style="font-size:small">
     <thead>
@@ -133,6 +134,24 @@
         tr = table.getElementsByTagName("tr");
         for (i = 0; i < tr.length; i++) {
             td = tr[i].getElementsByTagName("td")[1];
+            if (td) {
+                txtValue = td.textContent || td.innerText;
+                if (txtValue.toUpperCase().indexOf(filter) > -1) {
+                    tr[i].style.display = "";
+                } else {
+                    tr[i].style.display = "none";
+                }
+            }
+        }
+    }
+    function SearchByWE() {
+        var input, filter, table, tr, td, i, txtValue;
+        input = document.getElementById("myWE");
+        filter = input.value.toUpperCase();
+        table = document.getElementById("myTable");
+        tr = table.getElementsByTagName("tr");
+        for (i = 0; i < tr.length; i++) {
+            td = tr[i].getElementsByTagName("td")[8];
             if (td) {
                 txtValue = td.textContent || td.innerText;
                 if (txtValue.toUpperCase().indexOf(filter) > -1) {

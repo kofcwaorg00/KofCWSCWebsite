@@ -8,16 +8,13 @@ namespace KofCWSCWebsite.Controllers
 {
     public class HomeController : Controller
     {
-        private readonly ILogger<HomeController> _logger;
-
-        private readonly ApplicationDbContext _context;
+        private ApplicationDbContext _context;
         private DataSetService _dataSetService;
 
-        public HomeController(ApplicationDbContext context, ILogger<HomeController> logger, DataSetService dataSetService)
+        public HomeController(ApplicationDbContext context, DataSetService dataSetService)
         {
+            _dataSetService = dataSetService; 
             _context = context;
-            _logger = logger;
-            _dataSetService = dataSetService;   
         }
 
         public IActionResult Index()
@@ -43,7 +40,8 @@ namespace KofCWSCWebsite.Controllers
             {
                 ViewData["ConnectString"] = "Using DASP PRODUCTION DATABASE";
             }
-            ViewData["APIURL"] = "and the APIURL is using AZDEV";
+            ViewData["APIURL"] = "and the APIURL is using " + _dataSetService.GetAPIBaseAddress();
+            ViewData["ENV"] = Environment.GetEnvironmentVariable("ASPNETCORE_ENVIRONMENT");
             //*****************************************************************************************************
             Uri myURI = new Uri(_dataSetService.GetAPIBaseAddress() + "/Home");
 
@@ -66,16 +64,6 @@ namespace KofCWSCWebsite.Controllers
                 }
                 return View(home);
             }
-
-
-
-
-
-
-            var result = _context.Database
-                .SqlQuery<HomePageViewModel>($"uspWEB_GetHomePage")
-                .ToList();
-            return View(result);
         }
         public IActionResult Privacy()
         {

@@ -2,7 +2,7 @@
 @model UploadFileModel
 @{
 }
-<h1>Upload graphic images for use with Announcements and Of Interest</h1>
+<h1 class="MyPageHdr">Upload Graphic Image for use with Announcements and Of Interest</h1>
 <form method="post" enctype="multipart/form-data">
     <input type="file" asp-for="Upload" />
     <input type="submit" />
@@ -21,6 +21,8 @@
         }
     }
     <br />
+    ***NOTE: Please use a PNG format and limit the graphic width to 250px
+    <br /><br />
     <a asp-area="" asp-controller="TblWebTrxAois" asp-action="index" asp-route-id="">Back to Manage Announcements and Of Interest</a></p>
     
 

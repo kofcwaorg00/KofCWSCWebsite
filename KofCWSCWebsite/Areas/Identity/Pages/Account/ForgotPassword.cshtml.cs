@@ -8,6 +8,7 @@ using System.Text;
 using System.Text.Encodings.Web;
 using System.Threading.Tasks;
 using KofCWSCWebsite.Areas.Identity.Data;
+using KofCWSCWebsite.Services;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Identity.UI.Services;
@@ -20,9 +21,9 @@ namespace KofCWSCWebsite.Areas.Identity.Pages.Account
     public class ForgotPasswordModel : PageModel
     {
         private readonly UserManager<KofCUser> _userManager;
-        private readonly IEmailSender _emailSender;
+        private readonly ISenderEmail _emailSender;
 
-        public ForgotPasswordModel(UserManager<KofCUser> userManager, IEmailSender emailSender)
+        public ForgotPasswordModel(UserManager<KofCUser> userManager, ISenderEmail emailSender)
         {
             _userManager = userManager;
             _emailSender = emailSender;
@@ -71,10 +72,11 @@ namespace KofCWSCWebsite.Areas.Identity.Pages.Account
                     values: new { area = "Identity", code },
                     protocol: Request.Scheme);
 
-                await _emailSender.SendEmailAsync(
-                    Input.Email,
-                    "Reset Password",
-                    $"Please reset your password by <a href='{HtmlEncoder.Default.Encode(callbackUrl)}'>clicking here</a>.");
+                await _emailSender.SendEmailAsync(Input.Email, "Reset Password",
+                   $"You have received this email to reset your password as a member of Washington State Council, Knights of Columbus. For any support questions please email webmaster@kofc-wa.org.<br /><br />" +
+                   $"Please reset your password by <a href='{HtmlEncoder.Default.Encode(callbackUrl)}'>clicking here</a>.<br />" +
+                   $"<br /><br /><br /><br /><br />" +
+                   $"This email was sent to " + Input.Email + " by Washington State Council, Knights of Columbus.©1995-" + DateTime.Now.Year + " Washington State Council. All Rights Reserved");
 
                 return RedirectToPage("./ForgotPasswordConfirmation");
             }

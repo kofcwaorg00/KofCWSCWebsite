@@ -8,12 +8,15 @@ using System.Text;
 using System.Text.Encodings.Web;
 using System.Threading.Tasks;
 using KofCWSCWebsite.Areas.Identity.Data;
+using KofCWSCWebsite.Services;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Identity.UI.Services;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.AspNetCore.WebUtilities;
+using Microsoft.EntityFrameworkCore.Metadata.Internal;
+using Serilog;
 
 namespace KofCWSCWebsite.Areas.Identity.Pages.Account
 {
@@ -21,9 +24,9 @@ namespace KofCWSCWebsite.Areas.Identity.Pages.Account
     public class ResendEmailConfirmationModel : PageModel
     {
         private readonly UserManager<KofCUser> _userManager;
-        private readonly IEmailSender _emailSender;
+        private readonly ISenderEmail _emailSender;
 
-        public ResendEmailConfirmationModel(UserManager<KofCUser> userManager, IEmailSender emailSender)
+        public ResendEmailConfirmationModel(UserManager<KofCUser> userManager, ISenderEmail emailSender)
         {
             _userManager = userManager;
             _emailSender = emailSender;
@@ -65,25 +68,43 @@ namespace KofCWSCWebsite.Areas.Identity.Pages.Account
             var user = await _userManager.FindByEmailAsync(Input.Email);
             if (user == null)
             {
-                ModelState.AddModelError(string.Empty, "Verification email sent. Please check your email.");
+                ModelState.AddModelError(string.Empty, "Email Not Found. Please try again.");
                 return Page();
             }
 
-            var userId = await _userManager.GetUserIdAsync(user);
-            var code = await _userManager.GenerateEmailConfirmationTokenAsync(user);
-            code = WebEncoders.Base64UrlEncode(Encoding.UTF8.GetBytes(code));
-            var callbackUrl = Url.Page(
-                "/Account/ConfirmEmail",
-                pageHandler: null,
-                values: new { userId = userId, code = code },
-                protocol: Request.Scheme);
-            await _emailSender.SendEmailAsync(
-                Input.Email,
-                "Confirm your email",
-                $"Please confirm your account by <a href='{HtmlEncoder.Default.Encode(callbackUrl)}'>clicking here</a>.");
+            try
+            {
+                var userId = await _userManager.GetUserIdAsync(user);
+                var code = await _userManager.GenerateEmailConfirmationTokenAsync(user);
+                code = WebEncoders.Base64UrlEncode(Encoding.UTF8.GetBytes(code));
+                var host = Request.Host.Value;
+                var imgUrl = "<img src=" + host + "/images/LOGO-WA1.jpg style='text-align:left' />";
+                var callbackUrl = Url.Page(
+                    "/Account/ConfirmEmail",
+                    pageHandler: null,
+                    values: new { userId = userId, code = code },
+                    protocol: Request.Scheme);
+                await _emailSender.SendEmailAsync(
+                    Input.Email,
+                    "Confirm your email",
+                    $"You have received this email as a registered member of Washington State Council, Knights of Columbus. For any support questions please email webmaster@kofc-wa.org.<br /><br />" +
+                    $"Please confirm your account by <a href='{HtmlEncoder.Default.Encode(callbackUrl)}'>clicking here</a>.<br />" +
+                    $"<br /><br /><br /><br /><br />" +
+                    $"This email was sent to " + Input.Email + " by Washington State Council, Knights of Columbus.©1995-" + DateTime.Now.Year + " Washington State Council. All Rights Reserved"
+                    );
+                //$"Please confirm your account by clicking here {HtmlEncoder.Default.Encode(callbackUrl)}");
 
-            ModelState.AddModelError(string.Empty, "Verification email sent. Please check your email.");
-            return Page();
+                ModelState.AddModelError(string.Empty, "Confirmation email sent. Please check your email.");
+                return Page();
+
+            }
+            catch (Exception ex)
+            {
+                Log.Error(ex.Message + " - " + ex.InnerException);
+                ModelState.AddModelError(string.Empty, "Confirmation email was not sent. Please email webmaster@kofc-wa.org to report this.");
+                return Page();
+            }
+
         }
     }
 }

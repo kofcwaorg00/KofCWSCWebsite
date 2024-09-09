@@ -15,7 +15,6 @@
     <tbody>
         <tr>
             <td>
-                <a href="/files/StateFamily/GK/Handbook.pdf" target="_blank">Grand Knight Handbook</a><br />
                 <a href="http://www.kofc.org/un/en/resources/membership/interest_survey.pdf" target="_blank">Membership Interest Survey</a>
 
             </td>
@@ -53,7 +52,7 @@
             <th class="MyColHdr">
                 @Html.DisplayNameFor(model => model.LinkToTheAwardForm)
             </th>
-            <th class="MyColHdr">
+            <th class="MyColHdr" style="text-align:center;width:200px">
                 @Html.DisplayNameFor(model => model.AwardSubmissionEmailAddress)
             </th>
             @if (User.IsInRole("Admin"))
@@ -80,11 +79,24 @@
                 <td>
                     @Html.Raw(item.LinkToTheAwardForm)
                 </td>
-                <td>
-                    @Html.DisplayFor(modelItem => item.AwardSubmissionEmailAddress)
+                <td style="text-align:center">
+                    @{
+                        string myURL = "";
+                        string myData = @Html.Raw(item.AwardSubmissionEmailAddress).ToString();
+                        if (myData.Contains("href"))
+                        {
+                            myURL = @Html.Raw(item.AwardSubmissionEmailAddress).ToString();
+                        }
+                        else
+                        {
+                            myURL = myData;
+                        }
+                        @Html.Raw(myURL);
+                    }
+
                 </td>
-                    @if (User.IsInRole("Admin"))
-                    {
+                @if (User.IsInRole("Admin"))
+                {
                     <td style="padding-right:0px">
                         @* <a asp-action="Edit" asp-route-id="@item.MemberId">Edit</a>&nbsp;|&nbsp;<a asp-action="Details" asp-route-id="@item.MemberId">Details</a>&nbsp;|&nbsp;<a asp-action="Delete" asp-route-id="@item.MemberId">Delete</a> *@
                         <form asp-action="Edit" asp-route-id="@item.Id" method="get">
@@ -109,7 +121,7 @@
 
                     </td>
                 }
-                </tr>
-            }
+            </tr>
+        }
     </tbody>
 </table>

@@ -15,7 +15,7 @@
     @* Announcements card section *@
     <div class="offcanvas offcanvas-start" tabindex="-1" id="AnnouncementPanel" aria-labelledby="offcanvasExampleLabel">
         <div class="offcanvas-header">
-            <h5 class="offcanvas-title" id="offcanvasExampleLabel">Announcements Header</h5>
+            <h5 class="offcanvas-title" id="offcanvasExampleLabel">Announcements</h5>
             <button type="button" class="btn-close text-reset" data-bs-dismiss="offcanvas" aria-label="Close"></button>
         </div>
         <div class="offcanvas-body">
@@ -24,7 +24,7 @@
             {
                 if (item.Type == "AN")
                 {
-                    <div>
+                    <div style="width:100%;text-align:center">
                         @*if graphicurl is null then use title else use graphicurl*@
                         @{
                             if (item.GraphicURL != null)
@@ -65,7 +65,7 @@
             {
                 if (item.Type == "OI")
                 {
-                    <div>
+                    <div style="width:100%;text-align:center">
                         @*if graphicurl is null then use title else use graphicurl*@
                         @{
                             if (item.GraphicURL != null)
@@ -185,9 +185,9 @@
                     <li>
                         <p class="card-text"><a class="dropdown-item MyDDMenuLink" asp-area="" asp-controller="SP" asp-action="GetChairmanInfoBlock" asp-route-id="271">Catholic Community Services</a></p>
                     </li>
-                    <li>
+                    @*<li>
                         <p class="card-text"><a class="dropdown-item MyDDMenuLink" asp-area="" asp-controller="SP" asp-action="GetChairmanInfoBlock" asp-route-id="257">One Parish One Prisoner</a></p>
-                    </li>
+                    </li>*@
                     <li>
                         <p class="card-text"><a class="dropdown-item MyDDMenuLink" href="https://www.knightscommunityhospitalequipmentloanprogram.com/" target="_blank">KC Help</a></p>
                     </li>
@@ -266,7 +266,7 @@
                         <p class="card-text"><a class="dropdown-item MyDDMenuLink" asp-area="" asp-controller="SP" asp-action="GetChairmanInfoBlock" asp-route-id="285">ASAP (Aid and Support After Pregnacy)</a></p>
                     </li>
                     <li>
-                        <p class="card-text"><a class="dropdown-item MyDDMenuLink" href="/files/Life/LAMB1882.pdf" target="_blank">L.A.M.B. 1882</a></p>
+                        <p class="card-text"><a class="dropdown-item MyDDMenuLink" href="https://kofcwa.sharepoint.com/:b:/s/WebsiteStorage/EUUAbun4CntMq7cbn0zG9P8BzhKcs43q0YT5gO4Rtlo_Bw?e=XOOC0j" target="_blank">L.A.M.B. 1882</a></p>
                     </li>
                 </ul>
             </div>

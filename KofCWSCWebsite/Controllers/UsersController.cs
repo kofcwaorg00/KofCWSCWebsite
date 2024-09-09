@@ -11,15 +11,11 @@ namespace KofCWSCWebsite.Controllers
     [Route("[controller]")]
     public class UsersController : Controller
     {
-        private readonly ApplicationDbContext _context;
-        private string? _myBaseAddress;
-        private IConfiguration _configuration;
+        //private readonly ApplicationDbContext _context;
         private DataSetService _dataSetService;
 
-        public UsersController(ApplicationDbContext context, IConfiguration configuration, DataSetService dataSetService)
+        public UsersController(DataSetService dataSetService)
         {
-            _context = context;
-            _configuration = configuration;
             _dataSetService = dataSetService;
         }
 

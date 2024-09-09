@@ -19,6 +19,8 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.AspNetCore.WebUtilities;
 using Microsoft.Extensions.Logging;
+using KofCWSCWebsite.Services;
+
 
 namespace KofCWSCWebsite.Areas.Identity.Pages.Account
 {
@@ -29,7 +31,7 @@ namespace KofCWSCWebsite.Areas.Identity.Pages.Account
         private readonly IUserStore<KofCUser> _userStore;
         private readonly IUserEmailStore<KofCUser> _emailStore;
         private readonly ILogger<RegisterModel> _logger;
-        private readonly IEmailSender _emailSender;
+        private readonly ISenderEmail _emailSender;
         private readonly RoleManager<IdentityRole> _roleManager;
 
         public RegisterModel(
@@ -37,7 +39,7 @@ namespace KofCWSCWebsite.Areas.Identity.Pages.Account
             IUserStore<KofCUser> userStore,
             SignInManager<KofCUser> signInManager,
             ILogger<RegisterModel> logger,
-            IEmailSender emailSender,
+            ISenderEmail emailSender,
             RoleManager<IdentityRole> roleManager)
         {
             _userManager = userManager;
@@ -138,7 +140,7 @@ namespace KofCWSCWebsite.Areas.Identity.Pages.Account
 
                 user.FirstName = Input.FirstName;
                 user.LastName = Input.LastName;
-                //user.KofCMemberID = Input.KofCMemberID;
+                user.KofCMemberID = Input.KofCMemberID;
 
                 await _userStore.SetUserNameAsync(user, Input.Email, CancellationToken.None);
                 await _emailStore.SetEmailAsync(user, Input.Email, CancellationToken.None);
@@ -174,7 +176,12 @@ namespace KofCWSCWebsite.Areas.Identity.Pages.Account
                         protocol: Request.Scheme);
 
                     await _emailSender.SendEmailAsync(Input.Email, "Confirm your email",
-                        $"Please confirm your account by visiting the following URL:\r\n\r\n{callbackUrl}");
+                    $"You have received this email to registered your account as a member of Washington State Council, Knights of Columbus. For any support questions please email webmaster@kofc-wa.org.<br /><br />" +
+                    $"Please confirm your account by <a href='{HtmlEncoder.Default.Encode(callbackUrl)}'>clicking here</a>.<br />" +
+                    $"<br /><br /><br /><br /><br />" +
+                    $"This email was sent to " + Input.Email + " by Washington State Council, Knights of Columbus.©1995-" + DateTime.Now.Year + " Washington State Council. All Rights Reserved");
+
+
 
                     if (_userManager.Options.SignIn.RequireConfirmedAccount)
                     {

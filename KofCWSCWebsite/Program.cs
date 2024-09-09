@@ -24,6 +24,7 @@ Log.Logger = new LoggerConfiguration()
     .CreateLogger();
 
 Log.Information("Initialized Serilog and Starting Application");
+Log.Information("ENV = " + Environment.GetEnvironmentVariable("ASPNETCORE_ENVIRONMENT"));
 //******************************************************************************************************************************
 // 6/6/2024 Tim Philomneo
 //  Getting the connect string.  We have switched from the local appsettings.json to using KeyVault.
@@ -32,12 +33,18 @@ Log.Information("Initialized Serilog and Starting Application");
 //  Securtiy to KeyVault is handled by the DefaultAzureCredential.  It will use your VS login if you are running
 //  in Visual Studio or the Azure Application Identity when published.
 //******************************************************************************************************************************
-var kvURL = builder.Configuration.GetSection("KV").GetValue(typeof(string), "KVDev");
-var client = new SecretClient(new Uri((string)kvURL), new DefaultAzureCredential());
-var cnString = client.GetSecret("AZDEV").Value;
-string connectionString = cnString.Value;
+try
+{
+    var kvURL = builder.Configuration.GetSection("KV").GetValue(typeof(string), "VAULTURL");
+    Log.Information("KVURL is " + kvURL.ToString());
+    var client = new SecretClient(new Uri((string)kvURL), new DefaultAzureCredential());
+    var cnString = client.GetSecret("DBCONN").Value;
+    string connectionString = cnString.Value;
 
-//Log.Information("Found CS " + connectionString);
+    Log.Information("Found CS " + connectionString);
+    
+
+
 //------------------------------------------------------------------------------------------------------------------------------
 //////////////var connectionString = builder.Configuration.GetConnectionString("DASPDEVConnection") ?? throw new InvalidOperationException("Connection string 'DefaultConnection' not found.");
 //------------------------------------------------------------------------------------------------------------------------------
@@ -49,6 +56,13 @@ builder.Services.AddDbContext<ApplicationDbContext>(options =>
 
 builder.Services.AddDbContext<IdentityDBContext>(options =>
     options.UseSqlServer(connectionString));
+
+}
+catch (Exception ex)
+{
+    Log.Error(ex.Message + " - " + ex.InnerException);
+    throw;
+}
 
 // changed this to add IdentiyRole too
 builder.Services.AddDefaultIdentity<KofCUser>(options => options.SignIn.RequireConfirmedAccount = true)
@@ -73,7 +87,7 @@ builder.Services.AddDatabaseDeveloperPageExceptionFilter();
 
 builder.Services.AddControllersWithViews();
 
-builder.Services.AddTransient<IEmailSender, EmailSender>();
+builder.Services.AddTransient<ISenderEmail, EmailSender>();
 
 var app = builder.Build();
 
