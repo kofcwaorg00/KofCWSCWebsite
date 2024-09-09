@@ -59,7 +59,7 @@ namespace KofCWSCWebsite.Controllers
                 return NotFound();
             }
 
-            Uri myURI = new Uri(_dataSetService.GetAPIBaseAddress() + "/Offices/" + id.ToString());
+            Uri myURI = new Uri(_dataSetService.GetAPIBaseAddress() + "/Office/" + id.ToString());
 
             using (var client = new HttpClient())
             {
@@ -104,7 +104,7 @@ namespace KofCWSCWebsite.Controllers
         {
             if (ModelState.IsValid)
             {
-                Uri myURI = new(_dataSetService.GetAPIBaseAddress() + "/Offices");
+                Uri myURI = new(_dataSetService.GetAPIBaseAddress() + "/Office");
                 using (var client = new HttpClient())
                 {
                     client.BaseAddress = myURI;
@@ -177,7 +177,7 @@ namespace KofCWSCWebsite.Controllers
 
             if (ModelState.IsValid)
             {
-                Uri myURI = new(_dataSetService.GetAPIBaseAddress() + "/Council/" + id);
+                Uri myURI = new(_dataSetService.GetAPIBaseAddress() + "/Office/" + id);
                 try
                 {
                     using (var client = new HttpClient())
