@@ -7,41 +7,86 @@ using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using KofCWSCWebsite.Data;
 using KofCWSCWebsite.Models;
+using Newtonsoft.Json;
+using Serilog;
 
 namespace KofCWSCWebsite.Controllers
 {
     public class TblValOfficesController : Controller
     {
-        private readonly ApplicationDbContext _context;
+        private DataSetService _dataSetService;
 
-        public TblValOfficesController(ApplicationDbContext context)
+        public TblValOfficesController(DataSetService dataSetService)
         {
-            _context = context;
+            _dataSetService = dataSetService;
         }
 
         // GET: TblValOffices
         public async Task<IActionResult> Index()
         {
+
+            Uri myURI = new Uri(_dataSetService.GetAPIBaseAddress() + "/Offices");
+
+            using (var client = new HttpClient())
+            {
+                var responseTask = client.GetAsync(myURI);
+                responseTask.Wait();
+                var result = responseTask.Result;
+                IEnumerable<TblValOffice> offices;
+                if (result.IsSuccessStatusCode)
+                {
+                    var readTask = result.Content.ReadAsAsync<IList<TblValOffice>>();
+                    readTask.Wait();
+                    offices = readTask.Result;
+                }
+                else
+                {
+                    offices = Enumerable.Empty<TblValOffice>();
+                    ModelState.AddModelError(string.Empty, "Server Error.  Please contact administrator.");
+                }
+                return View(offices);
+            }
             //changed
-            return View(await _context.TblValOffices.OrderBy(x => x.OfficeDescription).ToListAsync());
+            //return View(await _context.TblValOffices.OrderBy(x => x.OfficeDescription).ToListAsync());
         }
 
         // GET: TblValOffices/Details/5
         public async Task<IActionResult> Details(int? id)
         {
+
             if (id == null)
             {
                 return NotFound();
             }
 
-            var tblValOffice = await _context.TblValOffices
-                .FirstOrDefaultAsync(m => m.OfficeId == id);
-            if (tblValOffice == null)
-            {
-                return NotFound();
-            }
+            Uri myURI = new Uri(_dataSetService.GetAPIBaseAddress() + "/Offices/" + id.ToString());
 
-            return View(tblValOffice);
+            using (var client = new HttpClient())
+            {
+                var responseTask = client.GetAsync(myURI);
+                responseTask.Wait();
+                var result = responseTask.Result;
+                TblValOffice? office;
+                if (result.IsSuccessStatusCode)
+                {
+                    string json = await result.Content.ReadAsStringAsync();
+                    office = JsonConvert.DeserializeObject<TblValOffice>(json);
+                }
+                else
+                {
+                    ModelState.AddModelError(string.Empty, "Server Error.  Please contact administrator.");
+                    office = null;
+                }
+                return View(office);
+            }
+            //var tblValOffice = await _context.TblValOffices
+            //    .FirstOrDefaultAsync(m => m.OfficeId == id);
+            //if (tblValOffice == null)
+            //{
+            //    return NotFound();
+            //}
+
+            //return View(tblValOffice);
         }
 
         // GET: TblValOffices/Create
@@ -59,11 +104,27 @@ namespace KofCWSCWebsite.Controllers
         {
             if (ModelState.IsValid)
             {
-                _context.Add(tblValOffice);
-                await _context.SaveChangesAsync();
-                return RedirectToAction(nameof(Index));
+                Uri myURI = new(_dataSetService.GetAPIBaseAddress() + "/Offices");
+                using (var client = new HttpClient())
+                {
+                    client.BaseAddress = myURI;
+                    var response = await client.PostAsJsonAsync(myURI, tblValOffice);
+                    try
+                    {
+                        response.EnsureSuccessStatusCode();
+                    }
+                    catch (Exception ex)
+                    {
+                        Log.Error(ex.Message + ' ' + ex.InnerException);
+                    }
+                }
+
+                //_context.Add(tblValOffice);
+                //await _context.SaveChangesAsync();
+                //return RedirectToAction(nameof(Index));
             }
-            return View(tblValOffice);
+            return RedirectToAction(nameof(Index));
+            //return View(tblValOffice);
         }
 
         // GET: TblValOffices/Edit/5
@@ -73,13 +134,33 @@ namespace KofCWSCWebsite.Controllers
             {
                 return NotFound();
             }
+            Uri myURI = new(_dataSetService.GetAPIBaseAddress() + "/Office/" + id);
 
-            var tblValOffice = await _context.TblValOffices.FindAsync(id);
-            if (tblValOffice == null)
+            using (var client = new HttpClient())
             {
-                return NotFound();
+                var responseTask = client.GetAsync(myURI);
+                responseTask.Wait();
+                var result = responseTask.Result;
+                TblValOffice? office;
+                if (result.IsSuccessStatusCode)
+                {
+                    string json = await result.Content.ReadAsStringAsync();
+                    office = JsonConvert.DeserializeObject<TblValOffice>(json);
+                }
+                else
+                {
+                    ModelState.AddModelError(string.Empty, "Server Error.  Please contact administrator.");
+                    office = null;
+                }
+                return View(office);
             }
-            return View(tblValOffice);
+
+            //var tblValOffice = await _context.TblValOffices.FindAsync(id);
+            //if (tblValOffice == null)
+            //{
+            //    return NotFound();
+            //}
+            //return View(tblValOffice);
         }
 
         // POST: TblValOffices/Edit/5
@@ -96,25 +177,36 @@ namespace KofCWSCWebsite.Controllers
 
             if (ModelState.IsValid)
             {
+                Uri myURI = new(_dataSetService.GetAPIBaseAddress() + "/Council/" + id);
                 try
                 {
-                    _context.Update(tblValOffice);
-                    await _context.SaveChangesAsync();
+                    using (var client = new HttpClient())
+                    {
+                        client.BaseAddress = myURI;
+                        var response = await client.PutAsJsonAsync(myURI, tblValOffice);
+                        var returnValue = await response.Content.ReadAsAsync<List<TblValOffice>>();
+                        Log.Information("Update of Office ID " + id + "Returned " + returnValue);
+                    }
+                    //_context.Update(tblValOffice);
+                    //await _context.SaveChangesAsync();
                 }
-                catch (DbUpdateConcurrencyException)
+                catch (Exception ex)
+                
                 {
-                    if (!TblValOfficeExists(tblValOffice.OfficeId))
-                    {
-                        return NotFound();
-                    }
-                    else
-                    {
-                        throw;
-                    }
+                    Log.Fatal(ex.Message);
                 }
-                return RedirectToAction(nameof(Index));
+                Log.Information("Update Success Office ID " + id);
+                //if (!TblValOfficeExists(tblValOffice.OfficeId))
+                //{
+                //    return NotFound();
+                //}
+                //else
+                //{
+                //    throw;
+                //}
             }
-            return View(tblValOffice);
+            return RedirectToAction(nameof(Index));
+             //return View(tblValOffice);
         }
 
         // GET: TblValOffices/Delete/5
@@ -124,15 +216,34 @@ namespace KofCWSCWebsite.Controllers
             {
                 return NotFound();
             }
-
-            var tblValOffice = await _context.TblValOffices
-                .FirstOrDefaultAsync(m => m.OfficeId == id);
-            if (tblValOffice == null)
+            Uri myURI = new(_dataSetService.GetAPIBaseAddress() + "/Office/" + id);
+            using (var client = new HttpClient())
             {
-                return NotFound();
+                var responseTask = client.GetAsync(myURI);
+                responseTask.Wait();
+                var result = responseTask.Result;
+                TblValOffice? office;
+                if (result.IsSuccessStatusCode)
+                {
+                    string json = await result.Content.ReadAsStringAsync();
+                    office = JsonConvert.DeserializeObject<TblValOffice>(json);
+                }
+                else
+                {
+                    ModelState.AddModelError(string.Empty, "Server Error.  Please contact administrator.");
+                    office = null;
+                }
+                return View(office);
             }
 
-            return View(tblValOffice);
+            //var tblValOffice = await _context.TblValOffices
+            //    .FirstOrDefaultAsync(m => m.OfficeId == id);
+            //if (tblValOffice == null)
+            //{
+            //    return NotFound();
+            //}
+
+            //return View(tblValOffice);
         }
 
         // POST: TblValOffices/Delete/5
@@ -140,19 +251,48 @@ namespace KofCWSCWebsite.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> DeleteConfirmed(int id)
         {
-            var tblValOffice = await _context.TblValOffices.FindAsync(id);
-            if (tblValOffice != null)
+            Uri myURI = new(_dataSetService.GetAPIBaseAddress() + "/Office/" + id);
+            try
             {
-                _context.TblValOffices.Remove(tblValOffice);
+                using (var client = new HttpClient())
+                {
+                    var responseTask = client.DeleteAsync(myURI);
+                    responseTask.Wait();
+                    var result = responseTask.Result;
+                    TblValOffice? office;
+                    if (result.IsSuccessStatusCode)
+                    {
+                        Log.Information("Delete Office Success " + id);
+                        string json = await result.Content.ReadAsStringAsync();
+                        office = JsonConvert.DeserializeObject<TblValOffice>(json);
+                    }
+                    else
+                    {
+                        Log.Information("Delete Office Failed " + id);
+                        ModelState.AddModelError(string.Empty, "Server Error.  Please contact administrator.");
+                        office = null;
+                    }
+                    return RedirectToAction(nameof(Index));
+                }
             }
+            catch (Exception ex)
+            {
+                Log.Fatal(ex.Message + " " + ex.InnerException);
+                return NoContent();
+            }
+            //var tblValOffice = await _context.TblValOffices.FindAsync(id);
+            //if (tblValOffice != null)
+            //{
+            //    _context.TblValOffices.Remove(tblValOffice);
+            //}
 
-            await _context.SaveChangesAsync();
-            return RedirectToAction(nameof(Index));
+            //await _context.SaveChangesAsync();
+            //return RedirectToAction(nameof(Index));
         }
 
-        private bool TblValOfficeExists(int id)
-        {
-            return _context.TblValOffices.Any(e => e.OfficeId == id);
-        }
+        //private bool TblValOfficeExists(int id)
+        //{
+        //    return _context.TblValOffices.Any(e => e.OfficeId == id);
+        //}
     }
 }
