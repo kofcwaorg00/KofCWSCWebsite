@@ -33,15 +33,20 @@
     <script src="https://unpkg.com/axios/dist/axios.min.js"></script>
     @*<script src="~/js/calendar.js" asp-append-version="true"></script>*@
     @*************************************************************************************************@
+    <link rel="icon" type="image/x-icon" href="./favicon.ico" />
 </head>
 <body>
     <div>
-        <a href="/"><img src="~/images/LOGO-WA1.jpg" alt="Banner" height="100px" width="250px" /></a>
+        <a href="/"><img src="~/images/LOGO-WA1.jpg" alt="Banner" height="100" width="250" /></a>
+        <div style="float:right;margin-top:35px">
+            <a href="https://www.kofc.org/secure/en/join/join-kofc.html" target="_blank"><img src="~/images/JoinUs.png" /></a>
+        </div>
         <p style="color:white;background-color:black">
             @ViewData["ConnectString"]
             @ViewData["APIURL"]
             @ViewData["ENV"]
         </p>
+
     </div>
     <header>
         <nav class="navbar navbar-expand-sm navbar-toggleable-sm navbar-light bg-white border-bottom box-shadow mb-3">
@@ -85,9 +90,9 @@
                                 <li><a class="dropdown-item MyMenuLink" asp-area="" asp-controller="SP" asp-action="GetChairmanInfoBlock" asp-route-id="202">KofC Riders</a></li>
                                 <li><a class="dropdown-item MyMenuLink" asp-area="" asp-controller="TblMasPSOs" asp-action="Index" asp-route-id="0">Past State Officers</a></li>
                                 <li><a class="dropdown-item MyMenuLink" href="https://kofcwa.sharepoint.com/:b:/s/WebsiteStorage/EUPgpg_PGwVEpuG8xXW8MfgB-adpQfb7J3kxnEnw04QK7A?e=rG6Icy" target="_blank">WA State Council History</a></li>
-                                <li><a class="dropdown-item MyMenuLink" asp-area="" asp-controller="TblMasAwards" asp-action="Index" asp-route-id="0">Grand Knight</a></li>
-                                <li><a class="dropdown-item MyMenuLink" asp-page="/SFPages/FinSec">Financial Secretary</a></li>
-                                <li><a class="dropdown-item MyMenuLink" asp-page="/SFPages/Chancellor">Chancellor</a></li>
+                                <li><a class="dropdown-item MyMenuLink" asp-area="" asp-controller="TblMasAwards" asp-action="Index" asp-route-id="0">Grand Knight Resources</a></li>
+                                <li><a class="dropdown-item MyMenuLink" asp-page="/SFPages/FinSec">Financial Secretary Resources</a></li>
+                                <li><a class="dropdown-item MyMenuLink" asp-page="/SFPages/Chancellor">Chancellor Resources</a></li>
                                 <li><a class="dropdown-item MyMenuLink" href="https://www.kofc.org/en/for-members/resources/index.html" target="_blank">For Councils</a></li>
                                 <li><a class="dropdown-item MyMenuLink" asp-area="" asp-controller="SP" asp-action="GetChairmanInfoBlock" asp-route-id="223">Council Administration & Finance</a></li>
                             </ul>
@@ -177,7 +182,7 @@
                                 <li><a class="dropdown-item MyMenuLink" asp-area="" asp-controller="SP" asp-action="GetChairmanInfoBlock" asp-route-id="215">Member Retention</a></li>
                                 @*<li><a class="dropdown-item MyMenuLink" asp-area="" asp-controller="SP" asp-action="GetChairmanInfoBlock" asp-route-id="204">Shining Armor Program</a></li>*@
                                 <li><a class="dropdown-item MyMenuLink" asp-area="" asp-controller="SP" asp-action="GetChairmanInfoBlock" asp-route-id="204">Silver Knight/Shining Armor Programs</a></li>
-                                <li><a class="dropdown-item MyMenuLink" asp-area="" asp-controller="TblMasAwards" asp-action="Index" asp-route-id="0">Membership Awards</a></li>
+                                @*<li><a class="dropdown-item MyMenuLink" asp-area="" asp-controller="TblMasAwards" asp-action="Index" asp-route-id="0">Membership Awards</a></li>*@
                             </ul>
                         </li>
                         <li class="nav-item dropdown">
