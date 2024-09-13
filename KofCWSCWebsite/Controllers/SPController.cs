@@ -1,6 +1,7 @@
 ﻿using com.sun.xml.@internal.bind.v2.model.core;
 using KofCWSCWebsite.Data;
 using KofCWSCWebsite.Models;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Data.SqlClient;
 using Microsoft.EntityFrameworkCore;
@@ -143,6 +144,7 @@ namespace KofCWSCWebsite.Controllers
         }
 
         // GET: EmailAlias
+        [Authorize]
         [Route("GetEmailAlias")]
         public IActionResult GetEmailAlias()
         {

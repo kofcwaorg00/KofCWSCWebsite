@@ -65,8 +65,15 @@ catch (Exception ex)
 }
 
 // changed this to add IdentiyRole too
-builder.Services.AddDefaultIdentity<KofCUser>(options => options.SignIn.RequireConfirmedAccount = true)
-    .AddRoles<IdentityRole>().AddEntityFrameworkStores<IdentityDBContext>();
+builder.Services.AddDefaultIdentity<KofCUser>
+    (options => 
+    {
+        options.SignIn.RequireConfirmedAccount = true;
+        options.Password.RequiredLength = 8;
+        
+    })
+    .AddRoles<IdentityRole>()
+    .AddEntityFrameworkStores<IdentityDBContext>();
 
 builder.Services.AddScoped<DataSetService, DataSetService>();
 

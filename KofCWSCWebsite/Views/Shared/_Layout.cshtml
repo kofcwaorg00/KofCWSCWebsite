@@ -41,11 +41,19 @@
         <div style="float:right;margin-top:35px">
             <a href="https://www.kofc.org/secure/en/join/join-kofc.html" target="_blank"><img src="~/images/JoinUs.png" /></a>
         </div>
-        <p style="color:white;background-color:black">
-            @ViewData["ConnectString"]
-            @ViewData["APIURL"]
-            @ViewData["ENV"]
-        </p>
+        @{ 
+            // we need to test for ViewData being null allowing with ?
+            string myENV = ViewData["ENV"]?.ToString();
+            if (myENV == null) { myENV = ""; };
+        }
+        @if (myENV == "QC" || myENV == "DEVELOPMENT")
+        {
+            <p style="color:white;background-color:black">
+                @ViewData["ConnectString"]
+                @ViewData["APIURL"]
+                @ViewData["ENV"]
+            </p>
+        }
 
     </div>
     <header>
@@ -233,7 +241,7 @@
                             </li>
                         }
 
-                        @if (User.IsInRole("Admin"))
+                        @if (User.IsInRole("Admin") || User.IsInRole("DataAdmin"))
                         {
                             <li class="nav-item dropdown">
                                 <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown1" role="button" data-bs-toggle="dropdown" aria-expanded="false">
@@ -275,10 +283,10 @@
                             </li>
                         }
                     </ul>
-                    <form class="d-flex">
+                    @*<form class="d-flex">
                         <input class="form-control me-2" type="search" placeholder="Search" aria-label="Search">
                         <button class="btn btn-outline-success" type="submit">Search</button>
-                    </form>
+                    </form>*@
                     <div>
                         <partial name="_LoginPartial" />
                     </div>
