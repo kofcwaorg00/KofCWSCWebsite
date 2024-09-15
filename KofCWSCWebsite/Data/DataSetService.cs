@@ -16,14 +16,17 @@ namespace KofCWSCWebsite.Data
         private IConfiguration _configuration;
         private readonly ApplicationDbContext _context;
         private IWebHostEnvironment? _hostingEnvironment;
+        private IHttpContextAccessor _httpContextAccessor;
         public string ReportsPath { get; private set; }
         public DataSet DataSet { get; private set; } = new DataSet();
 
-        public DataSetService(ApplicationDbContext context, IWebHostEnvironment hostingEnvironment,IConfiguration configuration)
+        public DataSetService(ApplicationDbContext context, IWebHostEnvironment hostingEnvironment,
+            IConfiguration configuration,IHttpContextAccessor httpContextAccessor)
         {
             _hostingEnvironment = hostingEnvironment;
             _context = context;
             _configuration = configuration;
+            _httpContextAccessor = httpContextAccessor;
             SetReportsFolder();
             //SetDataSet();
         }
@@ -31,6 +34,19 @@ namespace KofCWSCWebsite.Data
         private void SetReportsFolder() => ReportsPath = FindReportsFolder(_hostingEnvironment.WebRootPath);
         //private void SetDataSet() => _context.TblMasMembers.ToListAsync().Wait();
 
+        public string GetMyHost()
+        {
+            var myhost = _configuration["Host:HostName"];
+            if (myhost == null)
+            {
+                return "https://localhost:7213";
+            } else
+            {
+                return myhost;
+            }
+            
+
+        }
         private string FindReportsFolder(string startDir)
         {
             string directory = Path.Combine(startDir, "Reports");

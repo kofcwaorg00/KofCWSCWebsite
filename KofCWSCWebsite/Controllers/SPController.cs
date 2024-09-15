@@ -27,12 +27,14 @@ namespace KofCWSCWebsite.Controllers
             //_context = context;
             _configuration = configuration;
             _dataSetService = dataSetService;
+             
         }
 
         // GET: GetAssys
         [Route("GetAssys")]
         public IActionResult GetAssys()
         {
+            ViewData["HostName"] = _dataSetService.GetMyHost();
             // each one of these should follow the same pattern
             // set the URI, setup thew client, call the client, return the results
             Uri myURI = new Uri(_dataSetService.GetAPIBaseAddress() + "/GetAssys");
@@ -62,6 +64,7 @@ namespace KofCWSCWebsite.Controllers
         [Route("GetCouncils")]
         public IActionResult GetCouncils()
         {
+            ViewData["HostName"] = _dataSetService.GetMyHost();
             Uri myURI = new Uri(_dataSetService.GetAPIBaseAddress() + "/GetCouncils");
 
             using (var client = new HttpClient())
@@ -90,6 +93,7 @@ namespace KofCWSCWebsite.Controllers
         [Route("GetSOSView")]
         public IActionResult GetSOSView()
         {
+            ViewData["HostName"] = _dataSetService.GetMyHost();
             Uri myURI = new Uri(_dataSetService.GetAPIBaseAddress() + "/GetSOSView");
 
             using (var client = new HttpClient())
@@ -175,10 +179,12 @@ namespace KofCWSCWebsite.Controllers
         [Route("GetChairmen")]
         public IActionResult GetChairmen()
         {
+            ViewData["HostName"] = _dataSetService.GetMyHost();
             Uri myURI = new Uri(_dataSetService.GetAPIBaseAddress() + "/GetChairmen");
 
             using (var client = new HttpClient())
             {
+                
                 //client.BaseAddress = new Uri(myURI);
                 var responseTask = client.GetAsync(myURI);
                 responseTask.Wait();
@@ -234,6 +240,7 @@ namespace KofCWSCWebsite.Controllers
         [Route("GetDDs")]
         public IActionResult GetDDs()
         {
+            ViewData["HostName"] = _dataSetService.GetMyHost();
             Uri myURI = new Uri(_dataSetService.GetAPIBaseAddress() + "/GetDDs");
 
             using (var client = new HttpClient())

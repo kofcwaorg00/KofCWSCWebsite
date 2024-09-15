@@ -14,6 +14,7 @@ using Microsoft.AspNetCore.DataProtection;
 using Microsoft.IdentityModel.Tokens;
 using Serilog;
 using Microsoft.AspNet.Identity;
+using Microsoft.AspNetCore.ResponseCompression;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -63,17 +64,39 @@ catch (Exception ex)
     Log.Error(ex.Message + " - " + ex.InnerException);
     throw;
 }
-
+//*******************************************************************************************
+// 9/13/2024 Tim Philomeno
+// added this based on Dangs running of a security tool on our site.
+//-------------------------------------------------------------------------------------------
+//builder.Services.AddResponseCompression(options =>
+//{
+//    var gzip = options.Providers.OfType<GzipCompressionProvider>().FirstOrDefault();
+//    if (gzip != null)
+//    {
+//        options.Providers.Remove(gzip);
+//    }
+//    //options.EnableForHttps = false;
+//});
+//*******************************************************************************************
 // changed this to add IdentiyRole too
-builder.Services.AddDefaultIdentity<KofCUser>
-    (options => 
-    {
-        options.SignIn.RequireConfirmedAccount = true;
-        options.Password.RequiredLength = 8;
-        
-    })
-    .AddRoles<IdentityRole>()
-    .AddEntityFrameworkStores<IdentityDBContext>();
+try
+{
+    builder.Services.AddDefaultIdentity<KofCUser>
+        (options =>
+        {
+            options.SignIn.RequireConfirmedAccount = true;
+            options.Password.RequiredLength = 8;
+
+        })
+        .AddRoles<IdentityRole>()
+        .AddEntityFrameworkStores<IdentityDBContext>();
+}
+catch (Exception ex)
+{
+    Log.Error(ex.Message + " - " + ex.InnerException);  
+    throw;
+}
+
 
 builder.Services.AddScoped<DataSetService, DataSetService>();
 

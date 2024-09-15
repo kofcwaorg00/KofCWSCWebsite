@@ -35,7 +35,7 @@ namespace KofCWSCWebsite.Controllers
             // to the call of the stored proceudre
             //****************************************************************************************************
             var reportToLoad = "GetLabelByOfficeAPI";
-            string myMethod = "GetLabelByOffice/";
+            string myMethod = "/GetLabelByOffice/";
             Log.Information("Before Load Report");
             model.WebReport.Report.Load(Path.Combine(_dataSetService.ReportsPath, $"{reportToLoad}.frx"));
             Log.Information("Before Prepare Report");

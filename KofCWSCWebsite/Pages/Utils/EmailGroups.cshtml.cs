@@ -34,6 +34,7 @@ namespace KofCWSCWebsite.Pages.Utils
             public bool cFN { get; set; }
             public bool cFC { get; set; }
             public bool cAll { get; set; }
+            public bool cDD { get; set; }
         }
         public async Task<IActionResult> OnPostAsync(string returnUrl = null)
         {
@@ -70,6 +71,11 @@ namespace KofCWSCWebsite.Pages.Utils
                 if (Input.cAll)
                 {
                     mysuccess = Services.Utils.SendEmailAuthenticatedMG("AllMembers@mg.kofc-wa.org", Input.sFrom, "", "", Input.sSubject, Input.sBody, null,_configuration);
+                    //mysuccess = Services.Utils.SendEmailAuthenticatedMG("testing@mg.kofc-wa.org", Input.sFrom, "", "", Input.sSubject, "To All", null, _configuration);
+                }
+                if (Input.cDD)
+                {
+                    mysuccess = Services.Utils.SendEmailAuthenticatedDASP("AllDDs@kofc-wa.org", Input.sFrom, "", "", Input.sSubject, Input.sBody, null, _configuration);
                     //mysuccess = Services.Utils.SendEmailAuthenticatedMG("testing@mg.kofc-wa.org", Input.sFrom, "", "", Input.sSubject, "To All", null, _configuration);
                 }
                 if (mysuccess)

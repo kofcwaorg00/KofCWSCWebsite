@@ -83,19 +83,19 @@
                     @Html.DisplayFor(modelItem => item.CouncilName)
                 </td>
                 <td>
-                    @Html.Raw(Utils.GetMemberNameLink(item.GrandKnight, item.GKMemberID, User.Identity.IsAuthenticated, Context.Request.Host.Value, "GetCouncils"))
+                    @Html.Raw(Utils.GetMemberNameLink(item.GrandKnight, item.GKMemberID, User.Identity.IsAuthenticated, ViewData["HostName"].ToString(), "GetCouncils"))
                 </td>
                 @*<td>
                         @Html.DisplayFor(modelItem => item.GKMemberID)
                     </td>*@
                 <td>
-                    @Html.Raw(Utils.GetMemberNameLink(item.FinancialSecretary, item.FSMemberID, User.Identity.IsAuthenticated, Context.Request.Host.Value, "GetCouncils"))
+                    @Html.Raw(Utils.GetMemberNameLink(item.FinancialSecretary, item.FSMemberID, User.Identity.IsAuthenticated, ViewData["HostName"].ToString(), "GetCouncils"))
                 </td>
                 @*<td>
                         @Html.DisplayFor(modelItem => item.FSMemberID)
                     </td>*@
                 <td>
-                    @Html.Raw(Utils.GetMemberNameLink(item.Chaplain, item.ChapMemberID, User.Identity.IsAuthenticated, Context.Request.Host.Value, "GetCouncils"))
+                    @Html.Raw(Utils.GetMemberNameLink(item.Chaplain, item.ChapMemberID, User.Identity.IsAuthenticated, ViewData["HostName"].ToString(), "GetCouncils"))
                 </td>
                 @*<td>
                         @Html.DisplayFor(modelItem => item.ChapMemberID)
@@ -175,7 +175,7 @@
         table = document.getElementById("myTable");
         tr = table.getElementsByTagName("tr");
         for (i = 0; i < tr.length; i++) {
-            td = tr[i].getElementsByTagName("td")[3];
+            td = tr[i].getElementsByTagName("td")[2];
             if (td) {
                 txtValue = td.textContent || td.innerText;
                 if (txtValue.toUpperCase().indexOf(filter) > -1) {

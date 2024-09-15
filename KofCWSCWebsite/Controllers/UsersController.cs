@@ -53,7 +53,7 @@ namespace KofCWSCWebsite.Controllers
                     var result = responseTask.Result;
                     var myAns = result.Content.ReadAsStringAsync().Result;
 
-                    if (myAns == "false")
+                    if (myAns == "false" || myAns.ToLower().Contains("invalid"))
                     {
                         return Json($"Member Number {KofCMemberID} is not found in our database. Please email webmaster@kofc-wa.org with your member number, full name, email address and council.");
                     }
