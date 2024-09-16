@@ -43,7 +43,7 @@ namespace KofCWSCWebsite.Pages.Utils
                 bool mysuccess = false;
                 returnUrl ??= Url.Content("~/");
                 //check to see that at least one is checked
-                if (!(Input.cFN || Input.cFN || Input.cGK || Input.cFC || Input.cAll))
+                if (!(Input.cFN || Input.cFN || Input.cGK || Input.cFC || Input.cAll ||Input.cDD))
                 {
                     ModelState.AddModelError(string.Empty, "You must select at least one group");
                     //throw new Exception("You must select at least one group");
