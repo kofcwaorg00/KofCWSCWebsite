@@ -1,0 +1,73 @@
+﻿@model KofCWSCWebsite.Models.EmailOffice
+
+@{
+    ViewData["Title"] = "Create";
+}
+
+<h1>Create</h1>
+
+<h4>EmailOffice</h4>
+<hr />
+<div class="row">
+    <div class="col-md-4">
+        <form asp-action="Create">
+            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+            <div class="form-group">
+                <label asp-for="Subject" class="control-label"></label>
+                <input asp-for="Subject" class="form-control" />
+                <span asp-validation-for="Subject" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="From" class="control-label"></label>
+                <input asp-for="From" class="form-control" />
+                <span asp-validation-for="From" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="Body" class="control-label"></label>
+                <input asp-for="Body" class="form-control" />
+                <span asp-validation-for="Body" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="Fs" class="control-label"></label>
+                <input asp-for="Fs" class="form-control" />
+                <span asp-validation-for="Fs" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="Gk" class="control-label"></label>
+                <input asp-for="Gk" class="form-control" />
+                <span asp-validation-for="Gk" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="Fn" class="control-label"></label>
+                <input asp-for="Fn" class="form-control" />
+                <span asp-validation-for="Fn" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="Fc" class="control-label"></label>
+                <input asp-for="Fc" class="form-control" />
+                <span asp-validation-for="Fc" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="Dd" class="control-label"></label>
+                <input asp-for="Dd" class="form-control" />
+                <span asp-validation-for="Dd" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="All" class="control-label"></label>
+                <input asp-for="All" class="form-control" />
+                <span asp-validation-for="All" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <input type="submit" value="Create" class="btn btn-primary" />
+            </div>
+        </form>
+    </div>
+</div>
+
+<div>
+    <a asp-action="Index">Back to List</a>
+</div>
+
+@section Scripts {
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+}

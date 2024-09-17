@@ -161,7 +161,7 @@ namespace KofCWSCWebsite.Areas.Identity.Pages.Account
                         await _roleManager.CreateAsync(new IdentityRole("Member"));
                         await _roleManager.CreateAsync(new IdentityRole("Admin"));
                         await _roleManager.CreateAsync(new IdentityRole("StateOfficer"));
-                        await _roleManager.CreateAsync(new IdentityRole("Chairman"));
+                        await _roleManager.CreateAsync(new IdentityRole("StateChairman"));
                         await _roleManager.CreateAsync(new IdentityRole("DataAdmin"));
                         await _userManager.AddToRoleAsync(user, "Admin");
                     }

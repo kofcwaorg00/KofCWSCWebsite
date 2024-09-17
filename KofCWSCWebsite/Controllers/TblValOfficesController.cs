@@ -9,6 +9,7 @@ using KofCWSCWebsite.Data;
 using KofCWSCWebsite.Models;
 using Newtonsoft.Json;
 using Serilog;
+using Microsoft.AspNetCore.Authorization;
 
 namespace KofCWSCWebsite.Controllers
 {
@@ -22,6 +23,7 @@ namespace KofCWSCWebsite.Controllers
         }
 
         // GET: TblValOffices
+        [Authorize(Roles = "Admin")]
         public async Task<IActionResult> Index()
         {
 
@@ -51,6 +53,7 @@ namespace KofCWSCWebsite.Controllers
         }
 
         // GET: TblValOffices/Details/5
+        [Authorize(Roles = "Admin")]
         public async Task<IActionResult> Details(int? id)
         {
 
@@ -90,6 +93,7 @@ namespace KofCWSCWebsite.Controllers
         }
 
         // GET: TblValOffices/Create
+        [Authorize(Roles = "Admin")]
         public IActionResult Create()
         {
             return View();
@@ -98,6 +102,7 @@ namespace KofCWSCWebsite.Controllers
         // POST: TblValOffices/Create
         // To protect from overposting attacks, enable the specific properties you want to bind to.
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
+        [Authorize(Roles = "Admin")]
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Create([Bind("OfficeId,OfficeDescription,DirSortOrder,AltDescription,EmailAlias,UseAsFormalTitle,WebPageTagLine,SupremeUrl")] TblValOffice tblValOffice)
@@ -128,6 +133,7 @@ namespace KofCWSCWebsite.Controllers
         }
 
         // GET: TblValOffices/Edit/5
+        [Authorize(Roles = "Admin")]
         public async Task<IActionResult> Edit(int? id)
         {
             if (id == null)
@@ -166,6 +172,7 @@ namespace KofCWSCWebsite.Controllers
         // POST: TblValOffices/Edit/5
         // To protect from overposting attacks, enable the specific properties you want to bind to.
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
+        [Authorize(Roles = "Admin")]
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Edit(int id, [Bind("OfficeId,OfficeDescription,DirSortOrder,AltDescription,EmailAlias,UseAsFormalTitle,WebPageTagLine,SupremeUrl")] TblValOffice tblValOffice)
@@ -210,6 +217,7 @@ namespace KofCWSCWebsite.Controllers
         }
 
         // GET: TblValOffices/Delete/5
+        [Authorize(Roles = "Admin")]
         public async Task<IActionResult> Delete(int? id)
         {
             if (id == null)
@@ -247,6 +255,7 @@ namespace KofCWSCWebsite.Controllers
         }
 
         // POST: TblValOffices/Delete/5
+        [Authorize(Roles = "Admin")]
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> DeleteConfirmed(int id)

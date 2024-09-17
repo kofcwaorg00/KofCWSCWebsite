@@ -12,11 +12,29 @@
 </head>
 <body>
 
+
+
+
+
+
     @* Announcements card section *@
     <div class="offcanvas offcanvas-start" tabindex="-1" id="AnnouncementPanel" aria-labelledby="offcanvasExampleLabel">
         <div class="offcanvas-header">
             <h5 class="offcanvas-title" id="offcanvasExampleLabel">Announcements</h5>
             <button type="button" class="btn-close text-reset" data-bs-dismiss="offcanvas" aria-label="Close"></button>
+        </div>
+        <div style="margin-left:20px">
+            @foreach (var item in Model)
+            {
+                DateTime ANDate = DateTime.Now;
+                if (item.Type == "AN")
+                {
+                    ANDate = item.PostedDate;
+                    <span style="font-size:small;color:lightgray">Last Updated @ANDate.ToShortDateString()</span>
+                    <hr />
+                    break;
+                }
+            }
         </div>
         <div class="offcanvas-body">
             @* Begin Of Interest Loop *@
@@ -24,6 +42,7 @@
             {
                 if (item.Type == "AN")
                 {
+
                     <div style="width:100%;text-align:center">
                         @*if graphicurl is null then use title else use graphicurl*@
                         @{
@@ -58,7 +77,20 @@
             <h5 class="offcanvas-title" id="offcanvasExampleLabel">Of Interest</h5>
             <button type="button" class="btn-close text-reset" data-bs-dismiss="offcanvas" aria-label="Close"></button>
         </div>
+        <div style="margin-left:20px">
+            @foreach (var item in Model)
+            {
+                DateTime OIDate = DateTime.Now;
+                if (item.Type == "OI")
+                {
+                    OIDate = item.PostedDate;
+                    <span style="font-size:small;color:lightgray">Last Updated @OIDate.ToShortDateString()</span>
+                    <hr />
+                    break;
+                }
 
+            }
+        </div>
         <div class="offcanvas-body" style="text-align:center">
             @* Begin Of Interest Loop *@
             @foreach (var item in Model)
@@ -112,10 +144,10 @@
                 <a title="Facebook" href="https://www.facebook.com/KofCWA/?ref=embed_page" target="_blank">
                     <img src="~/images/Facebook.png" style="width:25px" />
                 </a>
-                <br />
-                <a title="Instagram" href="https://www.instagram.com/kofcwashington?igsh=cnVuY3N6cDNrOGVt&utm_source=qr" target="_blank">
-                    <img src="~/images/IG.png" style="width:25px" />
-                </a>
+                @*<br />
+                    <a title="Instagram" href="https://www.instagram.com/kofcwashington?igsh=cnVuY3N6cDNrOGVt&utm_source=qr" target="_blank">
+                        <img src="~/images/IG.png" style="width:25px" />
+                    </a>*@
             </div>
         </div>
     </div>
@@ -194,8 +226,8 @@
                         <p class="card-text"><a class="dropdown-item MyDDMenuLink" asp-area="" asp-controller="SP" asp-action="GetChairmanInfoBlock" asp-route-id="271">Catholic Community Services</a></p>
                     </li>
                     @*<li>
-                        <p class="card-text"><a class="dropdown-item MyDDMenuLink" asp-area="" asp-controller="SP" asp-action="GetChairmanInfoBlock" asp-route-id="257">One Parish One Prisoner</a></p>
-                    </li>*@
+                            <p class="card-text"><a class="dropdown-item MyDDMenuLink" asp-area="" asp-controller="SP" asp-action="GetChairmanInfoBlock" asp-route-id="257">One Parish One Prisoner</a></p>
+                        </li>*@
                     <li>
                         <p class="card-text"><a class="dropdown-item MyDDMenuLink" href="https://www.knightscommunityhospitalequipmentloanprogram.com/" target="_blank">KC Help</a></p>
                     </li>

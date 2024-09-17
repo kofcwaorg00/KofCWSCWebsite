@@ -9,6 +9,7 @@ using KofCWSCWebsite.Data;
 using KofCWSCWebsite.Models;
 using Newtonsoft.Json;
 using Serilog;
+using Microsoft.AspNetCore.Authorization;
 
 namespace KofCWSCWebsite.Controllers
 {
@@ -22,6 +23,7 @@ namespace KofCWSCWebsite.Controllers
         }
 
         // GET: TblMasPSOs
+        // everyone can see PSO
         public async Task<IActionResult> Index()
         {
             Uri myURI = new Uri(_dataSetService.GetAPIBaseAddress() + "/PSOs");
@@ -48,6 +50,7 @@ namespace KofCWSCWebsite.Controllers
         }
 
         // GET: TblMasPSOs/Details/5
+        [Authorize(Roles = "Admin,DataAdmin")]
         public async Task<IActionResult> Details(int? id)
         {
             if (id == null)
@@ -77,6 +80,7 @@ namespace KofCWSCWebsite.Controllers
         }
 
         // GET: TblMasPSOs/Create
+        [Authorize(Roles = "Admin,DataAdmin")]
         public IActionResult Create()
         {
             return View();
@@ -85,6 +89,7 @@ namespace KofCWSCWebsite.Controllers
         // POST: TblMasPSOs/Create
         // To protect from overposting attacks, enable the specific properties you want to bind to.
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
+        [Authorize(Roles = "Admin,DataAdmin")]
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Create([Bind("Id,Year,StateDeputy,StateSecretary,StateTreasurer,StateAdvocate,StateWarden")] TblMasPso tblMasPso)
@@ -111,6 +116,7 @@ namespace KofCWSCWebsite.Controllers
         }
 
         // GET: TblMasPSOs/Edit/5
+        [Authorize(Roles = "Admin,DataAdmin")]
         public async Task<IActionResult> Edit(int? id)
         {
             if (id == null)
@@ -142,6 +148,7 @@ namespace KofCWSCWebsite.Controllers
         // POST: TblMasPSOs/Edit/5
         // To protect from overposting attacks, enable the specific properties you want to bind to.
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
+        [Authorize(Roles = "Admin,DataAdmin")]
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Edit(int id, [Bind("Id,Year,StateDeputy,StateSecretary,StateTreasurer,StateAdvocate,StateWarden")] TblMasPso tblMasPso)
@@ -173,6 +180,7 @@ namespace KofCWSCWebsite.Controllers
         }
 
         // GET: TblMasPSOs/Delete/5
+        [Authorize(Roles = "Admin,DataAdmin")]
         public async Task<IActionResult> Delete(int? id)
         {
             if (id == null)
@@ -202,6 +210,7 @@ namespace KofCWSCWebsite.Controllers
         }
 
         // POST: TblMasPSOs/Delete/5
+        [Authorize(Roles = "Admin,DataAdmin")]
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> DeleteConfirmed(int id)

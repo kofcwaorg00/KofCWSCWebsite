@@ -11,6 +11,7 @@ using System.Text.Json;
 using Newtonsoft.Json;
 using Microsoft.CodeAnalysis.VisualBasic.Syntax;
 using Serilog;
+using Microsoft.AspNetCore.Authorization;
 
 namespace KofCWSCWebsite.Controllers
 {
@@ -24,6 +25,7 @@ namespace KofCWSCWebsite.Controllers
         }
 
         // GET: TblSysTrxEvents
+        [Authorize(Roles = "Admin,CalAdmin")]
         public async Task<IActionResult> Index()
         {
             Uri myURI = new Uri(_dataSetService.GetAPIBaseAddress() + "/Events");
@@ -48,7 +50,7 @@ namespace KofCWSCWebsite.Controllers
                 return View(events);
             }
         }
-
+        [Authorize]
         public IActionResult GetCalendarEvents(string start, string end)
         {
             Uri myURI = new Uri(_dataSetService.GetAPIBaseAddress() + "/Events/" + start + "/" + end );
@@ -75,6 +77,7 @@ namespace KofCWSCWebsite.Controllers
         }
 
         // GET: TblSysTrxEvents/Details/5
+        [Authorize(Roles = "Admin,CalAdmin")]
         public async Task<IActionResult> Details(int? id)
         {
             if (id == null)
@@ -104,6 +107,7 @@ namespace KofCWSCWebsite.Controllers
         }
 
         // GET: TblSysTrxEvents/Create
+        [Authorize(Roles = "Admin,CalAdmin")]
         public IActionResult Create()
         {
             return View();
@@ -112,6 +116,7 @@ namespace KofCWSCWebsite.Controllers
         // POST: TblSysTrxEvents/Create
         // To protect from overposting attacks, enable the specific properties you want to bind to.
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
+        [Authorize(Roles = "Admin,CalAdmin")]
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Create([Bind("Id,Title,Description,Begin,End,isAllDay,AttachUrl,AddedBy,DateAdded")] TblSysTrxEvent tblSysTrxEvent)
@@ -137,6 +142,7 @@ namespace KofCWSCWebsite.Controllers
         }
 
         // GET: TblSysTrxEvents/Edit/5
+        [Authorize(Roles = "Admin,CalAdmin")]
         public async Task<IActionResult> Edit(int? id)
         {
             if (id == null)
@@ -169,6 +175,7 @@ namespace KofCWSCWebsite.Controllers
         // POST: TblSysTrxEvents/Edit/5
         // To protect from overposting attacks, enable the specific properties you want to bind to.
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
+        [Authorize(Roles = "Admin,CalAdmin")]
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Edit(int id, [Bind("Id,Title,Description,Begin,End,isAllDay,AttachUrl,AddedBy,DateAdded")] TblSysTrxEvent tblSysTrxEvent)
@@ -201,6 +208,7 @@ namespace KofCWSCWebsite.Controllers
         }
 
         // GET: TblSysTrxEvents/Delete/5
+        [Authorize(Roles = "Admin,CalAdmin")]
         public async Task<IActionResult> Delete(int? id)
         {
             if (id == null)
@@ -231,6 +239,7 @@ namespace KofCWSCWebsite.Controllers
         }
 
         // POST: TblSysTrxEvents/Delete/5
+        [Authorize(Roles = "Admin,CalAdmin")]
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> DeleteConfirmed(int id)

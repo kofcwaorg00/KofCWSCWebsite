@@ -10,6 +10,7 @@ using KofCWSCWebsite.Models;
 using KofCWSCWebsite.Data;
 using Serilog;
 using Newtonsoft.Json;
+using Microsoft.AspNetCore.Authorization;
 
 namespace KofCWSCWebsite.Controllers
 {
@@ -49,6 +50,7 @@ namespace KofCWSCWebsite.Controllers
         }
 
         // GET: TblMasAwards/Details/5
+        [Authorize(Roles = "Admin,DataAdmin")]
         public async Task<IActionResult> Details(int? id)
         {
             if (id == null)
@@ -79,6 +81,7 @@ namespace KofCWSCWebsite.Controllers
         }
 
         // GET: TblMasAwards/Create
+        [Authorize(Roles = "Admin,DataAdmin")]
         public IActionResult Create()
         {
             return View();
@@ -87,6 +90,7 @@ namespace KofCWSCWebsite.Controllers
         // POST: TblMasAwards/Create
         // To protect from overposting attacks, enable the specific properties you want to bind to.
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
+        [Authorize(Roles = "Admin,DataAdmin")]
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Create([Bind("Id,AwardName,AwardDescription,AwardDueDate,LinkToTheAwardForm,AwardSubmissionEmailAddress")] TblMasAward tblMasAward)
@@ -113,6 +117,7 @@ namespace KofCWSCWebsite.Controllers
         }
 
         // GET: TblMasAwards/Edit/5
+        [Authorize(Roles = "Admin,DataAdmin")]
         public async Task<IActionResult> Edit(int? id)
         {
             if (id == null)
@@ -145,6 +150,7 @@ namespace KofCWSCWebsite.Controllers
         // POST: TblMasAwards/Edit/5
         // To protect from overposting attacks, enable the specific properties you want to bind to.
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
+        [Authorize(Roles = "Admin,DataAdmin")]
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Edit(int id, [Bind("Id,AwardName,AwardDescription,AwardDueDate,LinkToTheAwardForm,AwardSubmissionEmailAddress")] TblMasAward tblMasAward)
@@ -176,6 +182,7 @@ namespace KofCWSCWebsite.Controllers
         }
 
         // GET: TblMasAwards/Delete/5
+        [Authorize(Roles = "Admin,DataAdmin")]
         public async Task<IActionResult> Delete(int? id)
         {
             if (id == null)
@@ -206,6 +213,7 @@ namespace KofCWSCWebsite.Controllers
         }
 
         // POST: TblMasAwards/Delete/5
+        [Authorize(Roles = "Admin,DataAdmin")]
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> DeleteConfirmed(int id)

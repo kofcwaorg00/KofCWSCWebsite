@@ -9,6 +9,7 @@ using KofCWSCWebsite.Data;
 using KofCWSCWebsite.Models;
 using Newtonsoft.Json;
 using Serilog;
+using Microsoft.AspNetCore.Authorization;
 
 namespace KofCWSCWebsite.Controllers
 {
@@ -77,6 +78,7 @@ namespace KofCWSCWebsite.Controllers
         }
 
         // GET: TblWebTrxAois/Create
+        [Authorize(Roles = "Admin,AOIAdmin")]
         public IActionResult Create()
         {
             return View();
@@ -85,6 +87,7 @@ namespace KofCWSCWebsite.Controllers
         // POST: TblWebTrxAois/Create
         // To protect from overposting attacks, enable the specific properties you want to bind to.
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
+        [Authorize(Roles = "Admin,AOIAdmin")]
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Create([Bind("Id,Type,Title,GraphicUrl,Text,LinkUrl,PostedDate,Expired")] TblWebTrxAoi tblWebTrxAoi)
@@ -110,6 +113,7 @@ namespace KofCWSCWebsite.Controllers
         }
 
         // GET: TblWebTrxAois/Edit/5
+        [Authorize(Roles = "Admin,AOIAdmin")]
         public async Task<IActionResult> Edit(int? id)
         {
             if (id == null)
@@ -141,6 +145,7 @@ namespace KofCWSCWebsite.Controllers
         // POST: TblWebTrxAois/Edit/5
         // To protect from overposting attacks, enable the specific properties you want to bind to.
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
+        [Authorize(Roles = "Admin,AOIAdmin")]
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Edit(int id, [Bind("Id,Type,Title,GraphicUrl,Text,LinkUrl,PostedDate,Expired")] TblWebTrxAoi tblWebTrxAoi)
@@ -172,6 +177,7 @@ namespace KofCWSCWebsite.Controllers
         }
 
         // GET: TblWebTrxAois/Delete/5
+        [Authorize(Roles = "Admin,AOIAdmin")]
         public async Task<IActionResult> Delete(int? id)
         {
             if (id == null)
@@ -201,6 +207,7 @@ namespace KofCWSCWebsite.Controllers
         }
 
         // POST: TblWebTrxAois/Delete/5
+        [Authorize(Roles = "Admin,AOIAdmin")]
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> DeleteConfirmed(int id)

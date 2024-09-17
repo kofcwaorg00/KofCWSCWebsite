@@ -63,6 +63,8 @@ public partial class ApplicationDbContext : DbContext
     public DbSet<KofCWSCWebsite.Models.SPGetSOSView> SPGetSOSViews { get; set; } = default!;
     public DbSet<KofCWSCWebsite.Models.SPGetCouncilsView> SPGetCouncilsView { get; set; } = default!;
     public DbSet<KofCWSCWebsite.Models.SPGetAssysView> SPGetAssysView { get; set; } = default!;
+
+    public virtual DbSet<EmailOffice> TblWebTrxEmailOffices { get; set; }
     protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
     {
         if (!optionsBuilder.IsConfigured)
@@ -367,6 +369,20 @@ public partial class ApplicationDbContext : DbContext
             entity.Property(e => e.isAllDay).HasColumnType("boolean");
         });
 
+        modelBuilder.Entity<EmailOffice>(entity =>
+        {
+            entity.HasKey(e => e.Id).HasName("PK_tblWEB_EmailOffice");
+
+            entity.ToTable("tblWEB_trxEmailOffice");
+
+            entity.Property(e => e.Dd).HasColumnName("DD");
+            entity.Property(e => e.Fc).HasColumnName("FC");
+            entity.Property(e => e.Fn).HasColumnName("FN");
+            entity.Property(e => e.From).HasMaxLength(50);
+            entity.Property(e => e.Fs).HasColumnName("FS");
+            entity.Property(e => e.Gk).HasColumnName("GK");
+            entity.Property(e => e.Subject).HasMaxLength(50);
+        });
         OnModelCreatingPartial(modelBuilder);
     }
 

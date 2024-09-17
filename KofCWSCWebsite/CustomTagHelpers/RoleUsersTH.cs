@@ -27,12 +27,17 @@ namespace KofCWSCWebsite.CustomTagHelpers
             IdentityRole role = await roleManager.FindByIdAsync(Role);
             if (role != null)
             {
-                foreach (var user in userManager.Users)
-                {
-                    if (user != null && await userManager.IsInRoleAsync(user, role.Name))
-                        names.Add(user.UserName);
-                }
+                //if (role.Name != "Member")
+                //{
+
+                    foreach (var user in userManager.Users)
+                    {
+                        if (user != null && await userManager.IsInRoleAsync(user, role.Name))
+                            names.Add(user.UserName);
+                    }
+                //}
             }
+
             output.Content.SetContent(names.Count == 0 ? "No Users" : string.Join(", ", names));
         }
     }

@@ -1,6 +1,7 @@
 ﻿using FastReport.Web;
 using KofCWSCWebsite.Data;
 using KofCWSCWebsite.Models;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Serilog;
 
@@ -20,6 +21,7 @@ namespace KofCWSCWebsite.Controllers
             _dataSetService = dataSetService;
             _configuration = configuration;
         }
+        [Authorize(Roles = "Admin")]
         [Route("GetLabelByOffice")]
         public IActionResult GetLabelByOffice(string ID)
         {

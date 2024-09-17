@@ -9,6 +9,7 @@ using KofCWSCWebsite.Data;
 using KofCWSCWebsite.Models;
 using Newtonsoft.Json;
 using Serilog;
+using Microsoft.AspNetCore.Authorization;
 
 namespace KofCWSCWebsite.Controllers
 {
@@ -22,6 +23,7 @@ namespace KofCWSCWebsite.Controllers
         }
 
         // GET: TblValAssys
+        [Authorize(Roles = "Admin,DataAdmin")]
         public async Task<IActionResult> Index()
         {
             Uri myURI = new Uri(_dataSetService.GetAPIBaseAddress() + "/Assys");
@@ -48,6 +50,7 @@ namespace KofCWSCWebsite.Controllers
         }
 
         // GET: TblValAssys/Details/5
+        [Authorize(Roles = "Admin,DataAdmin")]
         public async Task<IActionResult> Details(int? id)
         {
             if (id == null)
@@ -77,6 +80,7 @@ namespace KofCWSCWebsite.Controllers
         }
 
         // GET: TblValAssys/Create
+        [Authorize(Roles = "Admin,DataAdmin")]
         public IActionResult Create()
         {
             return View();
@@ -85,6 +89,7 @@ namespace KofCWSCWebsite.Controllers
         // POST: TblValAssys/Create
         // To protect from overposting attacks, enable the specific properties you want to bind to.
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
+        [Authorize(Roles = "Admin,DataAdmin")]
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Create([Bind("ANumber,ALocation,AName,AddInfo1,AddInfo2,AddInfo3,WebSiteUrl,MasterLoc")] TblValAssy tblValAssy)
@@ -110,6 +115,7 @@ namespace KofCWSCWebsite.Controllers
         }
 
         // GET: TblValAssys/Edit/5
+        [Authorize(Roles = "Admin,DataAdmin")]
         public async Task<IActionResult> Edit(int? id)
         {
             if (id == null)
@@ -141,6 +147,7 @@ namespace KofCWSCWebsite.Controllers
         // POST: TblValAssys/Edit/5
         // To protect from overposting attacks, enable the specific properties you want to bind to.
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
+        [Authorize(Roles = "Admin,DataAdmin")]
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Edit(int id, [Bind("ANumber,ALocation,AName,AddInfo1,AddInfo2,AddInfo3,WebSiteUrl,MasterLoc")] TblValAssy tblValAssy)
@@ -172,6 +179,7 @@ namespace KofCWSCWebsite.Controllers
         }
 
         // GET: TblValAssys/Delete/5
+        [Authorize(Roles = "Admin,DataAdmin")]
         public async Task<IActionResult> Delete(int? id)
         {
             if (id == null)
@@ -201,6 +209,7 @@ namespace KofCWSCWebsite.Controllers
         }
 
         // POST: TblValAssys/Delete/5
+        [Authorize(Roles = "Admin,DataAdmin")]
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> DeleteConfirmed(int id)
