@@ -362,3 +362,6 @@ MigrationBackup/
 # Fody - auto-generated XML schema
 FodyWeavers.xsd
 /KofCWSCWebsite/GenOutput/Microsoft.CodeAnalysis.Razor.Compiler.SourceGenerators/Microsoft.NET.Sdk.Razor.SourceGenerators.RazorSourceGenerator
+
+# VS Code config files
+.vscode/**
