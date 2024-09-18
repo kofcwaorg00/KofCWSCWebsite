@@ -10,7 +10,7 @@
     <input type="text" id="myAname" onkeyup="myFunction2()" placeholder="Type in an Assembly Name to filter results" title="Type in a name" style="width:25%">
 </p>
 
-@if (User.IsInRole("Admin"))
+@if (User.IsInRole("Admin") || User.IsInRole("DataAdmin"))
 {
     <p>
         <form asp-controller="TblSysTrxEvents" asp-action="Create" method="get">
@@ -44,53 +44,54 @@
         </tr>
     </thead>
     <tbody>
-@foreach (var item in Model) {
-        <tr>
-            <td style="text-align:center">
-                @Html.DisplayFor(modelItem => item.ANumber)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.ALocation)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.AName)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.AddInfo1)@Html.DisplayFor(modelItem => item.AddInfo3)
-            </td>
-            <td style="text-align:center">
-                @Html.DisplayFor(modelItem => item.MasterLoc)
-            </td>
-            <td>
-                @if (User.IsInRole("Admin"))
-                {
-                <td style="padding-right:0px">
-                    @* <a asp-action="Edit" asp-route-id="@item.MemberId">Edit</a>&nbsp;|&nbsp;<a asp-action="Details" asp-route-id="@item.MemberId">Details</a>&nbsp;|&nbsp;<a asp-action="Delete" asp-route-id="@item.MemberId">Delete</a> *@
-                    <form asp-action="Edit" asp-route-id="@item.ANumber" method="get">
-                        <button type="submit" class="btn btn-sm btn-primary">
-                            Edit
-                        </button>
-                    </form>
+        @foreach (var item in Model)
+        {
+            <tr>
+                <td style="text-align:center">
+                    @Html.DisplayFor(modelItem => item.ANumber)
                 </td>
-                <td style="padding-left:0px;padding-right:0px">
-                    <form asp-action="Details" asp-route-id="@item.ANumber" method="get">
-                        <button type="submit" class="btn btn-sm btn-warning">
-                            Details
-                        </button>
-                    </form>
+                <td>
+                    @Html.DisplayFor(modelItem => item.ALocation)
                 </td>
-                <td style="padding-left:0px">
-                    <form asp-action="Delete" asp-route-id="@item.ANumber" method="get">
-                        <button type="submit" class="btn btn-sm btn-danger">
-                            Delete
-                        </button>
-                    </form>
+                <td>
+                    @Html.DisplayFor(modelItem => item.AName)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.AddInfo1)@Html.DisplayFor(modelItem => item.AddInfo3)
+                </td>
+                <td style="text-align:center">
+                    @Html.DisplayFor(modelItem => item.MasterLoc)
+                </td>
+                <td>
+                    @if (User.IsInRole("Admin") || User.IsInRole("DataAdmin"))
+                    {
+                    <td style="padding-right:0px">
+                        @* <a asp-action="Edit" asp-route-id="@item.MemberId">Edit</a>&nbsp;|&nbsp;<a asp-action="Details" asp-route-id="@item.MemberId">Details</a>&nbsp;|&nbsp;<a asp-action="Delete" asp-route-id="@item.MemberId">Delete</a> *@
+                        <form asp-action="Edit" asp-route-id="@item.ANumber" method="get">
+                            <button type="submit" class="btn btn-sm btn-primary">
+                                Edit
+                            </button>
+                        </form>
+                    </td>
+                    <td style="padding-left:0px;padding-right:0px">
+                        <form asp-action="Details" asp-route-id="@item.ANumber" method="get">
+                            <button type="submit" class="btn btn-sm btn-warning">
+                                Details
+                            </button>
+                        </form>
+                    </td>
+                    <td style="padding-left:0px">
+                        <form asp-action="Delete" asp-route-id="@item.ANumber" method="get">
+                            <button type="submit" class="btn btn-sm btn-danger">
+                                Delete
+                            </button>
+                        </form>
 
-                </td>
+                    </td>
+                }
+                    </td>
+                </tr>
             }
-                </td>
-            </tr>
-}
     </tbody>
 </table>
 

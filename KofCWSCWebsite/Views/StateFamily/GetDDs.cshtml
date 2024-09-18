@@ -35,7 +35,7 @@
                     @Html.DisplayFor(modelItem => item.DistrictI)
                 </td>
                 <td>
-                    @Html.Raw(Utils.GetMemberNameLink(item.FullName,item.MemberID, User.Identity.IsAuthenticated, ViewData["HostName"].ToString(), "GetDDs"))
+                    @Html.Raw(Utils.GetMemberNameLink(item.FullName,item.MemberID, User.Identity.IsAuthenticated, Context.Request.Host.Value, "GetDDs"))
                     @*@Html.Raw(item.FullName)*@
                 </td>
                 <td>

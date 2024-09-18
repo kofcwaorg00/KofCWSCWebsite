@@ -28,7 +28,7 @@
 </table>
 
 
-@if (User.IsInRole("Admin"))
+@if (User.IsInRole("Admin") || User.IsInRole("DataAdmin"))
 {
     <p>
         <form asp-controller="TblMasAwards" asp-action="Create" method="get">
@@ -96,7 +96,7 @@
                     }
 
                 </td>
-                @if (User.IsInRole("Admin"))
+                @if (User.IsInRole("Admin") || User.IsInRole("DataAdmin"))
                 {
                     <td style="padding-right:0px">
                         @* <a asp-action="Edit" asp-route-id="@item.MemberId">Edit</a>&nbsp;|&nbsp;<a asp-action="Details" asp-route-id="@item.MemberId">Details</a>&nbsp;|&nbsp;<a asp-action="Delete" asp-route-id="@item.MemberId">Delete</a> *@

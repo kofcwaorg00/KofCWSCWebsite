@@ -62,13 +62,13 @@
                     @Html.DisplayFor(modelItem => item.AssyName)
                 </td>
                 <td>
-                    @Html.Raw(Utils.GetMemberNameLink(item.FN, item.FNID, User.Identity.IsAuthenticated, ViewData["HostName"].ToString(), "GetAssys"))
+                    @Html.Raw(Utils.GetMemberNameLink(item.FN, item.FNID, User.Identity.IsAuthenticated, Context.Request.Host.Value, "GetAssys"))
                 </td>
                 <td>
-                    @Html.Raw(Utils.GetMemberNameLink(item.FC, item.FCID, User.Identity.IsAuthenticated, ViewData["HostName"].ToString(), "GetAssys"))
+                    @Html.Raw(Utils.GetMemberNameLink(item.FC, item.FCID, User.Identity.IsAuthenticated, Context.Request.Host.Value, "GetAssys"))
                 </td>
                 <td>
-                    @Html.Raw(Utils.GetMemberNameLink(item.FF, item.FFID, User.Identity.IsAuthenticated, ViewData["HostName"].ToString(), "GetAssys"))
+                    @Html.Raw(Utils.GetMemberNameLink(item.FF, item.FFID, User.Identity.IsAuthenticated, Context.Request.Host.Value, "GetAssys"))
                 </td>
                 <td>
                     @Html.DisplayFor(modelItem => item.MeetingInfo)

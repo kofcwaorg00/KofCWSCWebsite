@@ -33,7 +33,7 @@
                     @Html.DisplayFor(modelItem => item.Chairmanship)
                 </td>
                 <td>
-                    @Html.Raw(Utils.GetMemberNameLink(item.FullName, item.MemberID, User.Identity.IsAuthenticated, ViewData["HostName"].ToString(), "GetChairmen"))
+                    @Html.Raw(Utils.GetMemberNameLink(item.FullName, item.MemberID, User.Identity.IsAuthenticated,Context.Request.Host.Value, "GetChairmen"))
                     @*@Utils.GetMemberNameLink(item.FullName,item.MemberID,User.Identity.IsAuthenticated)*@
                     @*@Html.DisplayFor(modelItem => item.FullName)*@
                 </td>

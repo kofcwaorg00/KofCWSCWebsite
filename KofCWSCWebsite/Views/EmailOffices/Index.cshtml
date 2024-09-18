@@ -6,6 +6,23 @@
 
 <h1>Index</h1>
 
+@{
+    var myHost = Context.Request.Host.Value;
+    <span>"Context.Request.Host.Value is "@myHost</span>
+    <br />
+    var myHost1 = Context.Request.Headers["host"];
+    <span>"Context.Request.Headers["host"] is "@myHost1</span>
+    <br />
+    var myHost2 = Context.Request.Headers["Referer"];
+    <span>"Context.Request.Headers["Referer"] is "@myHost2</span>
+    <br />
+    var myHost3 = Context.Request.Headers.Host;
+    <span>"Context.Request.Host is " @myHost3</span>
+    <br />
+    var myHost4 = Context.Request.Headers[":authority:"];
+    <span>"Context.Request.Headers["Authority"] is " @myHost4</span>
+}
+
 <p>
     <a asp-action="Create">Create New</a>
 </p>
@@ -43,41 +60,42 @@
         </tr>
     </thead>
     <tbody>
-@foreach (var item in Model) {
-        <tr>
-            <td>
-                @Html.DisplayFor(modelItem => item.Subject)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.From)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Body)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Fs)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Gk)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Fn)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Fc)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Dd)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.All)
-            </td>
-            <td>
-                <a asp-action="Edit" asp-route-id="@item.Id">Edit</a> |
-                <a asp-action="Details" asp-route-id="@item.Id">Details</a> |
-                <a asp-action="Delete" asp-route-id="@item.Id">Delete</a>
-            </td>
-        </tr>
-}
+        @foreach (var item in Model)
+        {
+            <tr>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Subject)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.From)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Body)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Fs)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Gk)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Fn)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Fc)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Dd)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.All)
+                </td>
+                <td>
+                    <a asp-action="Edit" asp-route-id="@item.Id">Edit</a> |
+                    <a asp-action="Details" asp-route-id="@item.Id">Details</a> |
+                    <a asp-action="Delete" asp-route-id="@item.Id">Delete</a>
+                </td>
+            </tr>
+        }
     </tbody>
 </table>

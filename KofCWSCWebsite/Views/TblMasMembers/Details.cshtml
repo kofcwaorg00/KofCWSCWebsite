@@ -99,5 +99,20 @@
         <a asp-action="Edit" asp-route-id="@Model?.MemberId">Edit</a>
     }
     @*<a asp-action="Index">Back to List</a>*@
-    <a asp-area="" asp-controller="SP" asp-action="@Context.Request.Query["ReturnURL"]">Back</a>
+    @{ string myRetVal = "";
+        string myHost = Context.Request.Host.ToString();
+        string myRefer = Context.Request.Query["ReturnURL"].ToString();
+        // strange ReturnURL has value sometimes and sometimes not
+        if (myRefer.Length == 0 || myRefer.Contains("TblMasMembers"))
+        {
+            <a asp-area="" asp-action="@Context.Request.Query["ReturnURL"]">Back</a>
+        }
+        else
+        {
+            myRetVal = "https://" + myHost + "/" + myRefer;
+            <a href="@myRetVal">Back</a>
+        }
+    }
+    @*<a href="@myRetVal">Back</a>
+        <a asp-area="" asp-action="@Context.Request.Query["ReturnURL"]">Back</a>*@
 </div>
