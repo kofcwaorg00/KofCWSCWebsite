@@ -40,7 +40,7 @@
     <div>
         <a href="/"><img src="~/images/LOGO-WA1.jpg" alt="Banner" height="100" width="250" /></a>
         <div style="float:right;margin-top:35px">
-            <a href="https://www.kofc.org/secure/en/join/join-kofc.html" target="_blank"><img src="~/images/JoinUs.png" /></a>
+            <a href="https://www.kofc.org/join" target="_blank"><img src="~/images/JoinUs.png" /></a>
         </div>
         @{
             // we need to test for ViewData being null allowing with ?
@@ -72,12 +72,6 @@
                                 <li><a class="dropdown-item MyMenuLink" href="/">Homepage</a></li>
                                 <li><a class="dropdown-item MyMenuLink" target="_blank" href="https://kofcwa.sharepoint.com/:b:/s/WebsiteStorage/EZ5syWRgiTROniGvHtlQ8zMBtIGBRndVfIsmlFoS0fhcxw?e=vJFwNP">Next Six Months</a></li>
                                 <li><a class="dropdown-item MyMenuLink" target="_blank" href="https://kofcwa.sharepoint.com/:b:/s/WebsiteStorage/EYOfM90-FzxKtmmzz_U9stoB6rvOv7CnwTJ2wBNXRjtveg?e=gb5J0Y">Current State Bulletin</a></li>
-                                <li><a class="dropdown-item MyMenuLink" target="_blank" href="https://kofcwa.sharepoint.com/:b:/s/WebsiteStorage/EUqp5s8ZEu1FobDh1NgFv_oBnveYzRySadYchEJ_pfZ0dQ?e=ARGYWC">WSC Bylaws</a></li>
-                                <li><hr class="dropdown-divider"></li>
-
-                                @*<li><a class="dropdown-item MyMenuLink" asp-area="" asp-controller="SP" asp-action="GetBulletins" asp-route-id="">Get Bulletin Archive</a></li>*@
-                                <li><a class="dropdown-item MyMenuLink" target="_blank" href="https://kofcwa.sharepoint.com/:f:/s/WebsiteStorage/Eg30ehJZLVtNr986yywbNpYBSTfPVs35B24G6OZxYvgcBw?e=b0exGi">Bulletin Archive</a></li>
-
                                 <li><hr class="dropdown-divider"></li>
                                 <li><a class="dropdown-item MyMenuLink" asp-area="" asp-controller="SP" asp-action="GetCouncils" asp-route-id="">Search for a Council</a></li>
                                 <li><a class="dropdown-item MyMenuLink" asp-area="" asp-controller="SP" asp-action="GetAssys" asp-route-id="">Search for an Assembly</a></li>
@@ -96,14 +90,29 @@
                                 <li><a class="dropdown-item MyMenuLink" asp-area="" asp-controller="SP" asp-action="GetChairmanInfoBlock" asp-route-id="8">Ceremonials</a></li>
                                 <li><a class="dropdown-item MyMenuLink" asp-area="" asp-controller="SP" asp-action="GetDDs" asp-route-id="0">District Deputies</a></li>
                                 <li><a class="dropdown-item MyMenuLink" asp-area="" asp-controller="SP" asp-action="GetFourthDegreeOfficers" asp-route-id="0">Fourth Degree Officers</a></li>
+                                <li><hr class="dropdown-divider"></li>
                                 <li><a class="dropdown-item MyMenuLink" asp-area="" asp-controller="SP" asp-action="GetChairmanInfoBlock" asp-route-id="202">KofC Riders</a></li>
                                 <li><a class="dropdown-item MyMenuLink" asp-area="" asp-controller="TblMasPSOs" asp-action="Index" asp-route-id="0">Past State Officers</a></li>
                                 <li><a class="dropdown-item MyMenuLink" href="https://kofcwa.sharepoint.com/:b:/s/WebsiteStorage/EUPgpg_PGwVEpuG8xXW8MfgB-adpQfb7J3kxnEnw04QK7A?e=rG6Icy" target="_blank">WA State Council History</a></li>
+                                <li><hr class="dropdown-divider"></li>
                                 <li><a class="dropdown-item MyMenuLink" asp-area="" asp-controller="TblMasAwards" asp-action="Index" asp-route-id="0">Grand Knight Resources</a></li>
                                 <li><a class="dropdown-item MyMenuLink" href="https://www.kofc.org/en/for-members/resources/council-leaders/financial-secretary.html" target="_blank">Financial Secretary Resources</a></li>
                                 @*<li><a class="dropdown-item MyMenuLink" asp-page="/SFPages/Chancellor">Chancellor Resources</a></li>*@
+                                <li><hr class="dropdown-divider"></li>
                                 <li><a class="dropdown-item MyMenuLink" href="https://www.kofc.org/en/for-members/resources/index.html" target="_blank">For Councils</a></li>
                                 <li><a class="dropdown-item MyMenuLink" asp-area="" asp-controller="SP" asp-action="GetChairmanInfoBlock" asp-route-id="223">Council Administration & Finance</a></li>
+                            </ul>
+                        </li>
+                        <li class="nav-item dropdown">
+                            <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                                Columbus Charities
+                            </a>
+                            <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
+                                <li><a class="dropdown-item MyMenuLink" asp-area="" asp-controller="SP" asp-action="GetChairmanInfoBlock" asp-route-id="231">Coats for Kids</a></li>
+                                <li><a class="dropdown-item MyMenuLink" asp-area="" asp-controller="SP" asp-action="GetChairmanInfoBlock" asp-route-id="172">Global Wheelchair Mission</a></li>
+                                <li><a class="dropdown-item MyMenuLink" href="https://www.knightscommunityhospitalequipmentloanprogram.com/" target="_blank">KC Help</a></li>
+                                <li><a class="dropdown-item MyMenuLink" href="https://kofcwa.sharepoint.com/:b:/s/WebsiteStorage/EUUAbun4CntMq7cbn0zG9P8BzhKcs43q0YT5gO4Rtlo_Bw?e=XOOC0j" target="_blank">L.A.M.B. 1882</a> </li>
+                                <li><a class="dropdown-item MyMenuLink" href="https://columbuscharities.org/tootsieroll" target="_blank">Tootsie Rolls</a></li>
                             </ul>
                         </li>
                         <li class="nav-item dropdown">
@@ -179,7 +188,6 @@
                                 <li><a class="dropdown-item MyMenuLink" asp-area="" asp-controller="SP" asp-action="GetChairmanInfoBlock" asp-route-id="284">Novena For Life</a></li>
                                 <li><a class="dropdown-item MyMenuLink" asp-area="" asp-controller="SP" asp-action="GetChairmanInfoBlock" asp-route-id="285">ASAP (Aid and Support After Pregnacy)</a></li>
                                 <li><a class="dropdown-item MyMenuLink" href="https://kofcwa.sharepoint.com/:b:/s/WebsiteStorage/EUUAbun4CntMq7cbn0zG9P8BzhKcs43q0YT5gO4Rtlo_Bw?e=XOOC0j" target="_blank">L.A.M.B. 1882</a> </li>
-
                             </ul>
                         </li>
                         <li class="nav-item dropdown">
@@ -209,10 +217,9 @@
                                 Why join
                             </a>
                             <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
-                                <li><a class="dropdown-item" href="https://www.kofc.org/secure/en/join/join-kofc.html">Join</a></li>
+                                <li><a class="dropdown-item" href="https://www.kofc.org/join">Join</a></li>
                                 <li><a class="dropdown-item" href="https://www.kofc.org/en/who-we-are/our-story/index.html">About the Knights</a></li>
                                 <li><a class="dropdown-item" href="https://www.kofc.org/en/what-we-do/charity/index.html">Knights in Action</a></li>
-                                <li><hr class="dropdown-divider"></li>
                             </ul>
                         </li>
 
@@ -236,7 +243,7 @@
                                 <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
                                     @if (User.IsInRole("Admin") || User.IsInRole("StateOfficer") || User.IsInRole("StateChairman"))
                                     {
-                                        <li><a class="dropdown-item MyMenuLink" asp-page="/Utils/EmailGroups">Email Groups</a></li>
+                                        <li><a class="dropdown-item MyMenuLink" asp-page="/Utils/EmailGroups">Send Bulk Emails</a></li>
                                     }
                                     <li><a class="dropdown-item MyMenuLink" asp-area="" asp-controller="SP" asp-action="GetEmailAlias" asp-route-id="">Email Alias</a></li>
                                     <li><a class="dropdown-item MyMenuLink" href="https://kofcwa.sharepoint.com/:b:/s/WebsiteStorage/EanyYjMXQ_lBtMAFIvRvOAkBZINbbPydF_RL5N2uLCFAtQ?e=xMsLJK" target="_blank">KofC WSC State Directory</a></li>
@@ -244,10 +251,15 @@
                                     <li><a class="dropdown-item MyMenuLink" href="https://kofcwa.sharepoint.com/:x:/s/WebsiteStorage/EQA5DjyAzqdAuV5i6NZ5Nd0BfxTsvbAr6INE79wFayiucw?e=nhr7tv" target="_blank">IRS Form 990 Filing Months Council/Assembly</a></li>
                                     <li><a class="dropdown-item MyMenuLink" asp-page="/Forms/Necrology">Necrology Form</a></li>
                                     <li><a class="dropdown-item MyMenuLink" asp-page="/Forms/PrayerRequest">Prayer Request Form</a></li>
+<<<<<<< HEAD
                                     @if (User.IsInRole("Admin") || User.IsInRole("DataAdmin") || User.IsInRole("StateMembership") || User.IsInRole("StateOfficer"))
                                     {
                                         <li><a class="dropdown-item MyMenuLink" asp-area="" asp-controller="TblMasMembers" asp-action="Index" asp-route-id="aaa">Lookup Members</a></li>
                                     }
+=======
+                                    <li><hr class="dropdown-divider"></li>
+                                    <li><a class="dropdown-item MyMenuLink" target="_blank" href="https://kofcwa.sharepoint.com/:b:/s/WebsiteStorage/EUqp5s8ZEu1FobDh1NgFv_oBnveYzRySadYchEJ_pfZ0dQ?e=ARGYWC">WSC Bylaws</a></li>
+>>>>>>> 635f4db (moves the WSC Bylaws into the Members Only menu)
                                 </ul>
                             </li>
                         }
@@ -273,6 +285,19 @@
                                     Manage
                                 </a>
                                 <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
+                                    <li><a class="dropdown-item MyMenuLink" asp-area="" asp-controller="Role" asp-action="Index" asp-route-id="">Roles</a></li>
+                                    <li><a class="dropdown-item MyMenuLink" asp-area="" asp-controller="TblMasAwards" asp-action="Index" asp-route-id="">Awards</a></li>
+                                    <li><a class="dropdown-item MyMenuLink" asp-area="" asp-controller="TblWebSelfPublishes" asp-action="Index" asp-route-id="">Web Page Messages</a></li>
+                                    <li><a class="dropdown-item MyMenuLink" asp-area="" asp-controller="TblValOffices" asp-action="Index" asp-route-id="">Offices</a></li>
+                                    <li><a class="dropdown-item MyMenuLink" asp-area="" asp-controller="TblMasMembers" asp-action="Index" asp-route-id="aaa">Members</a></li>
+                                    <li><a class="dropdown-item MyMenuLink" asp-area="" asp-controller="TblWebTrxAois" asp-action="Index" asp-route-id="">A/OI</a></li>
+                                    <li><a class="dropdown-item MyMenuLink" asp-area="" asp-controller="TblMasPSOs" asp-action="Index" asp-route-id="">Past State Officers</a></li>
+                                    <li><a class="dropdown-item MyMenuLink" asp-area="" asp-controller="TblSysTrxEvents" asp-action="Index" asp-route-id="">Calendar</a></li>
+                                    <li><a class="dropdown-item MyMenuLink" asp-area="" asp-controller="TblValAssys" asp-action="Index" asp-route-id="">Assemblies</a></li>
+                                    <li><a class="dropdown-item MyMenuLink" asp-area="" asp-controller="TblValCouncils" asp-action="Index" asp-route-id="">Councils</a></li>
+                                    <li><a class="dropdown-item MyMenuLink" asp-page="/Utils/EmailGroups">Send Bulk Emails</a></li>
+                                    <li><a class="dropdown-item MyMenuLink" href="https://kofcwa.sharepoint.com/:f:/s/WebsiteStorage/EuAeETokY3JKn8L6TKHzSZ4BX2QmNDpZj4_w4TBZu9lX8g?e=KE8fJf" target="_blank">Upload To Document Storage</a></li>
+                                    <li><a class="dropdown-item MyMenuLink" href="~/UploadFile">AOI Graphic File Upload</a></li>
                                     @if (User.IsInRole("Admin"))
                                     {
                                         <li><a class="dropdown-item MyMenuLink" asp-area="" asp-controller="Role" asp-action="Index" asp-route-id="">Roles</a>                                </li>
@@ -303,7 +328,7 @@
                                     @if (User.IsInRole("Admin") || User.IsInRole("StateChairman"))
                                     {
                                         <li><a class="dropdown-item MyMenuLink" asp-area="" asp-controller="TblWebSelfPublishes" asp-action="Index" asp-route-id="">Web Page Messages</a></li>
-                                        <li><a class="dropdown-item MyMenuLink" asp-page="/Utils/EmailGroups">Email Groups</a></li>
+                                        <li><a class="dropdown-item MyMenuLink" asp-page="/Utils/EmailGroups">Send Bulk Emails</a></li>
                                         <li><a class="dropdown-item MyMenuLink" href="https://kofcwa.sharepoint.com/:f:/s/WebsiteStorage/EuAeETokY3JKn8L6TKHzSZ4BX2QmNDpZj4_w4TBZu9lX8g?e=KE8fJf" target="_blank">Upload To Document Storage</a></li>
                                     }
                                 </ul>
