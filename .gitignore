@@ -365,3 +365,6 @@ FodyWeavers.xsd
 
 # VS Code config files
 .vscode/**
+
+# Mac meta-files
+.DS_Store
