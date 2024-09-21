@@ -6,23 +6,6 @@
 
 <h1>Index</h1>
 
-@{
-    var myHost = Context.Request.Host.Value;
-    <span>"Context.Request.Host.Value is "@myHost</span>
-    <br />
-    var myHost1 = Context.Request.Headers["host"];
-    <span>"Context.Request.Headers["host"] is "@myHost1</span>
-    <br />
-    var myHost2 = Context.Request.Headers["Referer"];
-    <span>"Context.Request.Headers["Referer"] is "@myHost2</span>
-    <br />
-    var myHost3 = Context.Request.Headers.Host;
-    <span>"Context.Request.Host is " @myHost3</span>
-    <br />
-    var myHost4 = Context.Request.Headers[":authority:"];
-    <span>"Context.Request.Headers["Authority"] is " @myHost4</span>
-}
-
 <p>
     <a asp-action="Create">Create New</a>
 </p>

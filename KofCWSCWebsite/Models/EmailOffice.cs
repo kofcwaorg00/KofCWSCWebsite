@@ -13,15 +13,15 @@ public partial class EmailOffice
 
     public string Body { get; set; } = null!;
 
-    public bool? Fs { get; set; }
+    public bool Fs { get; set; }
 
-    public bool? Gk { get; set; }
+    public bool Gk { get; set; }
 
-    public bool? Fn { get; set; }
+    public bool Fn { get; set; }
 
-    public bool? Fc { get; set; }
+    public bool Fc { get; set; }
 
-    public bool? Dd { get; set; }
+    public bool Dd { get; set; }
 
-    public bool? All { get; set; }
+    public bool All { get; set; }
 }

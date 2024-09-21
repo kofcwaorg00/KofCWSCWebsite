@@ -63,8 +63,9 @@ public partial class ApplicationDbContext : DbContext
     public DbSet<KofCWSCWebsite.Models.SPGetSOSView> SPGetSOSViews { get; set; } = default!;
     public DbSet<KofCWSCWebsite.Models.SPGetCouncilsView> SPGetCouncilsView { get; set; } = default!;
     public DbSet<KofCWSCWebsite.Models.SPGetAssysView> SPGetAssysView { get; set; } = default!;
-
     public virtual DbSet<EmailOffice> TblWebTrxEmailOffices { get; set; }
+
+    public virtual DbSet<TblWebFileStorage> TblWebFileStorages { get; set; }
     protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
     {
         if (!optionsBuilder.IsConfigured)
@@ -383,6 +384,15 @@ public partial class ApplicationDbContext : DbContext
             entity.Property(e => e.Gk).HasColumnName("GK");
             entity.Property(e => e.Subject).HasMaxLength(50);
         });
+
+        modelBuilder.Entity<TblWebFileStorage>(entity =>
+        {
+            entity.ToTable("tblWEB_FileStorage");
+
+            entity.Property(e => e.ContentType).HasMaxLength(50);
+            entity.Property(e => e.FileName).HasMaxLength(50);
+        });
+
         OnModelCreatingPartial(modelBuilder);
     }
 

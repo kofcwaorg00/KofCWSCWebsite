@@ -8,6 +8,8 @@ using Microsoft.EntityFrameworkCore;
 using KofCWSCWebsite.Data;
 using KofCWSCWebsite.Models;
 using Serilog;
+using static com.sun.net.httpserver.Authenticator;
+using Microsoft.AspNetCore.Authorization;
 namespace KofCWSCWebsite.Controllers
 {
     public class EmailOfficesController : Controller
@@ -22,12 +24,14 @@ namespace KofCWSCWebsite.Controllers
         }
 
         // GET: EmailOffices
+        [Authorize(Roles = "Admin")]
         public async Task<IActionResult> Index()
         {
             return View(await _context.TblWebTrxEmailOffices.ToListAsync());
         }
 
         // GET: EmailOffices/Details/5
+        [Authorize(Roles = "Admin")]
         public async Task<IActionResult> Details(int? id)
         {
             if (id == null)
@@ -46,6 +50,7 @@ namespace KofCWSCWebsite.Controllers
         }
 
         // GET: EmailOffices/Create
+        [Authorize(Roles = "Admin,StateOfficer,StateChairman")]
         public IActionResult Create()
         {
             return View();
@@ -54,33 +59,88 @@ namespace KofCWSCWebsite.Controllers
         // POST: EmailOffices/Create
         // To protect from overposting attacks, enable the specific properties you want to bind to.
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
+        [Authorize(Roles = "Admin,StateOfficer,StateChairman")]
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Create([Bind("Id,Subject,From,Body,Fs,Gk,Fn,Fc,Dd,All")] EmailOffice emailOffice)
         {
             try
             {
-                //Testing
-                if (Services.Utils.SendEmailAuthenticatedMG("testing@mg.kofc-wa.org", emailOffice.From, "", "", emailOffice.Subject, emailOffice.Body, null, _configuration))
+                if (!(emailOffice.Fs || emailOffice.Fn || emailOffice.Gk || emailOffice.Fc || emailOffice.All || emailOffice.Dd))
                 {
-                    ModelState.AddModelError(string.Empty, "Your email has been sent to the selected groups!");
+                    //*******************************************************************************
+                    // 09/20/2024 Tim Philomeno
+                    // this should never happen because we have jquery to make sure at least one
+                    // checkbox is checked.
+                    ModelState.AddModelError(string.Empty, "You must select at least one group");
+                    return RedirectToAction("Create", "EmailOffices");
+                    //--------------------------------------------------------------------------------
+                }
+                //*******************************************************************************
+                // 09/20/2024 Tim Philomeno
+                // Let's log the email message and then send it.  That way we have a record
+                // of what was sent.
+                if (ModelState.IsValid)
+                {
+                    Log.Information("Sending Email");
+                    _context.Add(emailOffice);
+                    await _context.SaveChangesAsync();
+               }
+                //--------------------------------------------------------------------------------
+                //Testing
+                //////////if (Services.Utils.SendEmailAuthenticatedMG("testing@mg.kofc-wa.org", emailOffice.From, "", "", emailOffice.Subject, emailOffice.Body, null, _configuration))
+                //////////{
+                //////////    ModelState.AddModelError(string.Empty, "Your email has been sent to the selected groups!");
+                //////////    return RedirectToPage("/Utils/EmailGroupsConfirm");
+                //////////}
+                //////////else
+                //////////{
+                //////////    ModelState.AddModelError(string.Empty, "Email failed.");
+                //////////    return RedirectToPage("/error");
+                //////////}
+                //*******************************************************************************
+                // 09/20/2024 Tim Philomeno
+                // ok let's do the deed
+                bool mysuccess = false;
+                if (emailOffice.Fs)
+                {
+                    mysuccess = Services.Utils.SendEmailAuthenticatedMG("AllFSs@mg.kofc-wa.org",emailOffice.From, "", "", emailOffice.Subject, emailOffice.Body, null, _configuration);
+                    //mysuccess = Services.Utils.SendEmailAuthenticatedMG("testing@mg.kofc-wa.org",emailOffice.From, "", "", emailOffice.Subject,"FROM FS" , null, _configuration);
+                }
+                if (emailOffice.Gk)
+                {
+                    mysuccess = Services.Utils.SendEmailAuthenticatedMG("AllGKs@mg.kofc-wa.org", emailOffice.From, "", "", emailOffice.Subject, emailOffice.Body, null, _configuration);
+                    //mysuccess = Services.Utils.SendEmailAuthenticatedMG("testing@mg.kofc-wa.org", emailOffice.From, "", "", emailOffice.Subject, "FROM GK", null, _configuration);
+                }
+                if (emailOffice.Fn)
+                {
+                    mysuccess = Services.Utils.SendEmailAuthenticatedMG("AllFNs@mg.kofc-wa.org", emailOffice.From, "", "", emailOffice.Subject, emailOffice.Body, null, _configuration);
+                    //mysuccess = Services.Utils.SendEmailAuthenticatedMG("testing@mg.kofc-wa.org", emailOffice.From, "", "", emailOffice.Subject, "FROM FN", null, _configuration);
+                }
+                if (emailOffice.Fc)
+                {
+                    mysuccess = Services.Utils.SendEmailAuthenticatedMG("AllFCs@mg.kofc-wa.org", emailOffice.From, "", "", emailOffice.Subject, emailOffice.Body, null, _configuration);
+                    //mysuccess = Services.Utils.SendEmailAuthenticatedMG("testing@mg.kofc-wa.org", emailOffice.From, "", "", emailOffice.Subject, "FROM FC", null, _configuration);
+                }
+                if (emailOffice.All)
+                {
+                    mysuccess = Services.Utils.SendEmailAuthenticatedMG("AllMembers@mg.kofc-wa.org", emailOffice.From, "", "", emailOffice.Subject, emailOffice.Body, null, _configuration);
+                    //mysuccess = Services.Utils.SendEmailAuthenticatedMG("testing@mg.kofc-wa.org", emailOffice.From, "", "", emailOffice.Subject, "FROM ALL", null, _configuration);
+                }
+                if (emailOffice.Dd)
+                {
+                    mysuccess = Services.Utils.SendEmailAuthenticatedDASP("AllDDs@kofc-wa.org", emailOffice.From, "", "", emailOffice.Subject, emailOffice.Body, null, _configuration);
+                    //mysuccess = Services.Utils.SendEmailAuthenticatedDASP("webmaster@kofc-wa.org", emailOffice.From, "", "", emailOffice.Subject, "FROM DD", null, _configuration);
+                }
+                if (mysuccess)
+                {
                     return RedirectToPage("/Utils/EmailGroupsConfirm");
                 }
                 else
                 {
                     ModelState.AddModelError(string.Empty, "Email failed.");
-                    return RedirectToPage("/error");
+                    return View();
                 }
-
-
-                //if (ModelState.IsValid)
-                //{
-                //    Log.Information("Sending Email");
-                //    //_context.Add(emailOffice);
-                //    //await _context.SaveChangesAsync();
-                //    //return RedirectToAction(nameof(Index));
-                //}
-                //return RedirectToPage("/Utils/EmailGroupsConfirm");
             }
             catch (Exception ex)
             {
@@ -91,6 +151,7 @@ namespace KofCWSCWebsite.Controllers
         }
 
         // GET: EmailOffices/Edit/5
+        [Authorize(Roles = "Admin")]
         public async Task<IActionResult> Edit(int? id)
         {
             if (id == null)
@@ -109,6 +170,7 @@ namespace KofCWSCWebsite.Controllers
         // POST: EmailOffices/Edit/5
         // To protect from overposting attacks, enable the specific properties you want to bind to.
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
+        [Authorize(Roles = "Admin")]
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Edit(int id, [Bind("Id,Subject,From,Body,Fs,Gk,Fn,Fc,Dd,All")] EmailOffice emailOffice)
@@ -142,6 +204,7 @@ namespace KofCWSCWebsite.Controllers
         }
 
         // GET: EmailOffices/Delete/5
+        [Authorize(Roles = "Admin")]
         public async Task<IActionResult> Delete(int? id)
         {
             if (id == null)
@@ -160,6 +223,7 @@ namespace KofCWSCWebsite.Controllers
         }
 
         // POST: EmailOffices/Delete/5
+        [Authorize(Roles = "Admin")]
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> DeleteConfirmed(int id)

@@ -230,6 +230,7 @@
                             </a>
 
                             <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
+                                <li><a class="dropdown-item MyMenuLink" asp-area="" asp-controller="tblWebFileStorages" asp-action="Upload" asp-route-id="">Save a PDF</a></li>
                                 <a class="nav-link text-dark" asp-page="/ContactUs">Contact Us</a>
                                 @*<a class="nav-link text-dark" asp-page="/Calendar">Calendar</a>*@
                             </ul>
@@ -244,7 +245,7 @@
                                 <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
                                     @if (User.IsInRole("Admin") || User.IsInRole("StateOfficer") || User.IsInRole("StateChairman"))
                                     {
-                                        <li><a class="dropdown-item MyMenuLink" asp-page="/Utils/EmailGroups">Send Bulk Emails</a></li>
+                                        <li><a class="dropdown-item MyMenuLink" asp-area="" asp-controller="EmailOffices" asp-action="Create" asp-route-id="">Send Bulk Email</a></li>
                                     }
                                     <li><a class="dropdown-item MyMenuLink" asp-area="" asp-controller="SP" asp-action="GetEmailAlias" asp-route-id="">Email Alias</a></li>
                                     <li><a class="dropdown-item MyMenuLink" href="https://kofcwa.sharepoint.com/:b:/s/WebsiteStorage/EanyYjMXQ_lBtMAFIvRvOAkBZINbbPydF_RL5N2uLCFAtQ?e=xMsLJK" target="_blank">KofC WSC State Directory</a></li>
@@ -269,6 +270,7 @@
                                     Print
                                 </a>
                                 <ul class="dropdown-menu" aria-labelledby="navbarDropdown1">
+                                    
                                     <li><a class="dropdown-item MyMenuLink" asp-area="" asp-controller="Reports" asp-action="GetLabelByOffice" asp-route-id="27">Print GK Labels</a></li>
                                     <li><a class="dropdown-item MyMenuLink" asp-area="" asp-controller="Reports" asp-action="GetLabelByOffice" asp-route-id="22">Print FS Labels</a></li>
                                     <li><a class="dropdown-item MyMenuLink" asp-area="" asp-controller="Reports" asp-action="GetLabelByOffice" asp-route-id="20">Print FN Labels</a></li>
@@ -326,7 +328,7 @@
                                     @if (User.IsInRole("Admin") || User.IsInRole("StateChairman"))
                                     {
                                         <li><a class="dropdown-item MyMenuLink" asp-area="" asp-controller="TblWebSelfPublishes" asp-action="Index" asp-route-id="">Web Page Messages</a></li>
-                                        <li><a class="dropdown-item MyMenuLink" asp-page="/Utils/EmailGroups">Send Bulk Emails</a></li>
+                                        <li><a class="dropdown-item MyMenuLink" asp-area="" asp-controller="EmailOffices" asp-action="Create" asp-route-id="">Send Bulk Email</a></li>
                                         <li><a class="dropdown-item MyMenuLink" href="https://kofcwa.sharepoint.com/:f:/s/WebsiteStorage/EuAeETokY3JKn8L6TKHzSZ4BX2QmNDpZj4_w4TBZu9lX8g?e=KE8fJf" target="_blank">Upload To Document Storage</a></li>
                                     }
                                 </ul>
