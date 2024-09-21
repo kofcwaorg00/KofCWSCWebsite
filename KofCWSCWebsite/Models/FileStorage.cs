@@ -1,9 +1,12 @@
-﻿using System;
+﻿using Microsoft.AspNetCore.Mvc.ModelBinding.Validation;
+using System;
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations.Schema;
 
 namespace KofCWSCWebsite.Models;
 
-public partial class TblWebFileStorage
+
+public partial class FileStorage
 {
     public int Id { get; set; }
 

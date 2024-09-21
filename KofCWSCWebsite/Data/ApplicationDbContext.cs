@@ -65,7 +65,8 @@ public partial class ApplicationDbContext : DbContext
     public DbSet<KofCWSCWebsite.Models.SPGetAssysView> SPGetAssysView { get; set; } = default!;
     public virtual DbSet<EmailOffice> TblWebTrxEmailOffices { get; set; }
 
-    public virtual DbSet<TblWebFileStorage> TblWebFileStorages { get; set; }
+    public virtual DbSet<FileStorage> FileStorages { get; set; }
+    public virtual DbSet<FileStorageVM> FileStoragesVM { get; set; }
     protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
     {
         if (!optionsBuilder.IsConfigured)
@@ -385,13 +386,20 @@ public partial class ApplicationDbContext : DbContext
             entity.Property(e => e.Subject).HasMaxLength(50);
         });
 
-        modelBuilder.Entity<TblWebFileStorage>(entity =>
-        {
-            entity.ToTable("tblWEB_FileStorage");
+        modelBuilder.Entity<FileStorage>(
+            dob =>
+            {
+                dob.ToTable("tblWEB_FileStorage");
+            });
 
-            entity.Property(e => e.ContentType).HasMaxLength(50);
-            entity.Property(e => e.FileName).HasMaxLength(50);
-        });
+        //modelBuilder.Entity<FileStorageVM>(
+        //    ob =>
+        //    {
+        //        ob.ToTable("tblWEB_FileStorage");
+        //        ob.HasOne(o => o.FileStorage).WithOne()
+        //            .HasForeignKey<FileStorage>(o => o.Id);
+        //        ob.Navigation(o => o.FileStorage).IsRequired();
+        //    });
 
         OnModelCreatingPartial(modelBuilder);
     }

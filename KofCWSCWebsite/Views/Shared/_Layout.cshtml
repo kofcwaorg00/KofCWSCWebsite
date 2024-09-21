@@ -270,7 +270,7 @@
                                     Print
                                 </a>
                                 <ul class="dropdown-menu" aria-labelledby="navbarDropdown1">
-                                    
+
                                     <li><a class="dropdown-item MyMenuLink" asp-area="" asp-controller="Reports" asp-action="GetLabelByOffice" asp-route-id="27">Print GK Labels</a></li>
                                     <li><a class="dropdown-item MyMenuLink" asp-area="" asp-controller="Reports" asp-action="GetLabelByOffice" asp-route-id="22">Print FS Labels</a></li>
                                     <li><a class="dropdown-item MyMenuLink" asp-area="" asp-controller="Reports" asp-action="GetLabelByOffice" asp-route-id="20">Print FN Labels</a></li>
@@ -286,22 +286,23 @@
                                 </a>
                                 <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
                                     @*<li><a class="dropdown-item MyMenuLink" asp-area="" asp-controller="Role" asp-action="Index" asp-route-id="">Roles</a></li>
-                                    <li><a class="dropdown-item MyMenuLink" asp-area="" asp-controller="TblMasAwards" asp-action="Index" asp-route-id="">Awards</a></li>
-                                    <li><a class="dropdown-item MyMenuLink" asp-area="" asp-controller="TblWebSelfPublishes" asp-action="Index" asp-route-id="">Web Page Messages</a></li>
-                                    <li><a class="dropdown-item MyMenuLink" asp-area="" asp-controller="TblValOffices" asp-action="Index" asp-route-id="">Offices</a></li>
-                                    <li><a class="dropdown-item MyMenuLink" asp-area="" asp-controller="TblMasMembers" asp-action="Index" asp-route-id="aaa">Members</a></li>
-                                    <li><a class="dropdown-item MyMenuLink" asp-area="" asp-controller="TblWebTrxAois" asp-action="Index" asp-route-id="">A/OI</a></li>
-                                    <li><a class="dropdown-item MyMenuLink" asp-area="" asp-controller="TblMasPSOs" asp-action="Index" asp-route-id="">Past State Officers</a></li>
-                                    <li><a class="dropdown-item MyMenuLink" asp-area="" asp-controller="TblSysTrxEvents" asp-action="Index" asp-route-id="">Calendar</a></li>
-                                    <li><a class="dropdown-item MyMenuLink" asp-area="" asp-controller="TblValAssys" asp-action="Index" asp-route-id="">Assemblies</a></li>
-                                    <li><a class="dropdown-item MyMenuLink" asp-area="" asp-controller="TblValCouncils" asp-action="Index" asp-route-id="">Councils</a></li>
-                                    <li><a class="dropdown-item MyMenuLink" asp-page="/Utils/EmailGroups">Send Bulk Emails</a></li>
-                                    <li><a class="dropdown-item MyMenuLink" href="https://kofcwa.sharepoint.com/:f:/s/WebsiteStorage/EuAeETokY3JKn8L6TKHzSZ4BX2QmNDpZj4_w4TBZu9lX8g?e=KE8fJf" target="_blank">Upload To Document Storage</a></li>
-                                    <li><a class="dropdown-item MyMenuLink" href="~/UploadFile">AOI Graphic File Upload</a></li>*@
+                                        <li><a class="dropdown-item MyMenuLink" asp-area="" asp-controller="TblMasAwards" asp-action="Index" asp-route-id="">Awards</a></li>
+                                        <li><a class="dropdown-item MyMenuLink" asp-area="" asp-controller="TblWebSelfPublishes" asp-action="Index" asp-route-id="">Web Page Messages</a></li>
+                                        <li><a class="dropdown-item MyMenuLink" asp-area="" asp-controller="TblValOffices" asp-action="Index" asp-route-id="">Offices</a></li>
+                                        <li><a class="dropdown-item MyMenuLink" asp-area="" asp-controller="TblMasMembers" asp-action="Index" asp-route-id="aaa">Members</a></li>
+                                        <li><a class="dropdown-item MyMenuLink" asp-area="" asp-controller="TblWebTrxAois" asp-action="Index" asp-route-id="">A/OI</a></li>
+                                        <li><a class="dropdown-item MyMenuLink" asp-area="" asp-controller="TblMasPSOs" asp-action="Index" asp-route-id="">Past State Officers</a></li>
+                                        <li><a class="dropdown-item MyMenuLink" asp-area="" asp-controller="TblSysTrxEvents" asp-action="Index" asp-route-id="">Calendar</a></li>
+                                        <li><a class="dropdown-item MyMenuLink" asp-area="" asp-controller="TblValAssys" asp-action="Index" asp-route-id="">Assemblies</a></li>
+                                        <li><a class="dropdown-item MyMenuLink" asp-area="" asp-controller="TblValCouncils" asp-action="Index" asp-route-id="">Councils</a></li>
+                                        <li><a class="dropdown-item MyMenuLink" asp-page="/Utils/EmailGroups">Send Bulk Emails</a></li>
+                                        <li><a class="dropdown-item MyMenuLink" href="https://kofcwa.sharepoint.com/:f:/s/WebsiteStorage/EuAeETokY3JKn8L6TKHzSZ4BX2QmNDpZj4_w4TBZu9lX8g?e=KE8fJf" target="_blank">Upload To Document Storage</a></li>
+                                        <li><a class="dropdown-item MyMenuLink" href="~/UploadFile">AOI Graphic File Upload</a></li>*@
                                     @if (User.IsInRole("Admin"))
                                     {
                                         <li><a class="dropdown-item MyMenuLink" asp-area="" asp-controller="Role" asp-action="Index" asp-route-id="">Roles</a>                                </li>
                                         <li><a class="dropdown-item MyMenuLink" asp-area="" asp-controller="TblValOffices" asp-action="Index" asp-route-id="">Offices</a></li>
+                                        <li><a class="dropdown-item MyMenuLink" asp-area="" asp-controller="FileStorage" asp-action="Index" asp-route-id="">Upload a Document</a></li>
                                         <li><a class="dropdown-item MyMenuLink" href="#">Registered Users(future)</a></li>
                                         <li><hr class="dropdown-divider"></li>
                                     }
