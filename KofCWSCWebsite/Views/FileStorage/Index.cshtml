@@ -5,7 +5,9 @@
 }
 
 <h1>Document Storage</h1>
-
+<p>
+    <input type="text" id="myInput" onkeyup="myFunction()" placeholder="Type in a File Name to filter results" title="Type in a name" style="width:25%">
+</p>
 <p>
     <form asp-controller="FileStorage" asp-action="Create" method="get">
         <button type="submit" class="btn btn-sm btn-success">
@@ -13,7 +15,7 @@
         </button>
     </form>
 </p>
-<table class="table">
+<table class="table" id="myTable">
     <thead>
         <tr>
             <th>
@@ -72,3 +74,23 @@
 }
     </tbody>
 </table>
+<script>
+    function myFunction() {
+        var input, filter, table, tr, td, i, txtValue;
+        input = document.getElementById("myInput");
+        filter = input.value.toUpperCase();
+        table = document.getElementById("myTable");
+        tr = table.getElementsByTagName("tr");
+        for (i = 0; i < tr.length; i++) {
+            td = tr[i].getElementsByTagName("td")[1];
+            if (td) {
+                txtValue = td.textContent || td.innerText;
+                if (txtValue.toUpperCase().indexOf(filter) > -1) {
+                    tr[i].style.display = "";
+                } else {
+                    tr[i].style.display = "none";
+                }
+            }
+        }
+    }
+</script>

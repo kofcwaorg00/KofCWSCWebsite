@@ -10,6 +10,7 @@ using KofCWSCWebsite.Models;
 using com.sun.tools.javac.util;
 using com.sun.tools.@internal.ws.processor.model;
 using Microsoft.AspNetCore.Authorization;
+using NuGet.Protocol;
 
 namespace KofCWSCWebsite.Controllers
 {
@@ -22,7 +23,7 @@ namespace KofCWSCWebsite.Controllers
             _context = context;
         }
 
-        [Authorize(Roles ="Admin")]
+        [Authorize(Roles = "Admin")]
         [HttpPost]
         public async Task<IActionResult> Upload(IFormFile file)
         {
@@ -38,14 +39,21 @@ namespace KofCWSCWebsite.Controllers
                         Length = file.Length,
                         ContentType = file.ContentType
                     };
-                        _context.FileStorages.Add(fileModel);
+                    _context.FileStorages.Add(fileModel);
                     await _context.SaveChangesAsync();
                 }
             }
             return RedirectToAction("Index");
         }
 
+        public async Task<IActionResult> GetFiles()
+        {
+            var result = _context.Database
+                .SqlQuery<FileStorageVM>($"uspWEB_GetFileStorageVM")
+                .ToList();
 
+            return View("ShowPDF",result);
+        }
 
 
 
@@ -59,11 +67,11 @@ namespace KofCWSCWebsite.Controllers
             //  .SqlQuery<FileStorageVM>($"SELECT Id,Length,ContentType,FileName FROM tblWEB_FileStorage")
             //.ToList();
             //return  _context.Set<FileStorageVM>($"SELECT Id,Length,ContentType,FileName FROM tblWEB_FileStorage").ToList();
-                var result = _context.Database
-                    .SqlQuery<FileStorageVM>($"uspWEB_GetFileStorageVM")
-                    .ToList();
+            var result = _context.Database
+                .SqlQuery<FileStorageVM>($"uspWEB_GetFileStorageVM")
+                .ToList();
 
-                return View(result);
+            return View(result);
         }
 
         // GET: TblWebFileStorages/Details/5
@@ -86,10 +94,32 @@ namespace KofCWSCWebsite.Controllers
         }
 
         //// GET: TblWebFileStorages/Create
-        [Authorize(Roles ="Admin")]
+        [Authorize(Roles = "Admin")]
         public IActionResult Create()
         {
             return View();
+        }
+
+        // GET: TblWebFileStorages/Details/5
+        //[Authorize(Roles = "Admin")]
+        [HttpPost]
+        public JsonResult GetPDF(int? id)
+        {
+            if (id == null)
+            {
+                return Json(NotFound());
+            }
+            var tblWebFileStorage = _context.Database.SqlQuery<FileStorage>($"SELECT * FROM tblWEB_FileStorage where Id={id}").ToList();
+            var tfs = tblWebFileStorage.FirstOrDefault();
+            //var tblWebFileStorage = await _context.FileStorages
+            //    .FirstOrDefaultAsync(m => m.Id == id);
+            byte[] bytes = tfs.Data;
+            if (tblWebFileStorage == null)
+            {
+                return Json(NotFound());
+            }
+
+            return Json(new { FileName = tfs.FileName, ContentType = tfs.ContentType, Data = tfs.Data });
         }
 
         //// POST: TblWebFileStorages/Create
@@ -135,7 +165,7 @@ namespace KofCWSCWebsite.Controllers
         //    {
         //        return NotFound();
         //    }
-            
+
         //    if (ModelState.IsValid)
         //    {
         //        try

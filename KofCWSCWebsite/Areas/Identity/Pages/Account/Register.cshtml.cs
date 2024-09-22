@@ -132,6 +132,16 @@ namespace KofCWSCWebsite.Areas.Identity.Pages.Account
 
         public async Task<IActionResult> OnPostAsync(string returnUrl = null)
         {
+            //****************************************************************************************
+            // 09/21/2024 Tim Philomeno
+            // Need to add AOL email address validation here
+            if (Input.Email.ToLower().Contains("aol.com"))
+            {
+                string myer = "We are not able to support AOL email addresses. Please consider registering for a free email address at gmail, yahoo, or Microsoft Outlook (online)";
+                ModelState.AddModelError(string.Empty, myer);
+                return Page();
+            }
+            //----------------------------------------------------------------------------------------
             returnUrl ??= Url.Content("~/");
             ExternalLogins = (await _signInManager.GetExternalAuthenticationSchemesAsync()).ToList();
             if (ModelState.IsValid)
