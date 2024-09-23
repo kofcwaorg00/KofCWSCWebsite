@@ -274,14 +274,32 @@ namespace KofCWSCWebsite.Controllers
                         Log.Information("Delete Office Success " + id);
                         string json = await result.Content.ReadAsStringAsync();
                         office = JsonConvert.DeserializeObject<TblValOffice>(json);
+                        return RedirectToAction(nameof(Index));
                     }
                     else
                     {
-                        Log.Information("Delete Office Failed " + id);
-                        ModelState.AddModelError(string.Empty, "Server Error.  Please contact administrator.");
-                        office = null;
+                        //**************************************************************************
+                        // 09/26/2024 Tim Philomeno
+                        // not sure if this is the way to handle errors but I know in the API if we
+                        // have an FK error, I am expliciting setting the return code to a 450 so
+                        // we can give feedback to the user
+                        //**************************************************************************
+                        if (result.StatusCode.ToString() == "450")
+                        {
+                            Log.Information("Delete Failed because of FK Constraint " + id);
+                            ViewData["DelError"] = "***Delete failed bacause this office is in use by another Member";
+                            ModelState.AddModelError(string.Empty, "Server Error.  Please contact administrator.");
+                            return View();
+                        }
+                        else
+                        {
+                            Log.Information("Delete failed, reason is unknown " + id);
+                            ModelState.AddModelError(string.Empty, "Server Error.  Please contact administrator.");
+                            return View();
+                        }
+
                     }
-                    return RedirectToAction(nameof(Index));
+                    
                 }
             }
             catch (Exception ex)
