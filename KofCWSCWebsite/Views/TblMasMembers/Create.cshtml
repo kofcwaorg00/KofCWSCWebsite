@@ -13,6 +13,11 @@
         <form asp-action="Create">
             <div asp-validation-summary="ModelOnly" class="text-danger"></div>
             <div class="form-group">
+                <label asp-for="Prefix" class="control-label"></label>
+                <input asp-for="Prefix" class="form-control" maxlength="7" />
+                <span asp-validation-for="Prefix" class="text-danger"></span>
+            </div>
+            <div class="form-group">
                 <label asp-for="KofCid" class="control-label"></label>
                 <input asp-for="KofCid" class="form-control" maxlength="7" />
                 <span asp-validation-for="KofCid" class="text-danger"></span>
@@ -31,6 +36,11 @@
                 <label asp-for="LastName" class="control-label"></label>
                 <input asp-for="LastName" class="form-control" />
                 <span asp-validation-for="LastName" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="Suffix" class="control-label"></label>
+                <input asp-for="Suffix" class="form-control" />
+                <span asp-validation-for="Suffix" class="text-danger"></span>
             </div>
             <div class="form-group">
                 <label asp-for="Address" class="control-label"></label>

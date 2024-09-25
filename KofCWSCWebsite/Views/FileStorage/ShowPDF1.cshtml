@@ -2,58 +2,30 @@
 @model IEnumerable<KofCWSCWebsite.Models.FileStorageVM>
 
 @{
-//Layout = null;
+    //Layout = null;
 }
 
 <!DOCTYPE html>
 
 <html>
 <head>
+
     <meta name="viewport" content="width=device-width" />
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/2.4.456/pdf.min.js"></script>
     <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
     <link href="https://fonts.googleapis.com/icon?family=Material+Icons+Outlined" rel="stylesheet">
-    <script src="~/lib/jquery/dist/jquery.min.js"></script>
-    <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/2.6.347/pdf.min.js"></script>
-    <link href="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/2.6.347/pdf_viewer.min.css" rel="stylesheet" type="text/css" />
     <!-- Core -->
     <script src="/js/pdfjs-viewer.js"></script>
     <link rel="stylesheet" href="/css/pdfjs-viewer.css">
-    @*<link rel="stylesheet" href="/css/viewer.css">*@
     <!-- Optional Toolbar Stylesheet -->
     <link rel="stylesheet" href="/css/pdftoolbar.css">
 
-    <title>Index</title>
-    <style type="text/css">
-        body {
-            font-family: Arial;
-            font-size: 10pt;
-        }
-
-        table {
-            border: 1px solid #ccc;
-            border-collapse: collapse;
-        }
-
-            table th {
-                background-color: #F7F7F7;
-                color: #333;
-                font-weight: bold;
-            }
-
-            table th, table td {
-                padding: 5px;
-                border: 1px solid #ccc;
-            }
-
-        #pdf_container {
-            background: #ccc;
-            text-align: center;
-            display: none;
-            padding: 5px;
-            height: 820px;
-            overflow: auto;
-        }
-    </style>
+    <!-- Core -->
+    <script src="/js/pdfjs-viewer.js"></script>
+    <link rel="stylesheet" href="/css/pdfjs-viewer.css">
+    <!-- Optional Toolbar Stylesheet -->
+    <link rel="stylesheet" href="/css/pdftoolbar.css">
 </head>
 <body>
     <script>
@@ -61,25 +33,16 @@
         var pdfjsLib = window['pdfjs-dist/build/pdf'];
 
         // The workerSrc property shall be specified.
-        pdfjsLib.GlobalWorkerOptions.workerSrc = 'https://cdnjs.cloudflare.com/ajax/libs/pdf.js/2.6.347/pdf.worker.min.js';
-
-        //var pdfViewer = new PDFjsViewer($('.pdfjs-viewer'));
-        //// load a PDF file
-        //pdfViewer.loadDocument('test.pdf');
-
-        //let pdfViewer = document.getElementById("viewer");
-
+        pdfjsLib.GlobalWorkerOptions.workerSrc = 'https://cdnjs.cloudflare.com/ajax/libs/pdf.js/2.11.338/pdf.worker.min.js';
     </script>
-    
     <div class="pdfviewer">
         <div class="pdfjs-toolbar">
-            <button class="pushed" onclick="togglethumbs(this);" ><i class="material-icons-outlined">view_sidebar</i></button>
+            <button class="pushed" onclick="togglethumbs(this);"><i class="material-icons-outlined">view_sidebar</i></button>
             <div class="v-sep"></div>
-            <button onclick="pdfViewer.prev();" style="display:none"><i class="material-icons-outlined">arrow_upward</i></button>
+            <button onclick="pdfViewer.prev();"><i class="material-icons-outlined">arrow_upward</i></button>
             <div class="v-sep"></div>
-            <button onclick="pdfViewer.next();" style="display:none"><i class="material-icons-outlined">arrow_downward</i></button>
-            <div>Page</div>
-            <input id="pageno" type="number" class="pageno form-control form-control-sm d-inline w-auto" value="1" min="1" max="1000" onchange="pdfViewer.scrollToPage(parseInt(this.value))">
+            <button onclick="pdfViewer.next();"><i class="material-icons-outlined">arrow_downward</i></button>
+            <input id="pageno" class="pageno" type="number" class="form-control form-control-sm d-inline w-auto" value="1" min="1" max="1000" onchange="pdfViewer.scrollToPage(parseInt(this.value))">
             <span id="pagecount" class="pageno"></span>
             <div class="divider"></div>
             <button onclick="pdfViewer.setZoom('in')"><i class="material-icons-outlined">add</i></button>
@@ -106,12 +69,12 @@
                     <a href="#" onclick='pdfViewer.setZoom(4); return false;'>400%</a>
                 </div>
             </div>
-            <button id="hideselected" onclick="hideselected();" style="display:none"><i class="material-icons-outlined">block</i></button>
+            <button id="hideselected" onclick="hideselected();"><i class="material-icons-outlined">block</i></button>
             <div class="divider"></div>
-            <label class="button" for="opendoc" style="display:none"><i class="material-icons-outlined">file_open</i></label>
-            <input id="opendoc" type="file" accept="application/pdf" style="display:none" >
-            <a id="filedownload" class="button" style="display:none"><i class="material-icons-outlined">file_download</i></a>
-            <div class="dropdown dropdown-right" style="display:none">
+            <label class="button" for="opendoc"><i class="material-icons-outlined">file_open</i></label>
+            <input id="opendoc" type="file" accept="application/pdf">
+            <a id="filedownload" class="button"><i class="material-icons-outlined">file_download</i></a>
+            <div class="dropdown dropdown-right">
                 <div onclick="this.parentNode.classList.toggle('show');">
                     <button><i class="material-icons-outlined">keyboard_double_arrow_right</i></button>
                 </div>
@@ -128,7 +91,7 @@
             </div>
         </div>
         <div class="pdfviewer-container">
-            <div id="thumbnails" class="thumbnails pdfjs-viewer" style="width:10%; float:left;" >
+            <div class="thumbnails pdfjs-viewer">
             </div>
             <div class="maindoc pdfjs-viewer">
                 <div class="pdfpage placeholder">
@@ -137,7 +100,6 @@
             </div>
         </div>
     </div>
-    
     <script>
         const queryString = window.location.search;
         const urlParams = new URLSearchParams(queryString);
@@ -174,11 +136,9 @@
         /** Toggles the visibility of the thumbnails */
         function togglethumbs(el) {
             if (el.classList.contains('pushed')) {
-                $("#thumbnails").hide();
                 el.classList.remove('pushed');
                 document.querySelector('.thumbnails').classList.add('hide');
             } else {
-                $("#thumbnails").show();
                 el.classList.add('pushed');
                 document.querySelector('.thumbnails').classList.remove('hide');
             }
@@ -203,22 +163,19 @@
 
             /** Update the active page */
             onActivePageChanged: function (page) {
-                alert("in activepagechange");
                 let pageno = $(page).data('page');
-                alert("pageno" + pageno)
                 let pagetotal = this.getPageCount();
 
                 if (!$(page).hasClass('hidden')) {
                     pdfThumbnails.setActivePage(pageno);
                     $('#pageno').val(pageno);
                     $('#pageno').attr('max', pagetotal);
-                    $('#pagecount').text('of ' + pagetotal);
+                    $('#pagecount').text('de ' + pagetotal);
                 }
             },
 
             /** zoom to fit when the document is loaded and create the object if wanted to be downloaded */
             onDocumentReady: function () {
-                alert("Load PDF");
                 pdfViewer.setZoom('fit');
                 pdfViewer.pdf.getData().then(function (data) {
                     document.querySelector('#filedownload').href = URL.createObjectURL(new Blob([data], { type: 'application/pdf' }));
@@ -264,141 +221,5 @@
 
         pdfThumbnails.loadDocument(PDFFILE);
     </script>
-    <!-- Or Using pdf-document attribute
-    <div id="viewer" class="pdfjs-viewer" pdf-document="test.pdf" initial-zoom="fit">
-        ...
-    </div>-->
-    @*<form method="post" enctype="multipart/form-data" asp-controller="Home" asp-action="Index">
-            <input type="file" name="postedFile" />
-            <input type="submit" id="btnUpload" value="Upload" />
-        </form>
-        <hr />*@
-    @*<table id="tblFiles" cellpadding="0" cellspacing="0">
-            <tr>
-                <th style="width:120px">File Name</th>
-                <th style="width:80px"></th>
-            </tr>
-            @foreach (var file in Model)
-            {
-                <tr>
-                    <td>@file.FileName</td>
-                    <td><a class="view" href="javascript:;" rel='@file.Id'>View PDF</a></td>
-                </tr>
-            }
-        </table>
-        <hr />*@
-
-    @*<div class="row col-6 offset-md-3 pdfviewer p-0 row h-100">
-            <div class="pdfjs-toolbar text-center row m-0 p-0">
-                <div class="col-12 col-lg-6 my-1">
-                    <button class="btn btn-secondary btn-sm btn-first" onclick="pdfViewer.first()"><i class="material-icons-outlined">skip_previous</i></button>
-                    <button class="btn btn-secondary btn-sm btn-prev" onclick="pdfViewer.prev(); return false;"><i class="material-icons-outlined">navigate_before</i></button>
-                    <span class="pageno"></span>
-                    <button class="btn btn-secondary btn-sm btn-next" onclick="pdfViewer.next(); return false;"><i class="material-icons-outlined">navigate_next</i></button>
-                    <button class="btn btn-secondary btn-sm btn-last" onclick="pdfViewer.last()"><i class="material-icons-outlined">skip_next</i></button>
-                </div>
-                <div class="col-12 col-lg-6 my-1">
-                    <button class="btn btn-secondary btn-sm" onclick="pdfViewer.set<a href=" https: //www.jqueryscript.net/zoom/">Zoom</a>('out')"><i class="material-icons-outlined">zoom_out</i></button>
-                    <span class="zoomval">100%</span>
-                    <button class="btn btn-secondary btn-sm" onclick="pdfViewer.setZoom('in')"><i class="material-icons-outlined">zoom_in</i></button>
-                    <button class="btn btn-secondary btn-sm ms-3" onclick="pdfViewer.setZoom('width')"><i class="material-icons-outlined">swap_horiz</i></button>
-                    <button class="btn btn-secondary btn-sm" onclick="pdfViewer.setZoom('height')"><i class="material-icons-outlined">swap_vert</i></button>
-                    <button class="btn btn-secondary btn-sm" onclick="pdfViewer.setZoom('fit')"><i class="material-icons-outlined">fit_screen</i></button>
-                </div>
-            </div>
-            <div class="pdfjs-viewer h-100" pdf-document="test.pdf" initial-zoom="fit" on-document-ready="pdfViewer = this.pdfViewer;">
-            </div>
-        </div>
-        <div id="pdf_container"></div>
-        <script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jquery/1.8.3/jquery.min.js"></script>
-        <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/2.6.347/pdf.min.js"></script>
-        <link href="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/2.6.347/pdf_viewer.min.css" rel="stylesheet" type="text/css" />
-        <script type="text/javascript">
-            $(function () {
-                $("[id*=tblFiles] .view").click(function () {
-                    var fileId = $(this).attr("rel");
-                    $.ajax({
-                        type: "POST",
-                        url: "/FileStorage/GetPDF",
-                        data: { "Id": fileId },
-                        success: function (r) {
-                            //Convert Base64 string to Byte Array.
-                            var bytes = Base64ToBytes(r.data);
-                            LoadPdfFromBlob(bytes);
-
-                        },
-                        failure: function (response) {
-                            alert(response.responseText);
-                        },
-                        error: function (response) {
-                            alert(response.responseText);
-                        }
-                    });
-                });
-            });
-
-            var pdfjsLib = window['pdfjs-dist/build/pdf'];
-            pdfjsLib.GlobalWorkerOptions.workerSrc = 'https://cdnjs.cloudflare.com/ajax/libs/pdf.js/2.6.347/pdf.worker.min.js';
-            var pdfDoc = null;
-            var scale = 1; //Set Scale for zooming PDF.
-            var resolution = 1; //Set Resolution to Adjust PDF clarity.
-
-            function LoadPdfFromBlob(blob) {
-                //Read PDF from BLOB.
-                pdfjsLib.getDocument({ data: blob }).promise.then(function (pdfDoc_) {
-                    pdfDoc = pdfDoc_;
-                    //Reference the Container DIV.
-                    var pdf_container = document.getElementById("pdf_container");
-                    pdf_container.innerHTML = "";
-                    pdf_container.style.display = "block";
-
-                    var myTB = document.getElementById("myToolbar");
-
-                    myTB.style.display = "block";
-
-                    //Loop and render all pages.
-                    for (var i = 1; i <= pdfDoc.numPages; i++) {
-                        RenderPage(pdf_container, i);
-                    }
-                });
-            };
-            function RenderPage(pdf_container, num) {
-                pdfDoc.getPage(num).then(function (page) {
-                    //Create Canvas element and append to the Container DIV.
-                    var canvas = document.createElement('canvas');
-                    canvas.id = 'pdf-' + num;
-                    ctx = canvas.getContext('2d');
-                    pdf_container.appendChild(canvas);
-
-                    //Create and add empty DIV to add SPACE between pages.
-                    var spacer = document.createElement("div");
-                    spacer.style.height = "20px";
-                    pdf_container.appendChild(spacer);
-
-                    //Set the Canvas dimensions using ViewPort and Scale.
-                    var viewport = page.getViewport({ scale: scale });
-                    canvas.height = resolution * viewport.height;
-                    canvas.width = resolution * viewport.width;
-
-                    //Render the PDF page.
-                    var renderContext = {
-                        canvasContext: ctx,
-                        viewport: viewport,
-                        transform: [resolution, 0, 0, resolution, 0, 0]
-                    };
-
-                    page.render(renderContext);
-                });
-            };
-
-            function Base64ToBytes(base64) {
-                var s = window.atob(base64);
-                var bytes = new Uint8Array(s.length);
-                for (var i = 0; i < s.length; i++) {
-                    bytes[i] = s.charCodeAt(i);
-                }
-                return bytes;
-            };
-        </script>*@
 </body>
 </html>

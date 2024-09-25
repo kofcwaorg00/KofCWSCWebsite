@@ -10,7 +10,7 @@ public partial class TblMasMember
 
     public string? KofCid { get; set; }
 
-    //public string? Prefix { get; set; }
+    public string? Prefix { get; set; }
 
     //public DateTime? PrefixUpdated { get; set; }
 
@@ -40,7 +40,7 @@ public partial class TblMasMember
 
     //public string? LastNameUpdatedBy { get; set; }
 
-    //public string? Suffix { get; set; }
+    public string? Suffix { get; set; }
 
     //public DateTime? SuffixUpdated { get; set; }
 

@@ -17,6 +17,13 @@
             <div class="row">
                 <div class="col-sm pb-3">
                     <div class="form-group">
+                        <label asp-for="Prefix" class="control-label"></label>
+                        <input asp-for="Prefix" class="form-control" />
+                        <span asp-validation-for="Prefix" class="text-danger"></span>
+                    </div>
+                </div>
+                <div class="col-sm pb-3">
+                    <div class="form-group">
                         <label asp-for="KofCid" class="control-label"></label>
                         <input asp-for="KofCid" class="form-control" />
                         <span asp-validation-for="KofCid" class="text-danger"></span>
@@ -41,6 +48,13 @@
                         <label asp-for="LastName" class="control-label"></label>
                         <input asp-for="LastName" class="form-control" />
                         <span asp-validation-for="LastName" class="text-danger"></span>
+                    </div>
+                </div>
+                <div class="col-sm pb-4">
+                    <div class="form-group">
+                        <label asp-for="Suffix" class="control-label"></label>
+                        <input asp-for="Suffix" class="form-control" />
+                        <span asp-validation-for="Suffix" class="text-danger"></span>
                     </div>
                 </div>
             </div>

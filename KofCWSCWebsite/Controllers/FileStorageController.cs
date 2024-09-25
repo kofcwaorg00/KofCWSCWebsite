@@ -52,7 +52,7 @@ namespace KofCWSCWebsite.Controllers
                 .SqlQuery<FileStorageVM>($"uspWEB_GetFileStorageVM")
                 .ToList();
 
-            return View("ShowPDF",result);
+            return View("ShowPDF1",result);
         }
 
 
