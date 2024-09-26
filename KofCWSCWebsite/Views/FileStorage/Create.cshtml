@@ -10,8 +10,8 @@
 <hr />
 <div class="row">
     <div class="col-md-4">
-        <form asp-controller="FileStorage" asp-action="Upload" method="post" enctype="multipart/form-data">
-            <input type="file" name="file" />
+        <form asp-controller="FileStorage" asp-action="Upload" method="post" enctype="multipart/form-data" >
+            <input type="file" name="file" accept=".pdf" />
             <button type="submit">Upload</button>
         </form>
         @*<form asp-action="Create">

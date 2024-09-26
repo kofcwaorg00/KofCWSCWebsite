@@ -1,5 +1,5 @@
 ﻿@addTagHelper*, Microsoft.AspNetCore.Mvc.TagHelpers
-@model IEnumerable<KofCWSCWebsite.Models.FileStorageVM>
+@model KofCWSCWebsite.Models.FileStorage
 
 @{
 //Layout = null;
@@ -54,6 +54,7 @@
             overflow: auto;
         }
     </style>
+   
 </head>
 <body>
     <script>
@@ -70,10 +71,20 @@
         //let pdfViewer = document.getElementById("viewer");
 
     </script>
-    
+    @{
+        var myId = Model.Id;
+        <span id="myData" style="display:none">@myId</span>
+        <span>@Model.FileName</span>
+    }
+    <!-- ** BEGIN POP-UP MESSAGE AREA ** -->
+    <div class="submit-progress hidden">
+        <i class="fa fa-2x fa-spinner fa-spin"></i>
+        <label>Please wait while Saving Data...</label>
+    </div>
+    <!-- ** END POP-UP MESSAGE AREA ** -->
     <div class="pdfviewer">
         <div class="pdfjs-toolbar">
-            <button class="pushed" onclick="togglethumbs(this);" ><i class="material-icons-outlined">view_sidebar</i></button>
+            <button class="pushed" onclick="togglethumbs(this);"><i class="material-icons-outlined">view_sidebar</i></button>
             <div class="v-sep"></div>
             <button onclick="pdfViewer.prev();" style="display:none"><i class="material-icons-outlined">arrow_upward</i></button>
             <div class="v-sep"></div>
@@ -109,8 +120,8 @@
             <button id="hideselected" onclick="hideselected();" style="display:none"><i class="material-icons-outlined">block</i></button>
             <div class="divider"></div>
             <label class="button" for="opendoc" style="display:none"><i class="material-icons-outlined">file_open</i></label>
-            <input id="opendoc" type="file" accept="application/pdf" style="display:none" >
-            <a id="filedownload" class="button" style="display:none"><i class="material-icons-outlined">file_download</i></a>
+            <input id="opendoc" type="file" accept="application/pdf" style="display:none">
+            <a id="filedownload" class="button"><i class="material-icons-outlined">file_download</i></a>
             <div class="dropdown dropdown-right" style="display:none">
                 <div onclick="this.parentNode.classList.toggle('show');">
                     <button><i class="material-icons-outlined">keyboard_double_arrow_right</i></button>
@@ -128,7 +139,7 @@
             </div>
         </div>
         <div class="pdfviewer-container">
-            <div id="thumbnails" class="thumbnails pdfjs-viewer" style="width:10%; float:left;" >
+            <div id="thumbnails" class="thumbnails pdfjs-viewer" style="width:10%; float:left;">
             </div>
             <div class="maindoc pdfjs-viewer">
                 <div class="pdfpage placeholder">
@@ -137,7 +148,7 @@
             </div>
         </div>
     </div>
-    
+
     <script>
         const queryString = window.location.search;
         const urlParams = new URLSearchParams(queryString);
@@ -152,6 +163,15 @@
             }
             return new Uint8Array(array);
         }
+        function Base64ToBytes(base64) {
+            var s = window.atob(base64);
+            var bytes = new Uint8Array(s.length);
+            for (var i = 0; i < s.length; i++) {
+                bytes[i] = s.charCodeAt(i);
+            }
+            return bytes;
+        };
+
         /** Function to load a PDF file using the input=file API */
         document.querySelector("#opendoc").addEventListener("change", function (e) {
             let file = e.target;
@@ -165,7 +185,7 @@
                 document.querySelector('#filedownload').download = document.querySelector('#opendoc').files[0].name;
             }
         });
-        /** Sets the document in horizontal scroll by changing the class for the pages container and refreshing the document 
+        /** Sets the document in horizontal scroll by changing the class for the pages container and refreshing the document
          *    so that the pages may be displayed in horizontal scroll if they were not visible before */
         function setHorizontal() {
             document.querySelector(".maindoc").classList.add("horizontal-scroll");
@@ -203,9 +223,7 @@
 
             /** Update the active page */
             onActivePageChanged: function (page) {
-                alert("in activepagechange");
                 let pageno = $(page).data('page');
-                alert("pageno" + pageno)
                 let pagetotal = this.getPageCount();
 
                 if (!$(page).hasClass('hidden')) {
@@ -218,7 +236,6 @@
 
             /** zoom to fit when the document is loaded and create the object if wanted to be downloaded */
             onDocumentReady: function () {
-                alert("Load PDF");
                 pdfViewer.setZoom('fit');
                 pdfViewer.pdf.getData().then(function (data) {
                     document.querySelector('#filedownload').href = URL.createObjectURL(new Blob([data], { type: 'application/pdf' }));
@@ -228,11 +245,12 @@
         });
 
         /** Load the initial PDF file */
-        pdfViewer.loadDocument(PDFFILE).then(function () {
-            document.querySelector('#filedownload').download = PDFFILE;
-        });
+        //pdfViewer.loadDocument(PDFFILE).then(function () {
+        //    document.querySelector('#filedownload').download = PDFFILE;
+        //});
 
         /** Create the thumbnails */
+
         let pdfThumbnails = new PDFjsViewer($('.thumbnails'), {
             zoomFillArea: 0.7,
             onNewPage: function (page, i) {
@@ -249,6 +267,7 @@
             }
         });
 
+
         pdfThumbnails.setActivePage = function (pageno) {
             this.$container.find('.pdfpage').removeClass('selected');
 
@@ -262,7 +281,36 @@
             }
         }.bind(pdfThumbnails);
 
-        pdfThumbnails.loadDocument(PDFFILE);
+        var myId = $("#myData").text();
+
+        $.ajax({
+            type: "POST",
+            url: "/FileStorage/GetPDF",
+            data: { "Id": myId },
+            success: function (r) {
+                //Convert Base64 string to Byte Array.
+                var bytes = Base64ToBytes(r.data);
+                pdfViewer.loadDocument({ data: bytes });
+                pdfThumbnails.loadDocument({ data: bytes }).then(() => pdfThumbnails.setZoom("fit"));
+
+            },
+            failure: function (response) {
+                alert(response.responseText);
+            },
+            error: function (response) {
+                alert(response.responseText);
+            }
+        });
+
+
+
+
+        //pdfThumbnails.loadDocument(PDFFILE);
+
+
+
+
+
     </script>
     <!-- Or Using pdf-document attribute
     <div id="viewer" class="pdfjs-viewer" pdf-document="test.pdf" initial-zoom="fit">
@@ -393,7 +441,7 @@
 
             function Base64ToBytes(base64) {
                 var s = window.atob(base64);
-                var bytes = new Uint8Array(s.length);
+
                 for (var i = 0; i < s.length; i++) {
                     bytes[i] = s.charCodeAt(i);
                 }

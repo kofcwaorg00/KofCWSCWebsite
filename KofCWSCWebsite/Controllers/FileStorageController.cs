@@ -46,13 +46,14 @@ namespace KofCWSCWebsite.Controllers
             return RedirectToAction("Index");
         }
 
+        // not sure if this is going to be used
         public async Task<IActionResult> GetFiles()
         {
             var result = _context.Database
                 .SqlQuery<FileStorageVM>($"uspWEB_GetFileStorageVM")
                 .ToList();
 
-            return View("ShowPDF1",result);
+            return View("ShowPDF",result);
         }
 
 
@@ -61,12 +62,10 @@ namespace KofCWSCWebsite.Controllers
         [Authorize(Roles = "Admin")]
         public async Task<IActionResult> Index()
         {
+            //*****************************************************************************
             // 9/21/2024 Tim Philomeno
             // execute a select statement so we don't get the DATA stream, takes too long
-            //return  _context.Database
-            //  .SqlQuery<FileStorageVM>($"SELECT Id,Length,ContentType,FileName FROM tblWEB_FileStorage")
-            //.ToList();
-            //return  _context.Set<FileStorageVM>($"SELECT Id,Length,ContentType,FileName FROM tblWEB_FileStorage").ToList();
+            //-----------------------------------------------------------------------------
             var result = _context.Database
                 .SqlQuery<FileStorageVM>($"uspWEB_GetFileStorageVM")
                 .ToList();
@@ -75,8 +74,52 @@ namespace KofCWSCWebsite.Controllers
         }
 
         // GET: TblWebFileStorages/Details/5
-        [Authorize(Roles = "Admin")]
+        [Authorize]
         public async Task<IActionResult> Details(int? id)
+        {
+            if (id == null)
+            {
+                return NotFound();
+            }
+
+            var tblWebFileStorage = await _context.FileStorages
+                .FirstOrDefaultAsync(m => m.Id == id);
+            if (tblWebFileStorage == null)
+            {
+                return NotFound();
+            }
+            return View("ShowPDF", tblWebFileStorage);
+            
+        }
+
+        //// GET: TblWebFileStorages/Create
+        [Authorize(Roles = "Admin")]
+        public IActionResult Create()
+        {
+            return View();
+        }
+
+        // GET: TblWebFileStorages/Details/5
+        [Authorize]
+        [HttpPost]
+        public JsonResult GetPDF(int? id)
+        {
+            if (id == null)
+            {
+                return Json(NotFound());
+            }
+            var tblWebFileStorage = _context.Database.SqlQuery<FileStorage>($"SELECT * FROM tblWEB_FileStorage where Id={id}").ToList();
+            var tfs = tblWebFileStorage.FirstOrDefault();
+            if (tblWebFileStorage == null)
+            {
+                return Json(NotFound());
+            }
+
+            return Json(new { FileName = tfs.FileName, ContentType = tfs.ContentType, Data = tfs.Data });
+        }
+
+        // GET: TblWebFileStorages/Delete/5
+        public async Task<IActionResult> Delete(int? id)
         {
             if (id == null)
             {
@@ -93,134 +136,20 @@ namespace KofCWSCWebsite.Controllers
             return View(tblWebFileStorage);
         }
 
-        //// GET: TblWebFileStorages/Create
-        [Authorize(Roles = "Admin")]
-        public IActionResult Create()
+        // POST: TblWebFileStorages/Delete/5
+        [HttpPost, ActionName("Delete")]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> DeleteConfirmed(int id)
         {
-            return View();
-        }
-
-        // GET: TblWebFileStorages/Details/5
-        //[Authorize(Roles = "Admin")]
-        [HttpPost]
-        public JsonResult GetPDF(int? id)
-        {
-            if (id == null)
+            var tblWebFileStorage = await _context.FileStorages.FindAsync(id);
+            if (tblWebFileStorage != null)
             {
-                return Json(NotFound());
-            }
-            var tblWebFileStorage = _context.Database.SqlQuery<FileStorage>($"SELECT * FROM tblWEB_FileStorage where Id={id}").ToList();
-            var tfs = tblWebFileStorage.FirstOrDefault();
-            //var tblWebFileStorage = await _context.FileStorages
-            //    .FirstOrDefaultAsync(m => m.Id == id);
-            byte[] bytes = tfs.Data;
-            if (tblWebFileStorage == null)
-            {
-                return Json(NotFound());
+                _context.FileStorages.Remove(tblWebFileStorage);
             }
 
-            return Json(new { FileName = tfs.FileName, ContentType = tfs.ContentType, Data = tfs.Data });
+            await _context.SaveChangesAsync();
+            return RedirectToAction(nameof(Index));
         }
-
-        //// POST: TblWebFileStorages/Create
-        //// To protect from overposting attacks, enable the specific properties you want to bind to.
-        //// For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
-        //[HttpPost]
-        //[ValidateAntiForgeryToken]
-        //public async Task<IActionResult> Create([Bind("Id,FileName,Data,Length,ContentType")] FileStorage tblWebFileStorage)
-        //{
-        //    if (ModelState.IsValid)
-        //    {
-        //        _context.Add(tblWebFileStorage);
-        //        await _context.SaveChangesAsync();
-        //        return RedirectToAction(nameof(Index));
-        //    }
-        //    return View(tblWebFileStorage);
-        //}
-
-        //// GET: TblWebFileStorages/Edit/5
-        //public async Task<IActionResult> Edit(int? id)
-        //{
-        //    if (id == null)
-        //    {
-        //        return NotFound();
-        //    }
-
-        //    var tblWebFileStorage = await _context.FileStorages.FindAsync(id);
-        //    if (tblWebFileStorage == null)
-        //    {
-        //        return NotFound();
-        //    }
-        //    return View(tblWebFileStorage);
-        //}
-
-        //// POST: TblWebFileStorages/Edit/5
-        //// To protect from overposting attacks, enable the specific properties you want to bind to.
-        //// For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
-        //[HttpPost]
-        //[ValidateAntiForgeryToken]
-        //public async Task<IActionResult> Edit(int id, [Bind("Id,FileName,Length,Data,ContentType")] FileStorage tblWebFileStorage)
-        //{
-        //    if (id != tblWebFileStorage.Id)
-        //    {
-        //        return NotFound();
-        //    }
-
-        //    if (ModelState.IsValid)
-        //    {
-        //        try
-        //        {
-        //            _context.Update(tblWebFileStorage);
-        //            await _context.SaveChangesAsync();
-        //        }
-        //        catch (DbUpdateConcurrencyException)
-        //        {
-        //            if (!TblWebFileStorageExists(tblWebFileStorage.Id))
-        //            {
-        //                return NotFound();
-        //            }
-        //            else
-        //            {
-        //                throw;
-        //            }
-        //        }
-        //        return RedirectToAction(nameof(Index));
-        //    }
-        //    return View(tblWebFileStorage);
-        //}
-
-        //// GET: TblWebFileStorages/Delete/5
-        //public async Task<IActionResult> Delete(int? id)
-        //{
-        //    if (id == null)
-        //    {
-        //        return NotFound();
-        //    }
-
-        //    var tblWebFileStorage = await _context.FileStorages
-        //        .FirstOrDefaultAsync(m => m.Id == id);
-        //    if (tblWebFileStorage == null)
-        //    {
-        //        return NotFound();
-        //    }
-
-        //    return View(tblWebFileStorage);
-        //}
-
-        //// POST: TblWebFileStorages/Delete/5
-        //[HttpPost, ActionName("Delete")]
-        //[ValidateAntiForgeryToken]
-        //public async Task<IActionResult> DeleteConfirmed(int id)
-        //{
-        //    var tblWebFileStorage = await _context.FileStorages.FindAsync(id);
-        //    if (tblWebFileStorage != null)
-        //    {
-        //        _context.FileStorages.Remove(tblWebFileStorage);
-        //    }
-
-        //    await _context.SaveChangesAsync();
-        //    return RedirectToAction(nameof(Index));
-        //}
 
         //private bool TblWebFileStorageExists(int id)
         //{
