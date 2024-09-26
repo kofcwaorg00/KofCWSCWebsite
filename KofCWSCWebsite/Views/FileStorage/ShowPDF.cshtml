@@ -1,6 +1,6 @@
 ﻿@addTagHelper*, Microsoft.AspNetCore.Mvc.TagHelpers
 @model KofCWSCWebsite.Models.FileStorage
-
+@await Html.PartialAsync("_LoadingPartial")
 @{
 //Layout = null;
 }
@@ -54,7 +54,7 @@
             overflow: auto;
         }
     </style>
-   
+
 </head>
 <body>
     <script>
@@ -69,19 +69,13 @@
         //pdfViewer.loadDocument('test.pdf');
 
         //let pdfViewer = document.getElementById("viewer");
-
+        displayBusyIndicator();
     </script>
     @{
         var myId = Model.Id;
         <span id="myData" style="display:none">@myId</span>
         <span>@Model.FileName</span>
     }
-    <!-- ** BEGIN POP-UP MESSAGE AREA ** -->
-    <div class="submit-progress hidden">
-        <i class="fa fa-2x fa-spinner fa-spin"></i>
-        <label>Please wait while Saving Data...</label>
-    </div>
-    <!-- ** END POP-UP MESSAGE AREA ** -->
     <div class="pdfviewer">
         <div class="pdfjs-toolbar">
             <button class="pushed" onclick="togglethumbs(this);"><i class="material-icons-outlined">view_sidebar</i></button>
@@ -153,6 +147,10 @@
         const queryString = window.location.search;
         const urlParams = new URLSearchParams(queryString);
         const PDFFILE = urlParams.get('doc') ?? "test.pdf";
+
+        
+
+        
 
         function dataURItoBinArray(data) {
             // taken from: https://stackoverflow.com/a/11954337/14699733
@@ -292,7 +290,7 @@
                 var bytes = Base64ToBytes(r.data);
                 pdfViewer.loadDocument({ data: bytes });
                 pdfThumbnails.loadDocument({ data: bytes }).then(() => pdfThumbnails.setZoom("fit"));
-
+                hideBusyIndicator();
             },
             failure: function (response) {
                 alert(response.responseText);
@@ -302,12 +300,9 @@
             }
         });
 
-
-
-
         //pdfThumbnails.loadDocument(PDFFILE);
 
-
+        
 
 
 
