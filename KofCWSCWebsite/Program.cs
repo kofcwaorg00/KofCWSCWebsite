@@ -97,21 +97,7 @@ catch (Exception ex)
     throw;
 }
 
-
 builder.Services.AddScoped<DataSetService, DataSetService>();
-
-// my attempt at useing userid/email/kofcid...still needed to deal with email and custom validator NOT
-//builder.Services.AddDefaultIdentity<KofCUser>(options =>
-//{
-//    // Specify the allowed characters for usernames (including spaces and special characters)
-//    options.User.AllowedUserNameCharacters = "123456789";
-//    // Set other identity options as needed
-//    options.User.RequireUniqueEmail = true; // Optional: Require unique email addresses
-//    options.SignIn.RequireConfirmedAccount = true;
-//}).AddRoles<IdentityRole>().AddEntityFrameworkStores<IdentityDBContext>(); 
-
-
-
 
 builder.Services.AddDatabaseDeveloperPageExceptionFilter();
 
@@ -119,7 +105,12 @@ builder.Services.AddControllersWithViews();
 
 builder.Services.AddTransient<ISenderEmail, EmailSender>();
 
+builder.Services.AddFastReport();
+
 var app = builder.Build();
+
+// documentation says to call this before UseMvc or UseEndpoints
+app.UseFastReport();
 
 // Configure the HTTP request pipeline.
 if (app.Environment.IsDevelopment())

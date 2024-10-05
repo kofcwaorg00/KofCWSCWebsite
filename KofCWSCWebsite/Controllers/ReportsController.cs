@@ -1,4 +1,5 @@
-﻿using FastReport.Web;
+﻿using com.sun.xml.@internal.bind.v2.model.core;
+using FastReport.Web;
 using KofCWSCWebsite.Data;
 using KofCWSCWebsite.Models;
 using Microsoft.AspNetCore.Authorization;
@@ -23,7 +24,7 @@ namespace KofCWSCWebsite.Controllers
         }
         [Authorize(Roles = "Admin")]
         [Route("GetLabelByOffice")]
-        public IActionResult GetLabelByOffice(string ID)
+        public IActionResult GetLabelByOffice(int ID)
         {
             Log.Information("Starting GetLabelByOffice");
             GetLabelByOfficeModel model = new()
@@ -37,12 +38,25 @@ namespace KofCWSCWebsite.Controllers
             // to the call of the stored proceudre
             //****************************************************************************************************
             var reportToLoad = "GetLabelByOfficeAPI";
-            string myMethod = "/GetLabelByOffice/";
             Log.Information("Before Load Report");
             model.WebReport.Report.Load(Path.Combine(_dataSetService.ReportsPath, $"{reportToLoad}.frx"));
             Log.Information("Before Prepare Report");
-            _dataSetService.PrepareReport(model.WebReport.Report, myMethod, _configuration, ID);
+            _dataSetService.PrepareReport(model.WebReport.Report, _configuration, ID);
             Log.Information("Before Return");
+            return View(model);
+        }
+
+        [Authorize(Roles = "Admin")]
+        [Route("GetDirectory")]
+        public IActionResult GetDirectory(int ShortForm)
+        {
+            DirMain model = new()
+            {
+                WebReport = new WebReport(),
+            };
+            var reportToLoad = "DirectoryAPI";
+            model.WebReport.Report.Load(Path.Combine(_dataSetService.ReportsPath, $"{reportToLoad}.frx"));
+            _dataSetService.PrepareReport(model.WebReport.Report, _configuration, ShortForm);
             return View(model);
         }
     }

@@ -90,6 +90,7 @@ namespace KofCWSCWebsite.Services
         {
             try
             {
+                sBody = sBody.Replace("\r\n", "<br />");
                 MailMessage mail = new MailMessage();
                 mail.From = new MailAddress(sFrom);
                 mail.To.Add(sTo);

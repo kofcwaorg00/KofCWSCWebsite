@@ -8,6 +8,7 @@ using System.Diagnostics;
 using Serilog;
 using com.sun.xml.@internal.rngom.dt;
 using Microsoft.IdentityModel.Tokens;
+using sun.misc;
 
 namespace KofCWSCWebsite.Data
 {
@@ -75,7 +76,7 @@ namespace KofCWSCWebsite.Data
             }
         }
         
-        public Report PrepareReport(Report report,string APIMethod, IConfiguration _conf,string param)
+        public Report PrepareReport(Report report, IConfiguration _conf,int param)
         {
             try
             {
@@ -83,17 +84,41 @@ namespace KofCWSCWebsite.Data
                 // 6/6/2024 Tim Philomneo
                 //  so trying to encapsulate the nasty FastReports JSON stuff here so we can just call it
                 //  from the controllers and it will just work
+                // 10/02/2024 Tim Philomeno
+                // so the report connection strings are already set for all reports.  All we have to do is modify
+                // what is stored in the report itself.  i.e. change the HOST section and add the PARAM
                 //***************************************************************************************************************
-                var myAPIURL = (string?)_conf.GetSection("FRConnectStrings").GetValue(typeof(string), "AZDEVAPIURL");
-                var mySchema = (string?)_conf.GetSection("FRConnectStrings").GetValue(typeof(string), "GetLabelByOffice");
-                var myPrefix = "Json=";
+                for (int i = 0; i < report.Dictionary.Connections.Count; i++)
+                {
+                    string myHost = (string?)_conf.GetSection("APIURL").GetValue(typeof(string), "APIURL");
+                    string currString = report.Dictionary.Connections[i].ConnectionString;
+                    int currStringLen = currString.Length;
+                    int currStringSemi = currString.IndexOf(';');
+
+                    string myPre = currString.Split('/')[0];
+                    //string myHost = currString.Split('/')[2];
+                    string myMethod = currString.Split('/')[3];
+                    string schema = currString.Substring(currStringSemi, currStringLen - currStringSemi);
+                    string final = myPre + "//" + myHost + "/" + myMethod + "/" + param + schema;
+
+                    // start at the semi and then get from there to the end
+                    
+                    // then prepend the JSON=<API CALL;  this only works if we only have 1 param
+                    //string newString = "Json=" + myHost + APIMethod + param + schema;
+                    report.Dictionary.Connections[i].ConnectionString = final;
+                }
+
+
+                //var myAPIURL = (string?)_conf.GetSection("APIURL").GetValue(typeof(string), "APIURL");
+                //var mySchema = (string?)_conf.GetSection("FRConnectStrings").GetValue(typeof(string), "GetLabelByOffice");
+                //var myPrefix = "Json=";
                 ///--------------------------------------------------------------------------------------------------------------
                 // So I can't find a way to use a parameter to pass to the API URL in the FastReports API.  So, the only choice I
                 // have is to build the myJSONCON as a string and substituitng the paramerter then  setting it
                 //var myJSONCON = "Json=https://dev.kofc-wa.org/API/GetLabelByOffice/17;JsonSchema='{\"type\":\"array\",\"items\":{\"type\":\"object\",\"properties\":{\"district\":{\"type\":\"number\"},\"altOfficeDescription\":{\"type\":\"string\"},\"firstName\":{\"type\":\"string\"},\"lastName\":{\"type\":\"string\"},\"address\":{\"type\":\"string\"},\"council\":{\"type\":\"number\"},\"assembly\":{\"type\":\"number\"},\"city\":{\"type\":\"string\"},\"state\":{\"type\":\"string\"},\"postalCode\":{\"type\":\"string\"},\"officeDescription\":{\"type\":\"string\"},\"officeID\":{\"type\":\"number\"},\"councilName\":{\"type\":\"string\"},\"fullName\":{\"type\":\"string\"},\"csz\":{\"type\":\"string\"}}}}';Encoding=utf-8;SimpleStructure=false";
-                var myJSONCON = myPrefix + myAPIURL + APIMethod + param + mySchema;
+                //var myJSONCON = myPrefix + myAPIURL + APIMethod + param + mySchema;
                 ///--------------------------------------------------------------------------------------------------------------
-                report.Dictionary.Connections[0].ConnectionString = myJSONCON;
+                //report.Dictionary.Connections[0].ConnectionString = myJSONCON;
 
                 return report;
             }
@@ -118,7 +143,7 @@ namespace KofCWSCWebsite.Data
                     Log.Fatal("No API URI Initialized");
                     throw new Exception("API URI is not set");
                 }
-                return _myBaseAddress;
+                return "https://" + _myBaseAddress;
             }
             catch (Exception)
             {

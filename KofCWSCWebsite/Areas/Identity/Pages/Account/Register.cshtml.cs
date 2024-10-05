@@ -20,6 +20,10 @@ using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.AspNetCore.WebUtilities;
 using Microsoft.Extensions.Logging;
 using KofCWSCWebsite.Services;
+using KofCWSCWebsite.Data;
+using KofCWSCWebsite.Pages.AOI;
+using Serilog;
+using Microsoft.AspNetCore.Http.Extensions;
 
 
 namespace KofCWSCWebsite.Areas.Identity.Pages.Account
@@ -33,14 +37,15 @@ namespace KofCWSCWebsite.Areas.Identity.Pages.Account
         private readonly ILogger<RegisterModel> _logger;
         private readonly ISenderEmail _emailSender;
         private readonly RoleManager<IdentityRole> _roleManager;
-
+        private readonly DataSetService _dataSetService;
         public RegisterModel(
             UserManager<KofCUser> userManager,
             IUserStore<KofCUser> userStore,
             SignInManager<KofCUser> signInManager,
             ILogger<RegisterModel> logger,
             ISenderEmail emailSender,
-            RoleManager<IdentityRole> roleManager)
+            RoleManager<IdentityRole> roleManager,
+            DataSetService dataSetService)
         {
             _userManager = userManager;
             _userStore = userStore;
@@ -49,6 +54,7 @@ namespace KofCWSCWebsite.Areas.Identity.Pages.Account
             _logger = logger;
             _emailSender = emailSender;
             _roleManager = roleManager;
+            _dataSetService = dataSetService;
         }
 
         /// <summary>
@@ -63,7 +69,7 @@ namespace KofCWSCWebsite.Areas.Identity.Pages.Account
         ///     directly from your code. This API may change or be removed in future releases.
         /// </summary>
         public string ReturnUrl { get; set; }
-
+        public string RemoteIPAddr {  get; set; }
         /// <summary>
         ///     This API supports the ASP.NET Core Identity default UI infrastructure and is not intended to be used
         ///     directly from your code. This API may change or be removed in future releases.
@@ -98,7 +104,7 @@ namespace KofCWSCWebsite.Areas.Identity.Pages.Account
             /// </summary>
             [Required]
             [EmailAddress]
-            
+
             [Display(Name = "UserID (email)")]
             public string Email { get; set; }
 
@@ -128,6 +134,7 @@ namespace KofCWSCWebsite.Areas.Identity.Pages.Account
         {
             ReturnUrl = returnUrl;
             ExternalLogins = (await _signInManager.GetExternalAuthenticationSchemesAsync()).ToList();
+            RemoteIPAddr = HttpContext.Request.HttpContext.Connection.RemoteIpAddress.ToString();
         }
 
         public async Task<IActionResult> OnPostAsync(string returnUrl = null)
@@ -139,7 +146,32 @@ namespace KofCWSCWebsite.Areas.Identity.Pages.Account
             {
                 string myer = "We are not able to support AOL email addresses. Please consider registering for a free email address at gmail, yahoo, or Microsoft Outlook (online)";
                 ModelState.AddModelError(string.Empty, myer);
+                Log.Error(myer + " - " + Input.Email);
                 return Page();
+            }
+            //----------------------------------------------------------------------------------------
+            //****************************************************************************************
+            // 09/21/2024 Tim Philomeno
+            // need to validate kofcid again here
+            var myType = this.GetType();
+            var KofCMemberID = Input.KofCMemberID;
+            Uri myURI = new Uri(_dataSetService.GetAPIBaseAddress() + "/VerifyKofCID/" + KofCMemberID);
+            using (var client = new HttpClient())
+            {
+                var responseTask = client.GetAsync(myURI);
+                responseTask.Wait();
+
+                var result = responseTask.Result;
+                var myAns = result.Content.ReadAsStringAsync().Result;
+
+                if (myAns == "false" || myAns.ToLower().Contains("invalid"))
+                {
+                    string myError = string.Concat("Member Number ",KofCMemberID, " is not found in our database.");
+                    string myLogError = string.Concat("Member Number ", KofCMemberID, " is not found in our database.", "Using IP Address => ", HttpContext.Request.HttpContext.Connection.RemoteIpAddress.ToString());
+                    Log.Error(myType + myLogError);
+                    ModelState.AddModelError(string.Empty, myError);
+                    return Page();
+                }
             }
             //----------------------------------------------------------------------------------------
             returnUrl ??= Url.Content("~/");

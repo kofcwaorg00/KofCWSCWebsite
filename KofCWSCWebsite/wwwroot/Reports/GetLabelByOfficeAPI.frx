@@ -1,7 +1,7 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
-<Report ScriptLanguage="CSharp" ReportInfo.Created="06/08/2024 10:53:19" ReportInfo.Modified="06/18/2024 14:09:02" ReportInfo.CreatorVersion="2024.1.3.0">
+<Report ScriptLanguage="CSharp" ReportInfo.Created="06/08/2024 10:53:19" ReportInfo.Modified="09/30/2024 11:07:05" ReportInfo.CreatorVersion="2024.1.3.0">
   <Dictionary>
-    <JsonDataSourceConnection Name="Connection1" ConnectionString="rijcmlq/CdQ5zdl/9y0xe90yS6PZhKPzhsnIVX7fXSMkJt0KkFtwwMqMklZl5o4rxtSpKdewgkh5KaHiLf9CmMmnlZo9G9C0YfJLjkKjqiWDCPd5KDK6LHj52SRjrAmzKOiDFcE9rDi6G3ip9x2u4G0verNcLmS0XXLPNjp98fk+Cjy0L063flWglOVUM1vkYrAN9YsemUaLR0qGCymed2SPu+s0j8DhdjACVDFfrAJiHhNMTpqnBuI1q6DZjg6xYsVIESI8hP86XqPCMvIPdFziEaJfXj+/6XJZ5ScgD/9U0uMT9/44FbGK+zT9/9HLlNlPWhtixb0aXiuiRQS0rfERevMb9Q6UTxL7vvAIVVBzZ91B7xF4D1YE4rGr55pO2UN2iMZyg4cARiX5sgrv9qBtGg9LV1OGOlQGgE7CwX9JqSP8YAJ+8OM324Adprb1Wsb9+Fd/+EngM+uPORIE4o1j4wBvCHhcWFJ0zgIsvp3l97Gq8zkHm4IPD8oDTHNVkWXtO/hCXw4eamkkRW6Lu16+Om2I7vA48N2KcwTwZKOBz8JI5jeeE+Z7DYPIX0+/2FWgzVEMp9JJg2rXSDAGqA85hmdDA==">
+    <JsonDataSourceConnection Name="Connection1" ConnectionString="rijcmlqbJsCNDUWD8zs7Fjc+Sa5Ch4yhgOmFdtqzHncecX33gCyoZOzER1h24yj5+36a0T4fgivZNR2yjGotkgmbbskahDzKVGmpxPOUXzCjUGFZggMWa+Kc/UUjnIlJWQyVmDgZHKG+L2GWDLyxy3uCiM23Xk7aad5MHdF8FRUdivLoCN7iDoDG8lGISglixu6W7V25uk3EBZolJ6wu8pHh88idL1Bdn1896NyEwakgFsj8xxRo2X6+vOsRIwB4AoL1IGz8xwGl0TJw7PGq/kVxgDfu7L97n5wy58JwlYZd67qNP+gWEEBLAJYqZ+Mkr2U2Mw2eFmQoM0LniaHa3utEiHAshodTJ6PKjtMH9csAWHNvSNDnc3OizRvforrg61nCNSgI2xdVga/pdPWptiKsxOGygN44PcQpLUgJ40V59Sh/8vlD9XWNdRnCU6CDUMeM6CjciCBvDdfwyE2wvH9P0a32fQo1UqiP+6O2/W92IclhyEGBIeNfoTzq0OxFJnugbv2k/+0Sx+goklzlOeUOglr2MCXWIbyo8OPNFSm1CJccaEch+95Ph0sLeqkpBLYHpmV">
       <JsonTableDataSource Name="JSON1" DataType="FastReport.Utils.Json.JsonArray" Enabled="true" TableName="JSON">
         <Column Name="index" DataType="System.Int32"/>
         <Column Name="item" DataType="FastReport.JsonBase">

@@ -1,0 +1,79 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Report ScriptLanguage="CSharp" ReportInfo.Created="10/02/2024 13:05:47" ReportInfo.Modified="10/04/2024 10:23:20" ReportInfo.CreatorVersion="2024.1.3.0">
+  <Dictionary>
+    <JsonDataSourceConnection Name="GetDirMain" ConnectionString="rijcmlqbJsCNDUWD8zs7Fjc+Sa5Ct8Oj2WbQ+kiDaYNZJyu8Jv7Y1CSZPMIGpmZiZN6S68MdEW2kBnbHAYoMljfWQvVHEIbfKMOrX8gSw0Vk7uu6IfeGhRoPPEWLMDVncFHLefjxAEh4K55XlKSpXXkePm8NUWG4+T8zhv5TkyQny8QuwBKtJM/174z+JtmEhijKX3KgtI+xIkA5m7MgFYu+VihXhM2/2BMpCKTMcCI92GRH7YuKGbHeWYvVY6Zl/IfhMz/dz4QeT8qTYaAwLuHTQtbPTUGKlAPRlmnKmWS+1rmsdOa7Aql1yYVsRhEyHHTO+UAiJLKNe9RuQ2MOLH9A92fnmK/aoLIuyYzgLw21bauNnRMbmLisNST2i9npDjFDy1/YW4bV4tPBL7GhSVL23LDgzpUbGtOOIgXhiR2p/oJ6JQc+A47EOsoQWZUSs02oTU+EdH5M0xeAtbStUT/0SsUMzujdOv700WKwVwuTqdPTMMJhDjHSl0P4fEwKzy1PPXxBSpThc9airQVON/2tmRDVeFVZYzCDo7ONuvENRouXlRs+AxznpFyzq9x6WJp21YZDuoRvsu+4exSGLIe8caYINwkFfS4I0sxCqUueKe5nyHj2CoDh3ipNIjzOuN72PAct+cMRY3ywOMwUeEuiuNg1Ud6/9fnpWa2y8xUm24roWi5Qcm1q/Nc5JIunRMnKKuS">
+      <JsonTableDataSource Name="JSON" Alias="DirMain" DataType="FastReport.Utils.Json.JsonArray" Enabled="true" TableName="JSON">
+        <Column Name="index" DataType="System.Int32"/>
+        <Column Name="item" DataType="FastReport.JsonBase">
+          <Column Name="title" DataType="System.String"/>
+          <Column Name="shortForm" DataType="System.Double" Format="Boolean"/>
+          <Column Name="groupName" DataType="System.String"/>
+          <Column Name="reportTitle" DataType="System.String"/>
+          <Column Name="reportSubTitle" DataType="System.String"/>
+          <Column Name="fullName" DataType="System.String"/>
+          <Column Name="phone" DataType="System.String"/>
+          <Column Name="address" DataType="System.String"/>
+          <Column Name="city" DataType="System.String"/>
+          <Column Name="state" DataType="System.String"/>
+          <Column Name="postalCode" DataType="System.String"/>
+          <Column Name="email" DataType="System.String"/>
+          <Column Name="dirSortOrder" DataType="System.Double"/>
+        </Column>
+        <Column Name="array" DataType="FastReport.JsonBase"/>
+        <Column Name="DOTS" DataType="System.Int32" PropName="Column" Calculated="true" Expression="&quot;...........................................................................................................................&quot;"/>
+      </JsonTableDataSource>
+    </JsonDataSourceConnection>
+    <JsonDataSourceConnection Name="GetDirSupremeContacts" ConnectionString="rijcmlqbJsCNDUWD8zs7Fjc+Sa5Ct8Oj2WbQ+kiDaYNZJyu8Js4JZXiQ2UjKAfK3mSYY1VUIidYWLIzz/I6MpAVU4mHEnqGPVdNSwXa9h8ISVoN6P1D6kzBKQGIjuydy73WpG/kkmADZFme4t+ulvMJOwySc5r15oX6lessjhQSWbqXATa9NARzrGBf3YQU1TzbsPyfDnTXlYtIK/81I0q7fNAdT4f3q0Lv5AcoIB/qr4XEnkNoZE59s/90cM73MZf4iBa9/SUCGbTTATRi7vGnJ4uSTMJA3eSAE05iy0bo1gFcNuqEQ/XI0FPJ2rV7bGfxTqoqbRoEEN2Zc7SIjiD42hknUjfwQtG7yjPqlHHu4Ea457PFTKBxc2MbVFQ4RtA3PTpq8uZjCY2YOwBXecp9g0zP8AlEmvWsoQHLcu/T8jBhFde+wRvWmjxKYKPwQvr4T29k5BSnLQjwRwtEOLjyS2+102jlcpa7jZedSP0j9knVyvhEIhxlyLjIocvR81WugzhB0KnBiISTtkKdR1UL5ictEu0OUR5NO5hHwGH0ut5F+3xQE2NHh1cb85L27omr/kufoRhflLbOzFU5I1NKiLbTeG+0QwJzg6/SvqAgpzvQllw+j24snYrmea2iNEbDIo5R9WLEPvyptPLWZuYb1xFQSULWbmKnNhanENMvsbBJjuwUJSxlAqB1VMfILUANmVKogRQ8gRw5BMA128hF1Sk5XQ==">
+      <JsonTableDataSource Name="JSON1" Alias="DirSupremeContacts" DataType="FastReport.Utils.Json.JsonArray" Enabled="true" TableName="JSON">
+        <Column Name="index" DataType="System.Int32"/>
+        <Column Name="item" DataType="FastReport.JsonBase">
+          <Column Name="groupName" DataType="System.String"/>
+          <Column Name="phone" DataType="System.String"/>
+          <Column Name="address" DataType="System.String"/>
+          <Column Name="city" DataType="System.Object"/>
+          <Column Name="state" DataType="System.Object"/>
+          <Column Name="postalCode" DataType="System.Object"/>
+          <Column Name="title" DataType="System.String"/>
+          <Column Name="dirSortOrder" DataType="System.Double"/>
+          <Column Name="fullName" DataType="System.String"/>
+          <Column Name="email" DataType="System.Object"/>
+          <Column Name="shortForm" DataType="System.Double"/>
+          <Column Name="reportTitle" DataType="System.String"/>
+          <Column Name="reportSubTitle" DataType="System.String"/>
+        </Column>
+        <Column Name="array" DataType="FastReport.JsonBase"/>
+        <Column Name="CSZ" DataType="System.Int32" PropName="Column" Calculated="true" Expression="[DirSupremeContacts.item.address]+&quot; &quot;+[DirSupremeContacts.item.city]+&quot;, &quot;+[DirSupremeContacts.item.state]+&quot; &quot;+[DirSupremeContacts.item.postalCode]"/>
+      </JsonTableDataSource>
+    </JsonDataSourceConnection>
+  </Dictionary>
+  <ReportPage Name="Page1" PaperWidth="114.3" PaperHeight="215.9" LeftMargin="0" TopMargin="5" RightMargin="0" BottomMargin="0" Watermark.Font="Arial, 60pt" LastPageSource="15" FirstPageSource="15">
+    <PageHeaderBand Name="PageHeader1" Width="432.05" Height="76.8">
+      <LineObject Name="Line1" Top="48" Width="432" Border.Style="Dash" Border.Width="3"/>
+      <SubreportObject Name="Supreme" Top="57.6" Width="432" Height="19.2" ReportPage="Page3"/>
+      <TextObject Name="Text12" Width="432" Height="19.2" Text="[DirMain.item.reportTitle]" HorzAlign="Center" Font="Arial, 8pt"/>
+      <TextObject Name="Text13" Top="19.2" Width="432" Height="19.2" Text="[DirMain.item.reportSubTitle]" HorzAlign="Center" Font="Arial, 8pt"/>
+    </PageHeaderBand>
+    <DataBand Name="Data1" Top="80.8" Width="432.05"/>
+    <PageFooterBand Name="PageFooter1" Top="84.8" Width="432.05" Height="38.4" Guides="9.6">
+      <LineObject Name="Line3" Top="9.6" Width="432" Border.Style="Dash" Border.Width="3"/>
+      <TextObject Name="Text10" Top="19.2" Width="432" Height="19.2" Text="[PageNofM]" HorzAlign="Center" Font="Arial, 8pt, style=Italic"/>
+      <TextObject Name="Text11" Left="336" Top="19.2" Width="96" Height="19.2" Text="[DirMain.item.shortForm]" Format="Boolean" Format.TrueText="True" Format.FalseText="False" Font="Arial, 10pt"/>
+    </PageFooterBand>
+  </ReportPage>
+  <ReportPage Name="Page3" PaperWidth="114.3" PaperHeight="215.9" LeftMargin="0" TopMargin="10.01" RightMargin="0" BottomMargin="0" Border.Lines="All" Border.Width="3" Watermark.Font="Arial, 60pt" LastPageSource="15" FirstPageSource="15">
+    <GroupHeaderBand Name="GroupHeader1" Width="432.05" Height="28.8" Condition="[DirSupremeContacts.item.groupName]">
+      <TextObject Name="Text3" Width="432" Height="19.2" Text="[DirSupremeContacts.item.groupName]" Font="Arial, 12pt, style=Bold, Italic"/>
+      <LineObject Name="Line2" Top="19.2" Width="432" Border.Width="3"/>
+      <GroupHeaderBand Name="GroupHeader2" Top="32.8" Width="432.05" Height="9.6" Condition="[DirSupremeContacts.item.dirSortOrder]">
+        <DataBand Name="Data3" Top="46.4" Width="432.05" Height="76.8" DataSource="JSON1">
+          <TextObject Name="Text9" Left="134.4" Top="19.2" Width="201.6" Height="19.2" Text="[DirMain.DOTS]" HorzAlign="Right" Font="Arial, 8pt, style=Italic"/>
+          <TextObject Name="Text5" Width="441.6" Height="19.2" Text="[DirSupremeContacts.item.title]" Font="Arial, 8pt, style=Bold, Italic"/>
+          <TextObject Name="Text6" Left="9.6" Top="38.4" Width="412.8" Height="19.2" Text="[DirSupremeContacts.CSZ]" Font="Arial, 8pt, style=Italic"/>
+          <TextObject Name="Text7" Left="9.6" Top="57.6" Width="412.8" Height="19.2" Text="[DirSupremeContacts.item.email]" Font="Arial, 8pt, style=Italic"/>
+          <TextObject Name="Text8" Left="230.4" Top="19.2" Width="192" Height="19.2" Text="[DirSupremeContacts.item.phone]" HorzAlign="Right" Font="Arial, 8pt, style=Italic"/>
+          <TextObject Name="Text4" Left="9.6" Top="19.2" Width="211.2" Height="19.2" Text="[DirSupremeContacts.item.fullName]" Font="Arial, 8pt, style=Italic"/>
+        </DataBand>
+      </GroupHeaderBand>
+    </GroupHeaderBand>
+  </ReportPage>
+</Report>
