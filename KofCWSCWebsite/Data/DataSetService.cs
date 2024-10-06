@@ -76,8 +76,13 @@ namespace KofCWSCWebsite.Data
             }
         }
         
-        public Report PrepareReport(Report report, IConfiguration _conf,int param)
+        public Report PrepareReport(Report report, IConfiguration _conf,int param1,int param2=9)
         {
+            //***************************************************************************************************************
+            // 10/05/2024 Tim Philomeno
+            // modified to use an optional parameter for the 2nd parm to support the directory
+            // parm1 is the ShortForm and parm2 is the NextYear
+            //-----------------------------------------------------------------------------------------------------------------
             try
             {
                 //***************************************************************************************************************
@@ -99,27 +104,15 @@ namespace KofCWSCWebsite.Data
                     //string myHost = currString.Split('/')[2];
                     string myMethod = currString.Split('/')[3];
                     string schema = currString.Substring(currStringSemi, currStringLen - currStringSemi);
-                    string final = myPre + "//" + myHost + "/" + myMethod + "/" + param + schema;
-
-                    // start at the semi and then get from there to the end
-                    
-                    // then prepend the JSON=<API CALL;  this only works if we only have 1 param
-                    //string newString = "Json=" + myHost + APIMethod + param + schema;
-                    report.Dictionary.Connections[i].ConnectionString = final;
+                    if (param2 == 9)
+                    {
+                        report.Dictionary.Connections[i].ConnectionString = myPre + "//" + myHost + "/" + myMethod + "/" + param1 + schema;
+                    }
+                    else
+                    {
+                        report.Dictionary.Connections[i].ConnectionString = myPre + "//" + myHost + "/" + myMethod + "/" + param1 +"/"+ param2 + schema;
+                    }
                 }
-
-
-                //var myAPIURL = (string?)_conf.GetSection("APIURL").GetValue(typeof(string), "APIURL");
-                //var mySchema = (string?)_conf.GetSection("FRConnectStrings").GetValue(typeof(string), "GetLabelByOffice");
-                //var myPrefix = "Json=";
-                ///--------------------------------------------------------------------------------------------------------------
-                // So I can't find a way to use a parameter to pass to the API URL in the FastReports API.  So, the only choice I
-                // have is to build the myJSONCON as a string and substituitng the paramerter then  setting it
-                //var myJSONCON = "Json=https://dev.kofc-wa.org/API/GetLabelByOffice/17;JsonSchema='{\"type\":\"array\",\"items\":{\"type\":\"object\",\"properties\":{\"district\":{\"type\":\"number\"},\"altOfficeDescription\":{\"type\":\"string\"},\"firstName\":{\"type\":\"string\"},\"lastName\":{\"type\":\"string\"},\"address\":{\"type\":\"string\"},\"council\":{\"type\":\"number\"},\"assembly\":{\"type\":\"number\"},\"city\":{\"type\":\"string\"},\"state\":{\"type\":\"string\"},\"postalCode\":{\"type\":\"string\"},\"officeDescription\":{\"type\":\"string\"},\"officeID\":{\"type\":\"number\"},\"councilName\":{\"type\":\"string\"},\"fullName\":{\"type\":\"string\"},\"csz\":{\"type\":\"string\"}}}}';Encoding=utf-8;SimpleStructure=false";
-                //var myJSONCON = myPrefix + myAPIURL + APIMethod + param + mySchema;
-                ///--------------------------------------------------------------------------------------------------------------
-                //report.Dictionary.Connections[0].ConnectionString = myJSONCON;
-
                 return report;
             }
             catch (Exception ex)

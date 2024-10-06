@@ -47,16 +47,27 @@ namespace KofCWSCWebsite.Controllers
         }
 
         [Authorize(Roles = "Admin")]
-        [Route("GetDirectory")]
-        public IActionResult GetDirectory(int ShortForm)
+        [Route("GetDirectory/{Id}")]
+        public IActionResult GetDirectory(int Id)
         {
+            //**********************************************************************************************
+            // 10/05/2024 Tim Philomeno
+            // Type will containe 1-4 to be able to set the 4 combinations of ShortForm and NextYear
+            //----------------------------------------------------------------------------------------------
+            int ShortForm=0;
+            int NextYear=0;
+            if (Id < 0 || Id > 4) { ShortForm = 0;NextYear = 0; }
+            if (Id == 1) { ShortForm = 0;NextYear = 0; } //Full Current Year
+            if (Id == 2) { ShortForm = 1; NextYear = 0; } //Short Current Year
+            if (Id == 3) { ShortForm = 0; NextYear = 1; } //Full Next Year
+            if (Id == 4) { ShortForm = 1; NextYear = 1; } //Short Next Year
             DirMain model = new()
             {
                 WebReport = new WebReport(),
             };
             var reportToLoad = "DirectoryAPI";
             model.WebReport.Report.Load(Path.Combine(_dataSetService.ReportsPath, $"{reportToLoad}.frx"));
-            _dataSetService.PrepareReport(model.WebReport.Report, _configuration, ShortForm);
+            _dataSetService.PrepareReport(model.WebReport.Report, _configuration, ShortForm, NextYear);
             return View(model);
         }
     }
