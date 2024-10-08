@@ -104,33 +104,33 @@ namespace KofCWSCWebsite.Controllers
                 bool mysuccess = false;
                 if (emailOffice.Fs)
                 {
-                    //mysuccess = Services.Utils.SendEmailAuthenticatedMG("AllFSs@mg.kofc-wa.org",emailOffice.From, "", "", emailOffice.Subject, emailOffice.Body, null, _configuration);
-                    mysuccess = Services.Utils.SendEmailAuthenticatedMG("testing@mg.kofc-wa.org", emailOffice.From, "", "", emailOffice.Subject,emailOffice.Body , null, _configuration);
+                    mysuccess = Services.Utils.SendEmailAuthenticatedMG("AllFSs@mg.kofc-wa.org",emailOffice.From, "", "", emailOffice.Subject, emailOffice.Body, null, _configuration);
+                    //mysuccess = Services.Utils.SendEmailAuthenticatedMG("testing@mg.kofc-wa.org", emailOffice.From, "", "", emailOffice.Subject,emailOffice.Body , null, _configuration);
                 }
                 if (emailOffice.Gk)
                 {
-                    //mysuccess = Services.Utils.SendEmailAuthenticatedMG("AllGKs@mg.kofc-wa.org", emailOffice.From, "", "", emailOffice.Subject, emailOffice.Body, null, _configuration);
-                    mysuccess = Services.Utils.SendEmailAuthenticatedMG("testing@mg.kofc-wa.org", emailOffice.From, "", "", emailOffice.Subject, "FROM GK", null, _configuration);
+                    mysuccess = Services.Utils.SendEmailAuthenticatedMG("AllGKs@mg.kofc-wa.org", emailOffice.From, "", "", emailOffice.Subject, emailOffice.Body, null, _configuration);
+                    //mysuccess = Services.Utils.SendEmailAuthenticatedMG("testing@mg.kofc-wa.org", emailOffice.From, "", "", emailOffice.Subject, "FROM GK", null, _configuration);
                 }
                 if (emailOffice.Fn)
                 {
-                    //mysuccess = Services.Utils.SendEmailAuthenticatedMG("AllFNs@mg.kofc-wa.org", emailOffice.From, "", "", emailOffice.Subject, emailOffice.Body, null, _configuration);
-                    mysuccess = Services.Utils.SendEmailAuthenticatedMG("testing@mg.kofc-wa.org", emailOffice.From, "", "", emailOffice.Subject, "FROM FN", null, _configuration);
+                    mysuccess = Services.Utils.SendEmailAuthenticatedMG("AllFNs@mg.kofc-wa.org", emailOffice.From, "", "", emailOffice.Subject, emailOffice.Body, null, _configuration);
+                    //mysuccess = Services.Utils.SendEmailAuthenticatedMG("testing@mg.kofc-wa.org", emailOffice.From, "", "", emailOffice.Subject, "FROM FN", null, _configuration);
                 }
                 if (emailOffice.Fc)
                 {
-                    //mysuccess = Services.Utils.SendEmailAuthenticatedMG("AllFCs@mg.kofc-wa.org", emailOffice.From, "", "", emailOffice.Subject, emailOffice.Body, null, _configuration);
-                    mysuccess = Services.Utils.SendEmailAuthenticatedMG("testing@mg.kofc-wa.org", emailOffice.From, "", "", emailOffice.Subject, "FROM FC", null, _configuration);
+                    mysuccess = Services.Utils.SendEmailAuthenticatedMG("AllFCs@mg.kofc-wa.org", emailOffice.From, "", "", emailOffice.Subject, emailOffice.Body, null, _configuration);
+                    //mysuccess = Services.Utils.SendEmailAuthenticatedMG("testing@mg.kofc-wa.org", emailOffice.From, "", "", emailOffice.Subject, "FROM FC", null, _configuration);
                 }
                 if (emailOffice.All)
                 {
-                    //mysuccess = Services.Utils.SendEmailAuthenticatedMG("AllMembers@mg.kofc-wa.org", emailOffice.From, "", "", emailOffice.Subject, emailOffice.Body, null, _configuration);
-                    mysuccess = Services.Utils.SendEmailAuthenticatedMG("testing@mg.kofc-wa.org", emailOffice.From, "", "", emailOffice.Subject, "FROM ALL", null, _configuration);
+                    mysuccess = Services.Utils.SendEmailAuthenticatedMG("AllMembers@mg.kofc-wa.org", emailOffice.From, "", "", emailOffice.Subject, emailOffice.Body, null, _configuration);
+                    //mysuccess = Services.Utils.SendEmailAuthenticatedMG("testing@mg.kofc-wa.org", emailOffice.From, "", "", emailOffice.Subject, "FROM ALL", null, _configuration);
                 }
                 if (emailOffice.Dd)
                 {
-                    //mysuccess = Services.Utils.SendEmailAuthenticatedDASP("AllDDs@kofc-wa.org", emailOffice.From, "", "", emailOffice.Subject, emailOffice.Body, null, _configuration);
-                    mysuccess = Services.Utils.SendEmailAuthenticatedDASP("webmaster@kofc-wa.org", emailOffice.From, "", "", emailOffice.Subject, "FROM DD", null, _configuration);
+                    mysuccess = Services.Utils.SendEmailAuthenticatedDASP("AllDDs@kofc-wa.org", emailOffice.From, "", "", emailOffice.Subject, emailOffice.Body, null, _configuration);
+                    //mysuccess = Services.Utils.SendEmailAuthenticatedDASP("webmaster@kofc-wa.org", emailOffice.From, "", "", emailOffice.Subject, "FROM DD", null, _configuration);
                 }
                 if (mysuccess)
                 {
