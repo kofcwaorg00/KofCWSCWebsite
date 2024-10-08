@@ -253,7 +253,6 @@
                                     <li><a class="dropdown-item MyMenuLink" href="https://kofcwa.sharepoint.com/:x:/s/WebsiteStorage/EQA5DjyAzqdAuV5i6NZ5Nd0BfxTsvbAr6INE79wFayiucw?e=nhr7tv" target="_blank">IRS Form 990 Filing Months Council/Assembly</a></li>
                                     <li><a class="dropdown-item MyMenuLink" asp-page="/Forms/Necrology">Necrology Form</a></li>
                                     <li><a class="dropdown-item MyMenuLink" asp-page="/Forms/PrayerRequest">Prayer Request Form</a></li>
-                                    <li><a class="dropdown-item MyMenuLink" asp-page="/GetBulletins">State Bulletin Archives</a></li>
                                     @if (User.IsInRole("Admin") || User.IsInRole("DataAdmin") || User.IsInRole("StateMembership") || User.IsInRole("StateOfficer"))
                                     {
                                         <li><a class="dropdown-item MyMenuLink" asp-area="" asp-controller="TblMasMembers" asp-action="Index" asp-route-id="aaa">Lookup Members</a></li>
@@ -296,7 +295,7 @@
                                         <li><a class="dropdown-item MyMenuLink" asp-area="" asp-controller="Role" asp-action="Index" asp-route-id="">Roles</a>                                </li>
                                         <li><a class="dropdown-item MyMenuLink" asp-area="" asp-controller="TblValOffices" asp-action="Index" asp-route-id="">Offices</a></li>
                                         <li><a class="dropdown-item MyMenuLink" asp-area="" asp-controller="FileStorage" asp-action="Index" asp-route-id="">Upload a Document</a></li>
-
+                                        
                                         <li><a class="dropdown-item MyMenuLink" href="#">Registered Users(future)</a></li>
                                         <li><hr class="dropdown-divider"></li>
                                     }
