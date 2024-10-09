@@ -3,7 +3,7 @@ using Microsoft.AspNetCore.Mvc.RazorPages;
 
 namespace KofCWSCWebsite.Pages.AOI
 {
-    public class 122ndConventionModel : PageModel
+    public class StateConventionModel : PageModel
     {
         public void OnGet()
         {
