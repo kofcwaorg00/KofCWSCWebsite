@@ -1,9 +1,9 @@
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 
-namespace KofCWSCWebsite.Pages.StateFamily
+namespace KofCWSCWebsite.Pages.AOI
 {
-    public class _4thdegreeModel : PageModel
+    public class StateConventionModel : PageModel
     {
         public void OnGet()
         {
