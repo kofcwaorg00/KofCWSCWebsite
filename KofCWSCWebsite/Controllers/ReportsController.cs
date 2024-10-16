@@ -26,7 +26,6 @@ namespace KofCWSCWebsite.Controllers
         [Route("GetLabelByOffice")]
         public IActionResult GetLabelByOffice(int ID)
         {
-            Log.Information("Starting GetLabelByOffice");
             GetLabelByOfficeModel model = new()
             {
                 WebReport = new WebReport(),
@@ -38,11 +37,8 @@ namespace KofCWSCWebsite.Controllers
             // to the call of the stored proceudre
             //****************************************************************************************************
             var reportToLoad = "GetLabelByOfficeAPI";
-            Log.Information("Before Load Report");
             model.WebReport.Report.Load(Path.Combine(_dataSetService.ReportsPath, $"{reportToLoad}.frx"));
-            Log.Information("Before Prepare Report");
             _dataSetService.PrepareReport(model.WebReport.Report, _configuration, ID);
-            Log.Information("Before Return");
             return View(model);
         }
 

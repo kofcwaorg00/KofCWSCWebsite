@@ -42,7 +42,7 @@ try
     var cnString = client.GetSecret("DBCONN").Value;
     string connectionString = cnString.Value;
 
-    Log.Information("Found CS " + connectionString);
+    //Log.Information("Found CS " + connectionString);
     
 
 
