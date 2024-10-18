@@ -39,7 +39,7 @@ try
     var kvURL = builder.Configuration.GetSection("KV").GetValue(typeof(string), "VAULTURL");
     Log.Information("KVURL is " + kvURL.ToString());
     var client = new SecretClient(new Uri((string)kvURL), new DefaultAzureCredential());
-    var cnString = client.GetSecret("DBCONN").Value;
+    var cnString = client.GetSecret("DBCONNLOC").Value;
     string connectionString = cnString.Value;
 
     //Log.Information("Found CS " + connectionString);
