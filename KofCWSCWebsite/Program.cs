@@ -15,6 +15,7 @@ using Microsoft.IdentityModel.Tokens;
 using Serilog;
 using Microsoft.AspNet.Identity;
 using Microsoft.AspNetCore.ResponseCompression;
+using Microsoft.AspNetCore.Authentication.Cookies;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -90,10 +91,33 @@ try
         })
         .AddRoles<IdentityRole>()
         .AddEntityFrameworkStores<IdentityDBContext>();
+
+    // Force Identity's security stamp to be validated every minute.
+    builder.Services.Configure<SecurityStampValidatorOptions>(o =>
+                       o.ValidationInterval = TimeSpan.FromMinutes(1));
 }
 catch (Exception ex)
 {
     Log.Error(ex.Message + " - " + ex.InnerException);  
+    throw;
+}
+
+// implement a session timeout
+try
+{
+    builder.Services.ConfigureApplicationCookie(options =>
+    {
+        options.ExpireTimeSpan = TimeSpan.FromMinutes(60);
+        options.LoginPath = "/Identity/Account/Login";
+        // ReturnUrlParameter requires 
+        //using Microsoft.AspNetCore.Authentication.Cookies;
+        options.ReturnUrlParameter = CookieAuthenticationDefaults.ReturnUrlParameter;
+        options.SlidingExpiration = true;
+    });
+}
+catch (Exception ex)
+{
+    Log.Error(ex.Message + " - " + ex.InnerException);
     throw;
 }
 
