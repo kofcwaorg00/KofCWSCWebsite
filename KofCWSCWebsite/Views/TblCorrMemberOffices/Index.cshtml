@@ -30,8 +30,8 @@
     <thead>
         <tr>
             @* <th>
-            @Html.DisplayNameFor(model => model.MemberId)
-            </th> *@
+        @Html.DisplayNameFor(model => model.MemberId)
+        </th> *@
             <th>
                 @Html.DisplayNameFor(model => model.OfficeDescription)
             </th>
@@ -41,8 +41,17 @@
             <th>
                 @Html.DisplayNameFor(model => model.Year)
             </th>
+            <th>
+                @Html.DisplayNameFor(model => model.District)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Council)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Assembly)
+            </th>
             @*<th style="width:50px"></th>
-            <th style="width:60px"></th>*@
+        <th style="width:60px"></th>*@
             <th style="width:60px"></th>
         </tr>
     </thead>
@@ -51,8 +60,8 @@
         {
             <tr>
                 @*  <td>
-            @Html.DisplayFor(modelItem => item.MemberId)
-            </td> *@
+        @Html.DisplayFor(modelItem => item.MemberId)
+        </td> *@
                 <td>
                     @Html.DisplayFor(modelItem => item.OfficeDescription)
                 </td>
@@ -62,24 +71,34 @@
                 <td>
                     @Html.DisplayFor(modelItem => item.Year)
                 </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.District)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Council)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Assembly)
+                </td>
+
                 @if (User.IsInRole("Admin") || User.IsInRole("DataAdmin"))
                 {
                     <!--<td>-->
-                        @* <a asp-action="Edit" asp-route-id="@item.MemberId">Edit</a>&nbsp;|&nbsp;<a asp-action="Details" asp-route-id="@item.MemberId">Details</a>&nbsp;|&nbsp;<a asp-action="Delete" asp-route-id="@item.MemberId">Delete</a> *@
+                    @* <a asp-action="Edit" asp-route-id="@item.MemberId">Edit</a>&nbsp;|&nbsp;<a asp-action="Details" asp-route-id="@item.MemberId">Details</a>&nbsp;|&nbsp;<a asp-action="Delete" asp-route-id="@item.MemberId">Delete</a> *@
 
-                        <!--<form asp-controller="TblCorrMemberOffices" asp-action="Edit" asp-route-id="@item.Id" method="get">
-                            <button type="submit" class="btn btn-sm btn-primary">
-                                Edit
-                            </button>
-                        </form>
-                    </td>
-                    <td>
-                        <form asp-controller="TblCorrMemberOffices" asp-action="Details" asp-route-id="@item.Id" method="get">
-                            <button type="submit" class="btn btn-sm btn-warning">
-                                Details
-                            </button>
-                        </form>
-                    </td>-->
+                    <!--<form asp-controller="TblCorrMemberOffices" asp-action="Edit" asp-route-id="@item.Id" method="get">
+                <button type="submit" class="btn btn-sm btn-primary">
+                    Edit
+                </button>
+            </form>
+        </td>
+        <td>
+            <form asp-controller="TblCorrMemberOffices" asp-action="Details" asp-route-id="@item.Id" method="get">
+                <button type="submit" class="btn btn-sm btn-warning">
+                    Details
+                </button>
+            </form>
+        </td>-->
                     <td>
                         <form asp-controller="TblCorrMemberOffices" asp-action="Delete" asp-route-id="@item.Id" method="get">
                             <button type="submit" class="btn btn-sm btn-danger">
@@ -90,13 +109,13 @@
                     </td>
                 }
                 @* <td>
-            @if (User.IsInRole("Admin"))
-            {
-            <a asp-action="Edit" asp-route-id="@item.Id">Edit</a>
-            <a asp-action="Details" asp-route-id="@item.Id">Details</a>
-            <a asp-action="Delete" asp-route-id="@item.Id">Delete </a>
-            }
-            </td> *@
+        @if (User.IsInRole("Admin"))
+        {
+        <a asp-action="Edit" asp-route-id="@item.Id">Edit</a>
+        <a asp-action="Details" asp-route-id="@item.Id">Details</a>
+        <a asp-action="Delete" asp-route-id="@item.Id">Delete </a>
+        }
+        </td> *@
             </tr>
         }
     </tbody>

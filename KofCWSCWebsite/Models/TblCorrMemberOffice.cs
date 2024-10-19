@@ -16,5 +16,7 @@ public partial class TblCorrMemberOffice
     public bool PrimaryOffice { get; set; }
 
     public int? Year { get; set; }
-
+    public int? Council { get; set; }
+    public int? District { get; set; }
+    public int? Assembly { get; set; }
 }
