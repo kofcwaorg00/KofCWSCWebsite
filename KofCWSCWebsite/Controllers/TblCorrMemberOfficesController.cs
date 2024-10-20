@@ -163,7 +163,7 @@ namespace KofCWSCWebsite.Controllers
         //******************************************************************************
         // 8/24/2024 Tim Philomeno
         //******************************************************************************
-        public async Task<IActionResult> Create([Bind("MemberId,OfficeId,PrimaryOffice,Year")] TblCorrMemberOffice tblCorrMemberOffice)
+        public async Task<IActionResult> Create([Bind("MemberId,OfficeId,PrimaryOffice,Year,Council,Assembly,District")] TblCorrMemberOffice tblCorrMemberOffice)
         {
             if (ModelState.IsValid)
             {
@@ -212,7 +212,7 @@ namespace KofCWSCWebsite.Controllers
         // 8/25/2024 Tim Philomeno
         // we will never call edit on this table
         //***********************************************************************************************
-        public async Task<IActionResult> Edit(int id, [Bind("Id,MemberId,OfficeId,PrimaryOffice,Year")] TblCorrMemberOffice tblCorrMemberOffice)
+        public async Task<IActionResult> Edit(int id, [Bind("Id,MemberId,OfficeId,PrimaryOffice,Year,Council,Assembly,District")] TblCorrMemberOffice tblCorrMemberOffice)
         {
             return View(tblCorrMemberOffice);
             ////////////if (id != tblCorrMemberOffice.Id)
