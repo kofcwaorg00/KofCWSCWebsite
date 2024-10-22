@@ -316,7 +316,8 @@
     </div>
 
 
-    <div id="carouselKofC" class="carousel carousel-dark slide" data-bs-ride="true" data-bs-interval="100000">
+    <div id="carouselKofC" class="carousel carousel-dark slide" data-bs-ride="carousel">
+        @*100000*@
         <div class="carousel-indicators">
             <button type="button" data-bs-target="#carouselExampleDark" data-bs-slide-to="0" class="active" aria-current="true" aria-label="Slide 1"></button>
             <button type="button" data-bs-target="#carouselExampleDark" data-bs-slide-to="1" aria-label="Slide 2"></button>
@@ -332,7 +333,7 @@
                 {
                     if (item.Type == "SO")
                     {
-                        <div class="@Html.Raw(item.Class)" style="height:350px">
+                        <div class="@Html.Raw(item.Class)" data-bs-interval="10000" style="height:350px">
                             <div>
                                 <h5>@Html.DisplayFor(modelItem => item.FullName)</h5>
                             </div>
