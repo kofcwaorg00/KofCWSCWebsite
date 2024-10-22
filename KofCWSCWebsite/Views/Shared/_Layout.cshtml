@@ -37,26 +37,35 @@
     <link rel="icon" type="image/x-icon" href="./favicon.ico" />
 </head>
 <body>
-    <div>
-        <a href="/"><img src="~/images/LOGO-WA1.jpg" alt="Banner" height="100" width="250" /></a>
-        <div style="float:right;margin-top:35px">
-            <a href="https://www.kofc.org/join" target="_blank"><img src="~/images/JoinUs.png" /></a>
+    <div class="grid-container">
+        <div class="grid-item"><a href="/"><img src="~/images/LOGO-WA1.jpg" alt="Banner" height="100" width="250" /></a></div>
+        <div class="grid-item"></div>
+        <script async src="https://cse.google.com/cse.js?cx=712101acff46a4126">
+        </script>
+        <div class="grid-item">
+            <div class="gcse-search"></div>
         </div>
-        @{
-            // we need to test for ViewData being null allowing with ?
-            string myENV = ViewData["ENV"]?.ToString();
-            if (myENV == null) { myENV = ""; };
-        }
-        @if (myENV == "QC" || myENV == "DEVELOPMENT")
-        {
-            <p style="color:white;background-color:black">
-                @ViewData["ConnectString"]
-                @ViewData["APIURL"]
-                @ViewData["ENV"]
-            </p>
-        }
-
+        <partial name="_LoginPartial" />
+        <div class="grid-item">
+            <div style="float:right">
+                <a href="https://www.kofc.org/join" target="_blank"><img src="~/images/JoinUs.png" /></a>
+            </div>
+        </div>
     </div>
+    @{
+        // we need to test for ViewData being null allowing with ?
+        string myENV = ViewData["ENV"]?.ToString();
+        if (myENV == null) { myENV = ""; };
+    }
+    @if (myENV == "QC" || myENV == "DEVELOPMENT")
+    {
+        <p style="color:white;background-color:black">
+            @ViewData["ConnectString"]
+            @ViewData["APIURL"]
+            @ViewData["ENV"]
+        </p>
+    }
+
     <header>
         <nav class="navbar navbar-expand-sm navbar-toggleable-sm navbar-light bg-white border-bottom box-shadow mb-3">
             <div class="container-fluid">
@@ -250,7 +259,7 @@
                                     }
                                     <li><a class="dropdown-item MyMenuLink" asp-area="" asp-controller="SP" asp-action="GetEmailAlias" asp-route-id="">Email Alias</a></li>
 
-                                    <li><a class="dropdown-item MyMenuLink" asp-area="" asp-controller="FileStorage" asp-action="Details" asp-route-id="5">State Directory</a></li>
+                                    <li><a class="dropdown-item MyMenuLink" asp-area="" asp-controller="FileStorage" asp-action="Details" asp-route-id="14">State Directory</a></li>
                                     <li><a class="dropdown-item MyMenuLink" href="https://kofc.org/en/forms/spa/invite.html?lang=en&form=10784C.01" target="_blank">Fraternal Programs Report Form 10784</a></li>
                                     <li><a class="dropdown-item MyMenuLink" href="https://kofcwa.sharepoint.com/:x:/s/WebsiteStorage/EQA5DjyAzqdAuV5i6NZ5Nd0BfxTsvbAr6INE79wFayiucw?e=nhr7tv" target="_blank">IRS Form 990 Filing Months Council/Assembly</a></li>
                                     <li><a class="dropdown-item MyMenuLink" asp-page="/Forms/Necrology">Necrology Form</a></li>
@@ -297,7 +306,7 @@
                                         <li><a class="dropdown-item MyMenuLink" asp-area="" asp-controller="Role" asp-action="Index" asp-route-id="">Roles</a>                                </li>
                                         <li><a class="dropdown-item MyMenuLink" asp-area="" asp-controller="TblValOffices" asp-action="Index" asp-route-id="">Offices</a></li>
                                         <li><a class="dropdown-item MyMenuLink" asp-area="" asp-controller="FileStorage" asp-action="Index" asp-route-id="">Upload a Document</a></li>
-                                        
+
                                         <li><a class="dropdown-item MyMenuLink" href="#">Registered Users(future)</a></li>
                                         <li><hr class="dropdown-divider"></li>
                                     }
@@ -335,9 +344,7 @@
                             <input class="form-control me-2" type="search" placeholder="Search" aria-label="Search">
                             <button class="btn btn-outline-success" type="submit">Search</button>
                         </form>*@
-                    <div>
-                        <partial name="_LoginPartial" />
-                    </div>
+
                 </div>
             </div>
 

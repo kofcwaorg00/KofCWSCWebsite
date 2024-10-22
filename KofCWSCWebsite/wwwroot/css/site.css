@@ -66,3 +66,16 @@ body {
     height: 40px;
     background-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' fill='%23c593d8' width='8' height='8' viewBox='0 0 8 8'%3e%3cpath d='M2.75 0l-1.5 1.5L3.75 4l-2.5 2.5L2.75 8l4-4-4-4z'/%3e%3c/svg%3e") !important;
 }*/
+/*Override google search box width*/
+.gsc-control-cse{
+    /*width: !important;*/
+}
+.grid-container {
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr 15% 8%; /* Two equal columns */
+}
+
+.grid-item {
+    padding: 5px;
+    /*border: 1px solid #000;*/
+}
