@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
 
 namespace KofCWSCWebsite.Models;
 
@@ -7,6 +8,7 @@ public partial class EmailOffice
 {
     public int Id { get; set; }
 
+    [MaxLength(50)]
     public string Subject { get; set; } = null!;
 
     public string From { get; set; } = null!;
