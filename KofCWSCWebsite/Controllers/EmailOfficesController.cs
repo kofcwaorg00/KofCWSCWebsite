@@ -105,7 +105,7 @@ namespace KofCWSCWebsite.Controllers
                 if (emailOffice.Fs)
                 {
                     mysuccess = Services.Utils.SendEmailAuthenticatedMG("AllFSs@mg.kofc-wa.org",emailOffice.From, "", "", emailOffice.Subject, emailOffice.Body, null, _configuration);
-                    //mysuccess = Services.Utils.SendEmailAuthenticatedMG("testing@mg.kofc-wa.org", emailOffice.From, "", "", emailOffice.Subject,emailOffice.Body , null, _configuration);
+                    //mysuccess = Services.Utils.SendEmailAuthenticatedAZ("tphilomeno@comcast.net", emailOffice.From, "", "", emailOffice.Subject,emailOffice.Body , null,_configuration);
                 }
                 if (emailOffice.Gk)
                 {
@@ -129,7 +129,7 @@ namespace KofCWSCWebsite.Controllers
                 }
                 if (emailOffice.Dd)
                 {
-                    mysuccess = Services.Utils.SendEmailAuthenticatedDASP("AllDDs@kofc-wa.org", emailOffice.From, "", "", emailOffice.Subject, emailOffice.Body, null, _configuration);
+                    mysuccess = Services.Utils.SendEmailAuthenticatedAZ("AllDDs@kofc-wa.org", emailOffice.From, "", "", emailOffice.Subject, emailOffice.Body, null, _configuration);
                     //mysuccess = Services.Utils.SendEmailAuthenticatedDASP("webmaster@kofc-wa.org", emailOffice.From, "", "", emailOffice.Subject, "FROM DD", null, _configuration);
                 }
                 if (mysuccess)

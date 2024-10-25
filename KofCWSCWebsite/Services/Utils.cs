@@ -9,6 +9,11 @@ using Microsoft.AspNet.Identity;
 using Azure.Identity;
 using Azure.Security.KeyVault.Secrets;
 using System.Configuration;
+using Azure;
+using Azure.Communication.Email;
+using sun.tools.tree;
+using Microsoft.CodeAnalysis.VisualBasic.Syntax;
+
 
 namespace KofCWSCWebsite.Services
 {
@@ -48,6 +53,7 @@ namespace KofCWSCWebsite.Services
             return " " + FratYearString;
         }
 
+        // DASP should not be used anymore.  Switched over to use Azure Comm Server
         public static bool SendEmailAuthenticatedDASP(string sTo, string sFrom, string sCC, string sBCC, string sSubject, string sBody, 
             Attachment oAttachment,IConfiguration _config)
         {
@@ -123,12 +129,58 @@ namespace KofCWSCWebsite.Services
                 return false;
             }
         }
-        public static bool SendEmailAuthenticatedAZ(string sTo, string sFrom, string sCC, string sBCC, string sSubject, string sBody, Attachment oAttachment)
+        public static bool SendEmailAuthenticatedAZ(string sTo, string sFrom, string sCC, string sBCC, string sSubject, string sBody, 
+            Attachment oAttachment, IConfiguration _config)
         {
-            return true;
+            try
+            {
+                sBody = sBody.Replace("\r\n", "<br />");
+                string kvURL = _config["KV:VAULTURL"];
+                var kvclient = new SecretClient(new Uri((string)kvURL), new DefaultAzureCredential());
+                var vConnString = kvclient.GetSecret("AZEmailConnString").Value;
+                string connectionString = vConnString.Value;
 
-            //string smtpAuthUsername = "KofCWSCCom|22875cd2-d6bf-4cb0-8ced-bbbb019a8572|cba846cf-1683-4d63-8c9c-93e37f653c83";
-            //string smtpAuthPassword = "NRU8Q~pkq5Zbt1OPvxNjGKIKPRQ_CMxDs6L~4cbq";
+                //string connectionString = "endpoint=https://kofcwsccom.unitedstates.communication.azure.com/;accesskey=BCLd2XWtSGPqTKKYYxuiqOUPcpksMTIvUL8cmf3d5LC8rC9Ban8WJQQJ99AHACULyCpYivoHAAAAAZCSgBrJ";
+                
+                var emailClient = new EmailClient(connectionString);
+
+                var emailMessage = new EmailMessage(
+                    senderAddress: "DoNotReply@kofc-wa.org",
+                    content: new EmailContent(sSubject)
+                    {
+                        Html = sBody
+                    },
+                    recipients: new EmailRecipients(new List<EmailAddress> { new EmailAddress(sTo) }));
+
+                EmailSendOperation emailSendOperation = emailClient.Send(
+                    WaitUntil.Completed,
+                    emailMessage);
+                if (emailSendOperation != null)
+                {
+                    if (emailSendOperation.Value.Status == "Succeeded")
+                    {
+                        return true;
+                    }
+                    else
+                    {
+                        return false;
+                    }
+                }
+                else
+                {
+                    return false;
+                }
+            }
+            catch (Exception ex)
+            {
+                Log.Error(ex.Message + " - " + ex.InnerException);
+                return false;
+            }
+            
+            
+            
+            //string smtpAuthUsername = "KofCWSCEmailSvc.231618d3-e3bb-4d6d-8e11-920bfc3c90dc.cba846cf-1683-4d63-8c9c-93e37f653c83";
+            //string smtpAuthPassword = "RUj8Q~Ha35tCQ80gzAjS72PYMQbmLLObW_QuVcdI";
             //string sender = sFrom;
             //string recipient = sTo;
             //string subject = sSubject;
@@ -139,7 +191,8 @@ namespace KofCWSCWebsite.Services
             //{
             //    Port = 587,
             //    Credentials = new NetworkCredential(smtpAuthUsername, smtpAuthPassword),
-            //    EnableSsl = true
+            //    EnableSsl = false,
+               
             //};
 
             //var message = new MailMessage(sender, recipient, subject, body);
