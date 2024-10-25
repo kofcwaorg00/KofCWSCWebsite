@@ -140,8 +140,6 @@ namespace KofCWSCWebsite.Services
                 var vConnString = kvclient.GetSecret("AZEmailConnString").Value;
                 string connectionString = vConnString.Value;
 
-                //string connectionString = "endpoint=https://kofcwsccom.unitedstates.communication.azure.com/;accesskey=BCLd2XWtSGPqTKKYYxuiqOUPcpksMTIvUL8cmf3d5LC8rC9Ban8WJQQJ99AHACULyCpYivoHAAAAAZCSgBrJ";
-                
                 var emailClient = new EmailClient(connectionString);
 
                 var emailMessage = new EmailMessage(
