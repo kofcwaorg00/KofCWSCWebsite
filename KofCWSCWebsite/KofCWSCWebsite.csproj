@@ -53,11 +53,13 @@
   </ItemGroup>
 
   <ItemGroup>
+    <Compile Remove="Pages\Helper\_printDirModal.cshtml.cs" />
     <Compile Remove="Pages\Index.cshtml.cs" />
     <Compile Remove="Services\ConfigureSerilogLogging.cs" />
   </ItemGroup>
 
   <ItemGroup>
+    <Content Remove="Pages\Helper\_printDirModal.cshtml" />
     <Content Remove="Pages\Index.cshtml" />
     <Content Remove="Pages\Shared\_Layout.cshtml" />
     <Content Remove="Pages\Shared\_LoginPartial.cshtml" />
