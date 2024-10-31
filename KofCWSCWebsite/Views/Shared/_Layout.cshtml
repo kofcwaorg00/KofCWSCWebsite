@@ -259,11 +259,13 @@
                                     }
                                     <li><a class="dropdown-item MyMenuLink" asp-area="" asp-controller="SP" asp-action="GetEmailAlias" asp-route-id="">Email Alias</a></li>
 
-                                    <li><a class="dropdown-item MyMenuLink" asp-area="" asp-controller="FileStorage" asp-action="Details" asp-route-id="14">State Directory</a></li>
+                                    @*<li><a class="dropdown-item MyMenuLink" asp-area="" asp-controller="FileStorage" asp-action="Details" asp-route-id="14">State Directory</a></li>*@
+                                    <li><a class="dropdown-item MyMenuLink" asp-page="/Helper/PrintDir">State Directory</a></li>
                                     <li><a class="dropdown-item MyMenuLink" href="https://kofc.org/en/forms/spa/invite.html?lang=en&form=10784C.01" target="_blank">Fraternal Programs Report Form 10784</a></li>
                                     <li><a class="dropdown-item MyMenuLink" href="https://kofcwa.sharepoint.com/:x:/s/WebsiteStorage/EQA5DjyAzqdAuV5i6NZ5Nd0BfxTsvbAr6INE79wFayiucw?e=nhr7tv" target="_blank">IRS Form 990 Filing Months Council/Assembly</a></li>
                                     <li><a class="dropdown-item MyMenuLink" asp-page="/Forms/Necrology">Necrology Form</a></li>
                                     <li><a class="dropdown-item MyMenuLink" asp-page="/Forms/PrayerRequest">Prayer Request Form</a></li>
+                                    <li><a class="dropdown-item MyMenuLink" asp-page="/Forms/DDMidYear">Register for DD Mid Year Meeting</a></li>
                                     @if (User.IsInRole("Admin") || User.IsInRole("DataAdmin") || User.IsInRole("StateMembership") || User.IsInRole("StateOfficer"))
                                     {
                                         <li><a class="dropdown-item MyMenuLink" asp-area="" asp-controller="TblMasMembers" asp-action="Index" asp-route-id="aaa">Lookup Members</a></li>
