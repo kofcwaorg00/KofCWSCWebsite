@@ -3,7 +3,7 @@ using Microsoft.AspNetCore.Mvc.RazorPages;
 
 namespace KofCWSCWebsite.Pages.AOI
 {
-    public class TomSokoModel : PageModel
+    public class TomSokolModel : PageModel
     {
         public void OnGet()
         {
