@@ -32,16 +32,17 @@
                         @Html.DisplayFor(modelItem => item.FullName)
                     </div>
                     <div>
-
                         @Html.DisplayFor(modelItem => item.Title)
                     </div>
-                    <div>
-                        Email: @Html.Raw(item.Email)
-                    </div>
-                    <div>
-                        Phone: @Html.DisplayFor(modelItem => item.Phone)
-                    </div>
-
+                    @if (User.IsInRole("Member"))
+                    {
+                        <div>
+                            Email: @Html.Raw(item.Email)
+                        </div>
+                        <div>
+                            Phone: @Html.DisplayFor(modelItem => item.Phone)
+                        </div>
+                    }
                 </div>
             </td>
         </tr>
