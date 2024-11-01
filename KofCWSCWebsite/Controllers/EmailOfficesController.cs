@@ -20,7 +20,7 @@ namespace KofCWSCWebsite.Controllers
         public EmailOfficesController(ApplicationDbContext context, IConfiguration configuration)
         {
             _context = context;
-            this._configuration = configuration; 
+            this._configuration = configuration;
         }
 
         // GET: EmailOffices
@@ -134,6 +134,9 @@ namespace KofCWSCWebsite.Controllers
                 }
                 if (mysuccess)
                 {
+                    // send a copy to the originator before returning the final confirmation of delivery
+                    mysuccess = Services.Utils.SendEmailAuthenticatedAZ(emailOffice.From, emailOffice.From, "", "", emailOffice.Subject, emailOffice.Body, null, _configuration);
+
                     return RedirectToPage("/Utils/EmailGroupsConfirm");
                 }
                 else
