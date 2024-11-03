@@ -11,13 +11,11 @@ namespace KofCWSCWebsite.Controllers
     public class ReportsController : Controller
     {
         readonly DataSetService _dataSetService;
-        private readonly ApplicationDbContext? _context;
         readonly IWebHostEnvironment? _hostingEnvironment;
         private IConfiguration _configuration;
 
-        public ReportsController(ApplicationDbContext context, IWebHostEnvironment hostingEnvironment, DataSetService dataSetService, IConfiguration configuration)
+        public ReportsController(IWebHostEnvironment hostingEnvironment, DataSetService dataSetService, IConfiguration configuration)
         {
-            _context = context;
             _hostingEnvironment = hostingEnvironment;
             _dataSetService = dataSetService;
             _configuration = configuration;

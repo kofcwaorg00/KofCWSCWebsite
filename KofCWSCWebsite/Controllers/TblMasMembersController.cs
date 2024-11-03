@@ -28,6 +28,17 @@ namespace KofCWSCWebsite.Controllers
         [Authorize(Roles = "Admin,StateOfficer,DataAdmin,StateMembership")]
         public ActionResult Index(string lastname)
         {
+            //********************************************************************************
+            // 11/1/2024 Tim Philomeno
+            // create a session cookie, the MinValue does the trick
+            HttpContext.Response.Cookies.Append("IAgreeSensitive", "true", new CookieOptions
+            {
+                //Expires = DateTime.MinValue,// DateTimeOffset.UtcNow.AddMinutes(30),
+                Path="/",
+                HttpOnly = false, // Accessible only by the server
+                IsEssential = true // Required for GDPR compliance
+            });
+            //----------------------------------------------------------------------------------
             Log.Information("Starting index with Lastname " + lastname);
             if (lastname.IsNullOrEmpty())
             {

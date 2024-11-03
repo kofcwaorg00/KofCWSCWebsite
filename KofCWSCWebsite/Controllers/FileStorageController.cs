@@ -11,6 +11,7 @@ using com.sun.tools.javac.util;
 using com.sun.tools.@internal.ws.processor.model;
 using Microsoft.AspNetCore.Authorization;
 using NuGet.Protocol;
+using java.net;
 
 namespace KofCWSCWebsite.Controllers
 {
@@ -81,7 +82,17 @@ namespace KofCWSCWebsite.Controllers
             {
                 return NotFound();
             }
-
+            //********************************************************************************
+            // 11/1/2024 Tim Philomeno
+            // create a session cookie, the MinValue does the trick
+            HttpContext.Response.Cookies.Append("IAgreeSensitive", "true", new CookieOptions
+            {
+                //Expires = DateTimeOffset.UtcNow.AddMinutes(30),
+                Path="/",
+                HttpOnly = false, // Accessible only by the server
+                IsEssential = true // Required for GDPR compliance
+            });
+            //----------------------------------------------------------------------------------
             var tblWebFileStorage = await _context.FileStorages
                 .FirstOrDefaultAsync(m => m.Id == id);
             if (tblWebFileStorage == null)

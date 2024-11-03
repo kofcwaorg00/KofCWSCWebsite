@@ -3,7 +3,7 @@ using Microsoft.AspNetCore.Mvc.RazorPages;
 
 namespace KofCWSCWebsite.Pages.Helper
 {
-    public class PrintDirModel : PageModel
+    public class ShowSenseModel : PageModel
     {
         public void OnGet()
         {

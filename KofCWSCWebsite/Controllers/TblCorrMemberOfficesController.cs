@@ -10,6 +10,7 @@ using KofCWSCWebsite.Data;
 using Serilog;
 using Newtonsoft.Json;
 using Microsoft.EntityFrameworkCore.Metadata.Internal;
+using com.sun.xml.@internal.bind.v2.model.core;
 
 namespace KofCWSCWebsite.Controllers
 {
@@ -23,7 +24,6 @@ namespace KofCWSCWebsite.Controllers
         //*********************************************************************************
         public TblCorrMemberOfficesController(ApplicationDbContext context, DataSetService dataSetService)
         {
-            //_context = context;
             _dataSetService = dataSetService;
         }
 
@@ -151,6 +151,7 @@ namespace KofCWSCWebsite.Controllers
                 }
                 ViewBag.MemberID = id;
                 ViewBag.ListOfOffices = new SelectList(offices.OrderBy(x => x.OfficeDescription).ToList(), "OfficeId", "OfficeDescription");
+                ViewBag.FratYear = GetFratYear(0).Result;
             }
             return View();
         }
@@ -323,6 +324,30 @@ namespace KofCWSCWebsite.Controllers
         private bool TblCorrMemberOfficeExists(int id)
         {
             return true; // _context.TblCorrMemberOffices.Any(e => e.Id == id);
+        }
+        private async Task<string> GetFratYear(int NextYear)
+        {
+            Uri myURI = new Uri(_dataSetService.GetAPIBaseAddress() + "/GetFratYear/" + NextYear.ToString());
+
+            using (var client = new HttpClient())
+            {
+                //client.BaseAddress = new Uri(myURI);
+                var responseTask = client.GetAsync(myURI);
+                responseTask.Wait();
+                var result = responseTask.Result;
+                string? FY;
+                if (result.IsSuccessStatusCode)
+                {
+                    string json = await result.Content.ReadAsStringAsync();
+                    FY = json;
+                }
+                else
+                {
+                    FY = null;
+                    ModelState.AddModelError(string.Empty, "Server Error.  Please contact administrator.");
+                }
+                return FY;
+            }
         }
     }
 }

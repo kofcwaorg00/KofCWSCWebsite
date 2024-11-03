@@ -15,6 +15,7 @@ public partial class TblCorrMemberOffice
     
     public bool PrimaryOffice { get; set; }
 
+    [Display(Name = "Year - (defaults to the current fraternal year)")]
     public int? Year { get; set; }
     public int? Council { get; set; }
     public int? District { get; set; }

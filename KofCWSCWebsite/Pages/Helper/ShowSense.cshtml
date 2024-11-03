@@ -1,0 +1,135 @@
+﻿@page
+@model KofCWSCWebsite.Pages.Helper.ShowSenseModel
+@{
+}
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>@ViewData["Title"] - MyApp</title>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" />
+</head>
+<body>
+    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+    @*<script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.5.4/dist/umd/popper.min.js"></script>*@
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-cookie/1.4.1/jquery.cookie.min.js"></script>
+
+    <div class="modal fade" id="printDirModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="exampleModalLabel" style="text-align:center">Knights of Columbus Washington State Council Sensitive Information</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">×</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    By clicking 'I Agree' I certify that I am a member in good standing with the Knights of Columbus and will not copy, merge, disseminate, distribute, transmit or make available the enclosed reports to anyone not involved with the Knights of Columbus or to anyone for non-Knights of Columbus-related business and I will take the appropriate measures to protect the information. These materials are solely intended for the use of Knights of Columbus officers and members of the Washington State Council in the conduct of Knights of Columbus and Washington State Council business. Unauthorized distribution or reproduction for non-Knights of Columbus business is strictly prohibited.<br />
+                    <span style="font-weight:bold;color:red">NOTE: This process will take time to load.  Please be patient!</span>
+                </div>
+                <div class="modal-footer">
+                    @Html.ActionLink("Close", "Index", "Home", new { }, new { @class = "btn btn-secondary" })
+                    @{
+                        // 1 = State Directory
+                        // 2 = Email Alias
+                        // 3 = IRS Form 90
+                        // 4 = Lookup Members
+                        // 5 = WSC Bylaws
+                        var myQS = Request.Query["id"];
+                        switch (myQS)
+                        {
+                            case "1":
+                                @Html.ActionLink("I agree", "Details", "FileStorage", new { id = 14 }, new { @class = "btn btn-primary", @id = "myGo" });
+                                break;
+                            case "2":
+                                @Html.ActionLink("I agree", "GetEmailAlias", "SP", null, new { @class = "btn btn-primary", @id = "myGo" });
+                                break;
+                            case "3":
+                                <button class="btn btn-primary" id="myGo3" onclick="Do3()">I Agree</button>
+                                break;
+                            case "4":
+                                @Html.ActionLink("I agree", "Index", "TblMasMembers", null, new { @class = "btn btn-primary", @id = "myGo" });
+                                break;
+                            case "5":
+                                <button class="btn btn-primary" id="myGo5" onclick="Do5()">I Agree</button>
+                                break;
+                            default:
+                                @Html.ActionLink("No Source", "Index", "Home", null, new { @class = "btn btn-primary", @id = "myGo" });
+                                break;
+                        }
+                    }
+                </div>
+            </div>
+        </div>
+    </div>
+    <div id="busyIndicator" class="busy-indicator">
+        <div class="spinner"></div>
+    </div>
+
+    <script type="text/javascript">
+        $(window).on('load', function () {
+            var myAgree = $.cookie('IAgreeSensitive');
+            //alert(myAgree);
+            if (myAgree) {
+                showBusyIndicator();
+                if ($("#myGo3").attr("id"))
+                {
+                    Do3();
+                }
+                else if($("#myGo5").attr("id")){
+                    Do5();
+                }else
+                {
+                    window.location.href = $("#myGo").attr("href");
+                }
+            } else {
+                hideBusyIndicator();
+                $('#printDirModal').modal('show');
+            }
+        });
+
+        function showBusyIndicator() {
+            document.getElementById('busyIndicator').style.display = 'flex';
+        }
+
+        function hideBusyIndicator() {
+            document.getElementById('busyIndicator').style.display = 'none';
+        }
+        function Do3() {
+            // set the IAgreeSensitive cookie
+            $.cookie("IAgreeSensitive", "true", { path: '/' });
+            if (pop('https://kofcwa.sharepoint.com/:x:/s/WebsiteStorage/EQA5DjyAzqdAuV5i6NZ5Nd0BfxTsvbAr6INE79wFayiucw?e=nhr7tv', 250, 250)) {
+                alert("Popups are blocked, using current window to display document");
+                window.location.href = "https://kofcwa.sharepoint.com/:x:/s/WebsiteStorage/EQA5DjyAzqdAuV5i6NZ5Nd0BfxTsvbAr6INE79wFayiucw?e=nhr7tv";
+            } else {
+                window.open('https://kofcwa.sharepoint.com/:x:/s/WebsiteStorage/EQA5DjyAzqdAuV5i6NZ5Nd0BfxTsvbAr6INE79wFayiucw?e=nhr7tv', '_blank');
+                hideBusyIndicator();
+            }
+            //window.location.href = "https://kofc-wa.org";
+            //window.open('https://kofcwa.sharepoint.com/:x:/s/WebsiteStorage/EQA5DjyAzqdAuV5i6NZ5Nd0BfxTsvbAr6INE79wFayiucw?e=nhr7tv', '_blank');
+            //mywind.location.href = "https://"+window.location.host // "https://kofc-wa.org";
+            //window.location.href = "https://kofcwa.sharepoint.com/:x:/s/WebsiteStorage/EQA5DjyAzqdAuV5i6NZ5Nd0BfxTsvbAr6INE79wFayiucw?e=nhr7tv";
+        }
+        function Do5() {
+            // set the IAgreeSensitive cookie
+            $.cookie("IAgreeSensitive", "true", { path: '/' });
+            if (pop('https://kofcwa.sharepoint.com/:b:/s/WebsiteStorage/EUqp5s8ZEu1FobDh1NgFv_oBnveYzRySadYchEJ_pfZ0dQ?e=ARGYWC', 250, 250)) {
+                alert("Popups are blocked, using current window to display document");
+                window.location.href = "https://kofcwa.sharepoint.com/:b:/s/WebsiteStorage/EUqp5s8ZEu1FobDh1NgFv_oBnveYzRySadYchEJ_pfZ0dQ?e=ARGYWC";
+            }
+            else {
+                window.open('https://kofcwa.sharepoint.com/:b:/s/WebsiteStorage/EUqp5s8ZEu1FobDh1NgFv_oBnveYzRySadYchEJ_pfZ0dQ?e=ARGYWC', '_blank');
+                hideBusyIndicator();
+            }
+            //window.open('https://kofcwa.sharepoint.com/:b:/s/WebsiteStorage/EUqp5s8ZEu1FobDh1NgFv_oBnveYzRySadYchEJ_pfZ0dQ?e=ARGYWC', '_blank');
+            //window.location.href = "https://kofcwa.sharepoint.com/:b:/s/WebsiteStorage/EUqp5s8ZEu1FobDh1NgFv_oBnveYzRySadYchEJ_pfZ0dQ?e=ARGYWC";
+        }
+        function pop(url, w, h) {
+            n = window.open(url, '_blank', 'toolbar=0,location=0,directories=0,status=1,menubar=0,titlebar=0,scrollbars=1,resizable=1,width=' + w + ',height=' + h);
+            if (n == null) {
+                return true;
+            }
+            return false;
+        }
+    </script>
+</body>

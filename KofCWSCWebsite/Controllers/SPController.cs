@@ -24,7 +24,6 @@ namespace KofCWSCWebsite.Controllers
         public SPController(ApplicationDbContext context, IConfiguration configuration, DataSetService dataSetService)
         {
             Log.Information("Initializing SPController");
-            //_context = context;
             _configuration = configuration;
             _dataSetService = dataSetService;
              
@@ -152,6 +151,17 @@ namespace KofCWSCWebsite.Controllers
         [Route("GetEmailAlias")]
         public IActionResult GetEmailAlias()
         {
+            //********************************************************************************
+            // 11/1/2024 Tim Philomeno
+            // create a session cookie, the MinValue does the trick
+            HttpContext.Response.Cookies.Append("IAgreeSensitive", "true", new CookieOptions
+            {
+                //Expires = DateTimeOffset.UtcNow.AddMinutes(30),
+                Path = "/",
+                HttpOnly = false, // Accessible only by the server
+                IsEssential = true // Required for GDPR compliance
+            });
+            //----------------------------------------------------------------------------------
             Uri myURI = new Uri(_dataSetService.GetAPIBaseAddress() + "/GetEmailAlias");
 
             using (var client = new HttpClient())
