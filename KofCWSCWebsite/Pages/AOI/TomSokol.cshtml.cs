@@ -1,9 +1,9 @@
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 
-namespace KofCWSCWebsite.Pages.Home
+namespace KofCWSCWebsite.Pages.AOI
 {
-    public class EmailAliasModel : PageModel
+    public class TomSokolModel : PageModel
     {
         public void OnGet()
         {
