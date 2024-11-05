@@ -118,33 +118,33 @@ namespace KofCWSCWebsite.Controllers
             }
         }
 
-        // GET: Bulletins
-        [Route("GetBulletins")]
-        public IActionResult GetBulletins()
-        {
-            Uri myURI = new Uri(_dataSetService.GetAPIBaseAddress() + "/GetBulletins");
+        // GET: Bulletins - OBSOLETE
+        //[Route("GetBulletins")]
+        //public IActionResult GetBulletins()
+        //{
+        //    Uri myURI = new Uri(_dataSetService.GetAPIBaseAddress() + "/GetBulletins");
 
-            using (var client = new HttpClient())
-            {
-                //client.BaseAddress = new Uri(myURI);
-                var responseTask = client.GetAsync(myURI);
-                responseTask.Wait();
-                var result = responseTask.Result;
-                IEnumerable<SPGetBulletins> bulletins;
-                if (result.IsSuccessStatusCode)
-                {
-                    var readTask = result.Content.ReadAsAsync<IList<SPGetBulletins>>();
-                    readTask.Wait();
-                    bulletins = readTask.Result;
-                }
-                else
-                {
-                    bulletins = Enumerable.Empty<SPGetBulletins>();
-                    ModelState.AddModelError(string.Empty, "Server Error.  Please contact administrator.");
-                }
-                return View("Views/Home/GetBulletins.cshtml", bulletins);
-            }
-        }
+        //    using (var client = new HttpClient())
+        //    {
+        //        //client.BaseAddress = new Uri(myURI);
+        //        var responseTask = client.GetAsync(myURI);
+        //        responseTask.Wait();
+        //        var result = responseTask.Result;
+        //        IEnumerable<SPGetBulletins> bulletins;
+        //        if (result.IsSuccessStatusCode)
+        //        {
+        //            var readTask = result.Content.ReadAsAsync<IList<SPGetBulletins>>();
+        //            readTask.Wait();
+        //            bulletins = readTask.Result;
+        //        }
+        //        else
+        //        {
+        //            bulletins = Enumerable.Empty<SPGetBulletins>();
+        //            ModelState.AddModelError(string.Empty, "Server Error.  Please contact administrator.");
+        //        }
+        //        return View("Views/Home/GetBulletins.cshtml", bulletins);
+        //    }
+        //}
 
         // GET: EmailAlias
         [Authorize]
