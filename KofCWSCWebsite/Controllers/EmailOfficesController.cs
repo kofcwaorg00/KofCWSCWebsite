@@ -82,13 +82,14 @@ namespace KofCWSCWebsite.Controllers
                 // of what was sent.
                 if (ModelState.IsValid)
                 {
+                    emailOffice.DateSent = DateTime.Now;
                     Log.Information("Sending Email");
                     _context.Add(emailOffice);
                     await _context.SaveChangesAsync();
                }
                 //--------------------------------------------------------------------------------
                 //Testing
-                //////////if (Services.Utils.SendEmailAuthenticatedMG("testing@mg.kofc-wa.org", emailOffice.From, "", "", emailOffice.Subject, emailOffice.Body, null, _configuration))
+                //////////if (Services.Utils.SendEmailAuthenticatedAZ("tphilomeno@comcast.net", emailOffice.From, "", "", emailOffice.Subject, emailOffice.Body, null, _configuration))
                 //////////{
                 //////////    ModelState.AddModelError(string.Empty, "Your email has been sent to the selected groups!");
                 //////////    return RedirectToPage("/Utils/EmailGroupsConfirm");
@@ -104,7 +105,7 @@ namespace KofCWSCWebsite.Controllers
                 bool mysuccess = false;
                 if (emailOffice.Fs)
                 {
-                    mysuccess = Services.Utils.SendEmailAuthenticatedMG("AllFSs@mg.kofc-wa.org",emailOffice.From, "", "", emailOffice.Subject, emailOffice.Body, null, _configuration);
+                    mysuccess = Services.Utils.SendEmailAuthenticatedMG("AllFSs@mg.kofc-wa.org", emailOffice.From, "", "", emailOffice.Subject, emailOffice.Body, null, _configuration);
                     //mysuccess = Services.Utils.SendEmailAuthenticatedAZ("tphilomeno@comcast.net", emailOffice.From, "", "", emailOffice.Subject,emailOffice.Body , null,_configuration);
                 }
                 if (emailOffice.Gk)

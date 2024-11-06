@@ -8,7 +8,7 @@
     <table class="table">
         <tr>
             <td style="text-align:center">
-                <h3>Send Email to Selected Officers</h3><br />
+                <h3>Send Email to Selected Offices</h3><br />
                 <input type="submit" value="Send Email" class="btn btn-primary" style="width:200px" />
                 @*<button id="sendEmail" type="submit" value="Create" class="w-100 btn btn-lg btn-primary" style="width:200px !important">Send Email</button>*@
             </td>
@@ -37,6 +37,11 @@
         </tr>
         <tr>
             <td>
+                @*<div class="form-floating mb-3">
+                    <input asp-for="@Model.DateSent" class="form-control" autocomplete="off" aria-required="true" placeholder="Tom" value="@DateTime.Now.ToString("yyyy-MM-ddThh:mm")" />
+                    <label asp-for="@Model.DateSent" hidden="true">Date</label>
+                    <span asp-validation-for="@Model.DateSent" class="text-danger"></span>
+                </div>*@
                 <div class="form-floating mb-3">
                     <input asp-for="@Model.Subject" class="form-control" autocomplete="off" aria-required="true" placeholder="Tom" />
                     <label asp-for="@Model.Subject">Subject(max 50 chars)</label>
