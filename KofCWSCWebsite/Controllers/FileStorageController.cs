@@ -7,21 +7,21 @@ using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using KofCWSCWebsite.Data;
 using KofCWSCWebsite.Models;
-using com.sun.tools.javac.util;
-using com.sun.tools.@internal.ws.processor.model;
 using Microsoft.AspNetCore.Authorization;
 using NuGet.Protocol;
 using java.net;
+using Newtonsoft.Json;
+using Serilog;
 
 namespace KofCWSCWebsite.Controllers
 {
     public class FileStorageController : Controller
     {
-        private readonly ApplicationDbContext _context;
+        private DataSetService _dataSetService;
 
-        public FileStorageController(ApplicationDbContext context)
+        public FileStorageController(DataSetService dataSetService)
         {
-            _context = context;
+            _dataSetService = dataSetService;
         }
 
         [Authorize(Roles = "Admin")]
@@ -40,22 +40,30 @@ namespace KofCWSCWebsite.Controllers
                         Length = file.Length,
                         ContentType = file.ContentType
                     };
-                    _context.FileStorages.Add(fileModel);
-                    await _context.SaveChangesAsync();
+                    if (ModelState.IsValid)
+                    {
+                        Uri myURI = new(_dataSetService.GetAPIBaseAddress() + "/Files");
+                        using (var client = new HttpClient())
+                        {
+                            client.BaseAddress = myURI;
+                            var response = await client.PostAsJsonAsync(myURI, fileModel);
+                        }
+
+                    }
                 }
             }
             return RedirectToAction("Index");
         }
 
         // not sure if this is going to be used
-        public async Task<IActionResult> GetFiles()
-        {
-            var result = _context.Database
-                .SqlQuery<FileStorageVM>($"uspWEB_GetFileStorageVM")
-                .ToList();
+        //public async Task<IActionResult> GetFiles()
+        //{
+        //    var result = _context.Database
+        //        .SqlQuery<FileStorageVM>($"uspWEB_GetFileStorageVM")
+        //        .ToList();
 
-            return View("ShowPDF",result);
-        }
+        //    return View("ShowPDF",result);
+        //}
 
 
 
@@ -67,11 +75,27 @@ namespace KofCWSCWebsite.Controllers
             // 9/21/2024 Tim Philomeno
             // execute a select statement so we don't get the DATA stream, takes too long
             //-----------------------------------------------------------------------------
-            var result = _context.Database
-                .SqlQuery<FileStorageVM>($"uspWEB_GetFileStorageVM")
-                .ToList();
+            Uri myURI = new Uri(_dataSetService.GetAPIBaseAddress() + "/Files");
 
-            return View(result);
+            using (var client = new HttpClient())
+            {
+                var responseTask = client.GetAsync(myURI);
+                responseTask.Wait();
+                var result = responseTask.Result;
+                IEnumerable<FileStorageVM> FSOs;
+                if (result.IsSuccessStatusCode)
+                {
+                    var readTask = result.Content.ReadAsAsync<IList<FileStorageVM>>();
+                    readTask.Wait();
+                    FSOs = readTask.Result;
+                }
+                else
+                {
+                    FSOs = Enumerable.Empty<FileStorageVM>();
+                    ModelState.AddModelError(string.Empty, "Server Error.  Please contact administrator.");
+                }
+                return View(FSOs);
+            }
         }
 
         // GET: TblWebFileStorages/Details/5
@@ -80,7 +104,7 @@ namespace KofCWSCWebsite.Controllers
         {
             if (id == null)
             {
-                return NotFound();
+                return null;
             }
             //********************************************************************************
             // 11/1/2024 Tim Philomeno
@@ -88,19 +112,31 @@ namespace KofCWSCWebsite.Controllers
             HttpContext.Response.Cookies.Append("IAgreeSensitive", "true", new CookieOptions
             {
                 //Expires = DateTimeOffset.UtcNow.AddMinutes(30),
-                Path="/",
+                Path = "/",
                 HttpOnly = false, // Accessible only by the server
                 IsEssential = true // Required for GDPR compliance
             });
             //----------------------------------------------------------------------------------
-            var tblWebFileStorage = await _context.FileStorages
-                .FirstOrDefaultAsync(m => m.Id == id);
-            if (tblWebFileStorage == null)
+            Uri myURI = new Uri(_dataSetService.GetAPIBaseAddress() + "/Files/" + id.ToString());
+
+            using (var client = new HttpClient())
             {
-                return NotFound();
+                var responseTask = client.GetAsync(myURI);
+                responseTask.Wait();
+                var result = responseTask.Result;
+                FileStorage? FSO;
+                if (result.IsSuccessStatusCode)
+                {
+                    string json = await result.Content.ReadAsStringAsync();
+                    FSO = JsonConvert.DeserializeObject<FileStorage>(json);
+                }
+                else
+                {
+                    FSO = null;
+                    ModelState.AddModelError(string.Empty, "Server Error.  Please contact administrator.");
+                }
+                return View("ShowPDF", FSO);
             }
-            return View("ShowPDF", tblWebFileStorage);
-            
         }
 
         //// GET: TblWebFileStorages/Create
@@ -110,23 +146,39 @@ namespace KofCWSCWebsite.Controllers
             return View();
         }
 
-        // GET: TblWebFileStorages/Details/5
+        //*****************************************************************************
+        // 11/7/2024 Tim Philomeno
+        // GetPDF supports the Ajax call in FileStorage Details
+        // Security is set to only authenicated users [Authorize]
         [Authorize]
         [HttpPost]
-        public JsonResult GetPDF(int? id)
+        public async Task<JsonResult> GetPDF(int? id)
         {
             if (id == null)
             {
                 return Json(NotFound());
             }
-            var tblWebFileStorage = _context.Database.SqlQuery<FileStorage>($"SELECT * FROM tblWEB_FileStorage where Id={id}").ToList();
-            var tfs = tblWebFileStorage.FirstOrDefault();
-            if (tblWebFileStorage == null)
+            Uri myURI = new Uri(_dataSetService.GetAPIBaseAddress() + "/Files/" + id.ToString());
+            FileStorage? FSO;
+            using (var client = new HttpClient())
             {
-                return Json(NotFound());
-            }
+                var responseTask = client.GetAsync(myURI);
+                responseTask.Wait();
+                var result = responseTask.Result;
+                
+                if (result.IsSuccessStatusCode)
+                {
+                    string json = await result.Content.ReadAsStringAsync();
+                    FSO = JsonConvert.DeserializeObject<FileStorage>(json);
+                }
+                else
+                {
+                    ModelState.AddModelError(string.Empty, "Server Error.  Please contact administrator.");
+                    FSO = null;
+                }
 
-            return Json(new { FileName = tfs.FileName, ContentType = tfs.ContentType, Data = tfs.Data });
+            }
+            return Json(new { FileName = FSO.FileName, ContentType = FSO.ContentType, Data = FSO.Data });
         }
 
         // GET: TblWebFileStorages/Delete/5
@@ -136,15 +188,26 @@ namespace KofCWSCWebsite.Controllers
             {
                 return NotFound();
             }
+            Uri myURI = new(_dataSetService.GetAPIBaseAddress() + "/Files/" + id);
 
-            var tblWebFileStorage = await _context.FileStorages
-                .FirstOrDefaultAsync(m => m.Id == id);
-            if (tblWebFileStorage == null)
+            using (var client = new HttpClient())
             {
-                return NotFound();
+                var responseTask = client.GetAsync(myURI);
+                responseTask.Wait();
+                var result = responseTask.Result;
+                FileStorage? FSO;
+                if (result.IsSuccessStatusCode)
+                {
+                    string json = await result.Content.ReadAsStringAsync();
+                    FSO = JsonConvert.DeserializeObject<FileStorage>(json);
+                }
+                else
+                {
+                    ModelState.AddModelError(string.Empty, "Server Error.  Please contact administrator.");
+                    FSO = null;
+                }
+                return View(FSO);
             }
-
-            return View(tblWebFileStorage);
         }
 
         // POST: TblWebFileStorages/Delete/5
@@ -152,19 +215,35 @@ namespace KofCWSCWebsite.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> DeleteConfirmed(int id)
         {
-            var tblWebFileStorage = await _context.FileStorages.FindAsync(id);
-            if (tblWebFileStorage != null)
+            Uri myURI = new(_dataSetService.GetAPIBaseAddress() + "/Files/" + id);
+            try
             {
-                _context.FileStorages.Remove(tblWebFileStorage);
+                using (var client = new HttpClient())
+                {
+                    var responseTask = client.DeleteAsync(myURI);
+                    responseTask.Wait();
+                    var result = responseTask.Result;
+                    FileStorage? FSO;
+                    if (result.IsSuccessStatusCode)
+                    {
+                        Log.Information("Delete File Success " + id);
+                        string json = await result.Content.ReadAsStringAsync();
+                        FSO = JsonConvert.DeserializeObject<FileStorage>(json);
+                    }
+                    else
+                    {
+                        Log.Information("Delete File Failed " + id);
+                        ModelState.AddModelError(string.Empty, "Server Error.  Please contact administrator.");
+                        FSO = null;
+                    }
+                    return RedirectToAction(nameof(Index));
+                }
             }
-
-            await _context.SaveChangesAsync();
-            return RedirectToAction(nameof(Index));
+            catch (Exception ex)
+            {
+                Log.Fatal(ex.Message + " " + ex.InnerException);
+                return NoContent();
+            }
         }
-
-        //private bool TblWebFileStorageExists(int id)
-        //{
-        //    return _context.    FileStorages.Any(e => e.Id == id);
-        //}
     }
 }
