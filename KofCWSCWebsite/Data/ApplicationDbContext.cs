@@ -383,6 +383,7 @@ public partial class ApplicationDbContext : DbContext
             entity.Property(e => e.From).HasMaxLength(50);
             entity.Property(e => e.Fs).HasColumnName("FS");
             entity.Property(e => e.Gk).HasColumnName("GK");
+            entity.Property(e => e.DateSent).HasColumnName("DateSent");
             entity.Property(e => e.Subject).HasMaxLength(50);
         });
 

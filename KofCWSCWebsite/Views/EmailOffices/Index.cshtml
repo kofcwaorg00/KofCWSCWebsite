@@ -6,19 +6,26 @@
 
 <h1>Index</h1>
 
-<p>
+@*<p>
     <a asp-action="Create">Create New</a>
-</p>
+</p>*@
 <table class="table">
     <thead>
         <tr>
+            @if (User.IsInRole("Admin") || User.IsInRole("DataAdmin"))
+            {
+                <th></th>
+            }
+            <th>
+                @Html.DisplayNameFor(model => model.DateSent)
+            </th>
             <th>
                 @Html.DisplayNameFor(model => model.Subject)
             </th>
             <th>
                 @Html.DisplayNameFor(model => model.From)
             </th>
-            <th>
+            <th style="width:50%">
                 @Html.DisplayNameFor(model => model.Body)
             </th>
             <th>
@@ -39,20 +46,35 @@
             <th>
                 @Html.DisplayNameFor(model => model.All)
             </th>
-            <th></th>
+
+
         </tr>
     </thead>
     <tbody>
         @foreach (var item in Model)
         {
             <tr>
+                @if (User.IsInRole("Admin") || User.IsInRole("DataAdmin"))
+                {
+                    <td style="padding-left:0px;padding-right:0px">
+                        <form asp-action="Details" asp-route-id="@item.Id" method="get">
+                            <button type="submit" class="btn btn-sm btn-warning">
+                                Details
+                            </button>
+                        </form>
+                    </td>
+                }
+                <td>
+                    @Convert.ToDateTime(item.DateSent).ToString("MM/dd/yyyy")
+                    @*@Html.DisplayFor(modelItem => item.DateSent)*@
+                </td>
                 <td>
                     @Html.DisplayFor(modelItem => item.Subject)
                 </td>
                 <td>
                     @Html.DisplayFor(modelItem => item.From)
                 </td>
-                <td>
+                <td style="width:50%">
                     @Html.DisplayFor(modelItem => item.Body)
                 </td>
                 <td>
@@ -73,11 +95,7 @@
                 <td>
                     @Html.DisplayFor(modelItem => item.All)
                 </td>
-                <td>
-                    <a asp-action="Edit" asp-route-id="@item.Id">Edit</a> |
-                    <a asp-action="Details" asp-route-id="@item.Id">Details</a> |
-                    <a asp-action="Delete" asp-route-id="@item.Id">Delete</a>
-                </td>
+
             </tr>
         }
     </tbody>

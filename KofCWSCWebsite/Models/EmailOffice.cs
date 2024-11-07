@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.ComponentModel.DataAnnotations;
 
 namespace KofCWSCWebsite.Models;
@@ -14,7 +15,9 @@ public partial class EmailOffice
     public string From { get; set; } = null!;
 
     public string Body { get; set; } = null!;
-    public DateTime DateSent { get; set; }
+
+    [DisplayName("Date Sent")]
+    public DateTime DateSent { get; set; } 
 
     public bool Fs { get; set; }
 
