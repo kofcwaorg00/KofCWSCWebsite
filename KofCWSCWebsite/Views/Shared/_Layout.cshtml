@@ -85,7 +85,7 @@
                                 <li><a class="dropdown-item MyMenuLink" asp-area="" asp-controller="SP" asp-action="GetCouncils" asp-route-id="">Search for a Council</a></li>
                                 <li><a class="dropdown-item MyMenuLink" asp-area="" asp-controller="SP" asp-action="GetAssys" asp-route-id="">Search for an Assembly</a></li>
                                 @*
-                                    <li><a class="dropdown-item MyMenuLink" asp-area="" asp-controller="TblMasMembers" asp-action="Index" asp-route-id="aa">Testing Members API</a></li> *@
+                <li><a class="dropdown-item MyMenuLink" asp-area="" asp-controller="TblMasMembers" asp-action="Index" asp-route-id="aa">Testing Members API</a></li> *@
                             </ul>
                         </li>
                         <li class="nav-item dropdown">
@@ -273,7 +273,7 @@
                                     {
                                         @*<li><a class="dropdown-item MyMenuLink" asp-area="" asp-controller="TblMasMembers" asp-action="Index" asp-route-id="aaa">Lookup Members</a></li>*@
                                         <li><a class="dropdown-item MyMenuLink" asp-page="/Helper/ShowSense" asp-route-id="4">Lookup Members</a></li>
-                                        
+
                                     }
                                     <li><hr class="dropdown-divider"></li>
                                     <li><a class="dropdown-item MyMenuLink" href="https://kofcwa.sharepoint.com/:f:/s/WebsiteStorage/Eg30ehJZLVtNr986yywbNpYBSTfPVs35B24G6OZxYvgcBw?e=B78FZx" target="_blank">Bulletin Archive</a></li>
@@ -291,10 +291,13 @@
                                 </a>
                                 <ul class="dropdown-menu" aria-labelledby="navbarDropdown1">
 
-                                    <li><a class="dropdown-item MyMenuLink" asp-area="" asp-controller="Reports" asp-action="GetLabelByOffice" asp-route-id="27">Print GK Labels</a></li>
-                                    <li><a class="dropdown-item MyMenuLink" asp-area="" asp-controller="Reports" asp-action="GetLabelByOffice" asp-route-id="22">Print FS Labels</a></li>
-                                    <li><a class="dropdown-item MyMenuLink" asp-area="" asp-controller="Reports" asp-action="GetLabelByOffice" asp-route-id="20">Print FN Labels</a></li>
-                                    <li><a class="dropdown-item MyMenuLink" asp-area="" asp-controller="Reports" asp-action="GetLabelByOffice" asp-route-id="17">Print FC Labels</a></li>
+                                    <li><a class="dropdown-item MyMenuLink" asp-area="" asp-controller="Reports" asp-action="GetLabelByOffice" asp-route-id="27">Print Grand Knight Labels</a></li>
+                                    <li><a class="dropdown-item MyMenuLink" asp-area="" asp-controller="Reports" asp-action="GetLabelByOffice" asp-route-id="22">Print Financial Secretary Labels</a></li>
+                                    <li><a class="dropdown-item MyMenuLink" asp-area="" asp-controller="Reports" asp-action="GetLabelByOffice" asp-route-id="20">Print Faithful Navigator Labels</a></li>
+                                    <li><a class="dropdown-item MyMenuLink" asp-area="" asp-controller="Reports" asp-action="GetLabelByOffice" asp-route-id="17">Print Faithful Comptroller Labels</a></li>
+                                    <li><a class="dropdown-item MyMenuLink" asp-area="" asp-controller="Reports" asp-action="GetLabelByGroup" asp-route-id="2">Print State Officer Labels</a></li>
+                                    <li><a class="dropdown-item MyMenuLink" asp-area="" asp-controller="Reports" asp-action="GetLabelByGroup" asp-route-id="5">Print State Chairman Labels</a></li>
+                                    <li><a class="dropdown-item MyMenuLink" asp-area="" asp-controller="Reports" asp-action="GetLabelByGroup" asp-route-id="3">Print District Deputy Labels</a></li>
                                     <li><hr class="dropdown-divider"></li>
                                     <li><a class="dropdown-item MyMenuLink" asp-area="" asp-controller="Reports" asp-action="GetDirectory" asp-route-id="1">Print Directory Full Current (BETA)</a></li>
                                     <li><a class="dropdown-item MyMenuLink" asp-area="" asp-controller="Reports" asp-action="GetDirectory" asp-route-id="2">Print Directory Short Current (BETA)</a></li>
@@ -349,6 +352,25 @@
                                     }
                                 </ul>
                             </li>
+                            @if (User.IsInRole("Admin"))
+                            {
+                                <li class="nav-item dropdown">
+                                    <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown1" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                                        Convention
+                                    </a>
+                                    <ul class="dropdown-menu" aria-labelledby="navbarDropdown1">
+
+                                        <li><a class="dropdown-item MyMenuLink" asp-area="" asp-controller="" asp-action="" asp-route-id="">Update Convention Title</a></li>
+                                        <li><a class="dropdown-item MyMenuLink" asp-area="" asp-controller="" asp-action="" asp-route-id="">Reset Convention Attendees</a></li>
+                                        <li><a class="dropdown-item MyMenuLink" asp-area="" asp-controller="" asp-action="" asp-route-id="">Enter Convention Attendees</a></li>
+                                        <li><hr class="dropdown-divider"></li>
+                                        <li><a class="dropdown-item MyMenuLink" asp-area="" asp-controller="" asp-action="" asp-route-id="">Print Rollcall Sheets</a></li>
+                                        <li><a class="dropdown-item MyMenuLink" asp-area="" asp-controller="" asp-action="" asp-route-id="">Create a Batch of Checks</a></li>
+                                        <li><a class="dropdown-item MyMenuLink" asp-area="" asp-controller="" asp-action="" asp-route-id="">Export to Accounting</a></li>
+                                        <li><a class="dropdown-item MyMenuLink" asp-area="" asp-controller="" asp-action="" asp-route-id="">Export to CSV</a></li>
+                                    </ul>
+                                </li>
+                            }
                         }
                     </ul>
                     @*<form class="d-flex">

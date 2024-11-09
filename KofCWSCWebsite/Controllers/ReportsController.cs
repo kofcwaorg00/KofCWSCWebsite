@@ -20,6 +20,27 @@ namespace KofCWSCWebsite.Controllers
             _dataSetService = dataSetService;
             _configuration = configuration;
         }
+
+        [Authorize(Roles = "Admin")]
+        [Route("GetLabelByGroup")]
+        public IActionResult GetLabelByGroup(int ID)
+        {
+            GetLabelByGroupModel model = new()
+            {
+                WebReport = new WebReport(),
+            };
+            //****************************************************************************************************
+            // To get the link between report parameter and stored procedure parameter, create a report parameter
+            // @InOffice.  Then go to the stored procedure properties parameters list and link this new parameter
+            // to the stored procedure parameter using the expression box.  Then the value here is transferred
+            // to the call of the stored proceudre
+            //****************************************************************************************************
+            var reportToLoad = "GetLabelByGroupAPI";
+            model.WebReport.Report.Load(Path.Combine(_dataSetService.ReportsPath, $"{reportToLoad}.frx"));
+            _dataSetService.PrepareReport(model.WebReport.Report, _configuration, ID);
+
+            return View(model);
+        }
         [Authorize(Roles = "Admin")]
         [Route("GetLabelByOffice")]
         public IActionResult GetLabelByOffice(int ID)

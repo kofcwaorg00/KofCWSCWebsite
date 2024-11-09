@@ -1,0 +1,31 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Report ScriptLanguage="CSharp" ReportInfo.Created="11/05/2024 13:48:17" ReportInfo.Modified="11/05/2024 13:53:43" ReportInfo.CreatorVersion="2024.1.3.0">
+  <Dictionary>
+    <JsonDataSourceConnection Name="GetLabelByGroup" ConnectionString="rijcmlqbJsCNDUWD8zs7Fjc+Sa5Ch4yhgOmFdtqzHncecX33gDqAK+Hc01OQ1RdW/EiFSfBRIvqq37FVXdJY/quMDgllPbLxYohi1snkHg/1ZySNp7lEcESjSx+nUoaxJt+fO+uoZ1P7Yusv7l0nVUpU3q+ZkigQNZJAD6LkWwHtJBlJ/2ZYkPPIMZOhNE8o6vd+Bgdw90igLQpLNGqkm3BlWqUU9bY//bcLi3ZA8fm/QwWJ1ApA9Ig/NhJ2kriZHHpi511W4RhjI32bFfZbPhB7infQ+GEjGo9dcbQEBDItB/t9xkD3RauY6RC+21oniWwXG+q66Kk+VUAkqBB7PhRQtqMccFjcNJjnBX5TLZcOPRX0P1TAQKPCUzNUJwZCwfR/6Zfxh+uH1J1b5QmBt39u6r/wS1uwV1M/NHzSirkSSo/s5ODVOSaiq+fczoxtxKl5Esflg7V6Xcmj+dxvi/7Dp2yvrB2ZbLRSFtqkzk2OunMBnWOpFvbIytAEPRJACt1GZG6yszsMH8BQZXXbvzH/MiRX53GewlE2jjYA9nkWjdR5Et1KKkS5EZCBJw+r1XjZMDZ">
+      <JsonTableDataSource Name="JSON" DataType="FastReport.Utils.Json.JsonArray" Enabled="true" TableName="JSON">
+        <Column Name="index" DataType="System.Int32"/>
+        <Column Name="item" DataType="FastReport.JsonBase">
+          <Column Name="district" DataType="System.Double"/>
+          <Column Name="altOfficeDescription" DataType="System.String"/>
+          <Column Name="fullName" DataType="System.String"/>
+          <Column Name="address" DataType="System.String"/>
+          <Column Name="council" DataType="System.Double"/>
+          <Column Name="assembly" DataType="System.Double"/>
+          <Column Name="city" DataType="System.String"/>
+          <Column Name="state" DataType="System.String"/>
+          <Column Name="postalCode" DataType="System.String"/>
+        </Column>
+        <Column Name="array" DataType="FastReport.JsonBase"/>
+        <Column Name="CSZ" DataType="System.Int32" PropName="Column" Calculated="true" Expression="[JSON.item.city]+&quot;, &quot;+[JSON.item.state]+&quot; &quot;+[JSON.item.postalCode]"/>
+        <Column Name="PrintName" DataType="System.Int32" PropName="Column" Calculated="true" Expression="[JSON.item.fullName]+&quot;, &quot;+[JSON.item.altOfficeDescription]"/>
+      </JsonTableDataSource>
+    </JsonDataSourceConnection>
+  </Dictionary>
+  <ReportPage Name="Page1" PaperWidth="215.9" PaperHeight="279.4" LeftMargin="4.7752" TopMargin="12.7" RightMargin="0" BottomMargin="0" Columns.Count="3" Columns.Width="66.675" Columns.Positions="0,69.85,139.7" Watermark.Font="Arial, 60pt">
+    <DataBand Name="Data1" Width="252.03" Height="96.01" DataSource="JSON">
+      <TextObject Name="Text2" Top="38.4" Width="249.6" Height="19.2" Text="[JSON.item.address]" Font="Arial, 8pt"/>
+      <TextObject Name="Text3" Top="57.6" Width="249.6" Height="19.2" Text="[JSON.CSZ]" Font="Arial, 8pt"/>
+      <TextObject Name="Text4" Top="19.2" Width="249.6" Height="19.2" Text="[JSON.PrintName]" Font="Arial, 8pt"/>
+    </DataBand>
+  </ReportPage>
+</Report>
