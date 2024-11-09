@@ -2,10 +2,13 @@
 using KofCWSCWebsite.Data;
 using KofCWSCWebsite.Models;
 using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Http.Extensions;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Data.SqlClient;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Internal;
+using Newtonsoft.Json;
+using NuGet.Protocol;
 using Serilog;
 
 namespace KofCWSCWebsite.Controllers
@@ -26,7 +29,7 @@ namespace KofCWSCWebsite.Controllers
             Log.Information("Initializing SPController");
             _configuration = configuration;
             _dataSetService = dataSetService;
-             
+
         }
 
         // GET: GetAssys
@@ -194,7 +197,7 @@ namespace KofCWSCWebsite.Controllers
 
             using (var client = new HttpClient())
             {
-                
+
                 //client.BaseAddress = new Uri(myURI);
                 var responseTask = client.GetAsync(myURI);
                 responseTask.Wait();
@@ -222,7 +225,7 @@ namespace KofCWSCWebsite.Controllers
             {
                 return NotFound();
             }
-            Uri myURI = new Uri(_dataSetService.GetAPIBaseAddress() + "/GetChairmanInfoBlock/"+id.ToString());
+            Uri myURI = new Uri(_dataSetService.GetAPIBaseAddress() + "/GetChairmanInfoBlock/" + id.ToString());
 
             using (var client = new HttpClient())
             {
@@ -245,7 +248,7 @@ namespace KofCWSCWebsite.Controllers
                 return View("Views/StateFamily/ChairmanDetails.cshtml", cib);
             }
         }
-        
+
         // GET: Chairmen
         [Route("GetDDs")]
         public IActionResult GetDDs()
@@ -301,6 +304,50 @@ namespace KofCWSCWebsite.Controllers
                 }
                 return View("Views/StateFamily/FourthDegreeOfficers.cshtml", fourthdeg);
             }
+        }
+        [Route("GetNextTempID")]
+        public IActionResult GetNextTempID()
+        {
+            try
+            {
+                Uri myURI = new Uri(_dataSetService.GetAPIBaseAddress() + "/GetNextTempID");
+                using (var client = new HttpClient())
+                {
+                    var responseTask = client.GetAsync(myURI);
+                    responseTask.Wait();
+                    var result = responseTask.Result;
+
+                    if (result.IsSuccessStatusCode)
+                    {
+                        //**********************************************************
+                        // 11/7/2024 Tim PHilomeno
+                        // there has to be a better way to do this.  I just want the
+                        // string that is returned.  I suspect that it has to do with
+                        // what the API returning 
+                        var readTask = result.Content.ReadAsStringAsync();
+                        readTask.Wait();
+                        var myID = readTask.Result;
+                        myID = myID.Replace("[", "");
+                        myID = myID.Replace("]","");
+                        ViewBag.NextTempID = myID;
+                        //------------------------------------------------------------
+                    }
+                    else
+                    {
+                        ModelState.AddModelError(string.Empty, "Server Error.  Please contact administrator.");
+                        ViewBag.NextTempID = null;
+                    }
+                    return View("Views/NextTempID/NextTempID.cshtml");
+                }
+            }
+
+            catch (Exception ex)
+            {
+
+                Log.Fatal(ex.Message + " " + ex.InnerException);
+                return Json(string.Empty);
+            }
+
         }
     }
 }

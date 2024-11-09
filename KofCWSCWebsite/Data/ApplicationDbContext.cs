@@ -7,6 +7,7 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.Data.SqlClient.AlwaysEncrypted.AzureKeyVaultProvider;
 using Serilog;
 
+
 namespace KofCWSCWebsite.Data;
 
 public partial class ApplicationDbContext : DbContext
@@ -58,6 +59,7 @@ public partial class ApplicationDbContext : DbContext
     public virtual DbSet<MemberVM> funSYS_BuildName { get; set; }
     public virtual DbSet<TblWebTrxAoi> TblWebTrxAois { get; set; }
     public virtual DbSet<TblSysTrxEvent> TblSysTrxEvents { get; set; }
+    public virtual DbSet<NextID> NextIDs { get; set; }
     public DbSet<KofCWSCWebsite.Models.TblValAssy> TblValAssys { get; set; } = default!;
     //public DbSet<KofCWSCWebsite.Models.TblValOffice> TblValOffice { get; set; } = default!;
     public DbSet<KofCWSCWebsite.Models.SPGetSOSView> SPGetSOSViews { get; set; } = default!;
@@ -392,7 +394,10 @@ public partial class ApplicationDbContext : DbContext
             {
                 dob.ToTable("tblWEB_FileStorage");
             });
-
+        modelBuilder.Entity<NextID>(entity =>
+        {
+            entity.HasKey(e => e.NextTempID);
+        });
         //modelBuilder.Entity<FileStorageVM>(
         //    ob =>
         //    {
