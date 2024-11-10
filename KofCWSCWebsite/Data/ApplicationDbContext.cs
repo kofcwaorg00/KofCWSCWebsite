@@ -69,6 +69,7 @@ public partial class ApplicationDbContext : DbContext
 
     public virtual DbSet<FileStorage> FileStorages { get; set; }
     public virtual DbSet<FileStorageVM> FileStoragesVM { get; set; }
+    public virtual DbSet<CvnControl> TblCvnControls { get; set; }
     protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
     {
         if (!optionsBuilder.IsConfigured)
@@ -397,6 +398,16 @@ public partial class ApplicationDbContext : DbContext
         modelBuilder.Entity<NextID>(entity =>
         {
             entity.HasKey(e => e.NextTempID);
+        });
+
+        modelBuilder.Entity<CvnControl>(entity =>
+        {
+            entity.HasKey(e => e.Id).HasName("PK_tblCVN_Control1");
+
+            entity.ToTable("tblCVN_Control");
+
+            entity.Property(e => e.Id).HasColumnName("id");
+            entity.Property(e => e.LocationString).HasMaxLength(1000);
         });
         //modelBuilder.Entity<FileStorageVM>(
         //    ob =>
