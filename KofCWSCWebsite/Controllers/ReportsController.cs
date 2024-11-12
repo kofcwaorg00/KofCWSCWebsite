@@ -85,5 +85,19 @@ namespace KofCWSCWebsite.Controllers
             _dataSetService.PrepareReport(model.WebReport.Report, _configuration, ShortForm, NextYear);
             return View(model);
         }
+        [Authorize(Roles = "Admin")]
+        [Route("GetRollCallSheets/{Id}")]
+        public IActionResult GetRollCallSheets(int Id)
+        {
+            
+            RollCallSheets model = new()
+            {
+                WebReport = new WebReport(),
+            };
+            var reportToLoad = "RollCallSheetsAPI";
+            model.WebReport.Report.Load(Path.Combine(_dataSetService.ReportsPath, $"{reportToLoad}.frx"));
+            _dataSetService.PrepareReport(model.WebReport.Report, _configuration, Id);
+            return View(model);
+        }
     }
 }
