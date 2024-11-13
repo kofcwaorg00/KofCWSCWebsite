@@ -48,7 +48,7 @@
         <partial name="_LoginPartial" />
         <div class="grid-item">
             <div style="float:right">
-                <a href="https://www.kofc.org/join" target="_blank"><img src="~/images/JoinUs.png" /></a>
+                <a href="https://www.kofc.org/join" target="kofc-supreme-tab"><img src="~/images/JoinUs.png" /></a>
             </div>
         </div>
     </div>
@@ -79,8 +79,8 @@
                             <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">Home</a>
                             <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
                                 <li><a class="dropdown-item MyMenuLink" href="/">Homepage</a></li>
-                                <li><a class="dropdown-item MyMenuLink" target="_blank" href="https://kofcwa.sharepoint.com/:b:/s/WebsiteStorage/EZ5syWRgiTROniGvHtlQ8zMBtIGBRndVfIsmlFoS0fhcxw?e=vJFwNP">Next Six Months</a></li>
-                                <li><a class="dropdown-item MyMenuLink" target="_blank" href="https://kofcwa.sharepoint.com/:b:/s/WebsiteStorage/EYOfM90-FzxKtmmzz_U9stoB6rvOv7CnwTJ2wBNXRjtveg?e=gb5J0Y">Current State Bulletin</a></li>
+                                <li><a class="dropdown-item MyMenuLink" target="kofcwa-sharepoint" href="https://kofcwa.sharepoint.com/:b:/s/WebsiteStorage/EZ5syWRgiTROniGvHtlQ8zMBtIGBRndVfIsmlFoS0fhcxw?e=vJFwNP">Next Six Months</a></li>
+                                <li><a class="dropdown-item MyMenuLink" target="kofcwa-sharepoint" href="https://kofcwa.sharepoint.com/:b:/s/WebsiteStorage/EYOfM90-FzxKtmmzz_U9stoB6rvOv7CnwTJ2wBNXRjtveg?e=gb5J0Y">Current State Bulletin</a></li>
                                 <li><hr class="dropdown-divider"></li>
                                 <li><a class="dropdown-item MyMenuLink" asp-area="" asp-controller="SP" asp-action="GetCouncils" asp-route-id="">Search for a Council</a></li>
                                 <li><a class="dropdown-item MyMenuLink" asp-area="" asp-controller="SP" asp-action="GetAssys" asp-route-id="">Search for an Assembly</a></li>
@@ -103,14 +103,14 @@
                                 <li><hr class="dropdown-divider"></li>
                                 <li><a class="dropdown-item MyMenuLink" asp-area="" asp-controller="SP" asp-action="GetChairmanInfoBlock" asp-route-id="202">KofC Riders</a></li>
                                 <li><a class="dropdown-item MyMenuLink" asp-area="" asp-controller="TblMasPSOs" asp-action="Index" asp-route-id="0">Past State Officers</a></li>
-                                <li><a class="dropdown-item MyMenuLink" href="https://kofcwa.sharepoint.com/:b:/s/WebsiteStorage/EUPgpg_PGwVEpuG8xXW8MfgB-adpQfb7J3kxnEnw04QK7A?e=rG6Icy" target="_blank">WA State Council History</a></li>
+                                <li><a class="dropdown-item MyMenuLink" href="https://kofcwa.sharepoint.com/:b:/s/WebsiteStorage/EUPgpg_PGwVEpuG8xXW8MfgB-adpQfb7J3kxnEnw04QK7A?e=rG6Icy" target="kofcwa-sharepoint">WA State Council History</a></li>
                                 <li><hr class="dropdown-divider"></li>
                                 <li><a class="dropdown-item MyMenuLink" asp-area="" asp-controller="TblMasAwards" asp-action="Index" asp-route-id="0">Grand Knight Resources</a></li>
-                                <li><a class="dropdown-item MyMenuLink" href="https://www.kofc.org/en/for-members/resources/council-leaders/financial-secretary.html" target="_blank">Financial Secretary Resources</a></li>
+                                <li><a class="dropdown-item MyMenuLink" href="https://www.kofc.org/en/for-members/resources/council-leaders/financial-secretary.html" target="kofc-supreme-tab">Financial Secretary Resources</a></li>
                                 @*<li><a class="dropdown-item MyMenuLink" asp-page="/SFPages/Chancellor">Chancellor Resources</a></li>*@
                                 <li><hr class="dropdown-divider"></li>
-                                <li><a class="dropdown-item MyMenuLink" href="https://kofcwa.sharepoint.com/:b:/s/WebsiteStorage/EW28e-2XtvtOpnrkieyj62UBcVqVhSVZvkVH5PPcezvyXQ?e=eoBD6A" target="_blank">Country Store Catalog</a></li>
-                                <li><a class="dropdown-item MyMenuLink" href="https://www.kofc.org/en/for-members/resources/index.html" target="_blank">For Councils</a></li>
+                                <li><a class="dropdown-item MyMenuLink" href="https://kofcwa.sharepoint.com/:b:/s/WebsiteStorage/EW28e-2XtvtOpnrkieyj62UBcVqVhSVZvkVH5PPcezvyXQ?e=eoBD6A" target="kofcwa-sharepoint">Country Store Catalog</a></li>
+                                <li><a class="dropdown-item MyMenuLink" href="https://www.kofc.org/en/for-members/resources/index.html" target="kofc-supreme-tab">For Councils</a></li>
                                 <li><a class="dropdown-item MyMenuLink" asp-area="" asp-controller="SP" asp-action="GetChairmanInfoBlock" asp-route-id="223">Council Administration & Finance</a></li>
                             </ul>
                         </li>
@@ -119,12 +119,12 @@
                                 Columbus Charities
                             </a>
                             <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
-                                <li><a class="dropdown-item MyMenuLink" href="https://columbuscharities.org" target="_blank">Columbus Charities Homepage</a></li>
+                                <li><a class="dropdown-item MyMenuLink" href="https://columbuscharities.org" target="cc-tab">Columbus Charities Homepage</a></li>
                                 <li><a class="dropdown-item MyMenuLink" asp-area="" asp-controller="SP" asp-action="GetChairmanInfoBlock" asp-route-id="231">Coats for Kids</a></li>
                                 <li><a class="dropdown-item MyMenuLink" asp-area="" asp-controller="SP" asp-action="GetChairmanInfoBlock" asp-route-id="172">Global Wheelchair Mission</a></li>
                                 <li><a class="dropdown-item MyMenuLink" href="https://www.knightscommunityhospitalequipmentloanprogram.com/" target="_blank">KC Help</a></li>
-                                <li><a class="dropdown-item MyMenuLink" href="https://columbuscharities.org/lamb-1882" target="_blank">L.A.M.B. 1882</a> </li>
-                                <li><a class="dropdown-item MyMenuLink" href="https://columbuscharities.org/tootsieroll" target="_blank">Tootsie Rolls</a></li>
+                                <li><a class="dropdown-item MyMenuLink" href="https://columbuscharities.org/lamb-1882" target="cc-tab">L.A.M.B. 1882</a> </li>
+                                <li><a class="dropdown-item MyMenuLink" href="https://columbuscharities.org/tootsieroll" target="cc-tab">Tootsie Rolls</a></li>
                             </ul>
                         </li>
                         <li class="nav-item dropdown">
@@ -191,7 +191,7 @@
                                 <li><a class="dropdown-item MyMenuLink" asp-area="" asp-controller="SP" asp-action="GetChairmanInfoBlock" asp-route-id="37">Life Director</a></li>
                                 <li><a class="dropdown-item MyMenuLink" asp-area="" asp-controller="SP" asp-action="GetChairmanInfoBlock" asp-route-id="279">Marches for Life</a></li>
                                 <li><a class="dropdown-item MyMenuLink" asp-area="" asp-controller="SP" asp-action="GetChairmanInfoBlock" asp-route-id="140">Special Olympics</a></li>
-                                <li><a class="dropdown-item MyMenuLink" href="https://columbuscharities.org/tootsieroll" target="_blank">Tootsie Roll Program</a> </li>
+                                <li><a class="dropdown-item MyMenuLink" href="https://columbuscharities.org/tootsieroll" target="cc-tab">Tootsie Roll Program</a> </li>
                                 <li><a class="dropdown-item MyMenuLink" asp-area="" asp-controller="SP" asp-action="GetChairmanInfoBlock" asp-route-id="280">Ultrasound Initiative</a></li>
                                 <li><a class="dropdown-item MyMenuLink" asp-area="" asp-controller="SP" asp-action="GetChairmanInfoBlock" asp-route-id="281">Christian Refugee Relief</a></li>
                                 <li><a class="dropdown-item MyMenuLink" asp-area="" asp-controller="SP" asp-action="GetChairmanInfoBlock" asp-route-id="220">Silver Rose</a></li>
@@ -199,7 +199,7 @@
                                 <li><a class="dropdown-item MyMenuLink" asp-area="" asp-controller="SP" asp-action="GetChairmanInfoBlock" asp-route-id="283">Pregnancy Center Support</a></li>
                                 <li><a class="dropdown-item MyMenuLink" asp-area="" asp-controller="SP" asp-action="GetChairmanInfoBlock" asp-route-id="284">Novena For Life</a></li>
                                 <li><a class="dropdown-item MyMenuLink" asp-area="" asp-controller="SP" asp-action="GetChairmanInfoBlock" asp-route-id="285">ASAP (Aid and Support After Pregnancy)</a></li>
-                                <li><a class="dropdown-item MyMenuLink" href="https://columbuscharities.org/lamb-1882" target="_blank">L.A.M.B. 1882</a> </li>
+                                <li><a class="dropdown-item MyMenuLink" href="https://columbuscharities.org/lamb-1882" target="cc-tab">L.A.M.B. 1882</a> </li>
                             </ul>
                         </li>
                         <li class="nav-item dropdown">
@@ -222,7 +222,7 @@
                             <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
                                 <li><a class="dropdown-item" href="https://kofcpacific.com/?p=WA" target="_blank">Pacific Agency</a></li>
                                 <li><a class="dropdown-item" href="https://kofc-wa.org/GetChairmanInfoBlock?id=70">Liability Insurance</a></li>
-                                <li><a class="dropdown-item" href="http://kofc.org/un/en/insurance/index.html" target="_blank">Supreme Council</a></li>
+                                <li><a class="dropdown-item" href="http://kofc.org/un/en/insurance/index.html" target="kofc-supreme-tab">Supreme Council</a></li>
                             </ul>
                         </li>
                         <li class="nav-item dropdown">
@@ -261,10 +261,8 @@
                                     @*<li><a class="dropdown-item MyMenuLink" asp-area="" asp-controller="SP" asp-action="GetEmailAlias" asp-route-id="">Email Alias</a></li>*@
                                     <li><a class="dropdown-item MyMenuLink" asp-page="/Helper/ShowSense" asp-route-id="2">Email Alias</a></li>
 
-                                    @*<li><a class="dropdown-item MyMenuLink" asp-area="" asp-controller="FileStorage" asp-action="Details" asp-route-id="14">State Directory</a></li>*@
                                     <li><a class="dropdown-item MyMenuLink" asp-page="/Helper/ShowSense" asp-route-id="1">State Directory</a></li>
-                                    <li><a class="dropdown-item MyMenuLink" href="https://kofc.org/en/forms/spa/invite.html?lang=en&form=10784C.01" target="_blank">Fraternal Programs Report Form 10784</a></li>
-                                    @*<li><a class="dropdown-item MyMenuLink" href="https://kofcwa.sharepoint.com/:x:/s/WebsiteStorage/EQA5DjyAzqdAuV5i6NZ5Nd0BfxTsvbAr6INE79wFayiucw?e=nhr7tv" target="_blank">IRS Form 990 Filing Months Council/Assembly</a></li>*@
+                                    <li><a class="dropdown-item MyMenuLink" href="https://kofc.org/en/forms/spa/invite.html?lang=en&form=10784C.01" target="kofc-supreme-tab">Fraternal Programs Report Form 10784</a></li>
                                     <li><a class="dropdown-item MyMenuLink" asp-page="/Helper/ShowSense" asp-route-id="3">IRS Form 990 Filing Months Council/Assembly</a></li>
                                     <li><a class="dropdown-item MyMenuLink" asp-page="/Forms/Necrology">Necrology Form</a></li>
                                     <li><a class="dropdown-item MyMenuLink" asp-page="/Forms/PrayerRequest">Prayer Request Form</a></li>
@@ -276,9 +274,8 @@
 
                                     }
                                     <li><hr class="dropdown-divider"></li>
-                                    <li><a class="dropdown-item MyMenuLink" href="https://kofcwa.sharepoint.com/:f:/s/WebsiteStorage/Eg30ehJZLVtNr986yywbNpYBSTfPVs35B24G6OZxYvgcBw?e=B78FZx" target="_blank">Bulletin Archive</a></li>
+                                    <li><a class="dropdown-item MyMenuLink" href="https://kofcwa.sharepoint.com/:f:/s/WebsiteStorage/Eg30ehJZLVtNr986yywbNpYBSTfPVs35B24G6OZxYvgcBw?e=B78FZx" target="kofcwa-sharepoint">Bulletin Archive</a></li>
                                     <li><a class="dropdown-item MyMenuLink" asp-page="/Helper/ShowSense" asp-route-id="5">WSC Bylaws Members</a></li>
-                                    @*<li><a class="dropdown-item MyMenuLink" target="_blank" href="https://kofcwa.sharepoint.com/:b:/s/WebsiteStorage/EUqp5s8ZEu1FobDh1NgFv_oBnveYzRySadYchEJ_pfZ0dQ?e=ARGYWC">WSC Bylaws</a></li>*@
                                 </ul>
                             </li>
                         }
@@ -348,7 +345,7 @@
                                     {
                                         <li><a class="dropdown-item MyMenuLink" asp-area="" asp-controller="TblWebSelfPublishes" asp-action="Index" asp-route-id="">Web Page Messages</a></li>
                                         <li><a class="dropdown-item MyMenuLink" asp-area="" asp-controller="EmailOffices" asp-action="Create" asp-route-id="">Send Bulk Email</a></li>
-                                        <li><a class="dropdown-item MyMenuLink" href="https://kofcwa.sharepoint.com/:f:/s/WebsiteStorage/EuAeETokY3JKn8L6TKHzSZ4BX2QmNDpZj4_w4TBZu9lX8g?e=KE8fJf" target="_blank">Upload To Document Storage</a></li>
+                                        <li><a class="dropdown-item MyMenuLink" href="https://kofcwa.sharepoint.com/:f:/s/WebsiteStorage/EuAeETokY3JKn8L6TKHzSZ4BX2QmNDpZj4_w4TBZu9lX8g?e=KE8fJf" target="kofcwa-sharepoint">Upload To Document Storage</a></li>
                                     }
                                 </ul>
                             </li>
