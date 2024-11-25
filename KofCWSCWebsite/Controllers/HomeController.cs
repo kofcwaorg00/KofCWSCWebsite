@@ -28,7 +28,7 @@ namespace KofCWSCWebsite.Controllers
             {
                 ViewData["ConnectString"] = "Using DASP DEVELOPMENT DATABASE";
             }
-            else if (_context.Database.GetDbConnection().ConnectionString.Contains("KofCWSCWebDEV"))
+            else if (_context.Database.GetDbConnection().ConnectionString.Contains("KofCWSCWebDev"))
             {
                 ViewData["ConnectString"] = "Using AZURE DEVELOPMENT DATABASE";
             }
