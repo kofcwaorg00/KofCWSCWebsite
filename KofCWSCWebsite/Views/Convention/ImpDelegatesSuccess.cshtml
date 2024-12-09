@@ -1,0 +1,50 @@
+﻿@model IEnumerable<KofCWSCWebsite.Models.CvnImpDelegatesLog>
+
+@{
+    ViewData["Title"] = "Success";
+}
+
+<h1>Your Import of @ViewBag.ImportedDelegates Convention Delegates was Successful</h1>
+
+<table class="table">
+    <thead>
+        <tr>
+            <th>
+                @Html.DisplayNameFor(model => model.Guid)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Rundate)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Type)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.MemberId)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Data)
+            </th>
+        </tr>
+    </thead>
+    <tbody>
+@foreach (var item in Model) {
+        <tr>
+            <td>
+                @Html.DisplayFor(modelItem => item.Guid)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Rundate)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Type)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.MemberId)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Data)
+            </td>
+        </tr>
+}
+    </tbody>
+</table>

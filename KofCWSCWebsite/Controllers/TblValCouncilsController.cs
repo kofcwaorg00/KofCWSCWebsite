@@ -7,9 +7,11 @@ using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using KofCWSCWebsite.Data;
 using KofCWSCWebsite.Models;
+using KofCWSCWebsite.Services;
 using Newtonsoft.Json;
 using Serilog;
 using Microsoft.AspNetCore.Authorization;
+using com.sun.xml.@internal.bind.v2.model.core;
 
 namespace KofCWSCWebsite.Controllers
 {
@@ -26,27 +28,16 @@ namespace KofCWSCWebsite.Controllers
         [Authorize(Roles = "Admin,DataAdmin")]
         public async Task<IActionResult> Index()
         {
-            Uri myURI = new Uri(_dataSetService.GetAPIBaseAddress() + "/Councils");
-
-            using (var client = new HttpClient())
-            {
-                var responseTask = client.GetAsync(myURI);
-                responseTask.Wait();
-                var result = responseTask.Result;
-                IEnumerable<TblValCouncil> councils;
-                if (result.IsSuccessStatusCode)
-                {
-                    var readTask = result.Content.ReadAsAsync<IList<TblValCouncil>>();
-                    readTask.Wait();
-                    councils = readTask.Result;
-                }
-                else
-                {
-                    councils = Enumerable.Empty<TblValCouncil>();
-                    ModelState.AddModelError(string.Empty, "Server Error.  Please contact administrator.");
-                }
-                return View(councils);
-            }
+            //*****************************************************************************************************
+            // 12/05/2024 Tim Philomeno
+            // Now that we have a generic ApiHelper class, these are the only 2 lines that we should need to
+            // call the API
+            // I guess the programmers that created the controller code template didn't think that a GET or INDEX
+            // would return any errors.  It either gets some or not so no try/catch here
+            var apiHelper = new ApiHelper(_dataSetService);
+            var result = await apiHelper.GetAsync<IEnumerable<TblValCouncil>>("/Councils");
+            //------------------------------------------------------------------------------------------------------
+            return View(result);
         }
 
         // GET: TblValCouncils/Details/5
@@ -57,26 +48,25 @@ namespace KofCWSCWebsite.Controllers
             {
                 return NotFound();
             }
-            Uri myURI = new Uri(_dataSetService.GetAPIBaseAddress() + "/Council/" + id.ToString());
-
-            using (var client = new HttpClient())
+            //*****************************************************************************************************
+            // 12/05/2024 Tim Philomeno
+            // Now that we have a generic ApiHelper class, these are the only 2 lines that we should need to
+            // call the API
+            // this API will return NotFound if the item is not found so the try/catch block will catch it
+            // and return the same
+            try
             {
-                var responseTask = client.GetAsync(myURI);
-                responseTask.Wait();
-                var result = responseTask.Result;
-                TblValCouncil? council;
-                if (result.IsSuccessStatusCode)
-                {
-                    string json = await result.Content.ReadAsStringAsync();
-                    council = JsonConvert.DeserializeObject<TblValCouncil>(json);
-                }
-                else
-                {
-                    ModelState.AddModelError(string.Empty, "Server Error.  Please contact administrator.");
-                    council = null;
-                }
-                return View(council);
+                var apiHelper = new ApiHelper(_dataSetService);
+                var result = await apiHelper.GetAsync<TblValCouncil>($"/Council/{id}");
+                return View(result);
             }
+            catch (Exception ex)
+            {
+                Log.Error(Utils.FormatLogEntry(this, ex));
+                return NotFound();
+            }
+            //------------------------------------------------------------------------------------------------------
+            
         }
 
         // GET: TblValCouncils/Create
@@ -96,19 +86,24 @@ namespace KofCWSCWebsite.Controllers
         {
             if (ModelState.IsValid)
             {
-                Uri myURI = new(_dataSetService.GetAPIBaseAddress() + "/Council");
-                using (var client = new HttpClient())
+                //*****************************************************************************************************
+                // 12/05/2024 Tim Philomeno
+                // Now that we have a generic ApiHelper class, these are the only 2 lines that we should need to
+                // call the API
+                // this API will returns the created model with the id.  It seems that the developers who created the
+                // controller code templates didn't see any issue with not returing any http response messages.  So
+                // should the return from here be to INDEX or the newly created council????
+                try
                 {
-                    client.BaseAddress = myURI;
-                    var response = await client.PostAsJsonAsync(myURI, tblValCouncil);
-                    try
-                    {
-                        response.EnsureSuccessStatusCode();
-                    }
-                    catch (Exception ex)
-                    {
-                        Log.Error(ex.Message + ' ' + ex.InnerException);
-                    }
+                    var apiHelper = new ApiHelper(_dataSetService);
+                    var result = await apiHelper.PostAsync<TblValCouncil,TblValCouncil>("/Council/",tblValCouncil);
+                    return RedirectToAction(nameof(Index));
+                }
+                catch (Exception ex)
+                {
+                    Log.Error(Utils.FormatLogEntry(this, ex));
+                    ModelState.AddModelError(string.Empty, ex.Message);
+                    return RedirectToAction(nameof(Index));
                 }
             }
             return RedirectToAction(nameof(Index));
@@ -122,26 +117,25 @@ namespace KofCWSCWebsite.Controllers
             {
                 return NotFound();
             }
-            Uri myURI = new(_dataSetService.GetAPIBaseAddress() + "/Council/" + id);
-
-            using (var client = new HttpClient())
+            //*****************************************************************************************************
+            // 12/05/2024 Tim Philomeno
+            // Now that we have a generic ApiHelper class, these are the only 2 lines that we should need to
+            // call the API
+            // this API will return NotFound if the item is not found so the try/catch block will catch it
+            // and return the same
+            try
             {
-                var responseTask = client.GetAsync(myURI);
-                responseTask.Wait();
-                var result = responseTask.Result;
-                TblValCouncil? council;
-                if (result.IsSuccessStatusCode)
-                {
-                    string json = await result.Content.ReadAsStringAsync();
-                    council = JsonConvert.DeserializeObject<TblValCouncil>(json);
-                }
-                else
-                {
-                    ModelState.AddModelError(string.Empty, "Server Error.  Please contact administrator.");
-                    council = null;
-                }
-                return View(council);
+                var apiHelper = new ApiHelper(_dataSetService);
+                var result = await apiHelper.GetAsync<TblValCouncil>($"/Council/{id}");
+                return View(result);
             }
+            catch (Exception ex)
+            {
+                ModelState.AddModelError(string.Empty, ex.Message);
+                Log.Error(Utils.FormatLogEntry(this, ex));
+                return RedirectToAction(nameof(Index));
+            }
+            //------------------------------------------------------------------------------------------------------
         }
 
         // POST: TblValCouncils/Edit/5
@@ -158,22 +152,26 @@ namespace KofCWSCWebsite.Controllers
             }
             if (ModelState.IsValid)
             {
-                Uri myURI = new(_dataSetService.GetAPIBaseAddress() + "/Council/" + id);
+                //*****************************************************************************************************
+                // 12/05/2024 Tim Philomeno
+                // Now that we have a generic ApiHelper class, these are the only 2 lines that we should need to
+                // call the API
                 try
                 {
-                    using (var client = new HttpClient())
-                    {
-                        client.BaseAddress = myURI;
-                        var response = await client.PutAsJsonAsync(myURI, tblValCouncil);
-                        var returnValue = await response.Content.ReadAsAsync<List<TblValCouncil>>();
-                        Log.Information("Update of Council ID " + id + "Returned " + returnValue);
-                    }
+                    var apiHelper = new ApiHelper(_dataSetService);
+                    var result = await apiHelper.PutAsync<TblValCouncil, TblMasMember>($"/Council/{id}", tblValCouncil);
                 }
                 catch (Exception ex)
                 {
-                    Log.Fatal(ex.Message);
+                    //***************************************************************************************************
+                    // 12/05/2024 Tim Philomeno
+                    // I want handle these consistantly so we are returning an http response that can be caught here
+                    // the response message should appear in the ex.Message, then Log it and allow the method to
+                    // finish refreshing the index page3
+                    ModelState.AddModelError(string.Empty, ex.Message);
+                    Log.Error(Utils.FormatLogEntry(this, ex));
+                    //------------------------------------------------------------------------------------------------------
                 }
-                Log.Information("Update Success Council ID " + id);
             }
             return RedirectToAction(nameof(Index));
         }
@@ -186,25 +184,23 @@ namespace KofCWSCWebsite.Controllers
             {
                 return NotFound();
             }
-            Uri myURI = new(_dataSetService.GetAPIBaseAddress() + "/Council/" + id);
-
-            using (var client = new HttpClient())
+            //*****************************************************************************************************
+            // 12/05/2024 Tim Philomeno
+            // Now that we have a generic ApiHelper class, these are the only 2 lines that we should need to
+            // call the API
+            // this API will return NotFound if the item is not found so the try/catch block will catch it
+            // and return the same
+            try
             {
-                var responseTask = client.GetAsync(myURI);
-                responseTask.Wait();
-                var result = responseTask.Result;
-                TblValCouncil? council;
-                if (result.IsSuccessStatusCode)
-                {
-                    string json = await result.Content.ReadAsStringAsync();
-                    council = JsonConvert.DeserializeObject<TblValCouncil>(json);
-                }
-                else
-                {
-                    ModelState.AddModelError(string.Empty, "Server Error.  Please contact administrator.");
-                    council = null;
-                }
-                return View(council);
+                var apiHelper = new ApiHelper(_dataSetService);
+                var result = await apiHelper.GetAsync<TblValCouncil>($"/Council/{id}");
+                return View(result);
+            }
+            catch (Exception ex)
+            {
+                ModelState.AddModelError(string.Empty, ex.Message);
+                Log.Error(Utils.FormatLogEntry(this, ex));
+                return RedirectToAction(nameof(Index));
             }
         }
 
@@ -214,40 +210,18 @@ namespace KofCWSCWebsite.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> DeleteConfirmed(int id)
         {
-            Uri myURI = new(_dataSetService.GetAPIBaseAddress() + "/Council/" + id);
             try
             {
-                using (var client = new HttpClient())
-                {
-                    var responseTask = client.DeleteAsync(myURI);
-                    responseTask.Wait();
-                    var result = responseTask.Result;
-                    TblValCouncil? council;
-                    if (result.IsSuccessStatusCode)
-                    {
-                        Log.Information("Delete Member Success " + id);
-                        string json = await result.Content.ReadAsStringAsync();
-                        council = JsonConvert.DeserializeObject<TblValCouncil>(json);
-                    }
-                    else
-                    {
-                        Log.Information("Delete Member Failed " + id);
-                        ModelState.AddModelError(string.Empty, "Server Error.  Please contact administrator.");
-                        council = null;
-                    }
-                    return RedirectToAction(nameof(Index));
-                }
+                var apiHelper = new ApiHelper(_dataSetService);
+                await apiHelper.DeleteAsync($"/Council/{id}");
+                return RedirectToAction(nameof(Index));
             }
             catch (Exception ex)
             {
-                Log.Fatal(ex.Message + " " + ex.InnerException);
-                return NoContent();
+                ModelState.AddModelError(string.Empty, ex.Message);
+                Log.Error(Utils.FormatLogEntry(this, ex));
+                return RedirectToAction(nameof(Index));
             }
         }
-
-        //private bool TblValCouncilExists(int id)
-        //{
-        //    return _context.TblValCouncils.Any(e => e.CNumber == id);
-        //}
     }
 }

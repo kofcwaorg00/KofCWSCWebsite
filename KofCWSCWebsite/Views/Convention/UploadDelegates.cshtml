@@ -1,0 +1,16 @@
+﻿@model CvnImpDelegateViewModel
+
+<form asp-action="Upload" asp-controller="Csv" method="post" enctype="multipart/form-data">
+    <div class="form-group">
+        <label for="CsvFile">Upload CSV</label>
+        <input type="file" name="CsvFile" id="CsvFile" class="form-control" />
+    </div>
+    <button type="submit" class="btn btn-primary">Upload Delegate CSV</button>
+</form>
+
+@if (ViewData["ErrorMessage"] != null)
+{
+    <div class="alert alert-danger">
+        @ViewData["ErrorMessage"]
+    </div>
+}

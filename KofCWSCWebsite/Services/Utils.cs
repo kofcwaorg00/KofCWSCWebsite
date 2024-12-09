@@ -19,6 +19,15 @@ namespace KofCWSCWebsite.Services
 {
     public class Utils
     {
+        public static string FormatLogEntry(object thisme,Exception ex)
+        {
+            //***********************************************************************************************
+            // 12/05/2024 Tim Philomeno
+            // trying to get a consistant logging string
+            // usage: Log.Error(Utils.FormatLogEntry(this, ex));
+            return thisme.GetType().Name + " - " + ex.Message + " - " + ex.InnerException;
+            //-----------------------------------------------------------------------------------------------
+        }
         public static string GetString(IHtmlContent content)
         {
             if (content == null)

@@ -70,6 +70,8 @@ public partial class ApplicationDbContext : DbContext
     public virtual DbSet<FileStorage> FileStorages { get; set; }
     public virtual DbSet<FileStorageVM> FileStoragesVM { get; set; }
     public virtual DbSet<CvnControl> TblCvnControls { get; set; }
+    public virtual DbSet<CvnImpDelegate> CvnImpDelegates { get; set; }
+    public virtual DbSet<CvnImpDelegatesLog> TblCvnImpDelegatesLogs { get; set; }
     protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
     {
         if (!optionsBuilder.IsConfigured)
@@ -417,7 +419,175 @@ public partial class ApplicationDbContext : DbContext
         //            .HasForeignKey<FileStorage>(o => o.Id);
         //        ob.Navigation(o => o.FileStorage).IsRequired();
         //    });
+        modelBuilder.Entity<CvnImpDelegate>(entity =>
+        {
+            entity.HasKey(e => e.ID);
+            entity.ToTable("tblCVN_ImpDelegates");
 
+            entity.Property(e => e.A1Address1)
+                .HasMaxLength(255)
+                .HasColumnName("A1Address1");
+            entity.Property(e => e.A1Address2)
+                .HasMaxLength(255)
+                .HasColumnName("A1Address2");
+            entity.Property(e => e.A1City)
+                .HasMaxLength(255)
+                .HasColumnName("A1City");
+            entity.Property(e => e.A1Email)
+                .HasMaxLength(255)
+                .HasColumnName("A1Email");
+            entity.Property(e => e.A1FirstName)
+                .HasMaxLength(255)
+                .HasColumnName("A1FirstName");
+            entity.Property(e => e.A1LastName)
+                .HasMaxLength(255)
+                .HasColumnName("A1LastName");
+            entity.Property(e => e.A1MemberID).HasColumnName("A1MemberID");
+            entity.Property(e => e.A1MiddleName)
+                .HasMaxLength(255)
+                .HasColumnName("A1MiddleName");
+            entity.Property(e => e.A1Phone)
+                .HasMaxLength(255)
+                .HasColumnName("A1Phone");
+            entity.Property(e => e.A1State)
+                .HasMaxLength(255)
+                .HasColumnName("A1State");
+            entity.Property(e => e.A1Suffix)
+                .HasMaxLength(255)
+                .HasColumnName("A1Suffix");
+            entity.Property(e => e.A1ZipCode)
+                .HasMaxLength(255)
+                .HasColumnName("A1ZipCode");
+            entity.Property(e => e.A2Address1)
+                .HasMaxLength(255)
+                .HasColumnName("A2Address1");
+            entity.Property(e => e.A2Address2)
+                .HasMaxLength(255)
+                .HasColumnName("A2Address2");
+            entity.Property(e => e.A2City)
+                .HasMaxLength(255)
+                .HasColumnName("A2City");
+            entity.Property(e => e.A2Email)
+                .HasMaxLength(255)
+                .HasColumnName("A2Email");
+            entity.Property(e => e.A2FirstName)
+                .HasMaxLength(255)
+                .HasColumnName("A2FirstName");
+            entity.Property(e => e.A2LastName)
+                .HasMaxLength(255)
+                .HasColumnName("A2LastName");
+            entity.Property(e => e.A2MemberID).HasColumnName("A2MemberID");
+            entity.Property(e => e.A2MiddleName)
+                .HasMaxLength(255)
+                .HasColumnName("A2MiddleName");
+            entity.Property(e => e.A2Phone)
+                .HasMaxLength(255)
+                .HasColumnName("A2Phone");
+            entity.Property(e => e.A2State)
+                .HasMaxLength(255)
+                .HasColumnName("A2State");
+            entity.Property(e => e.A2Suffix)
+                .HasMaxLength(255)
+                .HasColumnName("A2Suffix");
+            entity.Property(e => e.A2ZipCode)
+                .HasMaxLength(255)
+                .HasColumnName("A2ZipCode");
+            entity.Property(e => e.CouncilName)
+                .HasMaxLength(255)
+                .HasColumnName("CouncilName");
+            entity.Property(e => e.CouncilNumber).HasColumnName("CouncilNumber");
+            entity.Property(e => e.D1Address1)
+                .HasMaxLength(255)
+                .HasColumnName("D1Address1");
+            entity.Property(e => e.D1Address2)
+                .HasMaxLength(255)
+                .HasColumnName("D1Address2");
+            entity.Property(e => e.D1City)
+                .HasMaxLength(255)
+                .HasColumnName("D1City");
+            entity.Property(e => e.D1Email)
+                .HasMaxLength(255)
+                .HasColumnName("D1Email");
+            entity.Property(e => e.D1FirstName)
+                .HasMaxLength(255)
+                .HasColumnName("D1FirstName");
+            entity.Property(e => e.D1LastName)
+                .HasMaxLength(255)
+                .HasColumnName("D1LastName");
+            entity.Property(e => e.D1MemberID).HasColumnName("D1MemberID");
+            entity.Property(e => e.D1MiddleName)
+                .HasMaxLength(255)
+                .HasColumnName("D1MiddleName");
+            entity.Property(e => e.D1Phone)
+                .HasMaxLength(255)
+                .HasColumnName("D1Phone");
+            entity.Property(e => e.D1State)
+                .HasMaxLength(255)
+                .HasColumnName("D1State");
+            entity.Property(e => e.D1Suffix)
+                .HasMaxLength(255)
+                .HasColumnName("D1Suffix");
+            entity.Property(e => e.D1ZipCode)
+                .HasMaxLength(255)
+                .HasColumnName("D1ZipCode");
+            entity.Property(e => e.D2Address1)
+                .HasMaxLength(255)
+                .HasColumnName("D2Address1");
+            entity.Property(e => e.D2Address2)
+                .HasMaxLength(255)
+                .HasColumnName("D2Address2");
+            entity.Property(e => e.D2City)
+                .HasMaxLength(255)
+                .HasColumnName("D2City");
+            entity.Property(e => e.D2Email)
+                .HasMaxLength(255)
+                .HasColumnName("D2Email");
+            entity.Property(e => e.D2FirstName)
+                .HasMaxLength(255)
+                .HasColumnName("D2FirstName");
+            entity.Property(e => e.D2LastName)
+                .HasMaxLength(255)
+                .HasColumnName("D2LastName");
+            entity.Property(e => e.D2MemberID).HasColumnName("D2MemberID");
+            entity.Property(e => e.D2MiddleName)
+                .HasMaxLength(255)
+                .HasColumnName("D2MiddleName");
+            entity.Property(e => e.D2Phone)
+                .HasMaxLength(255)
+                .HasColumnName("D2Phone");
+            entity.Property(e => e.D2State)
+                .HasMaxLength(255)
+                .HasColumnName("D2State");
+            entity.Property(e => e.D2Suffix)
+                .HasMaxLength(255)
+                .HasColumnName("D2Suffix");
+            entity.Property(e => e.D2ZipCode)
+                .HasMaxLength(255)
+                .HasColumnName("D2ZipCode");
+            entity.Property(e => e.FormSubmitterSEmail)
+                .HasMaxLength(255)
+                .HasColumnName("FormSubmitterSEmail");
+            entity.Property(e => e.ID)
+                .ValueGeneratedOnAdd()
+                .HasColumnName("ID");
+            entity.Property(e => e.SubmissionDate)
+                .HasColumnType("datetime")
+                .HasColumnName("SubmissionDate");
+        });
+        modelBuilder.Entity<CvnImpDelegatesLog>(entity =>
+        {
+            entity.HasKey(e => e.Id).HasName("PK__tblCVN_I__3214EC071756F502");
+
+            entity.ToTable("tblCVN_ImpDelegatesLog");
+
+            entity.Property(e => e.Data).IsUnicode(false);
+            entity.Property(e => e.Guid).HasColumnName("GUID");
+            entity.Property(e => e.MemberId).HasColumnName("MemberID");
+            entity.Property(e => e.Rundate).HasColumnType("datetime");
+            entity.Property(e => e.Type)
+                .HasMaxLength(10)
+                .IsUnicode(false);
+        });
         OnModelCreatingPartial(modelBuilder);
     }
 
