@@ -37,10 +37,17 @@ Log.Information("ENV = " + Environment.GetEnvironmentVariable("ASPNETCORE_ENVIRO
 //******************************************************************************************************************************
 try
 {
+    KeyVaultSecret cnString = null;
     var kvURL = builder.Configuration.GetSection("KV").GetValue(typeof(string), "VAULTURL");
-    Log.Information("KVURL is " + kvURL.ToString());
     var client = new SecretClient(new Uri((string)kvURL), new DefaultAzureCredential());
-    var cnString = client.GetSecret("AZDEV").Value;
+    if (Environment.GetEnvironmentVariable("ASPNETCORE_ENVIRONMENT").ToLower() == "production")
+    {
+        cnString = client.GetSecret("AZPROD").Value;
+    }
+    else
+    {
+        cnString = client.GetSecret("AZDEV").Value;
+    }
     string connectionString = cnString.Value;
 
     //Log.Information("Found CS " + connectionString);

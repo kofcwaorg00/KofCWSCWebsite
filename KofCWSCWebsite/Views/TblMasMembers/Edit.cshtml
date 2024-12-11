@@ -92,7 +92,7 @@
                 <div class="col-sm pb-4">
                     <div class="form-group">
                         <label asp-for="WifesName" class="control-label"></label>
-                        <input asp-for="WifesName" class="form-control"/>
+                        <input asp-for="WifesName" class="form-control" />
                         <span asp-validation-for="WifesName" class="text-danger"></span>
                     </div>
                 </div>
@@ -122,6 +122,17 @@
                         <label asp-for="Assembly" class="control-label"></label>
                         <input asp-for="Assembly" class="form-control" />
                         <span asp-validation-for="Assembly" class="text-danger"></span>
+                    </div>
+                </div>
+                <div class="col-sm pb-4">
+                    <div class="form-group">
+                        <label asp-for="Deceased" class="control-label"></label><br />
+                        <select asp-for="Deceased">
+                            <option value="true">True</option>
+                            <option value="false">False</option>
+                        </select>
+                        @*<input asp-for="Deceased" class="form-control" />*@
+                        <span asp-validation-for="Deceased" class="text-danger"></span>
                     </div>
                 </div>
             </div>
