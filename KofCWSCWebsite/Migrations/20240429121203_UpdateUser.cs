@@ -21,8 +21,7 @@ namespace KofCWSCWebsite.Migrations
             migrationBuilder.AddColumn<string>(
                 name: "KofCMemberID",
                 table: "AspNetUsers",
-                type: "nvarchar(100)",
-                maxLength: 100,
+                type: "int",
                 nullable: false,
                 defaultValue: "");
 

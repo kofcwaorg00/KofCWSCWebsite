@@ -19,7 +19,7 @@
             </div>
             <div class="form-group">
                 <label asp-for="KofCid" class="control-label"></label>
-                <input asp-for="KofCid" class="form-control" maxlength="7" type="number" onkeydown="CheckForLeadingZeros()" id="KofCid" />
+                <input asp-for="KofCid" class="form-control" type="number" id="KofCid" />
                 <span asp-validation-for="KofCid" class="text-danger"></span>
             </div>
             <div class="form-group">
@@ -99,12 +99,12 @@
     <a asp-action="Index">Back to List</a>
 </div>
 <script>
-    function CheckForLeadingZeros(){
-        //alert("yes");
-        var myvar = document.getElementById("KofCid").value;
-        document.getElementById("KofCid").value = myvar.replace(/^0+(?=\d)/, '');
-        //alert(myvar.replace(/^0+(?=\d)/, ''));
-    }
+    //function CheckForLeadingZeros(){
+    //    //alert("yes");
+    //    var myvar = document.getElementById("KofCid").value;
+    //    document.getElementById("KofCid").value = myvar.replace(/^0+(?=\d)/, '');
+    //    //alert(myvar.replace(/^0+(?=\d)/, ''));
+    //}
 </script>
 @section Scripts {
     @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}

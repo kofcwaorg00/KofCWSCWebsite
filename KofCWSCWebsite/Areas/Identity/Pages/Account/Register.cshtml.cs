@@ -94,9 +94,9 @@ namespace KofCWSCWebsite.Areas.Identity.Pages.Account
 
             [Remote(action: "VerifyKofCID", controller: "Users")]
             [Required]
-            [StringLength(50, ErrorMessage = "The {0} must be at least {2} and at max {1} characters long.", MinimumLength = 1)]
+            //[StringLength(50, ErrorMessage = "The {0} must be at least {2} and at max {1} characters long.", MinimumLength = 1)]
             [Display(Name = "KofC Member Number")]
-            public string KofCMemberID { get; set; }
+            public int KofCMemberID { get; set; }
 
             /// <summary>
             ///     This API supports the ASP.NET Core Identity default UI infrastructure and is not intended to be used

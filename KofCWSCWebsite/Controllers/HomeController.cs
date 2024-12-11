@@ -24,9 +24,9 @@ namespace KofCWSCWebsite.Controllers
             //  We need to be able to give feedback as to which environment we are in during development
             //  and implementation
             //*****************************************************************************************************
-            if (_context.Database.GetDbConnection().ConnectionString.Contains("2k2201"))
+            if (_context.Database.GetDbConnection().ConnectionString.Contains("local") || _context.Database.GetDbConnection().ConnectionString.Contains("EXPRESS"))
             {
-                ViewData["ConnectString"] = "Using DASP DEVELOPMENT DATABASE";
+                ViewData["ConnectString"] = "Using LOCAL DATABASE";
             }
             else if (_context.Database.GetDbConnection().ConnectionString.Contains("KofCWSCWebDev"))
             {
@@ -38,7 +38,7 @@ namespace KofCWSCWebsite.Controllers
             }
             else
             {
-                ViewData["ConnectString"] = "Using DASP PRODUCTION DATABASE";
+                ViewData["ConnectString"] = "Using UNKNOWN DATABASE";
             }
             ViewData["APIURL"] = "and the APIURL is using " + _dataSetService.GetAPIBaseAddress();
             ViewData["ENV"] = Environment.GetEnvironmentVariable("ASPNETCORE_ENVIRONMENT");

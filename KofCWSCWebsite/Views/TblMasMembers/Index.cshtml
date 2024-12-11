@@ -6,7 +6,7 @@
 
 <h1>Manage Members</h1>
 <form class="d-flex" style="width:40%">
-    <input class="form-control me-2" type="text" id="myInput" placeholder="Search by Member Last Name" title="Type in all or part of last name">
+    <input class="form-control me-1" type="text" id="myInput" placeholder="Search by Member Last Name or KofC Member Number" title="Type in all or part of last name or KofC Member ID">
     <button class="btn btn-outline-success" type="button" onclick="getFilteredData()">Search</button>
     <div style="width:50%; vertical-align:central; padding-left:5px; padding-top:7px">
         @ViewData["NoMembers"]
@@ -31,11 +31,14 @@
                 <th style="width:150px"></th>
             }
             <th style="width:100px">
+                KofCID
+            </th>
+            <th style="width:100px">
                 @Html.DisplayNameFor(model => model.FirstName)
             </th>
             @* <th>
-                @Html.DisplayNameFor(model => model.Mi)
-                </th> *@
+        @Html.DisplayNameFor(model => model.Mi)
+        </th> *@
             <th style="width:100px">
                 @Html.DisplayNameFor(model => model.LastName)
             </th>
@@ -79,9 +82,9 @@
                         </form>
                     </td>
                 }
-                @*  <td>
+                  <td>
                     @Html.DisplayFor(modelItem => item.KofCid)
-                    </td> *@
+                    </td>
                 <td>
                     @Html.DisplayFor(modelItem => item.FirstName)
                 </td>

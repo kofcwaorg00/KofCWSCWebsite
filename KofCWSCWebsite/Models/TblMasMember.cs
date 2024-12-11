@@ -8,8 +8,8 @@ public partial class TblMasMember
 {
     public int MemberId { get; set; }
 
-    [Display(Name = "KofC Member Number (No leading zeros)")]
-    public string? KofCid { get; set; }
+    [Display(Name = "KofC Member Number")]
+    public int KofCid { get; set; }
 
     public string? Prefix { get; set; }
 

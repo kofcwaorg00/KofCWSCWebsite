@@ -359,7 +359,8 @@
 
                                         <li><a class="dropdown-item MyMenuLink" asp-area="" asp-controller="CvnControls" asp-action="Edit" asp-route-id="1" title="Update the Convention Title for the New Year">Update Convention Title</a></li>
                                         <li><a class="dropdown-item MyMenuLink" asp-area="" asp-controller="" asp-action="" asp-route-id="" title="Run this process only once before beginning the Convention Year!">Reset Convention Attendees</a></li>
-                                        <li><a class="dropdown-item MyMenuLink" asp-area="" asp-controller="Csv" asp-action="UploadDelegates" asp-route-id="" title="Import a CSV of Exported Credentials from JotForm">Import Convention Attendees</a></li>
+                                        <li><a class="dropdown-item MyMenuLink" asp-area="" asp-controller="Csv" asp-action="UploadDelegates" asp-route-id="0" title="Import a CSV of Exported Credentials from JotForm">Import Convention Attendees (LOG ONLY)</a></li>
+                                        <li><a class="dropdown-item MyMenuLink" asp-area="" asp-controller="Csv" asp-action="UploadDelegates" asp-route-id="1" title="Import a CSV of Exported Credentials from JotForm">Import Convention Attendees (PROCESS)</a></li>
                                         <li><a class="dropdown-item MyMenuLink" asp-area="" asp-controller="" asp-action="" asp-route-id="" title="Manually add Convention Attendees">Enter Convention Attendees</a></li>
                                         <li><hr class="dropdown-divider"></li>
                                         <li><a class="dropdown-item MyMenuLink" asp-area="" asp-controller="Reports" asp-action="GetRollCallSheets" asp-route-id="1">Print Rollcall Sheets Day 1</a></li>

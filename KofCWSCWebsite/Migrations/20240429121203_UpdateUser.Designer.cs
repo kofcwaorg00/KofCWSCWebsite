@@ -51,8 +51,7 @@ namespace KofCWSCWebsite.Migrations
 
                     b.Property<string>("KofCMemberID")
                         .IsRequired()
-                        .HasMaxLength(100)
-                        .HasColumnType("nvarchar(100)");
+                        .HasColumnType("int");
 
                     b.Property<string>("LastName")
                         .IsRequired()

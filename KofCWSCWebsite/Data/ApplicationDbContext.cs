@@ -273,9 +273,7 @@ public partial class ApplicationDbContext : DbContext
             entity.Property(e => e.Address).HasMaxLength(255);
             entity.Property(e => e.City).HasMaxLength(50);
             entity.Property(e => e.Email).HasMaxLength(50);
-            entity.Property(e => e.KofCid)
-                .HasMaxLength(7)
-                .HasColumnName("KofCID");
+            entity.Property(e => e.KofCid).HasColumnName("KofCID");
             entity.Property(e => e.LastName).HasMaxLength(50);
             entity.Property(e => e.Mi)
                 .HasMaxLength(50)

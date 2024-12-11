@@ -27,22 +27,30 @@ namespace KofCWSCWebsite.Controllers
     {
         public enum DelegateOffices
         {
-            D1 = 115, 
-            D2 = 118, 
-            A1 = 119, 
+            D1 = 115,
+            D2 = 118,
+            A1 = 119,
             A2 = 116
         }
         private DataSetService _dataSetService;
-
+        private bool _postFlag = false;
         public CsvController(DataSetService dataSetService)
         {
             _dataSetService = dataSetService;
         }
 
         // GET: Display the form to upload CSV
-        [Route("UploadDelegates")]
-        public IActionResult UploadDelegates()
+        [Route("UploadDelegates/{id}")]
+        public IActionResult UploadDelegates(int id)
         {
+            if (id == 0)
+            {
+                _postFlag = false;
+            }
+            else
+            {
+                _postFlag = true;
+            }
             return View("/Views/Convention/UploadDelegates.cshtml");
         }
 
@@ -69,6 +77,16 @@ namespace KofCWSCWebsite.Controllers
                 {
                     var cvnImport = csv.GetRecords<CvnImpDelegate>(); // Parse CSV into CsvRecord objects
                     records.AddRange(cvnImport);
+                    //****************************************************************************************
+                    // 12/1/2024 Tim Philomeno Save the data to the database
+                    //*****************************************************************************************************
+                    // Let's check to make sure that our incoming data does not have duplicate councils
+                    if (HasDupCouncils(records))
+                    {
+                        ModelState.AddModelError(string.Empty, "Duplicate Councils found in CSV File. Please correct and try again");
+                        ViewBag.ImpError = "Duplicate Councils found in CSV File";
+                        return View("Views/Convention/ImpDelegatesFailed.cshtml", records);
+                    }
                     // Add records to list
                     //****************************************************************************************
                     // 12/1/2024 Tim Philomeno Save the data to the database
@@ -84,14 +102,15 @@ namespace KofCWSCWebsite.Controllers
                     catch (Exception ex)
                     {
                         Log.Error(Utils.FormatLogEntry(this, ex));
-                        return View("Views/Convention/ImpDelegatesFailed.cshtml");
+                        ViewBag.ImpError = "Import of CSV File Failed";
+                        return View("Views/Convention/ImpDelegatesFailed.cshtml", null);
                     }
                     //------------------------------------------------------------------------------------------------------
                     // first let's remove the currrent delegates in favor of the ones we are about to add
                     var apiHelperD = new ApiHelper(_dataSetService);
                     var apiHelperC = new ApiHelper(_dataSetService);
                     WriteToDelegateImportLog(guid, 0, "INFO", $"Removing old Delegates in lieu of incoming ones.");
-                    apiHelperD.GetAsync<int>($"/ClearDelegates/{await apiHelperC.GetAsync<int>($"/GetFratYear/{0}")}");
+                    await apiHelperD.GetAsync<int>($"/ClearDelegates/{await apiHelperC.GetAsync<int>($"/GetFratYear/{0}")}");
 
                     //------------------------------------------------------------------------------------------------------
                     ViewBag.ImportedDelegates = records.Count();
@@ -109,7 +128,7 @@ namespace KofCWSCWebsite.Controllers
                                 throw new Exception($"Processing of {myDel.CouncilNumber} for MemberID D1 {myDel.D1MemberID} Failed");
                             }
                             //bool D2 = await ProcessCouncilD2(myDel);
-                            if (!await ProcessCouncilD2(myDel,guid))
+                            if (!await ProcessCouncilD2(myDel, guid))
                             {
                                 WriteToDelegateImportLog(guid, myDel.D2MemberID, "ERROR", $"Processing of Council {myDel.CouncilNumber} D2, MemberID {myDel.D2MemberID} Failed");
                                 throw new Exception($"Processing of {myDel.CouncilNumber} for MemberID D2 {myDel.D2MemberID} Failed");
@@ -131,7 +150,8 @@ namespace KofCWSCWebsite.Controllers
                         catch (Exception ex)
                         {
                             Log.Error(Utils.FormatLogEntry(this, ex));
-                            return View("Views/Convention/ImpDelegatesFailed.cshtml",records);
+                            ViewBag.ImpError = "Processing of Delegate Records Failed";
+                            return View("Views/Convention/ImpDelegatesFailed.cshtml", records);
                         }
 
                     }
@@ -144,7 +164,8 @@ namespace KofCWSCWebsite.Controllers
                 }
             }
             ModelState.AddModelError("", "Please upload a valid CSV file.");
-            return View("Views/Convention/ImpDelegatesFailed.cshtml");
+            ViewBag.ImpError = "CSV File is invalid";
+            return View("Views/Convention/ImpDelegatesFailed.cshtml", null);
         }
         private async Task<bool> ProcessCouncilD1(CvnImpDelegate cvnImpDelegate, Guid guid)
         {
@@ -169,7 +190,7 @@ namespace KofCWSCWebsite.Controllers
                     {
                         if (FillD1(ref myIsD1Member, cvnImpDelegate))
                         {
-                            //**UNCOMMENT ME***await apiHelper.PostAsync<TblMasMember, TblMasMember>("/Member", myIsD1Member);
+                            if (_postFlag) { await apiHelper.PostAsync<TblMasMember, TblMasMember>("/Member", myIsD1Member); }
                             WriteToDelegateImportLog(guid, cvnImpDelegate.D1MemberID, "INFO", "Adding New Member");
                         }
                     }
@@ -186,7 +207,7 @@ namespace KofCWSCWebsite.Controllers
                     {
                         if (FillD1(ref myIsD1Member, cvnImpDelegate))
                         {
-                            //**UNCOMMENT ME***await apiHelper.PutAsync<TblMasMember, TblMasMember>($"/member/{myIsD1Member.MemberId}", myIsD1Member);
+                            if (_postFlag) { await apiHelper.PutAsync<TblMasMember, TblMasMember>($"/member/{myIsD1Member.MemberId}", myIsD1Member); };
                             WriteToDelegateImportLog(guid, cvnImpDelegate.D1MemberID, "INFO", "Updating Existing Member");
                         }
                     }
@@ -196,9 +217,9 @@ namespace KofCWSCWebsite.Controllers
                         return false;
                     }
                 }
-            // add the office here
-            AddDelegate(cvnImpDelegate.D1MemberID.ToString(), (int)DelegateOffices.D1, guid);
-        }
+                // add the office here
+                AddDelegate((int)cvnImpDelegate.D1MemberID, (int)DelegateOffices.D1, guid);
+            }
             return true;
         }
         private async Task<bool> ProcessCouncilD2(CvnImpDelegate cvnImpDelegate, Guid guid)
@@ -224,7 +245,7 @@ namespace KofCWSCWebsite.Controllers
                     {
                         if (FillD2(ref myIsD2Member, cvnImpDelegate))
                         {
-                            //**UNCOMMENT ME***await apiHelper.PostAsync<TblMasMember, TblMasMember>("/Member", myIsD2Member);
+                            if (_postFlag) { await apiHelper.PostAsync<TblMasMember, TblMasMember>("/Member", myIsD2Member); };
                             WriteToDelegateImportLog(guid, cvnImpDelegate.D2MemberID, "INFO", "Add a New Member");
                         }
                     }
@@ -240,7 +261,7 @@ namespace KofCWSCWebsite.Controllers
                     {
                         if (FillD2(ref myIsD2Member, cvnImpDelegate))
                         {
-                            //**UNCOMMENT ME***await apiHelper.PutAsync<TblMasMember, TblMasMember>($"/member/{myIsD2Member.MemberId}", myIsD2Member);
+                            if (_postFlag) { await apiHelper.PutAsync<TblMasMember, TblMasMember>($"/member/{myIsD2Member.MemberId}", myIsD2Member); };
                             WriteToDelegateImportLog(guid, cvnImpDelegate.D2MemberID, "INFO", "Update an Existing Member");
                         }
                     }
@@ -250,8 +271,8 @@ namespace KofCWSCWebsite.Controllers
                         return false;
                     }
                 }
-            AddDelegate(cvnImpDelegate.D2MemberID.ToString(), (int)DelegateOffices.D2, guid);
-        }
+                AddDelegate((int)cvnImpDelegate.D2MemberID, (int)DelegateOffices.D2, guid);
+            }
             return true;
         }
         private async Task<bool> ProcessCouncilA1(CvnImpDelegate cvnImpDelegate, Guid guid)
@@ -277,7 +298,7 @@ namespace KofCWSCWebsite.Controllers
                     {
                         if (FillA1(ref myIsA1Member, cvnImpDelegate))
                         {
-                            //**UNCOMMENT ME***await apiHelper.PostAsync<TblMasMember, TblMasMember>("/Member", myIsA1Member);
+                            if (_postFlag) { await apiHelper.PostAsync<TblMasMember, TblMasMember>("/Member", myIsA1Member); };
                             WriteToDelegateImportLog(guid, cvnImpDelegate.A1MemberID, "INFO", "Add a New Member");
                         }
                     }
@@ -293,7 +314,7 @@ namespace KofCWSCWebsite.Controllers
                     {
                         if (FillA1(ref myIsA1Member, cvnImpDelegate))
                         {
-                            //**UNCOMMENT ME***await apiHelper.PutAsync<TblMasMember, TblMasMember>($"/member/{myIsA1Member.MemberId}", myIsA1Member);
+                            if (_postFlag) { await apiHelper.PutAsync<TblMasMember, TblMasMember>($"/member/{myIsA1Member.MemberId}", myIsA1Member); };
                             WriteToDelegateImportLog(guid, cvnImpDelegate.A1MemberID, "INFO", "Update an Existing Member");
                         }
                         return true;
@@ -304,11 +325,11 @@ namespace KofCWSCWebsite.Controllers
                         return false;
                     }
                 }
-            AddDelegate(cvnImpDelegate.A1MemberID.ToString(), (int)DelegateOffices.A1, guid);
-        }
+                AddDelegate((int)cvnImpDelegate.A1MemberID, (int)DelegateOffices.A1, guid);
+            }
             return true;
         }
-        private async Task<bool> ProcessCouncilA2(CvnImpDelegate cvnImpDelegate,Guid guid)
+        private async Task<bool> ProcessCouncilA2(CvnImpDelegate cvnImpDelegate, Guid guid)
         {
             //**********************************************************************************************
             // 11/30/2024 Tim Philomeno
@@ -331,7 +352,7 @@ namespace KofCWSCWebsite.Controllers
                     {
                         if (FillA2(ref myIsA2Member, cvnImpDelegate))
                         {
-                            //**UNCOMMENT ME***await apiHelper.PostAsync<TblMasMember, TblMasMember>("/Member", myIsA2Member);
+                            if (_postFlag) { await apiHelper.PostAsync<TblMasMember, TblMasMember>("/Member", myIsA2Member); };
                             WriteToDelegateImportLog(guid, cvnImpDelegate.A2MemberID, "INFO", "Add a New Member");
 
                         }
@@ -348,7 +369,7 @@ namespace KofCWSCWebsite.Controllers
                     {
                         if (FillA2(ref myIsA2Member, cvnImpDelegate))
                         {
-                            //**UNCOMMENT ME***await apiHelper.PutAsync<TblMasMember, TblMasMember>($"/member/{myIsA2Member.MemberId}", myIsA2Member);
+                            if (_postFlag) { await apiHelper.PutAsync<TblMasMember, TblMasMember>($"/member/{myIsA2Member.MemberId}", myIsA2Member); };
                             WriteToDelegateImportLog(guid, cvnImpDelegate.A2MemberID, "INFO", "Update an Existing Member");
                         }
                     }
@@ -358,7 +379,7 @@ namespace KofCWSCWebsite.Controllers
                         return false;
                     }
                 }
-                AddDelegate(cvnImpDelegate.A2MemberID.ToString(), (int)DelegateOffices.A2, guid);
+                AddDelegate((int)cvnImpDelegate.A2MemberID, (int)DelegateOffices.A2, guid);
             }
             return true;
         }
@@ -379,7 +400,7 @@ namespace KofCWSCWebsite.Controllers
             // be set so don't mess with it
             // myMember.MemberId = ??
 
-            myMember.KofCid = myDelegate.D1MemberID.ToString();
+            myMember.KofCid = (int)myDelegate.D1MemberID;
             // ok for each member property that we can update, let's figure out if the data
             // has changed.  If so, then update it else leave it alone
             //-------------------------------------------------------------------------------------
@@ -496,7 +517,7 @@ namespace KofCWSCWebsite.Controllers
             // be set so don't mess with it
             // myMember.MemberId = ??
 
-            myMember.KofCid = myDelegate.D2MemberID.ToString();
+            myMember.KofCid = (int)myDelegate.D2MemberID;
             // ok for each member property that we can update, let's figure out if the data
             // has changed.  If so, then update it else leave it alone
             //-------------------------------------------------------------------------------------
@@ -613,7 +634,7 @@ namespace KofCWSCWebsite.Controllers
             // be set so don't mess with it
             // myMember.MemberId = ??
 
-            myMember.KofCid = myDelegate.A1MemberID.ToString();
+            myMember.KofCid = (int)myDelegate.A1MemberID;
             // ok for each member property that we can update, let's figure out if the data
             // has changed.  If so, then update it else leave it alone
             //-------------------------------------------------------------------------------------
@@ -730,7 +751,7 @@ namespace KofCWSCWebsite.Controllers
             // be set so don't mess with it
             // myMember.MemberId = ??
 
-            myMember.KofCid = myDelegate.A2MemberID.ToString();
+            myMember.KofCid = (int)myDelegate.A2MemberID;
             // ok for each member property that we can update, let's figure out if the data
             // has changed.  If so, then update it else leave it alone
             //-------------------------------------------------------------------------------------
@@ -845,7 +866,7 @@ namespace KofCWSCWebsite.Controllers
             }
             return true;
         }
-        private async void WriteToDelegateImportLog(Guid GUID,int? MemberID,string Type,string Data)
+        private async void WriteToDelegateImportLog(Guid GUID, int? MemberID, string Type, string Data)
         {
             CvnImpDelegatesLog cvnImpDelegatesLog = new CvnImpDelegatesLog();
             cvnImpDelegatesLog.Rundate = DateTime.Now;
@@ -856,25 +877,48 @@ namespace KofCWSCWebsite.Controllers
             var apiHelper = new ApiHelper(_dataSetService);
             await apiHelper.PostAsync<CvnImpDelegatesLog, CvnImpDelegatesLog>("/CreateImpDelegatesLog", cvnImpDelegatesLog);
         }
-        private async void AddDelegate(string KofCID,int OfficeId,Guid guid)
+        private async void AddDelegate(int KofCID, int OfficeId, Guid guid)
         {
-            WriteToDelegateImportLog(guid, 0, "INFO", $"Adding Office {OfficeId} to Member that needs to be created with KofCID {KofCID}");
-            return;
-            var apiHelper = new ApiHelper(_dataSetService);
-            
-            TblCorrMemberOffice tblCorrMemberOffice = new TblCorrMemberOffice();
-            TblMasMember myID = await apiHelper.GetAsync<TblMasMember>($"/IsKofCMember/{KofCID}");
+            try
+            {
+                var apiHelper = new ApiHelper(_dataSetService);
 
-            tblCorrMemberOffice.OfficeId = OfficeId;
-            tblCorrMemberOffice.MemberId = myID.MemberId;
-            tblCorrMemberOffice.PrimaryOffice = false;
-            tblCorrMemberOffice.Year = await apiHelper.GetAsync<int>($"/GetFratYear/{0}");
-            tblCorrMemberOffice.District = null;
-            tblCorrMemberOffice.Council = null;
-            tblCorrMemberOffice.Assembly = null;
+                TblCorrMemberOffice tblCorrMemberOffice = new TblCorrMemberOffice();
+                TblMasMember myID = await apiHelper.GetAsync<TblMasMember>($"/IsKofCMember/{KofCID}");
+                if (myID == null)
+                {
+                    WriteToDelegateImportLog(guid, 0, "INFO", $"Unable to add Office {OfficeId} for missing Member {KofCID}");
+                    return;
+                }
+                tblCorrMemberOffice.OfficeId = OfficeId;
+                tblCorrMemberOffice.MemberId = myID.MemberId;
+                tblCorrMemberOffice.PrimaryOffice = false;
+                tblCorrMemberOffice.Year = await apiHelper.GetAsync<int>($"/GetFratYear/{0}");
+                tblCorrMemberOffice.District = null;
+                tblCorrMemberOffice.Council = null;
+                tblCorrMemberOffice.Assembly = null;
 
-            await apiHelper.PostAsync<TblCorrMemberOffice, TblCorrMemberOffice>("/MemberOffice", tblCorrMemberOffice);
-            WriteToDelegateImportLog(guid, myID.MemberId, "INFO", $"Adding Office {OfficeId} to Member {myID.MemberId}");
+                if (_postFlag) { await apiHelper.PostAsync<TblCorrMemberOffice, TblCorrMemberOffice>("/MemberOffice", tblCorrMemberOffice); };
+                WriteToDelegateImportLog(guid, myID.MemberId, "INFO", $"Adding Office {OfficeId} to Member {myID.MemberId}");
+            }
+            catch (Exception ex)
+            {
+                Log.Error(Utils.FormatLogEntry(this, ex));
+                WriteToDelegateImportLog(guid, KofCID, "ERROR", $"Adding Office {OfficeId} to Member {KofCID}");
+            }
+
+        }
+        private bool HasDupCouncils(List<CvnImpDelegate> model)
+        {
+            if (model == null) { return true; }
+            foreach (var myDel in model)
+            {
+                if (model.Where(u => u.CouncilNumber == myDel.CouncilNumber).Count() > 1)
+                {
+                    return true;
+                }
+            }
+            return false;
         }
     }
 
