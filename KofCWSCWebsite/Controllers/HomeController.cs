@@ -1,7 +1,10 @@
 using KofCWSCWebsite.Data;
 using KofCWSCWebsite.Models;
+using KofCWSCWebsite.Services;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.ModelBinding;
 using Microsoft.EntityFrameworkCore;
+using Serilog;
 using System.Diagnostics;
 
 namespace KofCWSCWebsite.Controllers
@@ -46,28 +49,21 @@ namespace KofCWSCWebsite.Controllers
             // 12/05/2024 Tim Philomeno
             // Now that we have a generic ApiHelper class, these are the only 2 lines that we should need to
             // call the API
-            var apiHelper = new ApiHelper(_dataSetService);
-            var result = await apiHelper.GetAsync<IEnumerable<HomePageViewModel>>("/Home");
+            try
+            {
+                var apiHelper = new ApiHelper(_dataSetService);
+                var result = await apiHelper.GetAsync<IEnumerable<HomePageViewModel>>("/Home");
+                return View(result);
+                
+            }
+            catch (Exception ex)
+            {
+                Log.Error(Utils.FormatLogEntry(this, ex));
+                return BadRequest(ex.Message + $" Check to Make sure you are NOT hitting the Production API.  You should only run against a local API {ViewData["APIURL"]}");
+            }
+            
             //------------------------------------------------------------------------------------------------------
 
-            //using (var client = new HttpClient())
-            //{
-            //    var responseTask = client.GetAsync(myURI);
-            //    responseTask.Wait();
-            //    var myresult = responseTask.Result;
-            //    IEnumerable<HomePageViewModel> home;
-            //    if (myresult.IsSuccessStatusCode)
-            //    {
-            //        var readTask = myresult.Content.ReadAsAsync<IList<HomePageViewModel>>();
-            //        readTask.Wait();
-            //        home = readTask.Result;
-            //    }
-            //    else
-            //    {
-            //        home = Enumerable.Empty<HomePageViewModel>();
-            //        ModelState.AddModelError(string.Empty, "Server Error.  Please contact administrator.");
-            //    }
-            return View(result);
             //}
         }
         public IActionResult Privacy()

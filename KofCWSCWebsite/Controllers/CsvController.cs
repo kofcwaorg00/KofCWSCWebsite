@@ -33,7 +33,7 @@ namespace KofCWSCWebsite.Controllers
             A2 = 116
         }
         private DataSetService _dataSetService;
-        private bool _postFlag = false;
+        private static bool _postFlag = false;
         public CsvController(DataSetService dataSetService)
         {
             _dataSetService = dataSetService;
@@ -43,17 +43,27 @@ namespace KofCWSCWebsite.Controllers
         [Route("UploadDelegates/{id}")]
         public IActionResult UploadDelegates(int id)
         {
-            if (id == 0)
+            //************************************************************************************************
+            // 12/10/2024 Tim Philomeno
+            // I am using _PostFlag to allow my menu to call this process and NOT acutall do anything, just log
+            // very strange behavior. This method get called twice to be able to get favico to the browser
+            // so i create the static global var _postFlag and set it on the first call.  Subsequent calls
+            // do not change it because once it is set to true it will not change
+            //------------------------------------------------------------------------------------------------
+            var myQ = Request.Path.Value.Split("/")[2];
+
+            if (!_postFlag)
             {
-                _postFlag = false;
+                _postFlag = myQ == "1" ? true : false; ;
             }
-            else
-            {
-                _postFlag = true;
-            }
+            //------------------------------------------------------------------------------------------------
             return View("/Views/Convention/UploadDelegates.cshtml");
         }
-
+        static bool ConvertToBool(string input)
+        {
+            // Treat "0" as false, anything else as true
+            return input == "0" ? false : true;
+        }
         // POST: Handle the CSV file upload and parse it
         [HttpPost]
         public async Task<IActionResult> Upload(CvnImpDelegateViewModel model)
@@ -317,7 +327,6 @@ namespace KofCWSCWebsite.Controllers
                             if (_postFlag) { await apiHelper.PutAsync<TblMasMember, TblMasMember>($"/member/{myIsA1Member.MemberId}", myIsA1Member); };
                             WriteToDelegateImportLog(guid, cvnImpDelegate.A1MemberID, "INFO", "Update an Existing Member");
                         }
-                        return true;
                     }
                     catch (Exception ex)
                     {

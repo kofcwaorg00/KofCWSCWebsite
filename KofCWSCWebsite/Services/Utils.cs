@@ -13,6 +13,7 @@ using Azure;
 using Azure.Communication.Email;
 using sun.tools.tree;
 using Microsoft.CodeAnalysis.VisualBasic.Syntax;
+using System.Diagnostics;
 
 
 namespace KofCWSCWebsite.Services
@@ -25,7 +26,9 @@ namespace KofCWSCWebsite.Services
             // 12/05/2024 Tim Philomeno
             // trying to get a consistant logging string
             // usage: Log.Error(Utils.FormatLogEntry(this, ex));
-            return thisme.GetType().Name + " - " + ex.Message + " - " + ex.InnerException;
+            var method = new StackTrace(ex, true).GetFrame(0)?.GetMethod();
+            var className = method?.DeclaringType?.FullName;
+            return thisme.GetType().Name + " - in method " + method + " - in class " + className + ex.Message + " - " + ex.InnerException;
             //-----------------------------------------------------------------------------------------------
         }
         public static string GetString(IHtmlContent content)
