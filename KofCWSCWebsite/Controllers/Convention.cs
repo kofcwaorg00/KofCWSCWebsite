@@ -43,19 +43,21 @@ namespace KofCWSCWebsite.Controllers
             try
             {
                 var myAffectedRows = await _apiHelper.GetAsync<int>($"/ResetDelegates");
-                string myMess = $"<h5>The Reset of Delegate Data Succeeded.  Updated {myAffectedRows} Rows</h5>";
+                string myMess = $"The Reset of Delegate Data Succeeded.  Updated {myAffectedRows} Rows";
                 ViewBag.RowsUpdated = myMess;
-                string pagePath = Url.Content("/Convention/ResetDelegatesSuccessFail");
-                return Redirect(pagePath);
+                return View("Views/Convention/ResetDelegatesSuccessFail.cshtml");
+                //string pagePath = Url.Content("/Convention/ResetDelegatesSuccessFail");
+                //return Redirect(pagePath);
 
             }
             catch (Exception ex)
             {
                 Log.Error(Utils.FormatLogEntry(this, ex));
-                string myMess = $"<h5>The Reset of Delegate Data Failed with error - {ex.Message}</h5>";
+                string myMess = $"The Reset of Delegate Data Failed with error - {ex.Message}";
                 ViewBag.RowsUpdated = myMess;
-                string pagePath = Url.Content("/Convention/ResetDelegatesSuccessFail"); 
-                return Redirect(pagePath);
+                //string pagePath = Url.Content("/Convention/ResetDelegatesSuccessFail"); 
+                //return Redirect(pagePath);
+                return View("Views/Convention/ResetDelegatesSuccessFail.cshtml");
             }
         }
     }
