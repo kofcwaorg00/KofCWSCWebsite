@@ -1,0 +1,20 @@
+﻿@page
+@model KofCWSCWebsite.Pages.Convention.ResetDelegatesModel
+@{
+}
+<h5>Running this process will clear the Seated Days and Paid MPG flags in all member records.</h5>
+<h5>NOTE: this will not remove delegates.  The Delegate Import process does that.</h5>
+
+<div style="float:left;padding-right:5px">
+    @using (Html.BeginForm("ResetDelegates", "Convention", FormMethod.Get))
+    {
+        <button type="submit" class="btn btn-warning">Continue</button>
+    }
+</div>
+<div style="float:left">
+    @using (Html.BeginForm("Index", "Home", FormMethod.Post))
+    {
+        <button type="submit" class="btn btn-primary">Cancel</button>
+    }
+</div>
+<br />

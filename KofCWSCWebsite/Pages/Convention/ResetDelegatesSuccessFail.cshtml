@@ -1,0 +1,13 @@
+﻿@page
+@model KofCWSCWebsite.Pages.Convention.ResetDelegatesSuccessFailModel
+@{
+}
+
+<h5>@ViewBag.RowsUpdated</h5>
+<div style="float:left">
+    @using (Html.BeginForm("Index", "Home", FormMethod.Post))
+    {
+        <button type="submit" class="btn btn-primary">Done</button>
+    }
+</div>
+<br />

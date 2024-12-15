@@ -72,6 +72,7 @@ public partial class ApplicationDbContext : DbContext
     public virtual DbSet<CvnControl> TblCvnControls { get; set; }
     public virtual DbSet<CvnImpDelegate> CvnImpDelegates { get; set; }
     public virtual DbSet<CvnImpDelegatesLog> TblCvnImpDelegatesLogs { get; set; }
+    public virtual DbSet<CvnDelegateDays> CvnDelegateDays { get; set; }
     protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
     {
         if (!optionsBuilder.IsConfigured)
@@ -586,6 +587,11 @@ public partial class ApplicationDbContext : DbContext
                 .HasMaxLength(10)
                 .IsUnicode(false);
         });
+        modelBuilder.Entity<CvnDelegateDays>(entity =>
+        {
+            entity.HasNoKey();
+        });
+
         OnModelCreatingPartial(modelBuilder);
     }
 

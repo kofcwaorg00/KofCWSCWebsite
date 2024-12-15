@@ -1,0 +1,219 @@
+﻿@model IEnumerable<KofCWSCWebsite.Models.CvnDelegateDays>
+
+@{
+    ViewData["Title"] = "Manage Delegate Days";
+}
+<table>
+    <thead>
+        <tr>
+            <th>
+                District
+            </th>
+            <th>
+                Council
+            </th>
+            <th>
+                Type
+            </th>
+            <th>
+                Name
+            </th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+        <tr>
+            <td>
+                <input type="text" id="mydistrictFilter" placeholder="Type in a District Number to filter results" title="Type in a number">
+            </td>
+            <td>
+                <input type="text" id="mycouncilFilter" placeholder="Type in a Council Number to filter results" title="Type in a number">
+            </td>
+            <td>
+                <input type="text" id="mytypeFilter" placeholder="Type in a Delegate Type to filter results" title="Type in letters">
+            </td>
+            <td>
+                <input type="text" id="mynameFilter" placeholder="Type in a Delegate Name to filter results" title="Type in letters">
+            </td>
+            <td>
+                <button id="resetFilters" class="btn btn-outline-success">Reset Filters</button>
+            </td>
+        </tr>
+    </tbody>
+</table>
+
+<table class="table" width="100%" id="myTable">
+    <thead>
+        <tr>
+            <th class="MyColHdr" style="text-align:center">
+                @Html.DisplayNameFor(model => model.District)
+            </th>
+            <th class="MyColHdr" style="text-align:center">
+                @Html.DisplayNameFor(model => model.Council)
+            </th>
+            <th class="MyColHdr" style="text-align:center">
+                @Html.DisplayNameFor(model => model.Type)
+            </th>
+            <th class="MyColHdr">
+                @Html.DisplayNameFor(model => model.FullName)
+            </th>
+            <th class="MyColHdr">
+                @Html.DisplayNameFor(model => model.Delegate)
+            </th>
+            <th class="MyColHdr" style="text-align:center">
+                @Html.DisplayNameFor(model => model.Day1)
+            </th>
+            <th class="MyColHdr" style="text-align:center">
+                @Html.DisplayNameFor(model => model.Day2)
+            </th>
+            <th class="MyColHdr" style="text-align:center">
+                @Html.DisplayNameFor(model => model.Day3)
+            </th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var item in Model)
+        {
+            <tr>
+                <td style="text-align:center">
+                    @Html.DisplayFor(modelItem => item.District)
+                </td>
+                <td style="text-align:center">
+                    @Html.DisplayFor(modelItem => item.Council)
+                </td>
+                <td style="text-align:center">
+                    @Html.DisplayFor(modelItem => item.Type)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.FullName)
+                </td>
+                <td>
+                    @Html.Raw(item.Delegate)
+                </td>
+                <td style="text-align:center">
+                    <form asp-controller="Convention" asp-action="ToggleDelegateDays" asp-route-id=@item.MemberId asp-route-day="1" method="get">
+                        <button type="submit" class="btn btn-sm">
+                            @Html.Raw(item.Day1)
+                        </button>
+                    </form>
+                </td>
+                <td style="text-align:center">
+                    <form asp-controller="Convention" asp-action="ToggleDelegateDays" asp-route-id=@item.MemberId asp-route-day="2" method="get">
+                        <button type="submit" class="btn btn-sm">
+                            @Html.Raw(item.Day2)
+                        </button>
+                    </form>
+                </td>
+                <td style="text-align:center">
+                    <form asp-controller="Convention" asp-action="ToggleDelegateDays" asp-route-id=@item.MemberId asp-route-day="3" method="get">
+                        <button type="submit" class="btn btn-sm">
+                            @Html.Raw(item.Day3)
+                        </button>
+                    </form>
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>
+
+<script>
+    // Elements
+    const districtFilter = document.getElementById('mydistrictFilter');
+    const councilFilter = document.getElementById('mycouncilFilter');
+    const typeFilter = document.getElementById('mytypeFilter');
+    const nameFilter = document.getElementById('mynameFilter');
+
+    const resetFilters = document.getElementById('resetFilters');
+    const tableBody = document.getElementById('mytable');
+
+    function getCookie(name) {
+        const cookies = document.cookie.split('; '); // Split cookies into individual key=value pairs
+        for (let cookie of cookies) {
+            const [key, value] = cookie.split('='); // Split each cookie into key and value
+            if (key === name) {
+                return decodeURIComponent(value); // Decode and return the cookie value
+            }
+        }
+        return null; // Return null if the cookie isn't found
+    }
+    // Restore filters from localStorage
+    function restoreFilters() {
+        const saveddistrictFilter = getCookie("districtFilter") || ''; //localStorage.getItem('districtFilter') || '';
+        const savedcouncilFilter = getCookie("councilFilter") || ''; //localStorage.getItem('councilFilter') || '';
+        const savedtypeFilter = getCookie("typeFilter") || ''; //localStorage.getItem('typeFilter') || '';
+        const savednameFilter = getCookie("nameFilter") || ''; //localStorage.getItem('nameFilter') || '';
+
+        districtFilter.value = saveddistrictFilter;
+        councilFilter.value = savedcouncilFilter;
+        typeFilter.value = savedtypeFilter;
+        nameFilter.value = savednameFilter;
+    }
+
+    // Save filters to localStorage
+    function saveFilters() {
+        document.cookie = "districtFilter=" + districtFilter.value + "; path=/;"; //localStorage.setItem('districtFilter', districtFilter.value);
+        document.cookie = "councilFilter=" + councilFilter.value + "; path=/;"; //localStorage.setItem('councilFilter', councilFilter.value);
+        document.cookie = "typeFilter=" + typeFilter.value + "; path=/;"; //localStorage.setItem('typeFilter', typeFilter.value);
+        document.cookie = "nameFilter=" + nameFilter.value + "; path=/;"; //localStorage.setItem('nameFilter', nameFilter.value);
+    }
+
+    // Filter the table
+    function filterTable() {
+        const districtValue = districtFilter.value.toLowerCase();
+        const councilValue = councilFilter.value.toLowerCase();
+        const typeValue = typeFilter.value.toLowerCase();
+        const nameValue = nameFilter.value.toLowerCase();
+
+        var myTable = document.getElementById('myTable');
+
+        Array.from(myTable.rows).forEach(row => {
+            // only affect the body rows not the header
+            if (row.parentNode.tagName.toLowerCase() === 'tbody') {
+                const district = row.cells[0].textContent.toLowerCase();
+                const council = row.cells[1].textContent.toLowerCase();
+                const type = row.cells[2].textContent.toLowerCase();
+                const name = row.cells[3].textContent.toLowerCase();
+
+                // Check each filter
+
+                const districtMatch = district.value === '' || district.includes(districtValue);
+                const councilMatch = council.value === '' || council.includes(councilValue);
+                const typeMatch = type.value === '' || type.includes(typeValue);
+                const nameMatch = name.value === '' || name.includes(nameValue);
+
+                // Show or hide the row based on filters
+                if (districtMatch && councilMatch && typeMatch && nameMatch) {
+                    row.style.display = '';
+                } else {
+                    row.style.display = 'none';
+                }
+            }
+        });
+
+        // Save filter values
+        saveFilters();
+    }
+
+    // Reset filters
+    resetFilters.addEventListener('click', () => {
+        districtFilter.value = '';
+        councilFilter.value = '';
+        typeFilter.value = '';
+        nameFilter.value = '';
+        filterTable();
+    });
+
+    // Event listeners
+    districtFilter.addEventListener('input', filterTable);
+    councilFilter.addEventListener('input', filterTable);
+    typeFilter.addEventListener('input', filterTable);
+    nameFilter.addEventListener('input', filterTable);
+
+    // Initialize
+    restoreFilters();
+    filterTable();
+</script>
+
+
+
+
