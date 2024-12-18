@@ -30,7 +30,8 @@
                 <input type="text" id="mycouncilFilter" placeholder="Type in a Council Number to filter results" title="Type in a number">
             </td>
             <td>
-                <input type="text" id="mytypeFilter" placeholder="Type in a Delegate Type to filter results" title="Type in letters">
+                <input type="text" id="mytypeFilter" placeholder="Type in a Delegate Type to filter results." title="Use CHANCERY for Bishops, FIA for Faith In Action Directors, COMM for Committees, PSDs for Past State Deputies, GAs for General Agents, FAs for Field Agents, RPC for Regional Program Chairman, and CHAIRMEN for Chairmen">
+                
             </td>
             <td>
                 <input type="text" id="mynameFilter" placeholder="Type in a Delegate Name to filter results" title="Type in letters">
@@ -90,27 +91,57 @@
                 <td>
                     @Html.Raw(item.Delegate)
                 </td>
-                <td style="text-align:center">
-                    <form asp-controller="Convention" asp-action="ToggleDelegateDays" asp-route-id=@item.MemberId asp-route-day="1" method="get">
-                        <button type="submit" class="btn btn-sm">
-                            @Html.Raw(item.Day1)
-                        </button>
-                    </form>
-                </td>
-                <td style="text-align:center">
-                    <form asp-controller="Convention" asp-action="ToggleDelegateDays" asp-route-id=@item.MemberId asp-route-day="2" method="get">
-                        <button type="submit" class="btn btn-sm">
-                            @Html.Raw(item.Day2)
-                        </button>
-                    </form>
-                </td>
-                <td style="text-align:center">
-                    <form asp-controller="Convention" asp-action="ToggleDelegateDays" asp-route-id=@item.MemberId asp-route-day="3" method="get">
-                        <button type="submit" class="btn btn-sm">
-                            @Html.Raw(item.Day3)
-                        </button>
-                    </form>
-                </td>
+                @if (@item.Day1.ToLower().Contains("disabled"))
+                {
+                    <td style="text-align:center">
+                        @Html.Raw(item.Day1)
+                    </td>
+                }
+                else
+                {
+                    <td style="text-align:center">
+                        <form asp-controller="Convention" asp-action="ToggleDelegateDays" asp-route-id=@item.MemberId asp-route-day="1" method="get">
+                            <button type="submit" class="btn btn-sm">
+                                @Html.Raw(item.Day1)
+                            </button>
+                        </form>
+                    </td>
+                }
+                @if (item.Day2.ToLower().Contains("disabled"))
+                {
+                    <td style="text-align:center">
+                        @Html.Raw(item.Day2)
+                    </td>
+                }
+                else
+                {
+
+
+                    <td style="text-align:center">
+                        <form asp-controller="Convention" asp-action="ToggleDelegateDays" asp-route-id=@item.MemberId asp-route-day="2" method="get">
+                            <button type="submit" class="btn btn-sm">
+                                @Html.Raw(item.Day2)
+                            </button>
+                        </form>
+                    </td>
+                }
+                @if (item.Day3.ToLower().Contains("disabled"))
+                {
+                    <td style="text-align:center">
+                        @Html.Raw(item.Day3)
+                    </td>
+                }
+                else
+                {
+                    <td style="text-align:center">
+                        <form asp-controller="Convention" asp-action="ToggleDelegateDays" asp-route-id=@item.MemberId asp-route-day="3" method="get">
+                            <button type="submit" class="btn btn-sm">
+                                @Html.Raw(item.Day3)
+                            </button>
+                        </form>
+                    </td>
+                }
+
             </tr>
         }
     </tbody>

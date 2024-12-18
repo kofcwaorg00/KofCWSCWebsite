@@ -126,7 +126,12 @@
 
   <ItemGroup>
     <Folder Include="Scripts\" />
+    <Folder Include="Views\Address\" />
     <Folder Include="wwwroot\files\uploads\" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\..\USPS_Web_Tools_Wrapper_src\MAX.USPS.csproj" />
   </ItemGroup>
 
   <ItemGroup>

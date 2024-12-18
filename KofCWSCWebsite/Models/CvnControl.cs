@@ -10,4 +10,8 @@ public partial class CvnControl
 
     [DisplayName("Enter String for Location in the form 'State Convention' May nn-nn, 202n City, WA")]
     public string LocationString { get; set; } = null!;
+    public string? Address { get; set; }
+    public string? City { get; set; }
+    public string? State { get; set; }
+    public string? ZipCode { get; set; }
 }

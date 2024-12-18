@@ -591,11 +591,20 @@ public partial class ApplicationDbContext : DbContext
         {
             entity.HasNoKey();
         });
+        modelBuilder.Entity<USPSAddress>(entity =>
+        {
+            entity.HasNoKey();
+            entity.Ignore(p => p.AdditionalInfo);
+            entity.Ignore(p => p.Address);
+            
+        });
 
         OnModelCreatingPartial(modelBuilder);
     }
 
     partial void OnModelCreatingPartial(ModelBuilder modelBuilder);
+
+public DbSet<USPSAddress> Uspsaddress { get; set; } = default!;
 
 }
 

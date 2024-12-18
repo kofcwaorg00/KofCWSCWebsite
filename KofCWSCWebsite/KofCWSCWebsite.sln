@@ -5,6 +5,8 @@ VisualStudioVersion = 17.5.002.0
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "KofCWSCWebsite", "KofCWSCWebsite.csproj", "{871CF3A8-AFB7-4B90-B94B-B83B582DB2CA}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MAX.USPS", "..\..\USPS_Web_Tools_Wrapper_src\MAX.USPS.csproj", "{BAB21EB2-2A87-4076-A029-96ABC7EECE2F}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -15,6 +17,10 @@ Global
 		{871CF3A8-AFB7-4B90-B94B-B83B582DB2CA}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{871CF3A8-AFB7-4B90-B94B-B83B582DB2CA}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{871CF3A8-AFB7-4B90-B94B-B83B582DB2CA}.Release|Any CPU.Build.0 = Release|Any CPU
+		{BAB21EB2-2A87-4076-A029-96ABC7EECE2F}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{BAB21EB2-2A87-4076-A029-96ABC7EECE2F}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{BAB21EB2-2A87-4076-A029-96ABC7EECE2F}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{BAB21EB2-2A87-4076-A029-96ABC7EECE2F}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
