@@ -2,6 +2,13 @@
 
 @{
     ViewData["Title"] = "Create";
+    //**********************************************************************************************
+    // 12/18/2024 Tim Philomeno
+    // This is an example of how to use the USPS API to return a valid address and give the
+    // user a change to use it.
+    // It seems like there might be an easier way to do this.
+    // One issue is that the incoming model contains the old data from the controller
+    //-----------------------------------------------------------------------------------------------
 }
 
 <h1>Create</h1>
@@ -18,10 +25,10 @@
                 <span asp-validation-for="Address.StreetAddress" class="text-danger"></span>
             </div>
             @*<div class="form-group">
-                <label asp-for="Address2" class="control-label"></label>
-                <input asp-for="Address2" class="form-control" />
-                <span asp-validation-for="Address2" class="text-danger"></span>
-            </div>*@
+                    <label asp-for="Address2" class="control-label"></label>
+                    <input asp-for="Address2" class="form-control" />
+                    <span asp-validation-for="Address2" class="text-danger"></span>
+                </div>*@
             <div class="form-group">
                 <label asp-for="Address.City" class="control-label"></label>
                 <input asp-for="Address.City" class="form-control" />
@@ -50,44 +57,95 @@
 </div>
 
 <br />
-<div>
-    <hr />
-    <h6>Found This Address</h6>
-    <br />
-    <dl class="row">
-        <dt class="col-sm-2">
-            @Html.DisplayNameFor(model => model.Address.StreetAddress)
-        </dt>
-        <dd class="col-sm-10">
-            @Html.DisplayFor(model => model.Address.StreetAddress)
-        </dd>
-        <dt class="col-sm-2">
-            @Html.DisplayNameFor(model => model.Address.City)
-        </dt>
-        <dd class="col-sm-10">
-            @Html.DisplayFor(model => model.Address.City)
-        </dd>
-        <dt class="col-sm-2">
-            @Html.DisplayNameFor(model => model.Address.State)
-        </dt>
-        <dd class="col-sm-10">
-            @Html.DisplayFor(model => model.Address.State)
-        </dd>
-        <dt class="col-sm-2">
-            @Html.DisplayNameFor(model => model.Address.ZIPCode)
-        </dt>
-        <dd class="col-sm-10">
-            @Html.DisplayFor(model => model.Address.ZIPCode)
-        </dd>
-        <dt class="col-sm-2">
-            @Html.DisplayNameFor(model => model.Address.ZIPPlus4)
-        </dt>
-        <dd class="col-sm-10">
-            @Html.DisplayFor(model => model.Address.ZIPPlus4)
-        </dd>
-    </dl>
-</div>
+
+@if (@ViewBag.USPSAddress is not null)
+{
+    <div id="USPSDiv">
+        @if (@ViewBag.USPSAddress == "Found This Address")
+        {
+            <hr />
+            <table class="table">
+                <tr>
+
+                    <td>
+                        <div style="float:left">
+                            <span style="font-weight:bold">@ViewBag.USPSAddress - Do you want to use it? </span>
+                            <button onclick="CopyAddress()">Yes</button>
+                            <button>No</button>
+                        </div>
+                    </td>
+                </tr>
+            </table>
+
+            <hr />
+            <div>
+                <dl class="row">
+                    <dt class="col-sm-2">
+                        @Html.DisplayNameFor(model => model.Address.StreetAddress)
+                    </dt>
+                    <dd class="col-sm-10">
+                        <span id="StreetAddress">@Html.DisplayFor(model => model.Address.StreetAddress)</span>
+                    </dd>
+                    <dt class="col-sm-2">
+                        @Html.DisplayNameFor(model => model.Address.City)
+                    </dt>
+                    <dd class="col-sm-10">
+                        <span id="City">@Html.DisplayFor(model => model.Address.City)</span>
+                    </dd>
+                    <dt class="col-sm-2">
+                        @Html.DisplayNameFor(model => model.Address.State)
+                    </dt>
+                    <dd class="col-sm-10">
+                        <span id="State">@Html.DisplayFor(model => model.Address.State)</span>
+                    </dd>
+                    <dt class="col-sm-2">
+                        @Html.DisplayNameFor(model => model.Address.ZIPCode)
+                    </dt>
+                    <dd class="col-sm-10">
+                        <span id="ZIPCode">@Html.DisplayFor(model => model.Address.ZIPCode)</span>
+                    </dd>
+                    <dt class="col-sm-2">
+                        @Html.DisplayNameFor(model => model.Address.ZIPPlus4)
+                    </dt>
+                    <dd class="col-sm-10">
+                        <span id="ZIPPlus4">@Html.DisplayFor(model => model.Address.ZIPPlus4)</span>
+                    </dd>
+                </dl>
+            </div>
+
+        }
+        else
+        {
+            <h6>@ViewBag.USPSAddress</h6>
+        }
+    </div>
+}
+
+
+
 
 @section Scripts {
     @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
 }
+<script>
+    function CopyAddress() {
+
+        var srcAddress = document.getElementById("Address_StreetAddress");
+        srcAddress.value = document.getElementById("StreetAddress").textContent;
+
+        var srcCity = document.getElementById("Address_City");
+        srcCity.value = document.getElementById("City").textContent;
+
+        var srcState = document.getElementById("Address_State");
+        srcState.value = document.getElementById("State").textContent;
+
+        var srcZIPCode = document.getElementById("Address_ZIPCode");
+        srcZIPCode.value = document.getElementById("ZIPCode").textContent;
+
+        var srcZIPPlus4 = document.getElementById("Address_ZIPPlus4");
+        srcZIPPlus4.value = document.getElementById("ZIPPlus4").textContent;
+
+        var USPSDiv = document.getElementById("USPSDiv");
+        USPSDiv.style.display = "none";
+    }
+</script>

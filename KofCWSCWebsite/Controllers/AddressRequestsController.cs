@@ -1,19 +1,11 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-using Microsoft.AspNetCore.Mvc;
-using Microsoft.AspNetCore.Mvc.Rendering;
-using Microsoft.EntityFrameworkCore;
-using System.Web;
-using MAX.USPS;
+﻿using Microsoft.AspNetCore.Mvc;
 using System.Net.Http.Headers;
 using System.Text;
-//using Newtonsoft.Json;
 using System.Text.Json;
 using KofCWSCWebsite.Models;
 using KofCWSCWebsite.Data;
-
+using KofCWSCWebsite.Services;
+using Serilog;
 
 namespace KofCWSCWebsite.Controllers
 {
@@ -58,7 +50,7 @@ namespace KofCWSCWebsite.Controllers
             var consumerSecret = _configuration["USPS:ConsumerSecret"];
 
             var jwtToken = await GetJwtTokenAsync(JWTbaseUrl, consumerKey, consumerSecret);
-
+            Log.Information(jwtToken);
             var httpClient = new HttpClient();
 
             var payload = new
@@ -87,11 +79,16 @@ namespace KofCWSCWebsite.Controllers
                         PropertyNameCaseInsensitive = true
                     });
                     // Return API response (you can also deserialize to a model)
+                    ViewBag.USPSAddress = "Found This Address";
                     return View(desAddr);
                 }
                 else
                 {
-                    return StatusCode((int)responseData.StatusCode, await responseData.Content.ReadAsStringAsync());
+                    var myError = await responseData.Content.ReadAsStringAsync();
+                    ViewBag.USPSAddress = "Address Not Found.  Try Again";
+                    var myRetVal = new USPSAddress();
+                    return View(myRetVal);
+                    //return StatusCode((int)responseData.StatusCode, await responseData.Content.ReadAsStringAsync());
                 }
             }
             catch (Exception ex)
@@ -116,17 +113,19 @@ namespace KofCWSCWebsite.Controllers
             var content = new StringContent(JsonSerializer.Serialize(payload), Encoding.UTF8, "application/json");
 
             // Send POST request to the authentication endpoint
+            Log.Information(baseUrl + content.ToString());
             var response = await client.PostAsync(baseUrl, content);
 
             if (response.IsSuccessStatusCode)
             {
                 var responseString = await response.Content.ReadAsStringAsync();
                 dynamic jsonResponse = JsonSerializer.Deserialize<JwtResponse>(responseString);
+                Log.Information(jsonResponse.access_token);
                 return jsonResponse.access_token;
             }
             else
             {
-                Console.WriteLine($"Error: {response.StatusCode} - {response.ReasonPhrase}");
+                Log.Error($"Error: {response.StatusCode} - {response.ReasonPhrase}");
                 return null;
             }
         }
