@@ -14,4 +14,8 @@ public partial class CvnControl
     public string? City { get; set; }
     public string? State { get; set; }
     public string? ZipCode { get; set; }
+    [DisplayName("Dollars Per Day")]
+    public decimal? MPDDay { get; set; }
+    [DisplayName("Cents per Mile")]
+    public decimal? MPDMile { get; set; }
 }

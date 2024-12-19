@@ -409,6 +409,8 @@ public partial class ApplicationDbContext : DbContext
 
             entity.Property(e => e.Id).HasColumnName("id");
             entity.Property(e => e.LocationString).HasMaxLength(1000);
+            entity.Property(e => e.MPDDay).HasColumnName("MPDDay");
+            entity.Property(e => e.MPDMile).HasColumnName("MPDMile");
         });
         //modelBuilder.Entity<FileStorageVM>(
         //    ob =>
