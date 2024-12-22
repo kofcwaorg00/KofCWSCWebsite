@@ -1,0 +1,41 @@
+﻿@model IEnumerable<KofCWSCWebsite.Models.CvnLocation>
+
+@{
+    ViewData["Title"] = "Add Location";
+}
+
+
+<p>
+    <form asp-controller="CvnLocations" asp-action="Create" method="get">
+        <button type="submit" class="btn btn-sm btn-success">
+            Add a New Location
+        </button>
+    </form>
+</p>
+<table class="table" style="width:25%">
+    <thead>
+        <tr>
+            <th>
+                @Html.DisplayNameFor(model => model.Location)
+            </th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+@foreach (var item in Model) {
+        <tr>
+            <td>
+                @Html.DisplayFor(modelItem => item.Location)
+            </td>
+            <td style="padding-left:0px">
+                <form asp-action="Delete" asp-route-id="@item.Id" method="get">
+                    <button type="submit" class="btn btn-sm btn-danger">
+                        Delete
+                    </button>
+                </form>
+
+            </td>
+        </tr>
+}
+    </tbody>
+</table>

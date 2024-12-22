@@ -38,6 +38,11 @@
                 <input asp-for="ZipCode" class="form-control" />
                 <span asp-validation-for="ZipCode" class="text-danger"></span>
             </div>
+            <div class="form-group">
+                <label asp-for="Location" class="control-label"></label>
+                <input asp-for="Location" class="form-control" />
+                <span asp-validation-for="Location" class="text-danger"></span>
+            </div>
             <hr />
             <h6>Mileage and Per Diem Amounts</h6>
             <div class="form-group">
@@ -51,7 +56,7 @@
                     <input asp-for="MPDMile" class="form-control" />
                     <span asp-validation-for="MPDMile" class="text-danger"></span>
                 </div>
-               
+
             </div>
             <div class="form-group">
                 <input type="submit" value="Save" class="btn btn-primary" />

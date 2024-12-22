@@ -18,4 +18,6 @@ public partial class CvnControl
     public decimal? MPDDay { get; set; }
     [DisplayName("Cents per Mile")]
     public decimal? MPDMile { get; set; }
+    [DisplayName("Closest City to the Venue Location")]
+    public string? Location { get; set; }
 }

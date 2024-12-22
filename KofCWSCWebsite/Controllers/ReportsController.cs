@@ -21,7 +21,7 @@ namespace KofCWSCWebsite.Controllers
             _configuration = configuration;
         }
 
-        [Authorize(Roles = "Admin")]
+        [Authorize(Roles = "Admin,StateOfficer")]
         [Route("GetLabelByGroup")]
         public IActionResult GetLabelByGroup(int ID)
         {
@@ -41,7 +41,7 @@ namespace KofCWSCWebsite.Controllers
 
             return View(model);
         }
-        [Authorize(Roles = "Admin")]
+        [Authorize(Roles = "Admin,StateOfficer")]
         [Route("GetLabelByOffice")]
         public IActionResult GetLabelByOffice(int ID)
         {
@@ -61,7 +61,7 @@ namespace KofCWSCWebsite.Controllers
             return View(model);
         }
 
-        [Authorize(Roles = "Admin")]
+        [Authorize(Roles = "Admin,StateOfficer")]
         [Route("GetDirectory/{Id}")]
         public IActionResult GetDirectory(int Id)
         {
@@ -85,7 +85,7 @@ namespace KofCWSCWebsite.Controllers
             _dataSetService.PrepareReport(model.WebReport.Report, _configuration, ShortForm, NextYear);
             return View(model);
         }
-        [Authorize(Roles = "Admin")]
+        [Authorize(Roles = "Admin,StateOfficer")]
         [Route("GetRollCallSheets/{Id}")]
         public IActionResult GetRollCallSheets(int Id)
         {

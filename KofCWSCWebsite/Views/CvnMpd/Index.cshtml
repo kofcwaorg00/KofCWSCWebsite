@@ -1,0 +1,147 @@
+﻿@model IEnumerable<KofCWSCWebsite.Models.CvnMpd>
+
+@{
+    ViewData["Title"] = "Index";
+}
+
+<h1>Checks Ready to Print</h1>
+
+@*<p>
+        <a asp-action="Create">Create New</a>
+    </p>*@
+@{
+    int NbrCks = Model.Count();
+}
+<table class="table">
+    <thead>
+        <tr>
+            <td colspan="14">
+                <form asp-controller="CvnMpd" asp-action="Print" method="get">
+                    <button type="submit" class="btn btn-sm btn-success">
+                        Print @NbrCks Checks
+                    </button>
+                </form>
+            </td>
+        </tr>
+        <tr>
+            @*<th>
+                    @Html.DisplayNameFor(model => model.MemberId)
+                </th>*@
+            <th>
+                @Html.DisplayNameFor(model => model.Council)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.District)
+            </th>
+            <th style="width:250px">
+                @Html.DisplayNameFor(model => model.Group)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Office)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Payee)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.CheckNumber)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.CheckDate)
+            </th>
+            @*<th>
+                    @Html.DisplayNameFor(model => model.Day1)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.Day2)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.Day3)
+                </th>*@
+            <th>
+                @Html.DisplayNameFor(model => model.Day1G)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Day2G)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Day3G)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Miles)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.CheckTotal)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Location)
+            </th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var item in Model)
+        {
+            <tr>
+                @*<td>
+                        @Html.DisplayFor(modelItem => item.MemberId)
+                    </td>*@
+                <td>
+                    @Html.DisplayFor(modelItem => item.Council)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.District)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Group)
+                </td>
+                <td>
+                    <span title="@Html.DisplayFor(modelItem => item.Office)" class="ellipsis">@Html.DisplayFor(modelItem => item.Office)</span>
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Payee)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.CheckNumber)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.CheckDate)
+                </td>
+                @*<td>
+                        @Html.DisplayFor(modelItem => item.Day1)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Day2)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Day3)
+                    </td>*@
+                <td>
+                    <img src="@Html.Raw(item.Day1G)"/>
+                </td>
+                <td>
+                    <img src="@Html.Raw(item.Day2G)" />
+                </td>
+                <td>
+                    <img src="@Html.Raw(item.Day3G)" />
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Miles)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.CheckTotal)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Location)
+                </td>
+                @*
+                <td>
+                    <a asp-action="Edit" asp-route-id="@item.Id">Edit</a> |
+                    <a asp-action="Details" asp-route-id="@item.Id">Details</a> |
+                    <a asp-action="Delete" asp-route-id="@item.Id">Delete</a>
+                </td>*@
+            </tr>
+
+
+            }
+        </tbody>
+    </table>

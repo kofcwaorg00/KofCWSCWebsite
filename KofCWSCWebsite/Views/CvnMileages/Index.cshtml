@@ -1,0 +1,173 @@
+﻿@model IEnumerable<KofCWSCWebsite.Models.CvnMileage>
+
+@{
+    ViewData["Title"] = "Index";
+}
+<table>
+    <thead>
+        <tr>
+            <th>
+                Council
+            </th>
+            <th>
+                Venue
+            </th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+        <tr>
+            <td>
+                <input type="text" id="mycouncilFilter" placeholder="Type in a Council Number to filter results" title="Type in a number">
+            </td>
+            <td>
+                <input type="text" id="myvenueFilter" placeholder="Type in a Venue Type to filter results." title="Type text">
+
+            </td>
+            <td>
+                <button id="resetFilters" class="btn btn-outline-success">Reset Filters</button>
+            </td>
+        </tr>
+    </tbody>
+</table>
+<p>
+    <form asp-controller="CvnLocations" asp-action="Create" method="get">
+        <button type="submit" class="btn btn-sm btn-success">
+            Add a New Location
+        </button>
+    </form>
+</p>
+<table class="table" style="width:50%" id="myTable">
+    <thead>
+        <tr>
+            <th style="text-align:center">
+                @Html.DisplayNameFor(model => model.Council)
+            </th>
+            <th style="text-align:center">
+                @Html.DisplayNameFor(model => model.Location)
+            </th>
+            <th style="width:50%;text-align:center">
+                @Html.DisplayNameFor(model => model.Mileage)
+            </th>
+            <th></th>
+            <th></th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+@foreach (var item in Model) {
+        <tr>
+            <td style="text-align:center">
+                @Html.DisplayFor(modelItem => item.Council)
+            </td>
+            <td style="text-align:center">
+                @Html.DisplayFor(modelItem => item.Location)
+            </td>
+            <td style="width:50%;text-align:center">
+                @Html.DisplayFor(modelItem => item.Mileage)
+            </td>
+            <td style="padding-right:0px">
+                @* <a asp-action="Edit" asp-route-id="@item.MemberId">Edit</a>&nbsp;|&nbsp;<a asp-action="Details" asp-route-id="@item.MemberId">Details</a>&nbsp;|&nbsp;<a asp-action="Delete" asp-route-id="@item.MemberId">Delete</a> *@
+                <form asp-action="Edit" asp-route-id="@item.Id" method="get">
+                    <button type="submit" class="btn btn-sm btn-primary">
+                        Edit
+                    </button>
+                </form>
+            </td>
+            <td style="padding-left:0px;padding-right:0px">
+                <form asp-action="Details" asp-route-id="@item.Id" method="get">
+                    <button type="submit" class="btn btn-sm btn-warning">
+                        Details
+                    </button>
+                </form>
+            </td>
+            <td style="padding-left:0px">
+                <form asp-action="Delete" asp-route-id="@item.Id" method="get">
+                    <button type="submit" class="btn btn-sm btn-danger">
+                        Delete
+                    </button>
+                </form>
+
+            </td>
+        </tr>
+}
+    </tbody>
+</table>
+<script>
+    // Elements
+    const councilFilter = document.getElementById('mycouncilFilter');
+    const venueFilter = document.getElementById('myvenueFilter');
+
+    const resetFilters = document.getElementById('resetFilters');
+    const tableBody = document.getElementById('mytable');
+
+    function getCookie(name) {
+        const cookies = document.cookie.split('; '); // Split cookies into individual key=value pairs
+        for (let cookie of cookies) {
+            const [key, value] = cookie.split('='); // Split each cookie into key and value
+            if (key === name) {
+                return decodeURIComponent(value); // Decode and return the cookie value
+            }
+        }
+        return null; // Return null if the cookie isn't found
+    }
+    // Restore filters from localStorage
+    function restoreFilters() {
+        const savedcouncilFilter = getCookie("councilFilter") || ''; //localStorage.getItem('councilFilter') || '';
+        const savedvenueFilter = getCookie("venueFilter") || ''; //localStorage.getItem('typeFilter') || '';
+
+        councilFilter.value = savedcouncilFilter;
+        venueFilter.value = savedvenueFilter;
+    }
+
+    // Save filters to localStorage
+    function saveFilters() {
+        document.cookie = "councilFilter=" + councilFilter.value + "; path=/;"; //localStorage.setItem('councilFilter', councilFilter.value);
+        document.cookie = "venueFilter=" + venueFilter.value + "; path=/;"; //localStorage.setItem('typeFilter', typeFilter.value);
+    }
+
+    // Filter the table
+    function filterTable() {
+        const councilValue = councilFilter.value.toLowerCase();
+        const venueValue = venueFilter.value.toLowerCase();
+
+        var myTable = document.getElementById('myTable');
+
+        Array.from(myTable.rows).forEach(row => {
+            // only affect the body rows not the header
+            if (row.parentNode.tagName.toLowerCase() === 'tbody') {
+                const council = row.cells[0].textContent.toLowerCase();
+                const venue = row.cells[1].textContent.toLowerCase();
+
+                // Check each filter
+                const councilMatch = council.value === '' || council.includes(councilValue);
+                const venueMatch = venue.value === '' || venue.includes(venueValue);
+
+                // Show or hide the row based on filters
+                if (councilMatch && venueMatch) {
+                    row.style.display = '';
+                } else {
+                    row.style.display = 'none';
+                }
+            }
+        });
+
+        // Save filter values
+        saveFilters();
+    }
+
+    // Reset filters
+    resetFilters.addEventListener('click', () => {
+        councilFilter.value = '';
+        venueFilter.value = '';
+        filterTable();
+    });
+
+    // Event listeners
+    councilFilter.addEventListener('input', filterTable);
+    venueFilter.addEventListener('input', filterTable);
+
+    // Initialize
+    restoreFilters();
+    filterTable();
+</script>

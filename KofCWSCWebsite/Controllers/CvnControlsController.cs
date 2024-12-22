@@ -58,7 +58,7 @@ namespace KofCWSCWebsite.Controllers
         [HttpPost]
         [Authorize(Roles = "Admin")]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("Id,LocationString,Address,City,State,ZipCode,MPDDay,MPDMile")] CvnControl cvnControl)
+        public async Task<IActionResult> Edit(int id, [Bind("Id,LocationString,Address,City,State,ZipCode,MPDDay,MPDMile,Location")] CvnControl cvnControl)
         {
             if (id != cvnControl.Id)
             {
