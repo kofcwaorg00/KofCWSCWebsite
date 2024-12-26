@@ -36,4 +36,58 @@ public partial class TblValCouncil
     public decimal? Arbalance { get; set; }
 
     public string Status { get; set; } = null!;
+
+    [DisplayName("Address")]
+    public string? PhyAddress { get; set; }
+
+    [DisplayName("City")]
+    public string? PhyCity { get; set; }
+
+    [DisplayName("State")]
+    public string? PhyState { get; set; }
+
+    [DisplayName("Postal Code")]
+    public string? PhyPostalCode { get; set; }
+
+    [DisplayName("Address")]
+    public string? MailAddress { get; set; }
+
+    [DisplayName("City")]
+    public string? MailCity { get; set; }
+
+    [DisplayName("State")]
+    public string? MailState { get; set; }
+
+    [DisplayName("Postal Code")]
+    public string? MailPostalCode { get; set; }
+
+    [DisplayName("Address")]
+    public string? MeetAddress { get; set; }
+
+    [DisplayName("City")]
+    public string? MeetCity { get; set; }
+
+    [DisplayName("State")]
+    public string? MeetState { get; set; }
+
+    [DisplayName("Postal Code")]
+    public string? MeetPostalCode { get; set; }
+
+    [DisplayName("Day of Week (for example 4th Tue)")]
+    public string? BMeetDOW { get; set; }
+
+    [DisplayName("Meeting Time (for example 7:30pm)")]
+    public string? BMeetTime { get; set; }
+
+    [DisplayName("Day of Week (for example 4th Tue)")]
+            public string? OMeetDOW { get; set; }
+
+    [DisplayName("Meeting Time (for example 7:30pm)")]
+    public string? OMeetTime { get; set; }
+
+    [DisplayName("Day of Week (for example 4th Tue)")]
+    public string? SMeetDOW { get; set; }
+
+    [DisplayName("Meeting Time (for example 7:30pm)")]
+    public string? SMeetTime { get; set; }
 }

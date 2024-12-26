@@ -23,6 +23,7 @@ namespace KofCWSCWebsite.CustomTagHelpers
 
         public override async Task ProcessAsync(TagHelperContext context, TagHelperOutput output)
         {
+            if (Role == "bdd41d58-3e4a-4d0a-ac64-233458f94992") { return; }
             List<string> names = new List<string>();
             IdentityRole role = await roleManager.FindByIdAsync(Role);
             if (role != null)

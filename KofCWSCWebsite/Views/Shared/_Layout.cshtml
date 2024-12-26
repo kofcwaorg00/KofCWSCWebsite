@@ -276,6 +276,12 @@
                                     <li><hr class="dropdown-divider"></li>
                                     <li><a class="dropdown-item MyMenuLink" href="https://kofcwa.sharepoint.com/:f:/s/WebsiteStorage/Eg30ehJZLVtNr986yywbNpYBSTfPVs35B24G6OZxYvgcBw?e=B78FZx" target="kofcwa-sharepoint">Bulletin Archive</a></li>
                                     <li><a class="dropdown-item MyMenuLink" asp-page="/Helper/ShowSense" asp-route-id="5">WSC Bylaws Members</a></li>
+                                    @if (User.IsInRole("CouncilOfficer") || User.IsInRole("Admin"))
+                                    {
+                                        <li><hr class="dropdown-divider"></li>
+                                        <li><a class="dropdown-item MyMenuLink" asp-page="/Councils/PreFSDetails">Update Council Details(FSs Only)</a></li>
+                                    }
+
                                 </ul>
                             </li>
                         }

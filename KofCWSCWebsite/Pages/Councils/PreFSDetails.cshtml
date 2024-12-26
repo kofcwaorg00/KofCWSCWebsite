@@ -1,0 +1,21 @@
+﻿@page
+@model KofCWSCWebsite.Pages.Councils.PreFSDetailsModel
+@{
+}
+<h2>Update Council Details for Council @Model.Council</h2>
+
+<table class="table" style="width:25%">
+    <tr>
+        <td>
+            <form method="get" asp-controller="TblValCouncils" asp-action="FSEdit" asp-route-id="@Model.Council">
+                <button type="submit" class="btn btn-primary">Update</button>
+            </form>
+        </td>
+        <td>
+            <form method="get" asp-controller="Home" asp-action="Index" asp-route-id="">
+                <button type="submit" class="btn btn-success">Cancel</button>
+            </form>
+        </td>
+    </tr>
+</table>
+

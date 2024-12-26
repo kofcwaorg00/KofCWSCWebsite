@@ -40,6 +40,7 @@ namespace KofCWSCWebsite.Controllers
             return View(result);
         }
 
+
         // GET: TblValCouncils/Details/5
         [Authorize(Roles = "Admin,DataAdmin")]
         public async Task<IActionResult> Details(int? id)
@@ -68,6 +69,32 @@ namespace KofCWSCWebsite.Controllers
             //------------------------------------------------------------------------------------------------------
             
         }
+        public async Task<IActionResult> FSDetails(int? id)
+        {
+            if (id == null)
+            {
+                return NotFound();
+            }
+            //*****************************************************************************************************
+            // 12/05/2024 Tim Philomeno
+            // Now that we have a generic ApiHelper class, these are the only 2 lines that we should need to
+            // call the API
+            // this API will return NotFound if the item is not found so the try/catch block will catch it
+            // and return the same
+            try
+            {
+                var apiHelper = new ApiHelper(_dataSetService);
+                var result = await apiHelper.GetAsync<TblValCouncil>($"/Council/{id}");
+                return View("FSDetails",result);
+            }
+            catch (Exception ex)
+            {
+                Log.Error(Utils.FormatLogEntry(this, ex));
+                return NotFound();
+            }
+            //------------------------------------------------------------------------------------------------------
+
+        }
 
         // GET: TblValCouncils/Create
         [Authorize(Roles = "Admin,DataAdmin")]
@@ -82,7 +109,7 @@ namespace KofCWSCWebsite.Controllers
         [Authorize(Roles = "Admin,DataAdmin")]
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("CNumber,CLocation,CName,District,AddInfo1,AddInfo2,AddInfo3,LiabIns,DioceseId,Chartered,WebSiteUrl,BulletinUrl,Arbalance,Status")] TblValCouncil tblValCouncil)
+        public async Task<IActionResult> Create([Bind("CNumber,CLocation,CName,District,AddInfo1,AddInfo2,AddInfo3,LiabIns,DioceseId,Chartered,WebSiteUrl,BulletinUrl,Arbalance,Status,PhyAddress,PhyCity,PhyState,PhyPostalCode,MailAddress,MailCity,MailState,MailPostalCode,MeetAddress,MeetCity,MeetState,MeetPostalCode,BMeetDOW,BMeetTime,OMeetDOW,OMeetTime,SMeetDOW,SMeetTime")] TblValCouncil tblValCouncil)
         {
             if (ModelState.IsValid)
             {
@@ -137,6 +164,69 @@ namespace KofCWSCWebsite.Controllers
             }
             //------------------------------------------------------------------------------------------------------
         }
+        public async Task<IActionResult> FSEdit(int? id)
+        {
+            if (id == null)
+            {
+                return NotFound();
+            }
+            //*****************************************************************************************************
+            // 12/05/2024 Tim Philomeno
+            // Now that we have a generic ApiHelper class, these are the only 2 lines that we should need to
+            // call the API
+            // this API will return NotFound if the item is not found so the try/catch block will catch it
+            // and return the same
+            try
+            {
+                var apiHelper = new ApiHelper(_dataSetService);
+                var result = await apiHelper.GetAsync<TblValCouncil>($"/Council/{id}");
+                return View("FSEdit",result);
+            }
+            catch (Exception ex)
+            {
+                ModelState.AddModelError(string.Empty, ex.Message);
+                Log.Error(Utils.FormatLogEntry(this, ex));
+                return RedirectToAction(nameof(Index));
+            }
+            //------------------------------------------------------------------------------------------------------
+        }
+
+        [Authorize(Roles = "Admin,DataAdmin")]
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        //public async Task<IActionResult> FSEdit(int id, [Bind("CNumber,CLocation,CName,PhyAddress,PhyCity,PhyState,PhyPostalCode,MailAddress,MailCity,MailState,MailPostalCode,MeetAddress,MeetCity,MeetState,MeetPostalCode,BMeetDOW,BMeetTime,OMeetDOW,OMeetTime,SMeetDOW,SMeetTime")] TblValCouncil tblValCouncil)
+            public async Task<IActionResult> FSEdit(int id, [Bind("CNumber,CLocation,CName,District,AddInfo1,AddInfo2,AddInfo3,LiabIns,DioceseId,Chartered,WebSiteUrl,BulletinUrl,Arbalance,Status,PhyAddress,PhyCity,PhyState,PhyPostalCode,MailAddress,MailCity,MailState,MailPostalCode,MeetAddress,MeetCity,MeetState,MeetPostalCode,BMeetDOW,BMeetTime,OMeetDOW,OMeetTime,SMeetDOW,SMeetTime")] TblValCouncil tblValCouncil)
+        {
+            if (id != tblValCouncil.CNumber)
+            {
+                return NotFound();
+            }
+            if (ModelState.IsValid)
+            {
+                //*****************************************************************************************************
+                // 12/05/2024 Tim Philomeno
+                // Now that we have a generic ApiHelper class, these are the only 2 lines that we should need to
+                // call the API
+                try
+                {
+                    var apiHelper = new ApiHelper(_dataSetService);
+                    var result = await apiHelper.PutAsync<TblValCouncil, TblMasMember>($"/Council/{id}", tblValCouncil);
+                }
+                catch (Exception ex)
+                {
+                    //***************************************************************************************************
+                    // 12/05/2024 Tim Philomeno
+                    // I want handle these consistantly so we are returning an http response that can be caught here
+                    // the response message should appear in the ex.Message, then Log it and allow the method to
+                    // finish refreshing the index page3
+                    ModelState.AddModelError(string.Empty, ex.Message);
+                    Log.Error(Utils.FormatLogEntry(this, ex));
+                    //------------------------------------------------------------------------------------------------------
+                }
+            }
+            return RedirectToAction(nameof(Index));
+        }
+
 
         // POST: TblValCouncils/Edit/5
         // To protect from overposting attacks, enable the specific properties you want to bind to.
@@ -144,7 +234,7 @@ namespace KofCWSCWebsite.Controllers
         [Authorize(Roles = "Admin,DataAdmin")]
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("CNumber,CLocation,CName,District,AddInfo1,AddInfo2,AddInfo3,LiabIns,DioceseId,Chartered,WebSiteUrl,BulletinUrl,Arbalance,Status")] TblValCouncil tblValCouncil)
+        public async Task<IActionResult> Edit(int id, [Bind("CNumber,CLocation,CName,District,AddInfo1,AddInfo2,AddInfo3,LiabIns,DioceseId,Chartered,WebSiteUrl,BulletinUrl,Arbalance,Status,PhyAddress,PhyCity,PhyState,PhyPostalCode,MailAddress,MailCity,MailState,MailPostalCode,MeetAddress,MeetCity,MeetState,MeetPostalCode,BMeetDOW,BMeetTime,OMeetDOW,OMeetTime,SMeetDOW,SMeetTime")] TblValCouncil tblValCouncil)
         {
             if (id != tblValCouncil.CNumber)
             {

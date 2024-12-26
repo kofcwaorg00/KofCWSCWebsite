@@ -1,0 +1,49 @@
+﻿@model KofCWSCWebsite.Models.TblValCouncil
+
+
+@{
+    ViewData["Title"] = "FSDetails";
+}
+
+<h1>Council Details FS Only</h1>
+
+<div>
+    <hr />
+    <dl class="row">
+        <dt class = "col-sm-2">
+            @Html.DisplayNameFor(model => model.CName)
+        </dt>
+        <dd class = "col-sm-10">
+            @Html.DisplayFor(model => model.CName)
+        </dd>
+        <dt class = "col-sm-2">
+            @Html.DisplayNameFor(model => model.District)
+        </dt>
+        <dd class = "col-sm-10">
+            @Html.DisplayFor(model => model.District)
+        </dd>
+        <dt class = "col-sm-2">
+            @Html.DisplayNameFor(model => model.AddInfo1)
+        </dt>
+        <dd class = "col-sm-10">
+            @Html.DisplayFor(model => model.AddInfo1)
+        </dd>
+        <dt class = "col-sm-2">
+            @Html.DisplayNameFor(model => model.AddInfo2)
+        </dt>
+        <dd class = "col-sm-10">
+            @Html.DisplayFor(model => model.AddInfo2)
+        </dd>
+        <dt class = "col-sm-2">
+            @Html.DisplayNameFor(model => model.AddInfo3)
+        </dt>
+        <dd class = "col-sm-10">
+            @Html.DisplayFor(model => model.AddInfo3)
+        </dd>
+        
+    </dl>
+</div>
+<div>
+    <a asp-action="FSEdit" asp-route-id="@Model?.CNumber">Edit</a> |
+    <a asp-action="Index">Back to List</a>
+</div>
