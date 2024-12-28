@@ -15,7 +15,7 @@ namespace KofCWSCWebsite.Data
     public class DataSetService
     {
         private IConfiguration _configuration;
-        private readonly ApplicationDbContext _context;
+        //private readonly ApplicationDbContext _context;
         private IWebHostEnvironment? _hostingEnvironment;
         private IHttpContextAccessor _httpContextAccessor;
         public string ReportsPath { get; private set; }
@@ -25,7 +25,7 @@ namespace KofCWSCWebsite.Data
             IConfiguration configuration,IHttpContextAccessor httpContextAccessor)
         {
             _hostingEnvironment = hostingEnvironment;
-            _context = context;
+            //_context = context;
             _configuration = configuration;
             _httpContextAccessor = httpContextAccessor;
             SetReportsFolder();

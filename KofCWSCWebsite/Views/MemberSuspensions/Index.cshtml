@@ -1,0 +1,66 @@
+﻿@model IEnumerable<KofCWSCWebsite.Models.MemberSuspensionVM>
+
+@{
+    ViewData["Title"] = "Index";
+}
+
+<h1>Suspended Members</h1>
+
+<p>
+    <a asp-action="Create" class="btn btn-success">Suspend a Member</a>
+</p>
+<table class="table">
+    <thead>
+        <tr>
+            <th>
+                @Html.DisplayNameFor(model => model.KofCid)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Name)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Comment)
+            </th>
+            <th></th>
+            <th></th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+@foreach (var item in Model) {
+        <tr>
+            <td>
+                @Html.DisplayFor(modelItem => item.KofCid)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Name)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Comment)
+            </td>
+            <td style="padding-right:0px">
+                <form asp-action="Edit" asp-route-id="@item.Id" method="get">
+                    <button type="submit" class="btn btn-sm btn-primary">
+                        Edit
+                    </button>
+                </form>
+            </td>
+            <td style="padding-left:0px;padding-right:0px">
+                <form asp-action="Details" asp-route-id="@item.Id" method="get">
+                    <button type="submit" class="btn btn-sm btn-warning">
+                        Details
+                    </button>
+                </form>
+            </td>
+            <td style="padding-left:0px">
+                <form asp-action="Delete" asp-route-id="@item.Id" method="get">
+                    <button type="submit" class="btn btn-sm btn-danger">
+                        Delete
+                    </button>
+                </form>
+
+            </td>
+        </tr>
+}
+    </tbody>
+</table>

@@ -76,6 +76,7 @@ public partial class ApplicationDbContext : DbContext
     public virtual DbSet<CvnMileage> TblCvnMasMileages { get; set; }
     public virtual DbSet<CvnLocation> TblCvnMasLocations { get; set; }
     public virtual DbSet<CvnMpd> TblCvnTrxMpds { get; set; }
+    public virtual DbSet<MemberSuspension> TblSysMasMemberSuspensions { get; set; }
     protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
 
     {
@@ -632,6 +633,15 @@ public partial class ApplicationDbContext : DbContext
             entity.Property(e => e.MemberId).HasColumnName("MemberID");
             entity.Property(e => e.Office).HasMaxLength(50);
             entity.Property(e => e.Payee).HasMaxLength(50);
+        });
+
+        modelBuilder.Entity<MemberSuspension>(entity =>
+        {
+            entity.HasKey(e => e.Id).HasName("PK__tblSYS_M__3214EC07A5FFC31C");
+
+            entity.ToTable("tblSYS_MasMemberSuspension");
+
+            entity.Property(e => e.KofCid).HasColumnName("KofCId");
         });
 
         OnModelCreatingPartial(modelBuilder);

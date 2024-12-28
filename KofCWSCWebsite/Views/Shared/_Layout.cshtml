@@ -353,6 +353,11 @@
                                         <li><a class="dropdown-item MyMenuLink" asp-area="" asp-controller="EmailOffices" asp-action="Create" asp-route-id="">Send Bulk Email</a></li>
                                         <li><a class="dropdown-item MyMenuLink" href="https://kofcwa.sharepoint.com/:f:/s/WebsiteStorage/EuAeETokY3JKn8L6TKHzSZ4BX2QmNDpZj4_w4TBZu9lX8g?e=KE8fJf" target="kofcwa-sharepoint">Upload To Document Storage</a></li>
                                     }
+                                    @if (User.IsInRole("Admin"))
+                                    {
+                                        <li><hr class="dropdown-divider"></li>
+                                        <li><a class="dropdown-item MyMenuLink" asp-area="" asp-controller="MemberSuspensions" asp-action="Index" asp-route-id="">Member Suspensions</a></li>
+                                    }
                                 </ul>
                             </li>
                             @if (User.IsInRole("Admin"))

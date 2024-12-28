@@ -18,10 +18,12 @@ namespace KofCWSCWebsite.Controllers
     public class TblValCouncilsController : Controller
     {
         private DataSetService _dataSetService;
+        private readonly ApiHelper _apiHelper;
 
-        public TblValCouncilsController(DataSetService dataSetService)
+        public TblValCouncilsController(DataSetService dataSetService, ApiHelper apiHelper)
         {
             _dataSetService = dataSetService;
+            _apiHelper = new ApiHelper(_dataSetService);
         }
 
         // GET: TblValCouncils
@@ -34,8 +36,7 @@ namespace KofCWSCWebsite.Controllers
             // call the API
             // I guess the programmers that created the controller code template didn't think that a GET or INDEX
             // would return any errors.  It either gets some or not so no try/catch here
-            var apiHelper = new ApiHelper(_dataSetService);
-            var result = await apiHelper.GetAsync<IEnumerable<TblValCouncil>>("/Councils");
+            var result = await _apiHelper.GetAsync<IEnumerable<TblValCouncil>>("/Councils");
             //------------------------------------------------------------------------------------------------------
             return View(result);
         }
@@ -57,8 +58,7 @@ namespace KofCWSCWebsite.Controllers
             // and return the same
             try
             {
-                var apiHelper = new ApiHelper(_dataSetService);
-                var result = await apiHelper.GetAsync<TblValCouncil>($"/Council/{id}");
+                var result = await _apiHelper.GetAsync<TblValCouncil>($"/Council/{id}");
                 return View(result);
             }
             catch (Exception ex)
@@ -69,6 +69,7 @@ namespace KofCWSCWebsite.Controllers
             //------------------------------------------------------------------------------------------------------
             
         }
+        [Authorize(Roles = "Admin,CouncilOfficer")]
         public async Task<IActionResult> FSDetails(int? id)
         {
             if (id == null)
@@ -83,8 +84,7 @@ namespace KofCWSCWebsite.Controllers
             // and return the same
             try
             {
-                var apiHelper = new ApiHelper(_dataSetService);
-                var result = await apiHelper.GetAsync<TblValCouncil>($"/Council/{id}");
+                var result = await _apiHelper.GetAsync<TblValCouncil>($"/Council/{id}");
                 return View("FSDetails",result);
             }
             catch (Exception ex)
@@ -152,8 +152,7 @@ namespace KofCWSCWebsite.Controllers
             // and return the same
             try
             {
-                var apiHelper = new ApiHelper(_dataSetService);
-                var result = await apiHelper.GetAsync<TblValCouncil>($"/Council/{id}");
+                var result = await _apiHelper.GetAsync<TblValCouncil>($"/Council/{id}");
                 return View(result);
             }
             catch (Exception ex)
@@ -164,6 +163,7 @@ namespace KofCWSCWebsite.Controllers
             }
             //------------------------------------------------------------------------------------------------------
         }
+        [Authorize(Roles = "Admin,CouncilOfficer")]
         public async Task<IActionResult> FSEdit(int? id)
         {
             if (id == null)
@@ -178,8 +178,7 @@ namespace KofCWSCWebsite.Controllers
             // and return the same
             try
             {
-                var apiHelper = new ApiHelper(_dataSetService);
-                var result = await apiHelper.GetAsync<TblValCouncil>($"/Council/{id}");
+                var result = await _apiHelper.GetAsync<TblValCouncil>($"/Council/{id}");
                 return View("FSEdit",result);
             }
             catch (Exception ex)
@@ -191,7 +190,7 @@ namespace KofCWSCWebsite.Controllers
             //------------------------------------------------------------------------------------------------------
         }
 
-        [Authorize(Roles = "Admin,DataAdmin")]
+        [Authorize(Roles = "Admin,CouncilOfficer")]
         [HttpPost]
         [ValidateAntiForgeryToken]
         //public async Task<IActionResult> FSEdit(int id, [Bind("CNumber,CLocation,CName,PhyAddress,PhyCity,PhyState,PhyPostalCode,MailAddress,MailCity,MailState,MailPostalCode,MeetAddress,MeetCity,MeetState,MeetPostalCode,BMeetDOW,BMeetTime,OMeetDOW,OMeetTime,SMeetDOW,SMeetTime")] TblValCouncil tblValCouncil)
@@ -209,8 +208,7 @@ namespace KofCWSCWebsite.Controllers
                 // call the API
                 try
                 {
-                    var apiHelper = new ApiHelper(_dataSetService);
-                    var result = await apiHelper.PutAsync<TblValCouncil, TblMasMember>($"/Council/{id}", tblValCouncil);
+                    var result = await _apiHelper.PutAsync<TblValCouncil, TblMasMember>($"/Council/{id}", tblValCouncil);
                 }
                 catch (Exception ex)
                 {
@@ -248,8 +246,7 @@ namespace KofCWSCWebsite.Controllers
                 // call the API
                 try
                 {
-                    var apiHelper = new ApiHelper(_dataSetService);
-                    var result = await apiHelper.PutAsync<TblValCouncil, TblMasMember>($"/Council/{id}", tblValCouncil);
+                    var result = await _apiHelper.PutAsync<TblValCouncil, TblMasMember>($"/Council/{id}", tblValCouncil);
                 }
                 catch (Exception ex)
                 {
@@ -282,8 +279,7 @@ namespace KofCWSCWebsite.Controllers
             // and return the same
             try
             {
-                var apiHelper = new ApiHelper(_dataSetService);
-                var result = await apiHelper.GetAsync<TblValCouncil>($"/Council/{id}");
+               var result = await _apiHelper.GetAsync<TblValCouncil>($"/Council/{id}");
                 return View(result);
             }
             catch (Exception ex)
@@ -302,8 +298,7 @@ namespace KofCWSCWebsite.Controllers
         {
             try
             {
-                var apiHelper = new ApiHelper(_dataSetService);
-                await apiHelper.DeleteAsync($"/Council/{id}");
+                await _apiHelper.DeleteAsync($"/Council/{id}");
                 return RedirectToAction(nameof(Index));
             }
             catch (Exception ex)
