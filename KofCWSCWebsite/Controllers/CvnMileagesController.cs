@@ -14,13 +14,11 @@ namespace KofCWSCWebsite.Controllers
 {
     public class CvnMileagesController : Controller
     {
-        private readonly ApplicationDbContext _context;
         private readonly ApiHelper _apiHelper;
 
-        public CvnMileagesController(ApplicationDbContext context, ApiHelper apiHelper)
+        public CvnMileagesController(ApiHelper apiHelper)
         {
-            _context = context;
-            _apiHelper = apiHelper; 
+            _apiHelper = apiHelper;
         }
 
         // GET: CvnMileages
@@ -149,8 +147,8 @@ namespace KofCWSCWebsite.Controllers
                 return NotFound();
             }
 
-            var cvnMileage = await _context.TblCvnMasMileages
-                .FirstOrDefaultAsync(m => m.Id == id);
+            var cvnMileage = await _apiHelper.GetAsync<CvnMileage>($"/Mileage/{id}");
+
             if (cvnMileage == null)
             {
                 return NotFound();
@@ -175,11 +173,6 @@ namespace KofCWSCWebsite.Controllers
                 Log.Error(Utils.FormatLogEntry(this, ex));
                 return RedirectToAction(nameof(Index));
             }
-        }
-
-        private bool CvnMileageExists(int id)
-        {
-            return _context.TblCvnMasMileages.Any(e => e.Id == id);
         }
     }
 }

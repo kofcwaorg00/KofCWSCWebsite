@@ -14,11 +14,9 @@ namespace KofCWSCWebsite.Controllers
 {
     public class CvnLocationsController : Controller
     {
-        private readonly ApplicationDbContext _context;
         private readonly ApiHelper _apiHelper;
-        public CvnLocationsController(ApplicationDbContext context, ApiHelper apiHelper)
+        public CvnLocationsController(ApiHelper apiHelper)
         {
-            _context = context;
             _apiHelper = apiHelper; 
         }
 
@@ -101,11 +99,6 @@ namespace KofCWSCWebsite.Controllers
                 Log.Error(Utils.FormatLogEntry(this, ex));
                 return View();
             }
-        }
-
-        private bool CvnLocationExists(int id)
-        {
-            return _context.TblCvnMasLocations.Any(e => e.Id == id);
         }
     }
 }

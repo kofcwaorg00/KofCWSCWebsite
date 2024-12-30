@@ -18,7 +18,7 @@ namespace KofCWSCWebsite.Controllers
     }
     public class AddressRequestsController : Controller
     {
-        private readonly ApplicationDbContext _context;
+        //private readonly ApplicationDbContext _context;
         private readonly IConfiguration _configuration;
 
         const string JWTbaseUrl = "https://api.usps.com/oauth2/v3/token";
@@ -27,7 +27,7 @@ namespace KofCWSCWebsite.Controllers
 
         public AddressRequestsController(ApplicationDbContext context, IConfiguration configuration)
         {
-            _context = context;
+            //_context = context;
             _configuration = configuration;
 
         }

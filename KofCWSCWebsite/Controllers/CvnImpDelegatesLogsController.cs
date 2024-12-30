@@ -11,6 +11,12 @@ using Serilog;
 
 namespace KofCWSCWebsite.Controllers
 {
+    //***************************************************************************************
+    // 12/30/2024 Tim Philomeno
+    // this controller is not being used at the moment.  We can enable the 
+    // access to the log table and utilize the view, details, create and index Views
+    // if necessary
+    //---------------------------------------------------------------------------------------
     public class CvnImpDelegatesLogsController : Controller
     {
         private readonly ApplicationDbContext _context;

@@ -14,13 +14,11 @@ namespace KofCWSCWebsite.Controllers
 {
     public class MemberSuspensionsController : Controller
     {
-        //private readonly ApplicationDbContext _context;
         private DataSetService _dataSetService;
         private readonly ApiHelper _apiHelper;
 
-        public MemberSuspensionsController(ApplicationDbContext context,DataSetService dataSetService)
+        public MemberSuspensionsController(DataSetService dataSetService)
         {
-            //_context = context;
             _dataSetService = dataSetService;
             _apiHelper = new ApiHelper(_dataSetService);
         }
