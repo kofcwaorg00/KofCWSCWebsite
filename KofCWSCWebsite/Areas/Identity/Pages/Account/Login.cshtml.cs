@@ -66,6 +66,7 @@ namespace KofCWSCWebsite.Areas.Identity.Pages.Account
             ///     directly from your code. This API may change or be removed in future releases.
             /// </summary>
             [Required]
+            [Remote(action: "VerifyLogin", controller: "Users")]
             [EmailAddress]
             public string Email { get; set; }
 
