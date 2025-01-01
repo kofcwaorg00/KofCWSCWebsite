@@ -17,7 +17,7 @@ public partial class CvnMpd
     public int District { get; set; }
 
     public string Group { get; set; } = null!;
-
+    [DisplayName("Type")]
     public string Office { get; set; } = null!;
 
     public string Payee { get; set; } = null!;
@@ -34,10 +34,11 @@ public partial class CvnMpd
 
     public bool? Day3 { get; set; }
 
+    [DisplayName("Day1")]
     public string? Day1G { get; set; }
-
+    [DisplayName("Day2")]
     public string? Day2G { get; set; }
-
+    [DisplayName("Day3")]
     public string? Day3G { get; set; }
 
     [DisplayName("Mileage One Way")]
@@ -46,5 +47,8 @@ public partial class CvnMpd
     [DisplayName("Check Total")]
     public decimal CheckTotal { get; set; }
 
+    [DisplayName("Venue Location")]
     public string Location { get; set; } = null!;
+
+    public bool PayMe { get; set; }
 }

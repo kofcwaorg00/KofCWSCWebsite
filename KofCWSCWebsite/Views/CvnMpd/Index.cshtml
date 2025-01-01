@@ -4,7 +4,7 @@
     ViewData["Title"] = "Index";
 }
 
-<h1>Checks Ready to Print</h1>
+<h1>Print Checks</h1>
 
 @*<p>
         <a asp-action="Create">Create New</a>
@@ -12,12 +12,56 @@
 @{
     int NbrCks = Model.Count();
 }
-<table class="table">
+<table>
+    <thead>
+        <tr>
+            <th style="text-align:center;width:15%">Show PayMe Only</th>
+            <th>
+                District
+            </th>
+            <th>
+                Council
+            </th>
+            <th>
+                Type
+            </th>
+            <th>
+                Payee
+            </th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+        <tr>
+            <td style="text-align:center">
+                <input type="checkbox" id="mydaysFilter" title="Click to only show Days Attended" />
+            </td>
+            <td>
+                <input type="text" id="mydistrictFilter" placeholder="Type in a District Number to filter results" title="Type in a number">
+            </td>
+            <td>
+                <input type="text" id="mycouncilFilter" placeholder="Type in a Council Number to filter results" title="Type in a number">
+            </td>
+            <td>
+                <input type="text" id="mytypeFilter" placeholder="Type in a Delegate Type to filter results." title="D1 or D2 or A1 or A2">
+
+            </td>
+            <td>
+                <input type="text" id="mynameFilter" placeholder="Type in a Delegate Name to filter results" title="Type in letters">
+            </td>
+            <td>
+                <button id="resetFilters" class="btn btn-outline-success">Reset Filters</button>
+            </td>
+        </tr>
+    </tbody>
+</table>
+
+<table class="table" id="myTable">
     <thead>
         <tr>
             <td colspan="14">
                 <form asp-controller="CvnMpd" asp-action="Print" method="get">
-                    <button type="submit" class="btn btn-sm btn-success">
+                    <button type="submit" class="btn btn-sm btn-success" id="submitButton">
                         Print @NbrCks Checks
                     </button>
                 </form>
@@ -25,8 +69,8 @@
         </tr>
         <tr>
             @*<th>
-                    @Html.DisplayNameFor(model => model.MemberId)
-                </th>*@
+            @Html.DisplayNameFor(model => model.MemberId)
+        </th>*@
             <th>
                 @Html.DisplayNameFor(model => model.Council)
             </th>
@@ -42,31 +86,31 @@
             <th>
                 @Html.DisplayNameFor(model => model.Payee)
             </th>
-            <th>
+            <th style="text-align:center">
                 @Html.DisplayNameFor(model => model.CheckNumber)
             </th>
-            <th>
+            <th style="text-align:center">
                 @Html.DisplayNameFor(model => model.CheckDate)
             </th>
             @*<th>
-                    @Html.DisplayNameFor(model => model.Day1)
-                </th>
-                <th>
-                    @Html.DisplayNameFor(model => model.Day2)
-                </th>
-                <th>
-                    @Html.DisplayNameFor(model => model.Day3)
-                </th>*@
+                @Html.DisplayNameFor(model => model.Day1)
+            </th>
             <th>
+                @Html.DisplayNameFor(model => model.Day2)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Day3)
+            </th>*@
+            <th style="text-align:center">
                 @Html.DisplayNameFor(model => model.Day1G)
             </th>
-            <th>
+            <th style="text-align:center">
                 @Html.DisplayNameFor(model => model.Day2G)
             </th>
-            <th>
+            <th style="text-align:center">
                 @Html.DisplayNameFor(model => model.Day3G)
             </th>
-            <th>
+            <th style="text-align:center">
                 @Html.DisplayNameFor(model => model.Miles)
             </th>
             <th>
@@ -74,6 +118,9 @@
             </th>
             <th>
                 @Html.DisplayNameFor(model => model.Location)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.PayMe)
             </th>
             <th></th>
         </tr>
@@ -83,8 +130,8 @@
         {
             <tr>
                 @*<td>
-                        @Html.DisplayFor(modelItem => item.MemberId)
-                    </td>*@
+            @Html.DisplayFor(modelItem => item.MemberId)
+        </td>*@
                 <td>
                     @Html.DisplayFor(modelItem => item.Council)
                 </td>
@@ -100,31 +147,43 @@
                 <td>
                     @Html.DisplayFor(modelItem => item.Payee)
                 </td>
-                <td>
+                <td style="text-align:center">
                     @Html.DisplayFor(modelItem => item.CheckNumber)
                 </td>
-                <td>
+                <td style="text-align:center">
                     @Html.DisplayFor(modelItem => item.CheckDate)
                 </td>
                 @*<td>
-                        @Html.DisplayFor(modelItem => item.Day1)
-                    </td>
-                    <td>
-                        @Html.DisplayFor(modelItem => item.Day2)
-                    </td>
-                    <td>
-                        @Html.DisplayFor(modelItem => item.Day3)
-                    </td>*@
-                <td>
-                    <img src="@Html.Raw(item.Day1G)"/>
+                    @Html.DisplayFor(modelItem => item.Day1)
                 </td>
                 <td>
-                    <img src="@Html.Raw(item.Day2G)" />
+                    @Html.DisplayFor(modelItem => item.Day2)
                 </td>
                 <td>
-                    <img src="@Html.Raw(item.Day3G)" />
+                    @Html.DisplayFor(modelItem => item.Day3)
+                </td>*@
+                <td style="text-align:center">
+                    <form asp-controller="CvnMpd" asp-action="ToggleDelegateDaysMPD" asp-route-id=@item.MemberId asp-route-day="1" method="get">
+                        <button type="submit" class="btn btn-sm">
+                            @Html.Raw(item.Day1G)
+                        </button>
+                    </form>
                 </td>
-                <td>
+                <td style="text-align:center">
+                    <form asp-controller="CvnMpd" asp-action="ToggleDelegateDaysMPD" asp-route-id=@item.MemberId asp-route-day="2" method="get">
+                        <button type="submit" class="btn btn-sm">
+                            @Html.Raw(item.Day2G)
+                        </button>
+                    </form>
+                </td>
+                <td style="text-align:center">
+                    <form asp-controller="CvnMpd" asp-action="ToggleDelegateDaysMPD" asp-route-id=@item.MemberId asp-route-day="3" method="get">
+                        <button type="submit" class="btn btn-sm">
+                            @Html.Raw(item.Day3G)
+                        </button>
+                    </form>
+                </td>
+                <td style="text-align:center">
                     @Html.DisplayFor(modelItem => item.Miles)
                 </td>
                 <td>
@@ -133,15 +192,139 @@
                 <td>
                     @Html.DisplayFor(modelItem => item.Location)
                 </td>
-                @*
                 <td>
-                    <a asp-action="Edit" asp-route-id="@item.Id">Edit</a> |
-                    <a asp-action="Details" asp-route-id="@item.Id">Details</a> |
-                    <a asp-action="Delete" asp-route-id="@item.Id">Delete</a>
-                </td>*@
+                    @Html.DisplayFor(modelItem => item.PayMe)
+                </td>
+                @*
+        <td>
+            <a asp-action="Edit" asp-route-id="@item.Id">Edit</a> |
+            <a asp-action="Details" asp-route-id="@item.Id">Details</a> |
+            <a asp-action="Delete" asp-route-id="@item.Id">Delete</a>
+        </td>*@
             </tr>
 
 
+        }
+    </tbody>
+</table>
+<script>
+    // Elements
+    const districtFilter = document.getElementById('mydistrictFilter');
+    const councilFilter = document.getElementById('mycouncilFilter');
+    const typeFilter = document.getElementById('mytypeFilter');
+    const nameFilter = document.getElementById('mynameFilter');
+    const paymeFilter = document.getElementById('mydaysFilter');
+    var mycount = 0;
+
+    const resetFilters = document.getElementById('resetFilters');
+    const tableBody = document.getElementById('mytable');
+
+    function getCookie(name) {
+        const cookies = document.cookie.split('; '); // Split cookies into individual key=value pairs
+        for (let cookie of cookies) {
+            const [key, value] = cookie.split('='); // Split each cookie into key and value
+            if (key === name) {
+                return decodeURIComponent(value); // Decode and return the cookie value
             }
-        </tbody>
-    </table>
+        }
+        return null; // Return null if the cookie isn't found
+    }
+    // Restore filters from localStorage
+    function restoreFilters() {
+        const saveddistrictFilter = getCookie("districtFilter") || ''; //localStorage.getItem('districtFilter') || '';
+        const savedcouncilFilter = getCookie("councilFilter") || ''; //localStorage.getItem('councilFilter') || '';
+        const savedtypeFilter = getCookie("typeFilter") || ''; //localStorage.getItem('typeFilter') || '';
+        const savednameFilter = getCookie("nameFilter") || ''; //localStorage.getItem('nameFilter') || '';
+        const savedpaymeFilter = getCookie("paymeFilter") || '';
+
+        districtFilter.value = saveddistrictFilter;
+        councilFilter.value = savedcouncilFilter;
+        typeFilter.value = savedtypeFilter;
+        nameFilter.value = savednameFilter;
+        paymeFilter.checked = savedpaymeFilter;
+    }
+
+    // Save filters to localStorage
+    function saveFilters() {
+        document.cookie = "districtFilter=" + districtFilter.value + "; path=/;"; //localStorage.setItem('districtFilter', districtFilter.value);
+        document.cookie = "councilFilter=" + councilFilter.value + "; path=/;"; //localStorage.setItem('councilFilter', councilFilter.value);
+        document.cookie = "typeFilter=" + typeFilter.value + "; path=/;"; //localStorage.setItem('typeFilter', typeFilter.value);
+        document.cookie = "nameFilter=" + nameFilter.value + "; path=/;"; //localStorage.setItem('nameFilter', nameFilter.value);
+        document.cookie = "paymeFilter" + paymeFilter.checked + "; path=/";
+    }
+
+    // Filter the table
+    function filterTable() {
+        const districtValue = districtFilter.value.toLowerCase();
+        const councilValue = councilFilter.value.toLowerCase();
+        const typeValue = typeFilter.value.toLowerCase();
+        const nameValue = nameFilter.value.toLowerCase();
+
+        var myTable = document.getElementById('myTable');
+        mycount = 0;
+        Array.from(myTable.rows).forEach(row => {
+            // only affect the body rows not the header
+            if (row.parentNode.tagName.toLowerCase() === 'tbody') {
+                const district = row.cells[1].textContent.toLowerCase();
+                const council = row.cells[0].textContent.toLowerCase();
+                const type = row.cells[3].textContent.toLowerCase();
+                const name = row.cells[4].textContent.toLowerCase();
+                const paymecell = row.cells[13].getElementsByTagName('input')[0];
+                //alert(paymecell.checked);
+
+                // Check each filter
+
+                const districtMatch = districtValue === '' || district.trim() === districtValue;
+                //if (district == 12) {
+                //    alert("|"+district+"|");
+                //    alert("|"+districtValue+"|");
+                //    alert(districtMatch);
+                //}
+                const councilMatch = council.value === '' || council.includes(councilValue);
+                const typeMatch = type.value === '' || type.includes(typeValue);
+                const nameMatch = name.value === '' || name.includes(nameValue);
+
+                const paymeMatch = paymeFilter.checked === paymecell.checked;
+                //alert(paymeFilter.checked);
+                //alert(paymecell.checked);
+                //alert(paymeMatch);
+
+                // Show or hide the row based on filters
+                if (districtMatch && councilMatch && typeMatch && nameMatch && (!paymeFilter.checked || paymeMatch)) {
+                    row.style.display = '';
+                } else {
+                    row.style.display = 'none';
+                }
+                //if (!paymeFilter.checked || paymeMatch) { row.style.display = '' } else { row.style.display = 'none' };
+                if (paymecell.checked) { mycount++ };
+            }
+        });
+
+        const mysubButton = document.getElementById('submitButton')
+        mysubButton.textContent = "Print " + mycount + " Checks"
+
+        // Save filter values
+        saveFilters();
+    }
+
+    // Reset filters
+    resetFilters.addEventListener('click', () => {
+        districtFilter.value = '';
+        councilFilter.value = '';
+        typeFilter.value = '';
+        nameFilter.value = '';
+        paymeFilter.checked = false;
+        filterTable();
+    });
+
+    // Event listeners
+    districtFilter.addEventListener('input', filterTable);
+    councilFilter.addEventListener('input', filterTable);
+    typeFilter.addEventListener('input', filterTable);
+    nameFilter.addEventListener('input', filterTable);
+    paymeFilter.addEventListener('input', filterTable);
+
+    // Initialize
+    restoreFilters();
+    filterTable();
+</script>

@@ -35,6 +35,19 @@ namespace KofCWSCWebsite.Controllers
             }
         }
 
+        [HttpGet("ToggleDelegateDaysMPD/{id}/{day}")]
+        public async Task<ActionResult<IEnumerable<CvnDelegateDays>>> ToggleDelegateDaysMPD(int id, int day)
+        {
+            var myAffectedRows = _apiHelper.GetAsync<int>($"/ToggleDelegateDays/{id}/{day}");
+            //var myViewT1 = await _apiHelper.GetAsync<IEnumerable<CvnMpd>>("MPD");
+            return RedirectToAction("Index");
+
+        }
+        public async Task<ActionResult> PrintChecks()
+        {
+            return View();
+        }
+
         ////////////// GET: CvnMpd/Details/5
         ////////////public async Task<IActionResult> Details(int? id)
         ////////////{
