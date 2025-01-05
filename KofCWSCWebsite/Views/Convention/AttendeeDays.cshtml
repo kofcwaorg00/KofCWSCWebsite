@@ -3,6 +3,8 @@
 @{
     ViewData["Title"] = "Manage Delegate Days";
 }
+<span style="display:none" id="myCouncil">@ViewBag.Council</span>
+<h1>Update Convention Attendee Days</h1>
 <table>
     <thead>
         <tr>
@@ -30,8 +32,18 @@
                 <input type="text" id="mycouncilFilter" placeholder="Type in a Council Number to filter results" title="Type in a number">
             </td>
             <td>
-                <input type="text" id="mytypeFilter" placeholder="Type in a Delegate Type to filter results." title="Use CHANCERY for Bishops, FIA for Faith In Action Directors, COMM for Committees, PSDs for Past State Deputies, GAs for General Agents, FAs for Field Agents, RPC for Regional Program Chairman, and CHAIRMEN for Chairmen">
-                
+                <select id="mytypeFilter" style="height:30px">
+                    <option value="">Select an Attendee Type</option>
+                    <option value="CHANCERY">CHANCERY</option>
+                    <option value="DD">District Deputies</option>
+                    <option value="DEL">Delegates</option>
+                    <option value="FAs">Field Agents</option>
+                    <option value="FIA">Faith in Action</option>
+                    <option value="GAs">General Agents</option>
+                    <option value="PSDs">Past State Deputies</option>
+                </select>
+                @*<input type="text" id="mytypeFilter" placeholder="Type in a Delegate Type to filter results." title="Use CHANCERY for Bishops, FIA for Faith In Action Directors, COMM for Committees, PSDs for Past State Deputies, GAs for General Agents, FAs for Field Agents, RPC for Regional Program Chairman, and CHAIRMEN for Chairmen">*@
+
             </td>
             <td>
                 <input type="text" id="mynameFilter" placeholder="Type in a Delegate Name to filter results" title="Type in letters">
@@ -100,7 +112,7 @@
                 else
                 {
                     <td style="text-align:center">
-                        <form asp-controller="Convention" asp-action="ToggleDelegateDays" asp-route-id=@item.MemberId asp-route-day="1" method="get">
+                        <form asp-controller="CvnMpd" asp-action="ToggleDelegateDaysMPD" asp-route-id=@item.MemberId asp-route-day="1" asp-route-groupid="0" method="get">
                             <button type="submit" class="btn btn-sm">
                                 @Html.Raw(item.Day1)
                             </button>
@@ -118,7 +130,7 @@
 
 
                     <td style="text-align:center">
-                        <form asp-controller="Convention" asp-action="ToggleDelegateDays" asp-route-id=@item.MemberId asp-route-day="2" method="get">
+                        <form asp-controller="CvnMpd" asp-action="ToggleDelegateDaysMPD" asp-route-id=@item.MemberId asp-route-day="2" asp-route-groupid="0" method="get">
                             <button type="submit" class="btn btn-sm">
                                 @Html.Raw(item.Day2)
                             </button>
@@ -134,7 +146,7 @@
                 else
                 {
                     <td style="text-align:center">
-                        <form asp-controller="Convention" asp-action="ToggleDelegateDays" asp-route-id=@item.MemberId asp-route-day="3" method="get">
+                        <form asp-controller="CvnMpd" asp-action="ToggleDelegateDaysMPD" asp-route-id=@item.MemberId asp-route-day="3" asp-route-groupid="0" method="get">
                             <button type="submit" class="btn btn-sm">
                                 @Html.Raw(item.Day3)
                             </button>
@@ -153,6 +165,7 @@
     const councilFilter = document.getElementById('mycouncilFilter');
     const typeFilter = document.getElementById('mytypeFilter');
     const nameFilter = document.getElementById('mynameFilter');
+    const mycouncilbag = document.getElementById('myCouncil');
 
     const resetFilters = document.getElementById('resetFilters');
     const tableBody = document.getElementById('mytable');
@@ -200,18 +213,22 @@
         Array.from(myTable.rows).forEach(row => {
             // only affect the body rows not the header
             if (row.parentNode.tagName.toLowerCase() === 'tbody') {
-                const district = row.cells[0].textContent.toLowerCase();
-                const council = row.cells[1].textContent.toLowerCase();
-                const type = row.cells[2].textContent.toLowerCase();
-                const name = row.cells[3].textContent.toLowerCase();
+                const district = row.cells[0].textContent.toLowerCase().trim();
+                const council = row.cells[1].textContent.toLowerCase().trim();
+                const type = row.cells[2].textContent.toLowerCase().trim();
+                const name = row.cells[3].textContent.toLowerCase().trim();
 
                 // Check each filter
 
-                const districtMatch = district.value === '' || district.includes(districtValue);
-                const councilMatch = council.value === '' || council.includes(councilValue);
-                const typeMatch = type.value === '' || type.includes(typeValue);
-                const nameMatch = name.value === '' || name.includes(nameValue);
-
+                const districtMatch = districtValue === '' || district === districtValue; // district.includes(districtValue);
+                const councilMatch = councilValue === '' || council.includes(councilValue);
+                const typeMatch = typeValue === '' || type === typeValue // type.includes(typeValue);
+                const nameMatch = nameValue === '' || name.includes(nameValue);
+                // hightlight the active filter(s)
+                if (districtValue === '') { districtFilter.style.backgroundColor = '' } else { districtFilter.style.backgroundColor = '#e8f0fe' }
+                if (councilValue === '') { councilFilter.style.backgroundColor = '' } else { councilFilter.style.backgroundColor = '#e8f0fe' }
+                if (typeValue === '') { typeFilter.style.backgroundColor = '' } else { typeFilter.style.backgroundColor = '#e8f0fe' }
+                if (nameValue === '') { nameFilter.style.backgroundColor = '' } else { nameFilter.style.backgroundColor = '#e8f0fe' }
                 // Show or hide the row based on filters
                 if (districtMatch && councilMatch && typeMatch && nameMatch) {
                     row.style.display = '';
@@ -242,6 +259,16 @@
 
     // Initialize
     restoreFilters();
+
+    //-----------------------------------------------------------------------
+    // if we passed in a council using viewbag then assign the filter
+    var myBag = mycouncilbag.innerText.trim();
+    if (!(myBag === "0")) {
+        //alert("in bag as 0");
+        councilFilter.value = myBag;
+    }
+    //-----------------------------------------------------------------------
+
     filterTable();
 </script>
 

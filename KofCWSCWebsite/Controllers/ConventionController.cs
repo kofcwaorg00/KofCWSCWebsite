@@ -23,10 +23,25 @@ namespace KofCWSCWebsite.Controllers
             _dataSetService = dataSetService;
             _apiHelper = new ApiHelper(_dataSetService);
         }
-        public async Task<ActionResult<IEnumerable<CvnDelegateDays>>> Index()
+        [HttpGet("GetAttendeeDays/{council}/{groupid}")]
+        public async Task<ActionResult<IEnumerable<CvnDelegateDays>>> GetAttendeeDays(int council,int groupid)
         {
-            var myViewD = await _apiHelper.GetAsync<IEnumerable<CvnDelegateDays>>($"/GetDelegateDays");
-            return View("Views/Convention/DelegateDays.cshtml", myViewD);
+            ViewBag.Council = council;
+            switch (groupid)
+            {
+                case 3:
+                    Response.Cookies.Append("typeFilter", "DD");
+                    break;
+                case 25:
+                    Response.Cookies.Append("typeFilter", "DEL");
+                    break;
+                default:
+                    //Response.Cookies.Delete("typeFilter");
+                    break;
+            }
+
+            var myViewD = await _apiHelper.GetAsync<IEnumerable<CvnDelegateDays>>($"/GetAttendeeDays");
+            return View("Views/Convention/AttendeeDays.cshtml", myViewD);
         }
         [HttpGet("ToggleDelegateDays/{id}/{day}")]
         public async Task<ActionResult<IEnumerable<CvnDelegateDays>>> ToggleDelegateDays(int id, int day)

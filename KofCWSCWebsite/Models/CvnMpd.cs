@@ -51,4 +51,6 @@ public partial class CvnMpd
     public string Location { get; set; } = null!;
 
     public bool PayMe { get; set; }
+    public string? CouncilStatus { get; set; }
+    public int GroupID { get; set; }
 }

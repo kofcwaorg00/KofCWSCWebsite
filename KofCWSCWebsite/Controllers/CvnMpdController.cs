@@ -17,15 +17,38 @@ namespace KofCWSCWebsite.Controllers
         private readonly ApiHelper _apiHelper;
         public CvnMpdController(ApiHelper apiHelper)
         {
-            _apiHelper = apiHelper; 
+            _apiHelper = apiHelper;
         }
 
         // GET: CvnMpd
-        public async Task<IActionResult> Index()
+        public async Task<IActionResult> Index(int id)
         {
             try
             {
-                var result = await _apiHelper.GetAsync<IEnumerable<CvnMpd>>("MPD");
+                if (id == 3) { ViewBag.Group = "District Deputies"; };
+                if (id == 25) { ViewBag.Group = "Delegate"; };
+                var result = await _apiHelper.GetAsync<IEnumerable<CvnMpd>>($"MPD/{id}");
+                return View(result);
+            }
+            catch (Exception ex)
+            {
+                Log.Error(Utils.FormatLogEntry(this, ex));
+                return NotFound();
+            }
+        }
+        public async Task<IActionResult> GetCheckBatch(int id)
+        {
+            try
+            {
+                Response.Cookies.Delete("councilFilter");
+                if (id == 25)
+                {
+                    Response.Cookies.Append("typeFilter", "DEL");
+                }
+                ViewBag.GroupID = id;
+                if (id == 3) { ViewBag.Group = "District Deputies"; };
+                if (id == 25) { ViewBag.Group = "Delegate"; };
+                var result = await _apiHelper.GetAsync<IEnumerable<CvnMpd>>($"MPD/GetCheckBatch/{id}");
                 return View(result);
             }
             catch (Exception ex)
@@ -35,18 +58,28 @@ namespace KofCWSCWebsite.Controllers
             }
         }
 
-        [HttpGet("ToggleDelegateDaysMPD/{id}/{day}")]
-        public async Task<ActionResult<IEnumerable<CvnDelegateDays>>> ToggleDelegateDaysMPD(int id, int day)
+        [HttpGet("ToggleDelegateDaysMPD/{id}/{day}/{groupid}")]
+        public async Task<ActionResult<IEnumerable<CvnDelegateDays>>> ToggleDelegateDaysMPD(int id, int day,int groupid)
         {
-            var myAffectedRows = _apiHelper.GetAsync<int>($"/ToggleDelegateDays/{id}/{day}");
-            //var myViewT1 = await _apiHelper.GetAsync<IEnumerable<CvnMpd>>("MPD");
-            return RedirectToAction("Index");
-
+            //**************************************************************************************
+            // 1/5/2025 Tim PHilomeno
+            // Need to deal with the redirect to action based on where we are toggling from
+            var myAffectedRows = await _apiHelper.GetAsync<int>($"/ToggleDelegateDays/{id}/{day}");
+            switch (groupid) {
+                case 0: // from AttendeeDays
+                    return RedirectToAction("GetAttendeeDays", "Convention", new { council = 0, groupid = 0 });
+                case 3: // DDs from Check Batch only other place we can toggle days
+                    return RedirectToAction("GetCheckBatch", "CvnMpd", new { id = 3 });
+                default:
+                    return RedirectToAction("GetAttendeeDays", "Convention", new { council = 0, groupid});
+            }
+            
         }
         public async Task<ActionResult> PrintChecks()
         {
             return View();
         }
+
 
         ////////////// GET: CvnMpd/Details/5
         ////////////public async Task<IActionResult> Details(int? id)

@@ -1,0 +1,383 @@
+﻿@model IEnumerable<KofCWSCWebsite.Models.CvnMpd>
+
+@{
+    ViewData["Title"] = "Index";
+}
+
+<h1>Review @ViewBag.Group Check Batch</h1>
+<h6 id="ErrorMessage"><span style="color:red">Errors Found see Delegate Column to Edit</span></h6>
+
+@*<p>
+        <a asp-action="Create">Create New</a>
+    </p>*@
+@{
+    int NbrCks = Model.Count();
+}
+<table>
+    <thead>
+        <tr>
+            <th>Filter By:</th>
+            <th>
+                District
+            </th>
+            <th>
+                Council
+            </th>
+            <th>
+                Payee
+            </th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+        <tr>
+            <td style="text-align:center">
+                <input type="checkbox" id="myerrorsFilter" title="Click to only show Errors" />&nbsp;Show Errors Only&nbsp;&nbsp;
+            </td>
+            <td>
+                <input type="text" id="mydistrictFilter" placeholder="Type in a District Number to filter results" title="Type in a number">
+            </td>
+            <td>
+                <input type="text" id="mycouncilFilter" placeholder="Type in a Council Number to filter results" title="Type in a number">
+            </td>
+            <td>
+                <input type="text" id="mynameFilter" placeholder="Type in a Payee (Council) Name to filter results" title="Type in letters">
+            </td>
+            <td>
+                <button id="resetFilters" class="btn btn-outline-success">Reset Filters</button>
+            </td>
+        </tr>
+    </tbody>
+</table>
+
+<table class="table" id="myTable">
+    <thead>
+        <tr>
+            <td colspan="7">
+                <table>
+                    <tr>
+                        <td>
+                            <form asp-controller="CvnMpd" asp-action="Print" method="get">
+                                <button type="submit" class="btn btn-sm btn-success" id="submitButtonPrint">
+                                    Print Checks
+                                </button>
+                            </form>
+                        </td>
+                        <td>
+                            <form asp-controller="CvnMpd" asp-action="ExportCSV" method="get">
+                                <button type="submit" class="btn btn-sm btn-success" id="submitButtonExCSV">
+                                    Export Checks to CSV
+                                </button>
+                            </form>
+                        </td>
+                        <td>
+                            <form asp-controller="CvnMpd" asp-action="ExportQB" method="get">
+                                <button type="submit" class="btn btn-sm btn-success" id="submitButtonExQB">
+                                    Export Checks to QuickBooks
+                                </button>
+                            </form>
+                        </td>
+                        <td>
+                            <form asp-controller="CvnMpd" asp-action="Archive" method="get">
+                                <button type="submit" class="btn btn-sm btn-success" id="submitButtonArch">
+                                    Archive and Clear Check Batch
+                                </button>
+                            </form>
+                        </td>
+                    </tr>
+                </table>
+            </td>
+        </tr>
+        <tr>
+            @*<th>
+                    @Html.DisplayNameFor(model => model.MemberId)
+                </th>*@
+            <th colspan="2" style="width:15%;text-align:center">@ViewBag.Group Days</th>
+            <th>
+                @Html.DisplayNameFor(model => model.Council)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.District)
+            </th>
+            @*<th style="width:250px">
+                    @Html.DisplayNameFor(model => model.Group)
+                </th>*@
+            <th>
+                @Html.DisplayNameFor(model => model.Office)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Payee)
+            </th>
+            @*<th style="text-align:center">
+                    @Html.DisplayNameFor(model => model.CheckNumber)
+                </th>
+                <th style="text-align:center">
+                    @Html.DisplayNameFor(model => model.CheckDate)
+                </th>*@
+            @if (@ViewBag.GroupID == 3)
+            {
+                @*<th>
+                        @Html.DisplayNameFor(model => model.Day1)
+                    </th>
+                    <th>
+                        @Html.DisplayNameFor(model => model.Day2)
+                    </th>
+                    <th>
+                        @Html.DisplayNameFor(model => model.Day3)
+                    </th>*@
+                <th style="text-align:center">
+                    @Html.DisplayNameFor(model => model.Day1G)
+                </th>
+                <th style="text-align:center">
+                    @Html.DisplayNameFor(model => model.Day2G)
+                </th>
+                <th style="text-align:center">
+                    @Html.DisplayNameFor(model => model.Day3G)
+                </th>
+            }
+            <th style="text-align:center">
+                @Html.DisplayNameFor(model => model.Miles)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.CheckTotal)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Location)
+            </th>
+            @*<th>
+                    @Html.DisplayNameFor(model => model.PayMe)
+                </th>*@
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var item in Model)
+        {
+            <tr>
+                @*<td>
+                        @Html.DisplayFor(modelItem => item.MemberId)
+                    </td>*@
+                <td style="text-align:center">
+                    @if (@item.CouncilStatus == "ERROR")
+                    {
+                        <form asp-controller="Convention" asp-action="GetAttendeeDays" asp-route-council="@item.Council" asp-route-groupid="@item.GroupID" method="get">
+                            <button type="submit" class="btn btn-sm btn-danger" id="submitButton" title="Too Many Delegate Days">
+                                Edit
+                            </button>
+                        </form>
+                    }
+                    else
+                    {
+                        <form asp-controller="Convention" asp-action="GetAttendeeDays" asp-route-council="@item.Council" asp-route-groupid="@item.GroupID" method="get">
+                            <button type="submit" class="btn btn-sm btn-success" id="submitButton" title="Status is Good">
+                                Edit
+                            </button>
+                        </form>
+                    }
+                </td>
+                <td style="text-align:center">
+                    <form asp-controller="CvnMpd" asp-action="PrintJournal" method="get">
+                        <button type="submit" class="btn btn-sm btn-warning" id="submitButton">
+                            Print
+                        </button>
+                    </form>
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Council)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.District)
+                </td>
+                @*<td>
+                        @Html.DisplayFor(modelItem => item.Group)
+                    </td>*@
+                <td>
+                    <span title="@Html.DisplayFor(modelItem => item.Office)" class="ellipsis">@Html.DisplayFor(modelItem => item.Office)</span>
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Payee)
+                </td>
+                @*<td style="text-align:center">
+                        @Html.DisplayFor(modelItem => item.CheckNumber)
+                    </td>
+                    <td style="text-align:center">
+                        @Html.DisplayFor(modelItem => item.CheckDate)
+                    </td>
+                *@
+                @if (@ViewBag.GroupID == 3)
+                {
+                    @*<td>
+                            @Html.DisplayFor(modelItem => item.Day1)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.Day2)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.Day3)
+                        </td>*@
+
+                    <td style="text-align:center">
+                        <form asp-controller="CvnMpd" asp-action="ToggleDelegateDaysMPD" asp-route-id=@item.MemberId asp-route-day="1" asp-route-groupid="@item.GroupID" method="get">
+                            <button type="submit" class="btn btn-sm">
+                                @Html.Raw(item.Day1G)
+                            </button>
+                        </form>
+                    </td>
+                    <td style="text-align:center">
+                        <form asp-controller="CvnMpd" asp-action="ToggleDelegateDaysMPD" asp-route-id=@item.MemberId asp-route-day="2" asp-route-groupid="@item.GroupID" method="get">
+                            <button type="submit" class="btn btn-sm">
+                                @Html.Raw(item.Day2G)
+                            </button>
+                        </form>
+                    </td>
+                    <td style="text-align:center">
+                        <form asp-controller="CvnMpd" asp-action="ToggleDelegateDaysMPD" asp-route-id=@item.MemberId asp-route-day="3" asp-route-groupid="@item.GroupID"  method="get">
+                            <button type="submit" class="btn btn-sm">
+                                @Html.Raw(item.Day3G)
+                            </button>
+                        </form>
+                    </td>
+                }
+                <td style="text-align:center">
+                    @Html.DisplayFor(modelItem => item.Miles)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.CheckTotal)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Location)
+                </td>
+                @*<td>
+                        @Html.DisplayFor(modelItem => item.PayMe)
+                    </td>*@
+                @*
+                    <td>
+                        <a asp-action="Edit" asp-route-id="@item.Id">Edit</a> |
+                        <a asp-action="Details" asp-route-id="@item.Id">Details</a> |
+                        <a asp-action="Delete" asp-route-id="@item.Id">Delete</a>
+                    </td>*@
+                <td style="display:none">
+                    @Html.DisplayFor(modelItem => item.CouncilStatus)
+                </td>
+            </tr>
+
+
+        }
+    </tbody>
+</table>
+<script>
+    const myErrorMessage = document.getElementById('ErrorMessage');
+    myErrorMessage.hidden = true;
+
+    const myPrint = document.getElementById('submitButtonPrint');
+    const myExCSV = document.getElementById('submitButtonExCSV');
+    const myExQB = document.getElementById('submitButtonExQB');
+    const myArch = document.getElementById('submitButtonArch');
+
+
+    // Elements
+    const districtFilter = document.getElementById('mydistrictFilter');
+    const councilFilter = document.getElementById('mycouncilFilter');
+    const nameFilter = document.getElementById('mynameFilter');
+    const errorsFilter = document.getElementById('myerrorsFilter')
+
+    const resetFilters = document.getElementById('resetFilters');
+    const tableBody = document.getElementById('mytable');
+
+    function getCookie(name) {
+        const cookies = document.cookie.split('; '); // Split cookies into individual key=value pairs
+        for (let cookie of cookies) {
+            const [key, value] = cookie.split('='); // Split each cookie into key and value
+            if (key === name) {
+                return decodeURIComponent(value); // Decode and return the cookie value
+            }
+        }
+        return null; // Return null if the cookie isn't found
+    }
+    // Restore filters from localStorage
+    function restoreFilters() {
+        const saveddistrictFilter = getCookie("districtFilter") || ''; //localStorage.getItem('districtFilter') || '';
+        const savedcouncilFilter = getCookie("councilFilter") || ''; //localStorage.getItem('councilFilter') || '';
+        const savednameFilter = getCookie("nameFilter") || ''; //localStorage.getItem('nameFilter') || '';
+        //const savederrorsFilter = getCookie("errorsFilter") || '';
+
+        districtFilter.value = saveddistrictFilter;
+        councilFilter.value = savedcouncilFilter;
+        nameFilter.value = savednameFilter;
+        //errorsFilter.checked = savederrorsFilter;
+    }
+
+    // Save filters to localStorage
+    function saveFilters() {
+        document.cookie = "districtFilter=" + districtFilter.value + "; path=/;"; //localStorage.setItem('districtFilter', districtFilter.value);
+        document.cookie = "councilFilter=" + councilFilter.value + "; path=/;"; //localStorage.setItem('councilFilter', councilFilter.value);
+        document.cookie = "nameFilter=" + nameFilter.value + "; path=/;"; //localStorage.setItem('nameFilter', nameFilter.value);
+        //document.cookie = "errorsFilter=" + errorsFilter.checked + "; path=/";
+    }
+    function getPath() {
+        return window.location.pathname;
+    }
+    // Filter the table
+    function filterTable() {
+        const districtValue = districtFilter.value.toLowerCase();
+        const councilValue = councilFilter.value.toLowerCase();
+        const nameValue = nameFilter.value.toLowerCase();
+
+        var myTable = document.getElementById('myTable');
+        Array.from(myTable.rows).forEach(row => {
+            // only affect the body rows not the header
+            if (row.parentNode.tagName.toLowerCase() === 'tbody') {
+                const district = row.cells[3].textContent.toLowerCase();
+                const council = row.cells[2].textContent.toLowerCase();
+                const name = row.cells[4].textContent.toLowerCase();
+                const councilstat = row.cells[9].textContent.toLowerCase();
+
+                // if any of the items are in error flip these properties
+                if (councilstat.includes('error')) {
+                    myErrorMessage.hidden = false;
+                    myPrint.disabled = true;
+                    myExCSV.disabled = true;
+                    myExQB.disabled = true;
+                    myArch.disabled = true;
+                }
+
+
+                // Check each filter
+                const districtMatch = districtValue === '' || district.trim() === districtValue;
+                const councilMatch = council.value === '' || council.includes(councilValue);
+                const nameMatch = name.value === '' || name.includes(nameValue);
+                const errorMatch = councilstat === '' || councilstat.includes('error');
+
+                // Show or hide the row based on filters
+                if (districtMatch && councilMatch && nameMatch && (!errorsFilter.checked || errorMatch)) {
+                    row.style.display = '';
+                } else {
+                    row.style.display = 'none';
+                }
+            }
+        });
+        // Save filter values
+        saveFilters();
+    }
+
+    // Reset filters
+    resetFilters.addEventListener('click', () => {
+        districtFilter.value = '';
+        councilFilter.value = '';
+        nameFilter.value = '';
+        errorsFilter.checked = false;
+        filterTable();
+    });
+
+
+
+    // Event listeners
+    districtFilter.addEventListener('input', filterTable);
+    councilFilter.addEventListener('input', filterTable);
+    nameFilter.addEventListener('input', filterTable);
+    errorsFilter.addEventListener('input', filterTable);
+
+    // Initialize
+    restoreFilters();
+    filterTable();
+</script>
