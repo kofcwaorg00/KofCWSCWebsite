@@ -36,6 +36,7 @@ namespace KofCWSCWebsite.Controllers
                 return NotFound();
             }
         }
+        [HttpGet("GetCheckBatch/{id}")]
         public async Task<IActionResult> GetCheckBatch(int id)
         {
             try
