@@ -33,10 +33,12 @@ namespace KofCWSCWebsite.Controllers
             A2 = 116
         }
         private DataSetService _dataSetService;
+        private ApiHelper _apiHelper;
         private static bool _postFlag = false;
-        public CsvController(DataSetService dataSetService)
+        public CsvController(DataSetService dataSetService,ApiHelper apiHelper)
         {
             _dataSetService = dataSetService;
+            _apiHelper = apiHelper;
         }
 
         // GET: Display the form to upload CSV
@@ -106,8 +108,7 @@ namespace KofCWSCWebsite.Controllers
                     // call the API
                     try
                     {
-                        var apiHelper = new ApiHelper(_dataSetService);
-                        var result = await apiHelper.PostAsync<List<CvnImpDelegate>, CvnImpDelegate>("/ImpDelegates", records);
+                        var result = await _apiHelper.PostAsync<List<CvnImpDelegate>, CvnImpDelegate>("/ImpDelegates", records);
                     }
                     catch (Exception ex)
                     {
@@ -125,6 +126,10 @@ namespace KofCWSCWebsite.Controllers
                     //------------------------------------------------------------------------------------------------------
                     ViewBag.ImportedDelegates = records.Count();
                     //****************************************************************************************
+                    // now reset and prime council and dd seated days
+                    var affected = await _apiHelper.GetAsync<int>("PrimeCouncilDelegatesAndDDDays");
+                    WriteToDelegateImportLog(guid, 0, "INFO", $"Resetting and priming council and dd seated days. {affected} records affected.");
+                    //------------------------------------------------------------------------------------------------------
                     // 12/1/2024 Tim PHilomeno then add or update the members as needed
                     foreach (var myDel in records)
                     {

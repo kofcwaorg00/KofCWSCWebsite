@@ -58,7 +58,26 @@ namespace KofCWSCWebsite.Controllers
                 return NotFound();
             }
         }
+        [HttpGet("ToggleCouncilDays/{id}/{day}/{del}/{groupid}")]
+        public async Task<ActionResult<IEnumerable<CvnDelegateDays>>> ToggleCouncilDays(int id, int day,string del, int groupid)
+        {
+            //**************************************************************************************
+            // 1/5/2025 Tim PHilomeno
+            // Need to deal with the redirect to action based on where we are toggling from
+            var myAffectedRows = await _apiHelper.GetAsync<int>($"/ToggleCouncilDays/{id}/{day}/{del}");
+            switch (groupid)
+            {
+                case 0: // from AttendeeDays
+                    return RedirectToAction("GetAttendeeDays", "Convention", new { council = 0, groupid = 0 });
+                case 3: // DDs from Check Batch only other place we can toggle days
+                    return RedirectToAction("GetCheckBatch", "CvnMpd", new { id = 3 });
+                case 25: // DDs from Check Batch only other place we can toggle days
+                    return RedirectToAction("GetCheckBatch", "CvnMpd", new { id = 25 });
+                default:
+                    return RedirectToAction("GetAttendeeDays", "Convention", new { council = 0, groupid });
+            }
 
+        }
         [HttpGet("ToggleDelegateDaysMPD/{id}/{day}/{groupid}")]
         public async Task<ActionResult<IEnumerable<CvnDelegateDays>>> ToggleDelegateDaysMPD(int id, int day,int groupid)
         {

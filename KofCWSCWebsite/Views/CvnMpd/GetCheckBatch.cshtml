@@ -16,7 +16,7 @@
 <table>
     <thead>
         <tr>
-            <th>Filter By:</th>
+            @*<th>Filter By:</th>*@
             <th>
                 District
             </th>
@@ -31,9 +31,9 @@
     </thead>
     <tbody>
         <tr>
-            <td style="text-align:center">
+            @*<td style="text-align:center">
                 <input type="checkbox" id="myerrorsFilter" title="Click to only show Errors" />&nbsp;Show Errors Only&nbsp;&nbsp;
-            </td>
+            </td>*@
             <td>
                 <input type="text" id="mydistrictFilter" placeholder="Type in a District Number to filter results" title="Type in a number">
             </td>
@@ -90,49 +90,77 @@
         </tr>
         <tr>
             @*<th>
-                    @Html.DisplayNameFor(model => model.MemberId)
-                </th>*@
-            <th colspan="2" style="width:15%;text-align:center">@ViewBag.Group Days</th>
-            <th>
-                @Html.DisplayNameFor(model => model.Council)
-            </th>
+            @Html.DisplayNameFor(model => model.MemberId)
+        </th>*@
+            <!--<th colspan="2" style="width:15%;text-align:center">-->@*@ViewBag.Group Days*@<!--</th>-->
+
             <th>
                 @Html.DisplayNameFor(model => model.District)
             </th>
-            @*<th style="width:250px">
-                    @Html.DisplayNameFor(model => model.Group)
-                </th>*@
             <th>
-                @Html.DisplayNameFor(model => model.Office)
+                @Html.DisplayNameFor(model => model.Council)
             </th>
-            <th>
+            @*<th style="width:250px">
+            @Html.DisplayNameFor(model => model.Group)
+        </th>*@
+            @*<th>
+            @Html.DisplayNameFor(model => model.Office)
+        </th>*@
+            <th style="width:20%">
                 @Html.DisplayNameFor(model => model.Payee)
             </th>
             @*<th style="text-align:center">
-                    @Html.DisplayNameFor(model => model.CheckNumber)
-                </th>
-                <th style="text-align:center">
-                    @Html.DisplayNameFor(model => model.CheckDate)
-                </th>*@
+            @Html.DisplayNameFor(model => model.CheckNumber)
+        </th>
+        <th style="text-align:center">
+            @Html.DisplayNameFor(model => model.CheckDate)
+        </th>*@
+            @*<th>
+            @Html.DisplayNameFor(model => model.Day1)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.Day2)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.Day3)
+        </th>*@
             @if (@ViewBag.GroupID == 3)
             {
-                @*<th>
-                        @Html.DisplayNameFor(model => model.Day1)
-                    </th>
-                    <th>
-                        @Html.DisplayNameFor(model => model.Day2)
-                    </th>
-                    <th>
-                        @Html.DisplayNameFor(model => model.Day3)
-                    </th>*@
                 <th style="text-align:center">
-                    @Html.DisplayNameFor(model => model.Day1G)
+                    @Html.DisplayNameFor(model => model.Day1GD1)
                 </th>
                 <th style="text-align:center">
-                    @Html.DisplayNameFor(model => model.Day2G)
+                    @Html.DisplayNameFor(model => model.Day2GD1)
                 </th>
                 <th style="text-align:center">
-                    @Html.DisplayNameFor(model => model.Day3G)
+                    @Html.DisplayNameFor(model => model.Day3GD1)
+                </th>
+            }
+            @if (@ViewBag.GroupID == 25)
+            {
+                <th style="text-align:center">
+                    @*@Html.DisplayNameFor(model => model.Day1GD1)*@
+                    Day1 Delegate1
+                </th>
+                <th style="text-align:center">
+                    @*@Html.DisplayNameFor(model => model.Day1GD1)*@
+                    Day1 Delegate2
+                </th>
+                <th style="text-align:center">
+                    @*@Html.DisplayNameFor(model => model.Day1GD1)*@
+                    Day2 Delegate1
+                </th>
+                <th style="text-align:center">
+                    @*@Html.DisplayNameFor(model => model.Day1GD1)*@
+                    Day2 Delegate2
+                </th>
+                <th style="text-align:center">
+                    @*@Html.DisplayNameFor(model => model.Day1GD1)*@
+                    Day3 Delegate1
+                </th>
+                <th style="text-align:center">
+                    @*@Html.DisplayNameFor(model => model.Day1GD1)*@
+                    Day3 Delegate2
                 </th>
             }
             <th style="text-align:center">
@@ -145,8 +173,8 @@
                 @Html.DisplayNameFor(model => model.Location)
             </th>
             @*<th>
-                    @Html.DisplayNameFor(model => model.PayMe)
-                </th>*@
+            @Html.DisplayNameFor(model => model.PayMe)
+        </th>*@
             <th></th>
         </tr>
     </thead>
@@ -155,88 +183,136 @@
         {
             <tr>
                 @*<td>
-                        @Html.DisplayFor(modelItem => item.MemberId)
-                    </td>*@
-                <td style="text-align:center">
-                    @if (@item.CouncilStatus == "ERROR")
-                    {
-                        <form asp-controller="Convention" asp-action="GetAttendeeDays" asp-route-council="@item.Council" asp-route-groupid="@item.GroupID" method="get">
-                            <button type="submit" class="btn btn-sm btn-danger" id="submitButton" title="Too Many Delegate Days">
-                                Edit
-                            </button>
-                        </form>
-                    }
-                    else
-                    {
-                        <form asp-controller="Convention" asp-action="GetAttendeeDays" asp-route-council="@item.Council" asp-route-groupid="@item.GroupID" method="get">
-                            <button type="submit" class="btn btn-sm btn-success" id="submitButton" title="Status is Good">
-                                Edit
-                            </button>
-                        </form>
-                    }
-                </td>
-                <td style="text-align:center">
-                    <form asp-controller="CvnMpd" asp-action="PrintJournal" method="get">
-                        <button type="submit" class="btn btn-sm btn-warning" id="submitButton">
-                            Print
-                        </button>
-                    </form>
+            @Html.DisplayFor(modelItem => item.MemberId)
+        </td>*@
+                @*<td style="text-align:center">
+            @if (@item.CouncilStatus == "ERROR")
+            {
+                <form asp-controller="Convention" asp-action="GetAttendeeDays" asp-route-council="@item.Council" asp-route-groupid="@item.GroupID" method="get">
+                    <button type="submit" class="btn btn-sm btn-danger" id="submitButton" title="Too Many Delegate Days">
+                        Edit
+                    </button>
+                </form>
+            }
+            else
+            {
+                <form asp-controller="Convention" asp-action="GetAttendeeDays" asp-route-council="@item.Council" asp-route-groupid="@item.GroupID" method="get">
+                    <button type="submit" class="btn btn-sm btn-success" id="submitButton" title="Status is Good">
+                        Edit
+                    </button>
+                </form>
+            }
+        </td>
+        <td style="text-align:center">
+            <form asp-controller="CvnMpd" asp-action="PrintJournal" method="get">
+                <button type="submit" class="btn btn-sm btn-warning" id="submitButton">
+                    Print
+                </button>
+            </form>
+        </td>*@
+
+                <td>
+                    @Html.DisplayFor(modelItem => item.District)
                 </td>
                 <td>
                     @Html.DisplayFor(modelItem => item.Council)
                 </td>
-                <td>
-                    @Html.DisplayFor(modelItem => item.District)
-                </td>
                 @*<td>
-                        @Html.DisplayFor(modelItem => item.Group)
-                    </td>*@
-                <td>
-                    <span title="@Html.DisplayFor(modelItem => item.Office)" class="ellipsis">@Html.DisplayFor(modelItem => item.Office)</span>
-                </td>
+            @Html.DisplayFor(modelItem => item.Group)
+        </td>*@
+                @*<td>
+            <span title="@Html.DisplayFor(modelItem => item.Office)" class="ellipsis">@Html.DisplayFor(modelItem => item.Office)</span>
+        </td>*@
                 <td>
                     @Html.DisplayFor(modelItem => item.Payee)
                 </td>
                 @*<td style="text-align:center">
-                        @Html.DisplayFor(modelItem => item.CheckNumber)
-                    </td>
-                    <td style="text-align:center">
-                        @Html.DisplayFor(modelItem => item.CheckDate)
-                    </td>
+            @Html.DisplayFor(modelItem => item.CheckNumber)
+        </td>
+        <td style="text-align:center">
+            @Html.DisplayFor(modelItem => item.CheckDate)
+        </td>
                 *@
+                @*<td>
+            @Html.DisplayFor(modelItem => item.Day1)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.Day2)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.Day3)
+        </td>*@
                 @if (@ViewBag.GroupID == 3)
                 {
-                    @*<td>
-                            @Html.DisplayFor(modelItem => item.Day1)
-                        </td>
-                        <td>
-                            @Html.DisplayFor(modelItem => item.Day2)
-                        </td>
-                        <td>
-                            @Html.DisplayFor(modelItem => item.Day3)
-                        </td>*@
-
                     <td style="text-align:center">
                         <form asp-controller="CvnMpd" asp-action="ToggleDelegateDaysMPD" asp-route-id=@item.MemberId asp-route-day="1" asp-route-groupid="@item.GroupID" method="get">
                             <button type="submit" class="btn btn-sm">
-                                @Html.Raw(item.Day1G)
+                                @Html.Raw(item.Day1GD1)
                             </button>
                         </form>
                     </td>
                     <td style="text-align:center">
                         <form asp-controller="CvnMpd" asp-action="ToggleDelegateDaysMPD" asp-route-id=@item.MemberId asp-route-day="2" asp-route-groupid="@item.GroupID" method="get">
                             <button type="submit" class="btn btn-sm">
-                                @Html.Raw(item.Day2G)
+                                @Html.Raw(item.Day2GD1)
                             </button>
                         </form>
                     </td>
                     <td style="text-align:center">
-                        <form asp-controller="CvnMpd" asp-action="ToggleDelegateDaysMPD" asp-route-id=@item.MemberId asp-route-day="3" asp-route-groupid="@item.GroupID"  method="get">
+                        <form asp-controller="CvnMpd" asp-action="ToggleDelegateDaysMPD" asp-route-id=@item.MemberId asp-route-day="3" asp-route-groupid="@item.GroupID" method="get">
                             <button type="submit" class="btn btn-sm">
-                                @Html.Raw(item.Day3G)
+                                @Html.Raw(item.Day3GD1)
                             </button>
                         </form>
                     </td>
+                }
+
+
+                @if (@ViewBag.GroupID == 25)
+                {
+                    <td style="text-align:center">
+                        <form asp-controller="CvnMpd" asp-action="ToggleCouncilDays" asp-route-id=@item.Council asp-route-day="1" asp-route-del="D1" asp-route-groupid="@item.GroupID" method="get">
+                            <button type="submit" class="btn btn-sm">
+                                @Html.Raw(item.Day1GD1)
+                            </button>
+                        </form>
+                    </td>
+                    <td style="text-align:center">
+                        <form asp-controller="CvnMpd" asp-action="ToggleCouncilDays" asp-route-id=@item.Council asp-route-day="1" asp-route-del="D2" asp-route-groupid="@item.GroupID" method="get">
+                            <button type="submit" class="btn btn-sm">
+                                @Html.Raw(item.Day1GD2)
+                            </button>
+                        </form>
+                    </td>
+                    <td style="text-align:center">
+                        <form asp-controller="CvnMpd" asp-action="ToggleCouncilDays" asp-route-id=@item.Council asp-route-day="2" asp-route-del="D1" asp-route-groupid="@item.GroupID" method="get">
+                            <button type="submit" class="btn btn-sm">
+                                @Html.Raw(item.Day2GD1)
+                            </button>
+                        </form>
+                    </td>
+                    <td style="text-align:center">
+                        <form asp-controller="CvnMpd" asp-action="ToggleCouncilDays" asp-route-id=@item.Council asp-route-day="2" asp-route-del="D2" asp-route-groupid="@item.GroupID" method="get">
+                            <button type="submit" class="btn btn-sm">
+                                @Html.Raw(item.Day2GD2)
+                            </button>
+                        </form>
+                    </td>
+                    <td style="text-align:center">
+                        <form asp-controller="CvnMpd" asp-action="ToggleCouncilDays" asp-route-id=@item.Council asp-route-day="3" asp-route-del="D1" asp-route-groupid="@item.GroupID" method="get">
+                            <button type="submit" class="btn btn-sm">
+                                @Html.Raw(item.Day3GD1)
+                            </button>
+                        </form>
+                    </td>
+                    <td style="text-align:center">
+                        <form asp-controller="CvnMpd" asp-action="ToggleCouncilDays" asp-route-id=@item.Council asp-route-day="3" asp-route-del="D2" asp-route-groupid="@item.GroupID" method="get">
+                            <button type="submit" class="btn btn-sm">
+                                @Html.Raw(item.Day3GD2)
+                            </button>
+                        </form>
+                    </td>
+
                 }
                 <td style="text-align:center">
                     @Html.DisplayFor(modelItem => item.Miles)
@@ -248,14 +324,14 @@
                     @Html.DisplayFor(modelItem => item.Location)
                 </td>
                 @*<td>
-                        @Html.DisplayFor(modelItem => item.PayMe)
-                    </td>*@
+            @Html.DisplayFor(modelItem => item.PayMe)
+        </td>*@
                 @*
-                    <td>
-                        <a asp-action="Edit" asp-route-id="@item.Id">Edit</a> |
-                        <a asp-action="Details" asp-route-id="@item.Id">Details</a> |
-                        <a asp-action="Delete" asp-route-id="@item.Id">Delete</a>
-                    </td>*@
+        <td>
+            <a asp-action="Edit" asp-route-id="@item.Id">Edit</a> |
+            <a asp-action="Details" asp-route-id="@item.Id">Details</a> |
+            <a asp-action="Delete" asp-route-id="@item.Id">Delete</a>
+        </td>*@
                 <td style="display:none">
                     @Html.DisplayFor(modelItem => item.CouncilStatus)
                 </td>
@@ -279,7 +355,7 @@
     const districtFilter = document.getElementById('mydistrictFilter');
     const councilFilter = document.getElementById('mycouncilFilter');
     const nameFilter = document.getElementById('mynameFilter');
-    const errorsFilter = document.getElementById('myerrorsFilter')
+    //const errorsFilter = document.getElementById('myerrorsFilter')
 
     const resetFilters = document.getElementById('resetFilters');
     const tableBody = document.getElementById('mytable');
@@ -327,29 +403,32 @@
         Array.from(myTable.rows).forEach(row => {
             // only affect the body rows not the header
             if (row.parentNode.tagName.toLowerCase() === 'tbody') {
-                const district = row.cells[3].textContent.toLowerCase();
-                const council = row.cells[2].textContent.toLowerCase();
-                const name = row.cells[4].textContent.toLowerCase();
-                const councilstat = row.cells[9].textContent.toLowerCase();
+                const district = row.cells[0].textContent.toLowerCase().trim();
+                const council = row.cells[1].textContent.toLowerCase().trim();
+                const name = row.cells[2].textContent.toLowerCase().trim();
+                //const councilstat = row.cells[9].textContent.toLowerCase();
 
                 // if any of the items are in error flip these properties
-                if (councilstat.includes('error')) {
-                    myErrorMessage.hidden = false;
-                    myPrint.disabled = true;
-                    myExCSV.disabled = true;
-                    myExQB.disabled = true;
-                    myArch.disabled = true;
-                }
+                //if (councilstat.includes('error')) {
+                //    myErrorMessage.hidden = false;
+                //    myPrint.disabled = true;
+                //    myExCSV.disabled = true;
+                //    myExQB.disabled = true;
+                //    myArch.disabled = true;
+                //}
 
 
                 // Check each filter
-                const districtMatch = districtValue === '' || district.trim() === districtValue;
-                const councilMatch = council.value === '' || council.includes(councilValue);
-                const nameMatch = name.value === '' || name.includes(nameValue);
-                const errorMatch = councilstat === '' || councilstat.includes('error');
-
+                const districtMatch = districtValue === '' || district === districtValue;
+                const councilMatch = councilValue === '' || council === councilValue;
+                const nameMatch = nameValue === '' || name.includes(nameValue);
+                //const errorMatch = councilstat === '' || councilstat.includes('error');
+                //alert(districtMatch);
+                //alert(councilMatch);
+                //alert(nameMatch);
                 // Show or hide the row based on filters
-                if (districtMatch && councilMatch && nameMatch && (!errorsFilter.checked || errorMatch)) {
+                //if (districtMatch && councilMatch && nameMatch && (!errorsFilter.checked || errorMatch)) {
+                    if (districtMatch && councilMatch && nameMatch) {
                     row.style.display = '';
                 } else {
                     row.style.display = 'none';
@@ -365,7 +444,7 @@
         districtFilter.value = '';
         councilFilter.value = '';
         nameFilter.value = '';
-        errorsFilter.checked = false;
+        //errorsFilter.checked = false;
         filterTable();
     });
 
@@ -375,7 +454,7 @@
     districtFilter.addEventListener('input', filterTable);
     councilFilter.addEventListener('input', filterTable);
     nameFilter.addEventListener('input', filterTable);
-    errorsFilter.addEventListener('input', filterTable);
+    //errorsFilter.addEventListener('input', filterTable);
 
     // Initialize
     restoreFilters();

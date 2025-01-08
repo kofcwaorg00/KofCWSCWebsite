@@ -102,13 +102,13 @@
             @Html.DisplayNameFor(model => model.Day3)
         </th>*@
             <th style="text-align:center">
-                @Html.DisplayNameFor(model => model.Day1G)
+                @Html.DisplayNameFor(model => model.Day1GD1)
             </th>
             <th style="text-align:center">
-                @Html.DisplayNameFor(model => model.Day2G)
+                @Html.DisplayNameFor(model => model.Day2GD1)
             </th>
             <th style="text-align:center">
-                @Html.DisplayNameFor(model => model.Day3G)
+                @Html.DisplayNameFor(model => model.Day3GD1)
             </th>
             <th style="text-align:center">
                 @Html.DisplayNameFor(model => model.Miles)
@@ -165,21 +165,21 @@
                 <td style="text-align:center">
                     <form asp-controller="CvnMpd" asp-action="ToggleDelegateDaysMPD" asp-route-id=@item.MemberId asp-route-day="1" asp-route-groupid="@item.GroupID" method="get">
                         <button type="submit" class="btn btn-sm">
-                            @Html.Raw(item.Day1G)
+                            @Html.Raw(item.Day1GD1)
                         </button>
                     </form>
                 </td>
                 <td style="text-align:center">
                     <form asp-controller="CvnMpd" asp-action="ToggleDelegateDaysMPD" asp-route-id=@item.MemberId asp-route-day="2" asp-route-groupid="@item.GroupID" method="get">
                         <button type="submit" class="btn btn-sm">
-                            @Html.Raw(item.Day2G)
+                            @Html.Raw(item.Day2GD1)
                         </button>
                     </form>
                 </td>
                 <td style="text-align:center">
                     <form asp-controller="CvnMpd" asp-action="ToggleDelegateDaysMPD" asp-route-id=@item.MemberId asp-route-day="3" asp-route-groupid="@item.GroupID" method="get">
                         <button type="submit" class="btn btn-sm">
-                            @Html.Raw(item.Day3G)
+                            @Html.Raw(item.Day3GD1)
                         </button>
                     </form>
                 </td>
