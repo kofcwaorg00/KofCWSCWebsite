@@ -49,6 +49,8 @@ namespace KofCWSCWebsite.Data
 
             if (!response.IsSuccessStatusCode)
             {
+                
+                Log.Error($"Thrown from inside apiHelper because response.IsSuccessStatusCode is {response.IsSuccessStatusCode.ToString()} for endpoint {endpoint} and baseaddress {_httpClient.BaseAddress.ToString()} ");
                 throw new HttpRequestException($"GET request failed. Status Code: {response.StatusCode}, Reason: {response.ReasonPhrase}");
             }
 
