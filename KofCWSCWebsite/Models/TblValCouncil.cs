@@ -16,10 +16,11 @@ public partial class TblValCouncil
     [DisplayName("Dist")]
     public int? District { get; set; }
 
+    [DisplayName("For Reference")]
     public string? AddInfo1 { get; set; }
-
+    [DisplayName("For Reference")]
     public string? AddInfo2 { get; set; }
-
+    [DisplayName("For Reference")]
     public string? AddInfo3 { get; set; }
 
     public bool? LiabIns { get; set; }
