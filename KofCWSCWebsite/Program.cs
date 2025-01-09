@@ -130,6 +130,7 @@ catch (Exception ex)
 
 builder.Services.AddScoped<DataSetService, DataSetService>();
 builder.Services.AddScoped<ApiHelper, ApiHelper>();
+builder.Services.AddScoped<HttpClient,HttpClient>();
 
 builder.Services.AddDatabaseDeveloperPageExceptionFilter();
 

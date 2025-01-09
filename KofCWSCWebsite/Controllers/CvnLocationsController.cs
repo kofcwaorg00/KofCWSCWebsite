@@ -9,6 +9,7 @@ using KofCWSCWebsite.Data;
 using KofCWSCWebsite.Models;
 using KofCWSCWebsite.Services;
 using Serilog;
+using Microsoft.AspNetCore.Authorization;
 
 namespace KofCWSCWebsite.Controllers
 {
@@ -45,7 +46,7 @@ namespace KofCWSCWebsite.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("Id,Location")] CvnLocation cvnLocation)
+        public async Task<IActionResult> Create([Bind("Id,Location,Address,City,State,ZipCode")] CvnLocation cvnLocation)
         {
             if (ModelState.IsValid)
             {
@@ -62,7 +63,89 @@ namespace KofCWSCWebsite.Controllers
             }
             return RedirectToAction(nameof(Index));
         }
+        public async Task<IActionResult> Edit(int? id)
+        {
+            if (id == null)
+            {
+                return NotFound();
+            }
+            //*****************************************************************************************************
+            // 12/05/2024 Tim Philomeno
+            // Now that we have a generic ApiHelper class, these are the only 2 lines that we should need to
+            // call the API
+            // this API will return NotFound if the item is not found so the try/catch block will catch it
+            // and return the same
+            try
+            {
+                var result = await _apiHelper.GetAsync<CvnLocation>($"/Locations/{id}");
+                return View(result);
+            }
+            catch (Exception ex)
+            {
+                ModelState.AddModelError(string.Empty, ex.Message);
+                Log.Error(Utils.FormatLogEntry(this, ex));
+                return RedirectToAction(nameof(Index));
+            }
+            //------------------------------------------------------------------------------------------------------
+        }
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> Edit(int id, [Bind("Id,Location,Address,City,State,ZipCode")] CvnLocation cvnLocation)
+        {
+            if (id != cvnLocation.Id)
+            {
+                return NotFound();
+            }
+            if (ModelState.IsValid)
+            {
+                //*****************************************************************************************************
+                // 12/05/2024 Tim Philomeno
+                // Now that we have a generic ApiHelper class, these are the only 2 lines that we should need to
+                // call the API
+                try
+                {
+                    var result = await _apiHelper.PutAsync<CvnLocation, CvnLocation>($"/Locations/{id}", cvnLocation);
+                }
+                catch (Exception ex)
+                {
+                    //***************************************************************************************************
+                    // 12/05/2024 Tim Philomeno
+                    // I want handle these consistantly so we are returning an http response that can be caught here
+                    // the response message should appear in the ex.Message, then Log it and allow the method to
+                    // finish refreshing the index page3
+                    ModelState.AddModelError(string.Empty, ex.Message);
+                    Log.Error(Utils.FormatLogEntry(this, ex));
+                    //------------------------------------------------------------------------------------------------------
+                }
+            }
+            return RedirectToAction(nameof(Index));
+        }
 
+        public async Task<IActionResult> Details(int? id)
+        {
+            if (id == null)
+            {
+                return NotFound();
+            }
+            //*****************************************************************************************************
+            // 12/05/2024 Tim Philomeno
+            // Now that we have a generic ApiHelper class, these are the only 2 lines that we should need to
+            // call the API
+            // this API will return NotFound if the item is not found so the try/catch block will catch it
+            // and return the same
+            try
+            {
+                var result = await _apiHelper.GetAsync<CvnLocation>($"/Locations/{id}");
+                return View(result);
+            }
+            catch (Exception ex)
+            {
+                Log.Error(Utils.FormatLogEntry(this, ex));
+                return NotFound();
+            }
+            //------------------------------------------------------------------------------------------------------
+
+        }
         public async Task<IActionResult> Delete(int? id)
         {
             if (id == null)

@@ -12,10 +12,20 @@ GET {{KofCWSCWebsite_HostAddress}}/VerifyKofCID?KofCMemberID=11111
 
 ###
 
-GET {{KofCWSCWebsite_HostAddress}}/VerifyKofCID/{Input.KofCMemberID}?KofCMemberID=string
+GET {{KofCWSCWebsite_HostAddress}}/VerifyKofCID/{Input.KofCMemberID}?KofCMemberID="Philomeno"
 
 ###
 
 GET {{KofCWSCWebsite_HostAddress}}/VerifyKofCID/11111
+
+###
+
+@address1="6028 Nathan Way SE,Auburn, WA 98092"
+@address2="5000 Abbey Way SE,Lacey, WA 98503"
+GET {{KofCWSCWebsite_HostAddress}}/azuremaps/DriveDistance?address1={{address1}}&address2={{address2}}
+
+###
+
+GET {{KofCWSCWebsite_HostAddress}}/api/azuremaps/driving-distance?address1={{address1}}&address2={{address2}}
 
 ###

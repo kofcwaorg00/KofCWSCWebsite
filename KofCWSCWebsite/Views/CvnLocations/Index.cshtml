@@ -12,12 +12,26 @@
         </button>
     </form>
 </p>
-<table class="table" style="width:25%">
+<table class="table" style="width:75%">
     <thead>
         <tr>
             <th>
                 @Html.DisplayNameFor(model => model.Location)
             </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Address)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.City)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.State)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.ZipCode)
+            </th>
+            <th></th>
+            <th></th>
             <th></th>
         </tr>
     </thead>
@@ -26,6 +40,33 @@
         <tr>
             <td>
                 @Html.DisplayFor(modelItem => item.Location)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Address)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.City)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.State)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.ZipCode)
+            </td>
+            <td style="padding-right:0px">
+                @* <a asp-action="Edit" asp-route-id="@item.MemberId">Edit</a>&nbsp;|&nbsp;<a asp-action="Details" asp-route-id="@item.MemberId">Details</a>&nbsp;|&nbsp;<a asp-action="Delete" asp-route-id="@item.MemberId">Delete</a> *@
+                <form asp-action="Edit" asp-route-id="@item.Id" method="get">
+                    <button type="submit" class="btn btn-sm btn-primary">
+                        Edit
+                    </button>
+                </form>
+            </td>
+            <td style="padding-left:0px;padding-right:0px">
+                <form asp-action="Details" asp-route-id="@item.Id" method="get">
+                    <button type="submit" class="btn btn-sm btn-warning">
+                        Details
+                    </button>
+                </form>
             </td>
             <td style="padding-left:0px">
                 <form asp-action="Delete" asp-route-id="@item.Id" method="get">

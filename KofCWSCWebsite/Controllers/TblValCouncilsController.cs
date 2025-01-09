@@ -246,7 +246,7 @@ namespace KofCWSCWebsite.Controllers
                 // call the API
                 try
                 {
-                    var result = await _apiHelper.PutAsync<TblValCouncil, TblMasMember>($"/Council/{id}", tblValCouncil);
+                    var result = await _apiHelper.PutAsync<TblValCouncil, TblValCouncil>($"/Council/{id}", tblValCouncil);
                 }
                 catch (Exception ex)
                 {
