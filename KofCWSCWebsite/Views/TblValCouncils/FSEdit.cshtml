@@ -251,9 +251,16 @@
                 </td>
                 <td>
                     <div style="width:25%">
-                        <form method="get" asp-controller="Home" asp-action="Index" asp-route-id="">
-                            <button type="submit" class="btn btn-success">Cancel</button>
-                        </form>
+                        @*<form method="get" asp-controller="Home" asp-action="Index" asp-route-id="">*@
+                        <button type="submit" asp-controller="Home" asp-action="Index" class="btn btn-success">Cancel</button>
+                        @*</form>*@
+                    </div>
+                </td>
+                <td>
+                    <div style="width:25%">
+                        @*<form method="get" asp-controller="Home" asp-action="Index" asp-route-id="">*@
+                        <button type="reset" class="btn btn-info">Reset</button>
+                        @*</form>*@
                     </div>
                 </td>
             </tr>
