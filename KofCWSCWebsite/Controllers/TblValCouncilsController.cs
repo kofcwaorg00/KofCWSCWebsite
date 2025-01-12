@@ -12,6 +12,7 @@ using Newtonsoft.Json;
 using Serilog;
 using Microsoft.AspNetCore.Authorization;
 using com.sun.xml.@internal.bind.v2.model.core;
+using com.sun.tools.corba.se.logutil;
 
 namespace KofCWSCWebsite.Controllers
 {
@@ -40,7 +41,54 @@ namespace KofCWSCWebsite.Controllers
             //------------------------------------------------------------------------------------------------------
             return View(result);
         }
+        public async Task<IActionResult> MPDEdit()
+        {
+            //*****************************************************************************************************
+            // 12/05/2024 Tim Philomeno
+            // Now that we have a generic ApiHelper class, these are the only 2 lines that we should need to
+            // call the API
+            // I guess the programmers that created the controller code template didn't think that a GET or INDEX
+            // would return any errors.  It either gets some or not so no try/catch here
+            var result = await _apiHelper.GetAsync<List<TblValCouncil>>("/Councils");
 
+            var model = new TblValCouncilMPD
+            {
+                Councils = result
+            };
+            return View(model);
+        }
+             public async Task<IActionResult> CouncilsMPD()
+        {
+            //*****************************************************************************************************
+            // 12/05/2024 Tim Philomeno
+            // Now that we have a generic ApiHelper class, these are the only 2 lines that we should need to
+            // call the API
+            // I guess the programmers that created the controller code template didn't think that a GET or INDEX
+            // would return any errors.  It either gets some or not so no try/catch here
+            var result = await _apiHelper.GetAsync<List<TblValCouncil>>("/Councils");
+
+            var model = new TblValCouncilMPD
+            {
+                Councils = result
+            };
+            return View(model);
+
+            //TblValCouncilMPD myreturn = new TblValCouncilMPD();
+            //for (int i=0;i<result.Count;i++)
+            //{
+            //    TblValCouncil myC = new TblValCouncil();
+            //    myC.CNumber = result[i].CNumber;
+            //    myC.CName = result[i].CName;
+            //    myC.CLocation = result[i].CLocation;
+            //    myC.District = result[i].District;
+            //    myC.SeatedDelegateDay1D1 = result[i].SeatedDelegateDay1D1;
+            //    myC.SeatedDelegateDay1D2 = result[i].SeatedDelegateDay1D2;
+            //    myreturn.Councils.Add(myC);
+            //}
+
+            ////------------------------------------------------------------------------------------------------------
+            //return View(myreturn);
+        }
 
         // GET: TblValCouncils/Details/5
         [Authorize(Roles = "Admin,DataAdmin")]
@@ -67,7 +115,7 @@ namespace KofCWSCWebsite.Controllers
                 return NotFound();
             }
             //------------------------------------------------------------------------------------------------------
-            
+
         }
         [Authorize(Roles = "Admin,CouncilOfficer")]
         public async Task<IActionResult> FSDetails(int? id)
@@ -85,7 +133,7 @@ namespace KofCWSCWebsite.Controllers
             try
             {
                 var result = await _apiHelper.GetAsync<TblValCouncil>($"/Council/{id}");
-                return View("FSDetails",result);
+                return View("FSDetails", result);
             }
             catch (Exception ex)
             {
@@ -123,7 +171,7 @@ namespace KofCWSCWebsite.Controllers
                 try
                 {
                     var apiHelper = new ApiHelper(_dataSetService);
-                    var result = await apiHelper.PostAsync<TblValCouncil,TblValCouncil>("/Council/",tblValCouncil);
+                    var result = await apiHelper.PostAsync<TblValCouncil, TblValCouncil>("/Council/", tblValCouncil);
                     return RedirectToAction(nameof(Index));
                 }
                 catch (Exception ex)
@@ -179,7 +227,7 @@ namespace KofCWSCWebsite.Controllers
             try
             {
                 var result = await _apiHelper.GetAsync<TblValCouncil>($"/Council/{id}");
-                return View("FSEdit",result);
+                return View("FSEdit", result);
             }
             catch (Exception ex)
             {
@@ -194,7 +242,7 @@ namespace KofCWSCWebsite.Controllers
         [HttpPost]
         [ValidateAntiForgeryToken]
         //public async Task<IActionResult> FSEdit(int id, [Bind("CNumber,CLocation,CName,PhyAddress,PhyCity,PhyState,PhyPostalCode,MailAddress,MailCity,MailState,MailPostalCode,MeetAddress,MeetCity,MeetState,MeetPostalCode,BMeetDOW,BMeetTime,OMeetDOW,OMeetTime,SMeetDOW,SMeetTime")] TblValCouncil tblValCouncil)
-            public async Task<IActionResult> FSEdit(int id, [Bind("CNumber,CLocation,CName,District,AddInfo1,AddInfo2,AddInfo3,LiabIns,DioceseId,Chartered,WebSiteUrl,BulletinUrl,Arbalance,Status,PhyAddress,PhyCity,PhyState,PhyPostalCode,MailAddress,MailCity,MailState,MailPostalCode,MeetAddress,MeetCity,MeetState,MeetPostalCode,BMeetDOW,BMeetTime,OMeetDOW,OMeetTime,SMeetDOW,SMeetTime")] TblValCouncil tblValCouncil)
+        public async Task<IActionResult> FSEdit(int id, [Bind("CNumber,CLocation,CName,District,AddInfo1,AddInfo2,AddInfo3,LiabIns,DioceseId,Chartered,WebSiteUrl,BulletinUrl,Arbalance,Status,PhyAddress,PhyCity,PhyState,PhyPostalCode,MailAddress,MailCity,MailState,MailPostalCode,MeetAddress,MeetCity,MeetState,MeetPostalCode,BMeetDOW,BMeetTime,OMeetDOW,OMeetTime,SMeetDOW,SMeetTime")] TblValCouncil tblValCouncil)
         {
             if (id != tblValCouncil.CNumber)
             {
@@ -222,10 +270,56 @@ namespace KofCWSCWebsite.Controllers
                     //------------------------------------------------------------------------------------------------------
                 }
             }
-            return RedirectToAction("Index","Home");
+            return RedirectToAction("Index", "Home");
+        }
+
+        [HttpPost]
+        //[ValidateAntiForgeryToken]
+        public IActionResult CouncilsMPD(TblValCouncilMPD tblValCouncilsMPD)
+        {
+            if (tblValCouncilsMPD == null)
+            {
+                return BadRequest("Model is null");
+            }
+            if (ModelState.IsValid)
+            {
+                foreach (var updatedCouncil in tblValCouncilsMPD.Councils)
+                {
+                    var council = tblValCouncilsMPD.Councils.FirstOrDefault(p => p.CNumber == updatedCouncil.CNumber);
+                    if (council != null)
+                    {
+                        council.SeatedDelegateDay1D1 = updatedCouncil.SeatedDelegateDay1D1;
+                        // continue with others...
+                    }
+                } // Save changes to the database in a real application }
+            }
+            return RedirectToAction("MPDEdit");
         }
 
 
+        //[Authorize(Roles = "Admin,DataAdmin")]
+        [HttpPost]
+        //[ValidateAntiForgeryToken]
+        public IActionResult MPDEdit(TblValCouncilMPD tblValCouncilsMPD)
+        {
+            if (tblValCouncilsMPD == null)
+            {
+                return BadRequest("Model is null");
+            }
+            if (ModelState.IsValid)
+            {
+                foreach (var updatedCouncil in tblValCouncilsMPD.Councils)
+                {
+                    var council = tblValCouncilsMPD.Councils.FirstOrDefault(p => p.CNumber == updatedCouncil.CNumber);
+                    if (council != null)
+                    {
+                        council.SeatedDelegateDay1D1 = updatedCouncil.SeatedDelegateDay1D1; 
+                        // continue with others...
+                    }
+                } // Save changes to the database in a real application }
+            }
+            return RedirectToAction("MPDEdit");
+        }
         // POST: TblValCouncils/Edit/5
         // To protect from overposting attacks, enable the specific properties you want to bind to.
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
@@ -279,7 +373,7 @@ namespace KofCWSCWebsite.Controllers
             // and return the same
             try
             {
-               var result = await _apiHelper.GetAsync<TblValCouncil>($"/Council/{id}");
+                var result = await _apiHelper.GetAsync<TblValCouncil>($"/Council/{id}");
                 return View(result);
             }
             catch (Exception ex)

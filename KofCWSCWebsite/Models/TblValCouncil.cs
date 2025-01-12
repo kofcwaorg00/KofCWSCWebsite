@@ -1,6 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.ComponentModel;
+﻿using System.ComponentModel;
 using System.ComponentModel.DataAnnotations;
 
 namespace KofCWSCWebsite.Models;
@@ -91,10 +89,10 @@ public partial class TblValCouncil
 
     [DisplayName("Meeting Time (for example 7:30pm)")]
     public string? SMeetTime { get; set; }
-    public bool? SeatedDelegateDay1D1 { get; set; }
-    public bool? SeatedDelegateDay2D1 { get; set; }
-    public bool? SeatedDelegateDay3D1 { get; set; }
-    public bool? SeatedDelegateDay1D2 { get; set; }
-    public bool? SeatedDelegateDay2D2 { get; set; }
-    public bool? SeatedDelegateDay3D2 { get; set; }
+    public bool SeatedDelegateDay1D1 { get; set; }
+    public bool SeatedDelegateDay2D1 { get; set; }
+    public bool SeatedDelegateDay3D1 { get; set; }
+    public bool SeatedDelegateDay1D2 { get; set; }
+    public bool SeatedDelegateDay2D2 { get; set; }
+    public bool SeatedDelegateDay3D2 { get; set; }
 }

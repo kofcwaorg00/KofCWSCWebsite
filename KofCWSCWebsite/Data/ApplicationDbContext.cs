@@ -49,6 +49,7 @@ public partial class ApplicationDbContext : DbContext
     }
 
     public virtual DbSet<TblValCouncil> TblValCouncils { get; set; }
+    public virtual DbSet<TblValCouncilMPD> TblValCouncilsMPD { get; set; }
     public virtual DbSet<TblWebSelfPublish> TblWebSelfPublishes { get; set; }
     public virtual DbSet<TblMasPso> TblMasPsos { get; set; }
     public virtual DbSet<TblMasAward> TblMasAwards { get; set; }
@@ -95,6 +96,10 @@ public partial class ApplicationDbContext : DbContext
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
         modelBuilder.Entity<MemberVM>(entity =>
+        {
+            entity.HasNoKey();
+        });
+        modelBuilder.Entity<TblValCouncilMPD>(entity =>
         {
             entity.HasNoKey();
         });

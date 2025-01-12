@@ -242,140 +242,140 @@
                             </ul>
                         </li>
 
-                        <li class="nav-item dropdown">
-                            <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
-                                Contact Us
-                            </a>
-
-                            <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
-                                <a class="nav-link text-dark" asp-page="/ContactUs">Contact Us</a>
-                                @*<a class="nav-link text-dark" asp-page="/Calendar">Calendar</a>*@
-                            </ul>
-                        </li>
-                        @if (User.IsInRole("Member"))
-                        {
                             <li class="nav-item dropdown">
                                 <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
-                                    Members Only
+                                    Contact Us
                                 </a>
 
                                 <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
-                                    @if (User.IsInRole("Admin") || User.IsInRole("StateOfficer") || User.IsInRole("StateChairman"))
-                                    {
-                                        <li><a class="dropdown-item MyMenuLink" asp-area="" asp-controller="EmailOffices" asp-action="Create" asp-route-id="">Send Bulk Email</a></li>
-                                    }
-                                    @*<li><a class="dropdown-item MyMenuLink" asp-area="" asp-controller="SP" asp-action="GetEmailAlias" asp-route-id="">Email Alias</a></li>*@
-                                    <li><a class="dropdown-item MyMenuLink" asp-page="/Helper/ShowSense" asp-route-id="2">Email Alias</a></li>
-
-                                    <li><a class="dropdown-item MyMenuLink" asp-page="/Helper/ShowSense" asp-route-id="1">State Directory</a></li>
-                                    <li><a class="dropdown-item MyMenuLink" href="https://kofc.org/en/forms/spa/invite.html?lang=en&form=10784C.01" target="kofc-supreme-tab">Fraternal Programs Report Form 10784</a></li>
-                                    <li><a class="dropdown-item MyMenuLink" asp-page="/Helper/ShowSense" asp-route-id="3">IRS Form 990 Filing Months Council/Assembly</a></li>
-                                    <li><a class="dropdown-item MyMenuLink" asp-page="/Forms/Necrology">Necrology Form</a></li>
-                                    <li><a class="dropdown-item MyMenuLink" asp-page="/Forms/PrayerRequest">Prayer Request Form</a></li>
-                                    <li><a class="dropdown-item MyMenuLink" asp-page="/Forms/DDMidYear">Register for DD Mid Year Meeting</a></li>
-                                    @if (User.IsInRole("Admin") || User.IsInRole("DataAdmin") || User.IsInRole("StateMembership") || User.IsInRole("StateOfficer"))
-                                    {
-                                        @*<li><a class="dropdown-item MyMenuLink" asp-area="" asp-controller="TblMasMembers" asp-action="Index" asp-route-id="aaa">Lookup Members</a></li>*@
-                                        <li><a class="dropdown-item MyMenuLink" asp-page="/Helper/ShowSense" asp-route-id="4">Lookup Members</a></li>
-
-                                    }
-                                    <li><hr class="dropdown-divider"></li>
-                                    <li><a class="dropdown-item MyMenuLink" href="https://kofcwa.sharepoint.com/:f:/s/StateBulletinsArchive/EjO4QlaqbFJCnpwDC5D7IGsBoqS--NpRiRgf8313aEzHnw?e=r6FsIY" target="kofcwa-sharepoint">Bulletin Archive</a></li>
-                                    <li><a class="dropdown-item MyMenuLink" asp-page="/Helper/ShowSense" asp-route-id="5">WSC Bylaws Members</a></li>
-                                    @if (User.IsInRole("CouncilOfficer") || User.IsInRole("Admin"))
-                                    {
-                                        <li><hr class="dropdown-divider"></li>
-                                        <li><a class="dropdown-item MyMenuLink" asp-page="/Councils/PreFSDetails">Update Council Details (FSs Only)</a></li>
-                                        <li><hr class="dropdown-divider"></li>
-                                        <li><a class="nav-link MyMenuLink" asp-page="/COE">Certificate of Election (FS Only)</a></li>
-                                    }
-
+                                    <a class="nav-link text-dark" asp-page="/ContactUs">Contact Us</a>
+                                    @*<a class="nav-link text-dark" asp-page="/Calendar">Calendar</a>*@
                                 </ul>
                             </li>
-                        }
+                            @if (User.IsInRole("Member"))
+                            {
+                                <li class="nav-item dropdown">
+                                    <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                                        Members Only
+                                    </a>
 
-                        @if (User.IsInRole("Admin") || User.IsInRole("StateOfficer"))
-                        {
-                            <li class="nav-item dropdown">
-                                <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown1" role="button" data-bs-toggle="dropdown" aria-expanded="false">
-                                    Print
-                                </a>
-                                <ul class="dropdown-menu" aria-labelledby="navbarDropdown1">
+                                    <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
+                                        @if (User.IsInRole("Admin") || User.IsInRole("StateOfficer") || User.IsInRole("StateChairman"))
+                                        {
+                                            <li><a class="dropdown-item MyMenuLink" asp-area="" asp-controller="EmailOffices" asp-action="Create" asp-route-id="">Send Bulk Email</a></li>
+                                        }
+                                        @*<li><a class="dropdown-item MyMenuLink" asp-area="" asp-controller="SP" asp-action="GetEmailAlias" asp-route-id="">Email Alias</a></li>*@
+                                        <li><a class="dropdown-item MyMenuLink" asp-page="/Helper/ShowSense" asp-route-id="2">Email Alias</a></li>
 
-                                    <li><a class="dropdown-item MyMenuLink" asp-area="" asp-controller="Reports" asp-action="GetLabelByOffice" asp-route-id="27">Print Grand Knight Labels</a></li>
-                                    <li><a class="dropdown-item MyMenuLink" asp-area="" asp-controller="Reports" asp-action="GetLabelByOffice" asp-route-id="22">Print Financial Secretary Labels</a></li>
-                                    <li><a class="dropdown-item MyMenuLink" asp-area="" asp-controller="Reports" asp-action="GetLabelByOffice" asp-route-id="20">Print Faithful Navigator Labels</a></li>
-                                    <li><a class="dropdown-item MyMenuLink" asp-area="" asp-controller="Reports" asp-action="GetLabelByOffice" asp-route-id="17">Print Faithful Comptroller Labels</a></li>
-                                    <li><a class="dropdown-item MyMenuLink" asp-area="" asp-controller="Reports" asp-action="GetLabelByGroup" asp-route-id="2">Print State Officer Labels</a></li>
-                                    <li><a class="dropdown-item MyMenuLink" asp-area="" asp-controller="Reports" asp-action="GetLabelByGroup" asp-route-id="5">Print State Chairman Labels</a></li>
-                                    <li><a class="dropdown-item MyMenuLink" asp-area="" asp-controller="Reports" asp-action="GetLabelByGroup" asp-route-id="3">Print District Deputy Labels</a></li>
-                                    <li><hr class="dropdown-divider"></li>
-                                    <li><a class="dropdown-item MyMenuLink" asp-area="" asp-controller="Reports" asp-action="GetDirectory" asp-route-id="1">Print Directory Full Current (BETA)</a></li>
-                                    <li><a class="dropdown-item MyMenuLink" asp-area="" asp-controller="Reports" asp-action="GetDirectory" asp-route-id="2">Print Directory Short Current (BETA)</a></li>
-                                    <li><a class="dropdown-item MyMenuLink" asp-area="" asp-controller="Reports" asp-action="GetDirectory" asp-route-id="3">Print Directory Full Next (BETA)</a></li>
-                                    <li><a class="dropdown-item MyMenuLink" asp-area="" asp-controller="Reports" asp-action="GetDirectory" asp-route-id="4">Print Directory Short Next (BETA)</a></li>
-                                </ul>
-                            </li>
-                        }
-                        @if (User.IsInRole("Admin") || User.IsInRole("DataAdmin") || User.IsInRole("CalAdmin") || User.IsInRole("AOIAdmin") || User.IsInRole("StateChairman"))
-                        {
-                            <li class="nav-item dropdown">
-                                <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
-                                    Manage
-                                </a>
-                                <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
-                                    @if (User.IsInRole("Admin"))
-                                    {
-                                        <li><a class="dropdown-item MyMenuLink" asp-area="" asp-controller="Role" asp-action="Index" asp-route-id="">Roles</a>                                </li>
-                                        <li><a class="dropdown-item MyMenuLink" asp-area="" asp-controller="TblValOffices" asp-action="Index" asp-route-id="">Offices</a></li>
-                                        <li><a class="dropdown-item MyMenuLink" asp-area="" asp-controller="FileStorage" asp-action="Index" asp-route-id="">Upload a Document</a></li>
-                                        <li><a class="dropdown-item MyMenuLink" asp-area="" asp-controller="EmailOffices" asp-action="Index" asp-route-id="">View Bulk Emails</a></li>
+                                        <li><a class="dropdown-item MyMenuLink" asp-page="/Helper/ShowSense" asp-route-id="1">State Directory</a></li>
+                                        <li><a class="dropdown-item MyMenuLink" href="https://kofc.org/en/forms/spa/invite.html?lang=en&form=10784C.01" target="kofc-supreme-tab">Fraternal Programs Report Form 10784</a></li>
+                                        <li><a class="dropdown-item MyMenuLink" asp-page="/Helper/ShowSense" asp-route-id="3">IRS Form 990 Filing Months Council/Assembly</a></li>
+                                        <li><a class="dropdown-item MyMenuLink" asp-page="/Forms/Necrology">Necrology Form</a></li>
+                                        <li><a class="dropdown-item MyMenuLink" asp-page="/Forms/PrayerRequest">Prayer Request Form</a></li>
+                                        <li><a class="dropdown-item MyMenuLink" asp-page="/Forms/DDMidYear">Register for DD Mid Year Meeting</a></li>
+                                        @if (User.IsInRole("Admin") || User.IsInRole("DataAdmin") || User.IsInRole("StateMembership") || User.IsInRole("StateOfficer"))
+                                        {
+                                            @*<li><a class="dropdown-item MyMenuLink" asp-area="" asp-controller="TblMasMembers" asp-action="Index" asp-route-id="aaa">Lookup Members</a></li>*@
+                                            <li><a class="dropdown-item MyMenuLink" asp-page="/Helper/ShowSense" asp-route-id="4">Lookup Members</a></li>
 
-                                        <li><a class="dropdown-item MyMenuLink" href="#">Registered Users(future)</a></li>
+                                        }
                                         <li><hr class="dropdown-divider"></li>
-                                    }
-                                    @if (User.IsInRole("Admin") || User.IsInRole("DataAdmin"))
-                                    {
-                                        <li><a class="dropdown-item MyMenuLink" asp-area="" asp-controller="TblMasMembers" asp-action="Index" asp-route-id="aaa">Members</a></li>
-                                        <li><a class="dropdown-item MyMenuLink" asp-area="" asp-controller="TblValCouncils" asp-action="Index" asp-route-id="">Councils</a></li>
-                                        <li><a class="dropdown-item MyMenuLink" asp-area="" asp-controller="TblValAssys" asp-action="Index" asp-route-id="">Assemblies</a></li>
-                                        <li><a class="dropdown-item MyMenuLink" asp-area="" asp-controller="TblMasAwards" asp-action="Index" asp-route-id="">Awards</a></li>
-                                        <li><a class="dropdown-item MyMenuLink" asp-area="" asp-controller="TblMasPSOs" asp-action="Index" asp-route-id="">Past State Officers</a></li>
-                                        <li><a class="dropdown-item MyMenuLink" asp-area="" asp-controller="SP" asp-action="GetNextTempID" asp-route-id="">Get Next Temp Member Number</a></li>
-                                        <li><hr class="dropdown-divider"></li>
-                                    }
-                                    @if (User.IsInRole("Admin") || User.IsInRole("CalAdmin"))
-                                    {
-                                        <li><a class="dropdown-item MyMenuLink" asp-area="" asp-controller="TblSysTrxEvents" asp-action="Index" asp-route-id="">Calendar(future)</a></li>
-                                        <li><hr class="dropdown-divider"></li>
-                                    }
-                                    @if (User.IsInRole("Admin") || User.IsInRole("AOIAdmin"))
-                                    {
-                                        <li><a class="dropdown-item MyMenuLink" asp-area="" asp-controller="TblWebTrxAois" asp-action="Index" asp-route-id="">A/OI</a></li>
-                                        <li><a class="dropdown-item MyMenuLink" href="~/UploadFile">AOI Graphic File Upload</a></li>
-                                        <li><hr class="dropdown-divider"></li>
-                                    }
-                                    @if (User.IsInRole("Admin") || User.IsInRole("StateChairman"))
-                                    {
-                                        <li><a class="dropdown-item MyMenuLink" asp-area="" asp-controller="TblWebSelfPublishes" asp-action="Index" asp-route-id="">Web Page Messages</a></li>
-                                        <li><a class="dropdown-item MyMenuLink" asp-area="" asp-controller="EmailOffices" asp-action="Create" asp-route-id="">Send Bulk Email</a></li>
-                                        <li><a class="dropdown-item MyMenuLink" href="https://kofcwa.sharepoint.com/:f:/s/WebsiteStorage/EuAeETokY3JKn8L6TKHzSZ4BX2QmNDpZj4_w4TBZu9lX8g?e=KE8fJf" target="kofcwa-sharepoint">Upload To Document Storage</a></li>
-                                    }
-                                    @if (User.IsInRole("Admin"))
-                                    {
-                                        <li><hr class="dropdown-divider"></li>
-                                        <li><a class="dropdown-item MyMenuLink" asp-area="" asp-controller="MemberSuspensions" asp-action="Index" asp-route-id="">Member Suspensions</a></li>
-                                        <li><a class="dropdown-item MyMenuLink" asp-area="" asp-controller="AddressRequests" asp-action="Create" asp-route-id="" title="Test Address Request">Test Address Request</a></li>
-                                    }
-                                </ul>
-                            </li>
-                            @if (User.IsInRole("Admin"))
+                                        <li><a class="dropdown-item MyMenuLink" href="https://kofcwa.sharepoint.com/:f:/s/StateBulletinsArchive/EjO4QlaqbFJCnpwDC5D7IGsBoqS--NpRiRgf8313aEzHnw?e=r6FsIY" target="kofcwa-sharepoint">Bulletin Archive</a></li>
+                                        <li><a class="dropdown-item MyMenuLink" asp-page="/Helper/ShowSense" asp-route-id="5">WSC Bylaws Members</a></li>
+                                        @if (User.IsInRole("CouncilOfficer") || User.IsInRole("Admin"))
+                                        {
+                                            <li><hr class="dropdown-divider"></li>
+                                            <li><a class="dropdown-item MyMenuLink" asp-page="/Councils/PreFSDetails">Update Council Details (FSs Only)</a></li>
+                                            <li><hr class="dropdown-divider"></li>
+                                            <li><a class="nav-link MyMenuLink" asp-page="/Forms/COE">Certificate of Election (FS Only)</a></li>
+                                        }
+
+                                    </ul>
+                                </li>
+                            }
+
+                            @if (User.IsInRole("Admin") || User.IsInRole("StateOfficer"))
                             {
                                 <li class="nav-item dropdown">
                                     <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown1" role="button" data-bs-toggle="dropdown" aria-expanded="false">
-                                        Convention
+                                        Print
                                     </a>
                                     <ul class="dropdown-menu" aria-labelledby="navbarDropdown1">
+
+                                        <li><a class="dropdown-item MyMenuLink" asp-area="" asp-controller="Reports" asp-action="GetLabelByOffice" asp-route-id="27">Print Grand Knight Labels</a></li>
+                                        <li><a class="dropdown-item MyMenuLink" asp-area="" asp-controller="Reports" asp-action="GetLabelByOffice" asp-route-id="22">Print Financial Secretary Labels</a></li>
+                                        <li><a class="dropdown-item MyMenuLink" asp-area="" asp-controller="Reports" asp-action="GetLabelByOffice" asp-route-id="20">Print Faithful Navigator Labels</a></li>
+                                        <li><a class="dropdown-item MyMenuLink" asp-area="" asp-controller="Reports" asp-action="GetLabelByOffice" asp-route-id="17">Print Faithful Comptroller Labels</a></li>
+                                        <li><a class="dropdown-item MyMenuLink" asp-area="" asp-controller="Reports" asp-action="GetLabelByGroup" asp-route-id="2">Print State Officer Labels</a></li>
+                                        <li><a class="dropdown-item MyMenuLink" asp-area="" asp-controller="Reports" asp-action="GetLabelByGroup" asp-route-id="5">Print State Chairman Labels</a></li>
+                                        <li><a class="dropdown-item MyMenuLink" asp-area="" asp-controller="Reports" asp-action="GetLabelByGroup" asp-route-id="3">Print District Deputy Labels</a></li>
+                                        <li><hr class="dropdown-divider"></li>
+                                        <li><a class="dropdown-item MyMenuLink" asp-area="" asp-controller="Reports" asp-action="GetDirectory" asp-route-id="1">Print Directory Full Current (BETA)</a></li>
+                                        <li><a class="dropdown-item MyMenuLink" asp-area="" asp-controller="Reports" asp-action="GetDirectory" asp-route-id="2">Print Directory Short Current (BETA)</a></li>
+                                        <li><a class="dropdown-item MyMenuLink" asp-area="" asp-controller="Reports" asp-action="GetDirectory" asp-route-id="3">Print Directory Full Next (BETA)</a></li>
+                                        <li><a class="dropdown-item MyMenuLink" asp-area="" asp-controller="Reports" asp-action="GetDirectory" asp-route-id="4">Print Directory Short Next (BETA)</a></li>
+                                    </ul>
+                                </li>
+                            }
+                            @if (User.IsInRole("Admin") || User.IsInRole("DataAdmin") || User.IsInRole("CalAdmin") || User.IsInRole("AOIAdmin") || User.IsInRole("StateChairman"))
+                            {
+                                <li class="nav-item dropdown">
+                                    <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                                        Manage
+                                    </a>
+                                    <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
+                                        @if (User.IsInRole("Admin"))
+                                        {
+                                            <li><a class="dropdown-item MyMenuLink" asp-area="" asp-controller="Role" asp-action="Index" asp-route-id="">Roles</a>                                </li>
+                                            <li><a class="dropdown-item MyMenuLink" asp-area="" asp-controller="TblValOffices" asp-action="Index" asp-route-id="">Offices</a></li>
+                                            <li><a class="dropdown-item MyMenuLink" asp-area="" asp-controller="FileStorage" asp-action="Index" asp-route-id="">Upload a Document</a></li>
+                                            <li><a class="dropdown-item MyMenuLink" asp-area="" asp-controller="EmailOffices" asp-action="Index" asp-route-id="">View Bulk Emails</a></li>
+
+                                            <li><a class="dropdown-item MyMenuLink" href="#">Registered Users(future)</a></li>
+                                            <li><hr class="dropdown-divider"></li>
+                                        }
+                                        @if (User.IsInRole("Admin") || User.IsInRole("DataAdmin"))
+                                        {
+                                            <li><a class="dropdown-item MyMenuLink" asp-area="" asp-controller="TblMasMembers" asp-action="Index" asp-route-id="aaa">Members</a></li>
+                                            <li><a class="dropdown-item MyMenuLink" asp-area="" asp-controller="TblValCouncils" asp-action="Index" asp-route-id="">Councils</a></li>
+                                            <li><a class="dropdown-item MyMenuLink" asp-area="" asp-controller="TblValAssys" asp-action="Index" asp-route-id="">Assemblies</a></li>
+                                            <li><a class="dropdown-item MyMenuLink" asp-area="" asp-controller="TblMasAwards" asp-action="Index" asp-route-id="">Awards</a></li>
+                                            <li><a class="dropdown-item MyMenuLink" asp-area="" asp-controller="TblMasPSOs" asp-action="Index" asp-route-id="">Past State Officers</a></li>
+                                            <li><a class="dropdown-item MyMenuLink" asp-area="" asp-controller="SP" asp-action="GetNextTempID" asp-route-id="">Get Next Temp Member Number</a></li>
+                                            <li><hr class="dropdown-divider"></li>
+                                        }
+                                        @if (User.IsInRole("Admin") || User.IsInRole("CalAdmin"))
+                                        {
+                                            <li><a class="dropdown-item MyMenuLink" asp-area="" asp-controller="TblSysTrxEvents" asp-action="Index" asp-route-id="">Calendar(future)</a></li>
+                                            <li><hr class="dropdown-divider"></li>
+                                        }
+                                        @if (User.IsInRole("Admin") || User.IsInRole("AOIAdmin"))
+                                        {
+                                            <li><a class="dropdown-item MyMenuLink" asp-area="" asp-controller="TblWebTrxAois" asp-action="Index" asp-route-id="">A/OI</a></li>
+                                            <li><a class="dropdown-item MyMenuLink" href="~/UploadFile">AOI Graphic File Upload</a></li>
+                                            <li><hr class="dropdown-divider"></li>
+                                        }
+                                        @if (User.IsInRole("Admin") || User.IsInRole("StateChairman"))
+                                        {
+                                            <li><a class="dropdown-item MyMenuLink" asp-area="" asp-controller="TblWebSelfPublishes" asp-action="Index" asp-route-id="">Web Page Messages</a></li>
+                                            <li><a class="dropdown-item MyMenuLink" asp-area="" asp-controller="EmailOffices" asp-action="Create" asp-route-id="">Send Bulk Email</a></li>
+                                            <li><a class="dropdown-item MyMenuLink" href="https://kofcwa.sharepoint.com/:f:/s/WebsiteStorage/EuAeETokY3JKn8L6TKHzSZ4BX2QmNDpZj4_w4TBZu9lX8g?e=KE8fJf" target="kofcwa-sharepoint">Upload To Document Storage</a></li>
+                                        }
+                                        @if (User.IsInRole("Admin"))
+                                        {
+                                            <li><hr class="dropdown-divider"></li>
+                                            <li><a class="dropdown-item MyMenuLink" asp-area="" asp-controller="MemberSuspensions" asp-action="Index" asp-route-id="">Member Suspensions</a></li>
+                                            <li><a class="dropdown-item MyMenuLink" asp-area="" asp-controller="AddressRequests" asp-action="Create" asp-route-id="" title="Test Address Request">Test Address Request</a></li>
+                                        }
+                                    </ul>
+                                </li>
+                                @if (User.IsInRole("Admin"))
+                                {
+                                    <li class="nav-item dropdown">
+                                        <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown1" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                                            Convention
+                                        </a>
+                                        <ul class="dropdown-menu" aria-labelledby="navbarDropdown1">
 
                                         <li><a class="dropdown-item MyMenuLink" asp-area="" asp-controller="CvnControls" asp-action="Edit" asp-route-id="1" title="Update the Convention Title for the New Year">1. Update Convention Control Information</a></li>
                                         <li><a class="dropdown-item MyMenuLink" asp-page="/Convention/ResetDelegates" title="Run this process only once before beginning the Convention Year!">2. Reset Convention Attendees</a></li>
@@ -398,40 +398,40 @@
                                         <li><a class="dropdown-item MyMenuLink" asp-area="" asp-controller="CvnMileages" asp-action="Index" asp-route-id="" title="Convention Locations">Manage Convention Mileage</a></li>
 
 
-                                    </ul>
-                                </li>
+                                        </ul>
+                                    </li>
+                                }
                             }
-                        }
-                    </ul>
-                    @*<form class="d-flex">
-                            <input class="form-control me-2" type="search" placeholder="Search" aria-label="Search">
-                            <button class="btn btn-outline-success" type="submit">Search</button>
-                        </form>*@
+                        </ul>
+                        @*<form class="d-flex">
+                                <input class="form-control me-2" type="search" placeholder="Search" aria-label="Search">
+                                <button class="btn btn-outline-success" type="submit">Search</button>
+                            </form>*@
 
+                    </div>
                 </div>
-            </div>
 
-        </nav>
+            </nav>
 
-    </header>
-    <div class="container">
-        <main role="main" class="pb-3">
-            @RenderBody()
-        </main>
+        </header>
+        <div class="container">
+            <main role="main" class="pb-3">
+                @RenderBody()
+            </main>
 
 
-        <footer class="border-top footer text-muted">
-            <div class="container-footer">
-                &copy; 1995 - @DateTime.Now.Year Knights of Columbus Washington State Council
-            </div>
-        </footer>
-    </div>
-    @*
-        <script src="~/lib/jquery/dist/jquery.min.js"></script> *@
-    @*
-        <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script> *@
-    @*
-        <script src="~/js/site.js" asp-append-version="true"></script> *@
-    @await RenderSectionAsync("Scripts", required: false)
-</body>
+            <footer class="border-top footer text-muted">
+                <div class="container-footer">
+                    &copy; 1995 - @DateTime.Now.Year Knights of Columbus Washington State Council
+                </div>
+            </footer>
+        </div>
+        @*
+            <script src="~/lib/jquery/dist/jquery.min.js"></script> *@
+        @*
+            <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script> *@
+        @*
+            <script src="~/js/site.js" asp-append-version="true"></script> *@
+        @await RenderSectionAsync("Scripts", required: false)
+    </body>
 </html>
