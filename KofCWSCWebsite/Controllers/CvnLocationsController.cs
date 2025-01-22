@@ -22,6 +22,7 @@ namespace KofCWSCWebsite.Controllers
         }
 
         // GET: CvnLocations
+        [Authorize(Roles = "Admin, ConventionAdmin")]
         public async Task<IActionResult> Index()
         {
             try
@@ -35,7 +36,7 @@ namespace KofCWSCWebsite.Controllers
                 return NotFound();
             }
         }
-
+        [Authorize(Roles = "Admin, ConventionAdmin")]
         public IActionResult Create()
         {
             return View();
@@ -46,6 +47,7 @@ namespace KofCWSCWebsite.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
+        [Authorize(Roles = "Admin, ConventionAdmin")]
         public async Task<IActionResult> Create([Bind("Id,Location,Address,City,State,ZipCode")] CvnLocation cvnLocation)
         {
             if (ModelState.IsValid)
@@ -63,6 +65,7 @@ namespace KofCWSCWebsite.Controllers
             }
             return RedirectToAction(nameof(Index));
         }
+        [Authorize(Roles = "Admin, ConventionAdmin")]
         public async Task<IActionResult> Edit(int? id)
         {
             if (id == null)
@@ -90,6 +93,7 @@ namespace KofCWSCWebsite.Controllers
         }
         [HttpPost]
         [ValidateAntiForgeryToken]
+        [Authorize(Roles = "Admin, ConventionAdmin")]
         public async Task<IActionResult> Edit(int id, [Bind("Id,Location,Address,City,State,ZipCode")] CvnLocation cvnLocation)
         {
             if (id != cvnLocation.Id)
@@ -120,7 +124,7 @@ namespace KofCWSCWebsite.Controllers
             }
             return RedirectToAction(nameof(Index));
         }
-
+        [Authorize(Roles = "Admin, ConventionAdmin")]
         public async Task<IActionResult> Details(int? id)
         {
             if (id == null)
@@ -146,6 +150,7 @@ namespace KofCWSCWebsite.Controllers
             //------------------------------------------------------------------------------------------------------
 
         }
+        [Authorize(Roles = "Admin, ConventionAdmin")]
         public async Task<IActionResult> Delete(int? id)
         {
             if (id == null)
@@ -169,6 +174,7 @@ namespace KofCWSCWebsite.Controllers
         // POST: CvnLocations/Delete/5
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
+        [Authorize(Roles = "Admin, ConventionAdmin")]
         public async Task<IActionResult> DeleteConfirmed(int id)
         {
             try

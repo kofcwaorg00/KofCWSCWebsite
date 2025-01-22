@@ -9,6 +9,7 @@ using KofCWSCWebsite.Data;
 using KofCWSCWebsite.Models;
 using KofCWSCWebsite.Services;
 using Serilog;
+using Microsoft.AspNetCore.Authorization;
 
 namespace KofCWSCWebsite.Controllers
 {
@@ -21,6 +22,7 @@ namespace KofCWSCWebsite.Controllers
         }
 
         // GET: CvnMpd
+        [Authorize(Roles = "Admin, ConventionAdmin")]
         public async Task<IActionResult> Index(int id)
         {
             try
@@ -37,6 +39,7 @@ namespace KofCWSCWebsite.Controllers
             }
         }
         [HttpGet("GetCheckBatch/{id}")]
+        [Authorize(Roles = "Admin, ConventionAdmin")]
         public async Task<IActionResult> GetCheckBatch(int id)
         {
             try
@@ -59,6 +62,7 @@ namespace KofCWSCWebsite.Controllers
             }
         }
         [HttpGet("ToggleCouncilDays/{id}/{day}/{del}/{groupid}")]
+        [Authorize(Roles = "Admin, ConventionAdmin")]
         public async Task<ActionResult<IEnumerable<CvnDelegateDays>>> ToggleCouncilDays(int id, int day,string del, int groupid)
         {
             //**************************************************************************************
@@ -79,6 +83,7 @@ namespace KofCWSCWebsite.Controllers
 
         }
         [HttpGet("ToggleDelegateDaysMPD/{id}/{day}/{groupid}")]
+        [Authorize(Roles = "Admin, ConventionAdmin")]
         public async Task<ActionResult<IEnumerable<CvnDelegateDays>>> ToggleDelegateDaysMPD(int id, int day,int groupid)
         {
             //**************************************************************************************
@@ -95,6 +100,7 @@ namespace KofCWSCWebsite.Controllers
             }
             
         }
+        [Authorize(Roles = "Admin, ConventionAdmin")]
         public async Task<ActionResult> PrintChecks()
         {
             return View();

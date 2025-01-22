@@ -22,7 +22,7 @@ namespace KofCWSCWebsite.Controllers
             _dataSetService = dataSetService;
         }
 
-        [Authorize(Roles = "Admin")]
+        [Authorize(Roles = "Admin, ConventionAdmin")]
         public async Task<IActionResult> Edit(int? id)
         {
             if (id == null)
@@ -56,7 +56,7 @@ namespace KofCWSCWebsite.Controllers
         // To protect from overposting attacks, enable the specific properties you want to bind to.
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
-        [Authorize(Roles = "Admin")]
+        [Authorize(Roles = "Admin, ConventionAdmin")]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Edit(int id, [Bind("Id,LocationString,Address,City,State,ZipCode,MPDDay,MPDMile,Location")] CvnControl cvnControl)
         {

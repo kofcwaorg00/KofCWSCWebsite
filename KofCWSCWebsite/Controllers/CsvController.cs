@@ -18,6 +18,8 @@ using Microsoft.CodeAnalysis.VisualBasic.Syntax;
 using Microsoft.AspNetCore.Mvc.ModelBinding;
 using Microsoft.AspNetCore.Http.Extensions;
 using System;
+using Microsoft.AspNetCore.Authorization;
+
 
 
 namespace KofCWSCWebsite.Controllers
@@ -43,6 +45,7 @@ namespace KofCWSCWebsite.Controllers
 
         // GET: Display the form to upload CSV
         [Route("UploadDelegates/{id}")]
+        [Authorize(Roles = "Admin, ConventionAdmin")]
         public IActionResult UploadDelegates(int id)
         {
             //************************************************************************************************
@@ -68,6 +71,7 @@ namespace KofCWSCWebsite.Controllers
         }
         // POST: Handle the CSV file upload and parse it
         [HttpPost]
+        [Authorize(Roles = "Admin, ConventionAdmin")]
         public async Task<IActionResult> Upload(CvnImpDelegateViewModel model)
         {
             var records = new List<CvnImpDelegate>();

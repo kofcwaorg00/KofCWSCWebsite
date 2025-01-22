@@ -9,6 +9,7 @@ using KofCWSCWebsite.Data;
 using KofCWSCWebsite.Models;
 using KofCWSCWebsite.Services;
 using Serilog;
+using Microsoft.AspNetCore.Authorization;
 
 namespace KofCWSCWebsite.Controllers
 {
@@ -22,6 +23,7 @@ namespace KofCWSCWebsite.Controllers
         }
 
         // GET: CvnMileages
+        [Authorize(Roles = "Admin, ConventionAdmin")]
         public async Task<IActionResult> Index()
         {
             try
@@ -37,6 +39,7 @@ namespace KofCWSCWebsite.Controllers
         }
 
         // GET: CvnMileages/Details/5
+        [Authorize(Roles = "Admin, ConventionAdmin")]
         public async Task<IActionResult> Details(int? id)
         {
             if (id == null)
@@ -57,6 +60,7 @@ namespace KofCWSCWebsite.Controllers
         }
 
         // GET: CvnMileages/Create
+        [Authorize(Roles = "Admin, ConventionAdmin")]
         public IActionResult Create()
         {
             return View();
@@ -67,6 +71,7 @@ namespace KofCWSCWebsite.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
+        [Authorize(Roles = "Admin, ConventionAdmin")]
         public async Task<IActionResult> Create([Bind("Id,Council,Location,Mileage")] CvnMileage cvnMileage)
         {
             if (ModelState.IsValid)
@@ -87,6 +92,7 @@ namespace KofCWSCWebsite.Controllers
         }
 
         // GET: CvnMileages/Edit/5
+        [Authorize(Roles = "Admin, ConventionAdmin")]
         public async Task<IActionResult> Edit(int? id)
         {
             if (id == null)
@@ -110,6 +116,7 @@ namespace KofCWSCWebsite.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
+        [Authorize(Roles = "Admin, ConventionAdmin")]
         public async Task<IActionResult> Edit(int id, [Bind("Id,Council,Location,Mileage")] CvnMileage cvnMileage)
         {
             if (id != cvnMileage.Id)
@@ -140,6 +147,7 @@ namespace KofCWSCWebsite.Controllers
         }
 
         // GET: CvnMileages/Delete/5
+        [Authorize(Roles = "Admin, ConventionAdmin")]
         public async Task<IActionResult> Delete(int? id)
         {
             if (id == null)
@@ -160,6 +168,7 @@ namespace KofCWSCWebsite.Controllers
         // POST: CvnMileages/Delete/5
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
+        [Authorize(Roles = "Admin, ConventionAdmin")]
         public async Task<IActionResult> DeleteConfirmed(int id)
         {
             try

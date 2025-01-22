@@ -8,6 +8,7 @@ using Microsoft.EntityFrameworkCore;
 using KofCWSCWebsite.Data;
 using KofCWSCWebsite.Models;
 using Serilog;
+using Microsoft.AspNetCore.Authorization;
 
 namespace KofCWSCWebsite.Controllers
 {
@@ -29,12 +30,14 @@ namespace KofCWSCWebsite.Controllers
         }
 
         // GET: CvnImpDelegatesLogs
+        [Authorize(Roles = "Admin, ConventionAdmin")]
         public async Task<IActionResult> Index()
         {
             return View(await _context.TblCvnImpDelegatesLogs.ToListAsync());
         }
 
         // GET: CvnImpDelegatesLogs/Details/5
+        [Authorize(Roles = "Admin, ConventionAdmin")]
         public async Task<IActionResult> Details(int? id)
         {
             if (id == null)
@@ -63,6 +66,7 @@ namespace KofCWSCWebsite.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
+        [Authorize(Roles = "Admin, ConventionAdmin")]
         public async Task<IActionResult> Create([Bind("Id,Guid,Rundate,Type,MemberId,Data")] CvnImpDelegatesLog cvnImpDelegatesLog)
         {
             if (ModelState.IsValid)
@@ -94,6 +98,7 @@ namespace KofCWSCWebsite.Controllers
         }
 
         // GET: CvnImpDelegatesLogs/Edit/5
+        [Authorize(Roles = "Admin, ConventionAdmin")]
         public async Task<IActionResult> Edit(int? id)
         {
             if (id == null)
@@ -114,6 +119,7 @@ namespace KofCWSCWebsite.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
+        [Authorize(Roles = "Admin, ConventionAdmin")]
         public async Task<IActionResult> Edit(int id, [Bind("Id,Guid,Rundate,Type,MemberId,Data")] CvnImpDelegatesLog cvnImpDelegatesLog)
         {
             if (id != cvnImpDelegatesLog.Id)
@@ -145,6 +151,7 @@ namespace KofCWSCWebsite.Controllers
         }
 
         // GET: CvnImpDelegatesLogs/Delete/5
+        [Authorize(Roles = "Admin, ConventionAdmin")]
         public async Task<IActionResult> Delete(int? id)
         {
             if (id == null)
@@ -165,6 +172,7 @@ namespace KofCWSCWebsite.Controllers
         // POST: CvnImpDelegatesLogs/Delete/5
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
+        [Authorize(Roles = "Admin, ConventionAdmin")]
         public async Task<IActionResult> DeleteConfirmed(int id)
         {
             var cvnImpDelegatesLog = await _context.TblCvnImpDelegatesLogs.FindAsync(id);
