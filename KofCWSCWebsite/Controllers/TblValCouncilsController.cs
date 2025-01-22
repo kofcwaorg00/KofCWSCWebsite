@@ -20,10 +20,12 @@ namespace KofCWSCWebsite.Controllers
     {
         private DataSetService _dataSetService;
         private readonly ApiHelper _apiHelper;
+        private readonly ApplicationDbContext _context;
 
-        public TblValCouncilsController(DataSetService dataSetService, ApiHelper apiHelper)
+        public TblValCouncilsController(DataSetService dataSetService, ApiHelper apiHelper, ApplicationDbContext context)
         {
             _dataSetService = dataSetService;
+            _context = context;
             _apiHelper = new ApiHelper(_dataSetService);
         }
 
@@ -49,46 +51,15 @@ namespace KofCWSCWebsite.Controllers
             // call the API
             // I guess the programmers that created the controller code template didn't think that a GET or INDEX
             // would return any errors.  It either gets some or not so no try/catch here
-            var result = await _apiHelper.GetAsync<List<TblValCouncil>>("/Councils");
+            var result = await _apiHelper.GetAsync<List<TblValCouncilMPD>>("/Councils");
 
-            var model = new TblValCouncilMPD
-            {
-                Councils = result
-            };
-            return View(model);
-        }
-             public async Task<IActionResult> CouncilsMPD()
-        {
-            //*****************************************************************************************************
-            // 12/05/2024 Tim Philomeno
-            // Now that we have a generic ApiHelper class, these are the only 2 lines that we should need to
-            // call the API
-            // I guess the programmers that created the controller code template didn't think that a GET or INDEX
-            // would return any errors.  It either gets some or not so no try/catch here
-            var result = await _apiHelper.GetAsync<List<TblValCouncil>>("/Councils");
-
-            var model = new TblValCouncilMPD
-            {
-                Councils = result
-            };
-            return View(model);
-
-            //TblValCouncilMPD myreturn = new TblValCouncilMPD();
-            //for (int i=0;i<result.Count;i++)
+            //var model = new TblValCouncilMPD
             //{
-            //    TblValCouncil myC = new TblValCouncil();
-            //    myC.CNumber = result[i].CNumber;
-            //    myC.CName = result[i].CName;
-            //    myC.CLocation = result[i].CLocation;
-            //    myC.District = result[i].District;
-            //    myC.SeatedDelegateDay1D1 = result[i].SeatedDelegateDay1D1;
-            //    myC.SeatedDelegateDay1D2 = result[i].SeatedDelegateDay1D2;
-            //    myreturn.Councils.Add(myC);
-            //}
-
-            ////------------------------------------------------------------------------------------------------------
-            //return View(myreturn);
+            //    Councils = result
+            //};
+            return View(result.OrderBy(e => e.District).ThenBy(e => e.CNumber).ToList());
         }
+             
 
         // GET: TblValCouncils/Details/5
         [Authorize(Roles = "Admin,DataAdmin")]
@@ -273,48 +244,38 @@ namespace KofCWSCWebsite.Controllers
             return RedirectToAction("Index", "Home");
         }
 
-        [HttpPost]
-        //[ValidateAntiForgeryToken]
-        public IActionResult CouncilsMPD(TblValCouncilMPD tblValCouncilsMPD)
-        {
-            if (tblValCouncilsMPD == null)
-            {
-                return BadRequest("Model is null");
-            }
-            if (ModelState.IsValid)
-            {
-                foreach (var updatedCouncil in tblValCouncilsMPD.Councils)
-                {
-                    var council = tblValCouncilsMPD.Councils.FirstOrDefault(p => p.CNumber == updatedCouncil.CNumber);
-                    if (council != null)
-                    {
-                        council.SeatedDelegateDay1D1 = updatedCouncil.SeatedDelegateDay1D1;
-                        // continue with others...
-                    }
-                } // Save changes to the database in a real application }
-            }
-            return RedirectToAction("MPDEdit");
-        }
 
 
         //[Authorize(Roles = "Admin,DataAdmin")]
         [HttpPost]
         //[ValidateAntiForgeryToken]
-        public IActionResult MPDEdit(TblValCouncilMPD tblValCouncilsMPD)
+        //public IActionResult MPDEdit([Bind(include: "CNumber,CName,District,SeatedDelegateDay1D1,SeatedDelegateDay1D2,SeatedDelegateDay2D1,SeatedDelegateDay2D2,SeatedDelegateDay3D1,SeatedDelegateDay3D2")] List<TblValCouncil> tblValCouncils)
+            //public IActionResult MPDEdit([Bind(include: "CNumber,CLocation,CName,District,AddInfo1,AddInfo2,AddInfo3,LiabIns,DioceseId,Chartered,WebSiteUrl,BulletinUrl,Arbalance,Status,PhyAddress,PhyCity,PhyState,PhyPostalCode,MailAddress,MailCity,MailState,MailPostalCode,MeetAddress,MeetCity,MeetState,MeetPostalCode,BMeetDOW,BMeetTime,OMeetDOW,OMeetTime,SMeetDOW,SMeetTime,SeatedDelegateDay1D1,SeatedDelegateDay1D2,SeatedDelegateDay2D1,SeatedDelegateDay2D2,SeatedDelegateDay3D1,SeatedDelegateDay3D2")] List<TblValCouncil> tblValCouncils)
+        public async Task<IActionResult> MPDEdit(List<TblValCouncilMPD> tblValCouncils)
         {
-            if (tblValCouncilsMPD == null)
+            if (tblValCouncils == null || tblValCouncils.Count == 0)
             {
-                return BadRequest("Model is null");
+                return NotFound("Model from View is null");
             }
+
             if (ModelState.IsValid)
             {
-                foreach (var updatedCouncil in tblValCouncilsMPD.Councils)
+                foreach (var updatedCouncil in tblValCouncils)
                 {
-                    var council = tblValCouncilsMPD.Councils.FirstOrDefault(p => p.CNumber == updatedCouncil.CNumber);
-                    if (council != null)
+                    if (updatedCouncil != null)
                     {
-                        council.SeatedDelegateDay1D1 = updatedCouncil.SeatedDelegateDay1D1; 
+                        if (IsMPDModifed(updatedCouncil))
+                        {
+                            var result = await _apiHelper.PutAsync<TblValCouncilMPD, TblValCouncil>($"/Council/MPD/{updatedCouncil.CNumber}", updatedCouncil);
+                        }
+                        ////var council = new TblValCouncil { CNumber = updatedCouncil.CNumber };
+                        ////_context.Attach(council);
+                        ////council.SeatedDelegateDay1D1 = updatedCouncil.SeatedDelegateDay1D1;
+                        ////_context.Entry(council).Property(e => e.SeatedDelegateDay1D1).IsModified = true;
+                        ////council.Status = "A";
+                        ////_context.Entry(council).Property(e => e.Status).IsModified = true;
                         // continue with others...
+                        //var result = await _apiHelper.PutAsync<TblValCouncilMPD, TblValCouncil>($"/Council/MPD/{updatedCouncil.CNumber}", updatedCouncil);
                     }
                 } // Save changes to the database in a real application }
             }
@@ -326,7 +287,9 @@ namespace KofCWSCWebsite.Controllers
         [Authorize(Roles = "Admin,DataAdmin")]
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("CNumber,CLocation,CName,District,AddInfo1,AddInfo2,AddInfo3,LiabIns,DioceseId,Chartered,WebSiteUrl,BulletinUrl,Arbalance,Status,PhyAddress,PhyCity,PhyState,PhyPostalCode,MailAddress,MailCity,MailState,MailPostalCode,MeetAddress,MeetCity,MeetState,MeetPostalCode,BMeetDOW,BMeetTime,OMeetDOW,OMeetTime,SMeetDOW,SMeetTime")] TblValCouncil tblValCouncil)
+        public async Task<IActionResult> Edit(int id, [Bind("CNumber,CLocation,CName,District,AddInfo1,AddInfo2,AddInfo3,LiabIns,DioceseId,Chartered,WebSiteUrl,BulletinUrl,Arbalance,Status,PhyAddress,PhyCity,PhyState,PhyPostalCode,MailAddress,MailCity,MailState,MailPostalCode,MeetAddress,MeetCity,MeetState,MeetPostalCode,BMeetDOW,BMeetTime,OMeetDOW,OMeetTime,SMeetDOW,SMeetTime,SeatedDelegateDay1D1,SeatedDelegateDay1D2,SeatedDelegateDay2D1,SeatedDelegateDay2D2,SeatedDelegateDay3D1,SeatedDelegateDay3D2")] TblValCouncil tblValCouncil)
+        //public async Task<IActionResult> Edit(int id, [Bind("CNumber,CLocation,CName,District,AddInfo1,AddInfo2,AddInfo3,LiabIns,DioceseId,Chartered,WebSiteUrl,BulletinUrl,Arbalance,Status")] TblValCouncil tblValCouncil)
+        //public async Task<IActionResult> Edit(int id,TblValCouncil tblValCouncil)
         {
             if (id != tblValCouncil.CNumber)
             {
@@ -401,6 +364,17 @@ namespace KofCWSCWebsite.Controllers
                 Log.Error(Utils.FormatLogEntry(this, ex));
                 return RedirectToAction(nameof(Index));
             }
+        }
+        private bool IsMPDModifed(TblValCouncilMPD mpd)
+        {
+            var result =  _apiHelper.GetAsync<TblValCouncilMPD>($"/Council/{mpd.CNumber}");
+            if (mpd.SeatedDelegateDay1D1 != result.Result.SeatedDelegateDay1D1) { return true; }
+            else if (mpd.SeatedDelegateDay1D2 != result.Result.SeatedDelegateDay1D2) {  return true; }
+            else if (mpd.SeatedDelegateDay2D1 != result.Result.SeatedDelegateDay2D1) { return true; }
+            else if (mpd.SeatedDelegateDay2D2 != result.Result.SeatedDelegateDay2D2) { return true; }
+            else if (mpd.SeatedDelegateDay3D1 != result.Result.SeatedDelegateDay3D1) { return true; }
+            else if (mpd.SeatedDelegateDay3D2 != result.Result.SeatedDelegateDay3D2) { return true; }
+            else { return false; }
         }
     }
 }

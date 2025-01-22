@@ -25,7 +25,9 @@ public partial class TblValCouncil
 
     [DisplayName("Diocese")]
     public string? DioceseId { get; set; }
-    [DisplayFormat(DataFormatString = "{0:MM/dd/yyyy}", ApplyFormatInEditMode = true)]
+
+    [DisplayFormat(ApplyFormatInEditMode = true, DataFormatString = "{0:yyyy-MM-dd}")]
+    [DataType(DataType.Date)]
     public DateTime? Chartered { get; set; }
 
     public string? WebSiteUrl { get; set; }

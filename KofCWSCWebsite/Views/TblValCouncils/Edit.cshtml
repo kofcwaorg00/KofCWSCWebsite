@@ -12,6 +12,107 @@
         <form asp-action="Edit">
             <div asp-validation-summary="ModelOnly" class="text-danger"></div>
             <input type="hidden" asp-for="CNumber" />
+            <div style="display:none">
+                <div class="form-group">
+                    <label asp-for="PhyAddress" class="control-label"></label>
+                    <input asp-for="PhyAddress" class="form-control" />
+                    <span asp-validation-for="PhyAddress" class="text-danger"></span>
+                </div>
+                <div class="form-group">
+                    <label asp-for="PhyCity" class="control-label"></label>
+                    <input asp-for="PhyCity" class="form-control" />
+                    <span asp-validation-for="PhyCity" class="text-danger"></span>
+                </div>
+                <div class="form-group">
+                    <label asp-for="PhyState" class="control-label"></label>
+                    <input asp-for="PhyState" class="form-control" />
+                    <span asp-validation-for="PhyState" class="text-danger"></span>
+                </div>
+                <div class="form-group">
+                    <label asp-for="PhyPostalCode" class="control-label"></label>
+                    <input asp-for="PhyPostalCode" class="form-control" />
+                    <span asp-validation-for="PhyPostalCode" class="text-danger"></span>
+                </div>
+                <div class="form-group">
+                    <label asp-for="MailAddress" class="control-label"></label>
+                    <input asp-for="MailAddress" class="form-control" />
+                    <span asp-validation-for="MailAddress" class="text-danger"></span>
+                </div>
+                <div class="form-group">
+                    <label asp-for="MailCity" class="control-label"></label>
+                    <input asp-for="MailCity" class="form-control" />
+                    <span asp-validation-for="MailCity" class="text-danger"></span>
+                </div>
+                <div class="form-group">
+                    <label asp-for="MailState" class="control-label"></label>
+                    <input asp-for="MailState" class="form-control" />
+                    <span asp-validation-for="MailState" class="text-danger"></span>
+                </div>
+                <div class="form-group">
+                    <label asp-for="MailPostalCode" class="control-label"></label>
+                    <input asp-for="MailPostalCode" class="form-control" />
+                    <span asp-validation-for="MailPostalCode" class="text-danger"></span>
+                </div>
+                <div class="form-group">
+                    <label asp-for="MeetAddress" class="control-label"></label>
+                    <input asp-for="MeetAddress" class="form-control" />
+                    <span asp-validation-for="MeetAddress" class="text-danger"></span>
+                </div>
+                <div class="form-group">
+                    <label asp-for="MeetCity" class="control-label"></label>
+                    <input asp-for="MeetCity" class="form-control" />
+                    <span asp-validation-for="MeetCity" class="text-danger"></span>
+                </div>
+                <div class="form-group">
+                    <label asp-for="MeetState" class="control-label"></label>
+                    <input asp-for="MeetState" class="form-control" />
+                    <span asp-validation-for="MeetState" class="text-danger"></span>
+                </div>
+                <div class="form-group">
+                    <label asp-for="MeetPostalCode" class="control-label"></label>
+                    <input asp-for="MeetPostalCode" class="form-control" />
+                    <span asp-validation-for="MeetPostalCode" class="text-danger"></span>
+                </div>
+                <div class="form-group">
+                    <label asp-for="BMeetDOW" class="control-label"></label>
+                    <input asp-for="BMeetDOW" class="form-control" />
+                    <span asp-validation-for="BMeetDOW" class="text-danger"></span>
+                </div>
+                <div class="form-group">
+                    <label asp-for="BMeetTime" class="control-label"></label>
+                    <input asp-for="BMeetTime" class="form-control" />
+                    <span asp-validation-for="BMeetTime" class="text-danger"></span>
+                </div>
+                <h6>Officers Meeting Details</h6>
+                <div class="form-group">
+                    <label asp-for="OMeetDOW" class="control-label"></label>
+                    <input asp-for="OMeetDOW" class="form-control" />
+                    <span asp-validation-for="OMeetDOW" class="text-danger"></span>
+                </div>
+                <div class="form-group">
+                    <label asp-for="OMeetTime" class="control-label"></label>
+                    <input asp-for="OMeetTime" class="form-control" />
+                    <span asp-validation-for="OMeetTime" class="text-danger"></span>
+                </div>
+                <h6>Social Meeting Details</h6>
+                <div class="form-group">
+                    <label asp-for="SMeetDOW" class="control-label"></label>
+                    <input asp-for="SMeetDOW" class="form-control" />
+                    <span asp-validation-for="SMeetDOW" class="text-danger"></span>
+                </div>
+                <div class="form-group">
+                    <label asp-for="SMeetTime" class="control-label"></label>
+                    <input asp-for="SMeetTime" class="form-control" />
+                    <span asp-validation-for="SMeetTime" class="text-danger"></span>
+                </div>
+                @Html.CheckBoxFor(m => Model.SeatedDelegateDay1D1)
+                @Html.CheckBoxFor(m => Model.SeatedDelegateDay1D2)
+                @Html.CheckBoxFor(m => Model.SeatedDelegateDay2D1)
+                @Html.CheckBoxFor(m => Model.SeatedDelegateDay2D2)
+                @Html.CheckBoxFor(m => Model.SeatedDelegateDay3D1)
+                @Html.CheckBoxFor(m => Model.SeatedDelegateDay3D2)
+            </div>
+
             <div class="form-group">
                 <label asp-for="CLocation" class="control-label"></label>
                 <input asp-for="CLocation" class="form-control" />
@@ -54,7 +155,7 @@
             </div>
             <div class="form-group">
                 <label asp-for="Chartered" class="control-label"></label>
-                <input asp-for="Chartered" class="form-control" />
+                <input asp-for="Chartered" class="form-control" type="date" value="@(Model.Chartered.HasValue ? Model.Chartered.Value.ToString("yyyy-MM-dd") : string.Empty)" />
                 <span asp-validation-for="Chartered" class="text-danger"></span>
             </div>
             <div class="form-group">
@@ -80,7 +181,7 @@
             <div class="form-group">
                 <input type="submit" value="Save" class="btn btn-primary" />
             </div>
-            
+
         </form>
         <div style="float:right">
             <form method="get" asp-controller="TblValCouncils" asp-action="FSEdit" asp-route-id="@Model.CNumber">
@@ -88,7 +189,7 @@
             </form>
         </div>
     </div>
-    
+
 </div>
 
 

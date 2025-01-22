@@ -16,6 +16,7 @@ using Serilog;
 using Microsoft.AspNet.Identity;
 using Microsoft.AspNetCore.ResponseCompression;
 using Microsoft.AspNetCore.Authentication.Cookies;
+using Microsoft.AspNetCore.Http.Features;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -127,7 +128,7 @@ catch (Exception ex)
     Log.Error(ex.Message + " - " + ex.InnerException);
     throw;
 }
-
+builder.Services.Configure<FormOptions>(options => { options.ValueCountLimit = builder.Configuration.GetValue<int>("AspNetCore:FormOptions:ValueCountLimit"); });
 builder.Services.AddScoped<DataSetService, DataSetService>();
 builder.Services.AddScoped<ApiHelper, ApiHelper>();
 builder.Services.AddScoped<HttpClient,HttpClient>();

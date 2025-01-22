@@ -101,7 +101,7 @@ public partial class ApplicationDbContext : DbContext
         });
         modelBuilder.Entity<TblValCouncilMPD>(entity =>
         {
-            entity.HasNoKey();
+            entity.HasKey(e => e.CNumber);
         });
 
         modelBuilder.Entity<TblValCouncil>(entity =>
