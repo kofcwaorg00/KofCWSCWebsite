@@ -132,6 +132,7 @@
         </td>
     </tr>
 </table>
+<div class="overlay" id="overlay"></div>
 <div class="form-container">
     <form asp-action="MPDEdit" method="post" id="myForm">
         @Html.AntiForgeryToken()
@@ -228,6 +229,7 @@
 
 <script>
     document.getElementById('myForm').addEventListener('submit', function (event) {
+        document.getElementById('overlay').style.display = 'block'; // Show the Overlay
         document.getElementById('spinner').style.display = 'block'; // Show the spinner
     });
 </script>
