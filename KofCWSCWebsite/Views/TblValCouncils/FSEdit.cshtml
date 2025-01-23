@@ -251,10 +251,10 @@
                 </td>
                 <!--<td>
                     <div style="width:25%">-->
-                        @*<form method="get" asp-controller="Home" asp-action="Index" asp-route-id="">*@
-                        <!--<button type="submit" asp-controller="Home" asp-action="Index" class="btn btn-success">Cancel</button>-->
-                        @*</form>*@
-                    <!--</div>
+                @*<form method="get" asp-controller="Home" asp-action="Index" asp-route-id="">*@
+                <!--<button type="submit" asp-controller="Home" asp-action="Index" class="btn btn-success">Cancel</button>-->
+                @*</form>*@
+                <!--</div>
                 </td>-->
                 <td>
                     <div style="width:25%">
@@ -268,13 +268,24 @@
 
 
     </form>
-    <a asp-action="Index">Cancel</a>
+    @if (User.IsInRole("Admin"))
+    {
+        <a asp-action="Index">Cancel</a>
+    }
+    else
+    {
+        <a asp-controller="Home" asp-action="Index">Cancel</a>
+    }
 
-    
+
+
+
 </div>
 
 <!--<div>
-    <a asp-action="Index">-->@*Back to List*@<!--</a>
+    <a asp-action="Index">-->
+@*Back to List*@
+<!--</a>
 </div>-->
 
 @section Scripts {

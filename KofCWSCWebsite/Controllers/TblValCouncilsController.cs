@@ -59,7 +59,7 @@ namespace KofCWSCWebsite.Controllers
             //};
             return View(result.OrderBy(e => e.District).ThenBy(e => e.CNumber).ToList());
         }
-             
+
 
         // GET: TblValCouncils/Details/5
         [Authorize(Roles = "Admin,DataAdmin")]
@@ -241,7 +241,14 @@ namespace KofCWSCWebsite.Controllers
                     //------------------------------------------------------------------------------------------------------
                 }
             }
-            return RedirectToAction("Index", "Home");
+            if (User.IsInRole("Admin"))
+            {
+                return RedirectToAction("Index", "TblValCouncils");
+            }
+            else
+            {
+                return RedirectToAction("Index", "Home");
+            }
         }
 
 
@@ -250,7 +257,7 @@ namespace KofCWSCWebsite.Controllers
         [HttpPost]
         //[ValidateAntiForgeryToken]
         //public IActionResult MPDEdit([Bind(include: "CNumber,CName,District,SeatedDelegateDay1D1,SeatedDelegateDay1D2,SeatedDelegateDay2D1,SeatedDelegateDay2D2,SeatedDelegateDay3D1,SeatedDelegateDay3D2")] List<TblValCouncil> tblValCouncils)
-            //public IActionResult MPDEdit([Bind(include: "CNumber,CLocation,CName,District,AddInfo1,AddInfo2,AddInfo3,LiabIns,DioceseId,Chartered,WebSiteUrl,BulletinUrl,Arbalance,Status,PhyAddress,PhyCity,PhyState,PhyPostalCode,MailAddress,MailCity,MailState,MailPostalCode,MeetAddress,MeetCity,MeetState,MeetPostalCode,BMeetDOW,BMeetTime,OMeetDOW,OMeetTime,SMeetDOW,SMeetTime,SeatedDelegateDay1D1,SeatedDelegateDay1D2,SeatedDelegateDay2D1,SeatedDelegateDay2D2,SeatedDelegateDay3D1,SeatedDelegateDay3D2")] List<TblValCouncil> tblValCouncils)
+        //public IActionResult MPDEdit([Bind(include: "CNumber,CLocation,CName,District,AddInfo1,AddInfo2,AddInfo3,LiabIns,DioceseId,Chartered,WebSiteUrl,BulletinUrl,Arbalance,Status,PhyAddress,PhyCity,PhyState,PhyPostalCode,MailAddress,MailCity,MailState,MailPostalCode,MeetAddress,MeetCity,MeetState,MeetPostalCode,BMeetDOW,BMeetTime,OMeetDOW,OMeetTime,SMeetDOW,SMeetTime,SeatedDelegateDay1D1,SeatedDelegateDay1D2,SeatedDelegateDay2D1,SeatedDelegateDay2D2,SeatedDelegateDay3D1,SeatedDelegateDay3D2")] List<TblValCouncil> tblValCouncils)
         public async Task<IActionResult> MPDEdit(List<TblValCouncilMPD> tblValCouncils)
         {
             if (tblValCouncils == null || tblValCouncils.Count == 0)
@@ -367,9 +374,9 @@ namespace KofCWSCWebsite.Controllers
         }
         private bool IsMPDModifed(TblValCouncilMPD mpd)
         {
-            var result =  _apiHelper.GetAsync<TblValCouncilMPD>($"/Council/{mpd.CNumber}");
+            var result = _apiHelper.GetAsync<TblValCouncilMPD>($"/Council/{mpd.CNumber}");
             if (mpd.SeatedDelegateDay1D1 != result.Result.SeatedDelegateDay1D1) { return true; }
-            else if (mpd.SeatedDelegateDay1D2 != result.Result.SeatedDelegateDay1D2) {  return true; }
+            else if (mpd.SeatedDelegateDay1D2 != result.Result.SeatedDelegateDay1D2) { return true; }
             else if (mpd.SeatedDelegateDay2D1 != result.Result.SeatedDelegateDay2D1) { return true; }
             else if (mpd.SeatedDelegateDay2D2 != result.Result.SeatedDelegateDay2D2) { return true; }
             else if (mpd.SeatedDelegateDay3D1 != result.Result.SeatedDelegateDay3D1) { return true; }
