@@ -13,7 +13,7 @@
             <div asp-validation-summary="ModelOnly" class="text-danger"></div>
             <input type="hidden" asp-for="CNumber" />
             <div style="display:none">
-                <div class="form-group">
+                @*<div class="form-group">
                     <label asp-for="PhyAddress" class="control-label"></label>
                     <input asp-for="PhyAddress" class="form-control" />
                     <span asp-validation-for="PhyAddress" class="text-danger"></span>
@@ -104,7 +104,9 @@
                     <label asp-for="SMeetTime" class="control-label"></label>
                     <input asp-for="SMeetTime" class="form-control" />
                     <span asp-validation-for="SMeetTime" class="text-danger"></span>
-                </div>
+                </div>*@
+                @*These need to be added to the form and hidden so that when the model is returned, they 
+                have the same data as when they were fetched and won't be all false*@
                 @Html.CheckBoxFor(m => Model.SeatedDelegateDay1D1)
                 @Html.CheckBoxFor(m => Model.SeatedDelegateDay1D2)
                 @Html.CheckBoxFor(m => Model.SeatedDelegateDay2D1)
@@ -155,7 +157,8 @@
             </div>
             <div class="form-group">
                 <label asp-for="Chartered" class="control-label"></label>
-                <input asp-for="Chartered" class="form-control" type="date" value="@(Model.Chartered.HasValue ? Model.Chartered.Value.ToString("yyyy-MM-dd") : string.Empty)" />
+                @*<input asp-for="Chartered" class="form-control" type="date" value="@(Model.Chartered.HasValue ? Model.Chartered.Value.ToString("yyyy-MM-dd") : string.Empty)" />*@
+            <input asp-for="Chartered" class="form-control" type="date" />
                 <span asp-validation-for="Chartered" class="text-danger"></span>
             </div>
             <div class="form-group">

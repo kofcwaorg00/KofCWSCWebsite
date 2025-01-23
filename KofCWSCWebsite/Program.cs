@@ -135,7 +135,18 @@ builder.Services.AddScoped<HttpClient,HttpClient>();
 
 builder.Services.AddDatabaseDeveloperPageExceptionFilter();
 
-builder.Services.AddControllersWithViews();
+// this was added to properly handle binding to date controls on forms
+//builder.Services.AddControllersWithViews()
+builder.Services.AddControllersWithViews()
+        .AddMvcOptions(options => {
+            var supportedCultures = new[] { "en-US" };
+            var localizationOptions = new RequestLocalizationOptions()
+                .SetDefaultCulture(supportedCultures[0])
+                .AddSupportedCultures(supportedCultures)
+                .AddSupportedUICultures(supportedCultures);
+
+            options.ModelBinderProviders.Insert(0, new Microsoft.AspNetCore.Mvc.ModelBinding.Binders.DateTimeModelBinderProvider());
+        });
 
 builder.Services.AddTransient<ISenderEmail, EmailSender>();
 

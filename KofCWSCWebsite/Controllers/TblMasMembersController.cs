@@ -13,6 +13,7 @@ using System.Collections;
 using Newtonsoft.Json;
 using Serilog;
 using Microsoft.AspNetCore.Authorization;
+using KofCWSCWebsite.Services;
 
 namespace KofCWSCWebsite.Controllers
 {
@@ -132,7 +133,7 @@ namespace KofCWSCWebsite.Controllers
                     }
                     catch (Exception ex)
                     {
-                        Log.Error(ex.Message + ' ' + ex.InnerException);
+                        Log.Error(Utils.FormatLogEntry(this, ex));
                     }
                     return RedirectToAction(nameof(Index), new { lastname = lastname });
                 }

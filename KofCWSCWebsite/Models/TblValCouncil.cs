@@ -39,40 +39,40 @@ public partial class TblValCouncil
     public string Status { get; set; } = null!;
 
     [DisplayName("Address")]
-    public string PhyAddress { get; set; }
+    public string PhyAddress { get; set; } = "";
 
     [DisplayName("City")]
-    public string PhyCity { get; set; }
+    public string PhyCity { get; set; } = "";
 
     [DisplayName("State")]
-    public string PhyState { get; set; }
+    public string PhyState { get; set; } = "";
 
     [DisplayName("Postal Code")]
-    public string PhyPostalCode { get; set; }
+    public string PhyPostalCode { get; set; } = "";
 
     [DisplayName("Address")]
-    public string MailAddress { get; set; }
+    public string MailAddress { get; set; } = "";
 
     [DisplayName("City")]
-    public string MailCity { get; set; }
+    public string MailCity { get; set; } = "";
 
     [DisplayName("State")]
-    public string MailState { get; set; }
+    public string MailState { get; set; } = "";
 
     [DisplayName("Postal Code")]
-    public string MailPostalCode { get; set; }
+    public string MailPostalCode { get; set; } = "";
 
     [DisplayName("Address")]
-    public string MeetAddress { get; set; }
+    public string MeetAddress { get; set; } = "";
 
     [DisplayName("City")]
-    public string MeetCity { get; set; }
+    public string MeetCity { get; set; } = "";
 
     [DisplayName("State")]
-    public string MeetState { get; set; }
+    public string MeetState { get; set; } = "";
 
     [DisplayName("Postal Code")]
-    public string MeetPostalCode { get; set; }
+    public string MeetPostalCode { get; set; } = "";
 
     [DisplayName("Day of Week (for example 4th Tue)")]
     public string? BMeetDOW { get; set; }
