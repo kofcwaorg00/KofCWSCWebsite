@@ -249,13 +249,13 @@
                         <input type="submit" value="Save" class="btn btn-primary" />
                     </div>
                 </td>
-                <td>
-                    <div style="width:25%">
+                <!--<td>
+                    <div style="width:25%">-->
                         @*<form method="get" asp-controller="Home" asp-action="Index" asp-route-id="">*@
-                        <button type="submit" asp-controller="Home" asp-action="Index" class="btn btn-success">Cancel</button>
+                        <!--<button type="submit" asp-controller="Home" asp-action="Index" class="btn btn-success">Cancel</button>-->
                         @*</form>*@
-                    </div>
-                </td>
+                    <!--</div>
+                </td>-->
                 <td>
                     <div style="width:25%">
                         @*<form method="get" asp-controller="Home" asp-action="Index" asp-route-id="">*@
@@ -273,9 +273,9 @@
     
 </div>
 
-<div>
-    <a asp-action="Index">@*Back to List*@</a>
-</div>
+<!--<div>
+    <a asp-action="Index">-->@*Back to List*@<!--</a>
+</div>-->
 
 @section Scripts {
     @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
