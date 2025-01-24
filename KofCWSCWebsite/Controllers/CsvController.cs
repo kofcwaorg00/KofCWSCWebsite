@@ -112,7 +112,7 @@ namespace KofCWSCWebsite.Controllers
                     // call the API
                     try
                     {
-                        var result = await _apiHelper.PostAsync<List<CvnImpDelegate>, CvnImpDelegate>("/ImpDelegates", records);
+                        var result = await _apiHelper.PostAsync<List<CvnImpDelegate>, string>("/ImpDelegates", records);
                     }
                     catch (Exception ex)
                     {

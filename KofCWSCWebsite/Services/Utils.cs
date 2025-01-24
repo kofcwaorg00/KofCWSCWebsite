@@ -20,7 +20,7 @@ namespace KofCWSCWebsite.Services
 {
     public class Utils
     {
-        public static string FormatLogEntry(object thisme,Exception ex)
+        public static string FormatLogEntry(object thisme,Exception ex,string addData = "")
         {
             //***********************************************************************************************
             // 12/05/2024 Tim Philomeno
@@ -28,7 +28,7 @@ namespace KofCWSCWebsite.Services
             // usage: Log.Error(Utils.FormatLogEntry(this, ex));
             var method = new StackTrace(ex, true).GetFrame(0)?.GetMethod();
             var className = method?.DeclaringType?.FullName;
-            return thisme.GetType().Name + " - in method " + method + " - in class " + className + ex.Message + " - " + ex.InnerException;
+            return thisme.GetType().Name + " - in method " + method + " - in class " + className + ex.Message + " - " + ex.InnerException + " - ***" + addData;
             //-----------------------------------------------------------------------------------------------
         }
         public static string GetString(IHtmlContent content)

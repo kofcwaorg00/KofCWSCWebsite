@@ -10,6 +10,7 @@ using KofCWSCWebsite.Models;
 using KofCWSCWebsite.Services;
 using Serilog;
 using Microsoft.AspNetCore.Authorization;
+using KofCWSC.API.Models;
 
 namespace KofCWSCWebsite.Controllers
 {
@@ -55,6 +56,14 @@ namespace KofCWSCWebsite.Controllers
                 try
                 {
                     var result = await _apiHelper.PostAsync<CvnLocation, CvnLocation>("Locations", cvnLocation);
+                    var address = String.Concat(cvnLocation.City,", ",cvnLocation.State);
+                    var location = cvnLocation.Location;
+                    // then get all councils and spin through them adding to the mileage table for all
+                    var councils = await _apiHelper.GetAsync<IEnumerable<TblValCouncil>>($"Councils");
+                    foreach (var council in councils)
+                    {
+                        await AddorUpdateMileageTable(council, location, address);
+                    }
                 }
                 catch (Exception ex)
                 {
@@ -188,6 +197,43 @@ namespace KofCWSCWebsite.Controllers
                 Log.Error(Utils.FormatLogEntry(this, ex));
                 return View();
             }
+        }
+
+        private async Task<bool> AddorUpdateMileageTable(TblValCouncil council,string srclocation,string address)
+        {
+            try
+            {
+                var destLocation = String.Concat(council.PhyCity, ", ", council.PhyState);
+                // First see if the council already has a mileage entry for the incoming location
+                var existingCouncil = await _apiHelper.GetAsync<CvnMileage>($"MileageForCouncil/{council.CNumber}/{srclocation}");
+                var distance = await _apiHelper.GetAsync<AzureMapsDistance>($"DriveDistance/{destLocation}/{address}");
+                if (distance.DistanceInKilometers < 0)
+                {
+                    // This is an error condition, probably one of the addresses is blank or invalid
+                    Exception ex = new Exception($"Council {council.CNumber} is missing Physical Address");
+                    Log.Error(Utils.FormatLogEntry(this, ex));
+                    return false;
+                }
+
+                if (existingCouncil is null)
+                {
+                    // Add New
+                    return true;
+                }
+                else
+                {
+                    // Update
+                    return true;
+                }
+
+
+            }
+            catch (Exception ex)
+            {
+                Log.Error(Utils.FormatLogEntry(this, ex));
+                return false;
+            }
+
         }
     }
 }

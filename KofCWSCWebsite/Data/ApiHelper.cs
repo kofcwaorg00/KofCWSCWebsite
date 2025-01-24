@@ -51,7 +51,7 @@ namespace KofCWSCWebsite.Data
             {
                 
                 Log.Error($"Thrown from inside apiHelper because response.IsSuccessStatusCode is {response.IsSuccessStatusCode.ToString()} for endpoint {endpoint} and baseaddress {_httpClient.BaseAddress.ToString()} ");
-                throw new HttpRequestException($"GET request failed. Status Code: {response.StatusCode}, Reason: {response.ReasonPhrase}");
+                throw new HttpRequestException($"GET request failed. Status Code: {response.StatusCode}, Reason: {response.ReasonPhrase}+{endpoint}");
             }
 
             var json = await response.Content.ReadAsStringAsync();
@@ -64,7 +64,7 @@ namespace KofCWSCWebsite.Data
             }
             catch (Exception ex)
             {
-                Log.Error(Utils.FormatLogEntry(this, ex));
+                Log.Error(Utils.FormatLogEntry(this, ex,"GET"+endpoint));
                 return default;
             }
             
@@ -80,7 +80,7 @@ namespace KofCWSCWebsite.Data
 
             if (!response.IsSuccessStatusCode)
             {
-                throw new HttpRequestException($"POST request failed. Status Code: {response.StatusCode}, Reason: {response.ReasonPhrase}");
+                throw new HttpRequestException($"POST request failed. Status Code: {response.StatusCode}, Reason: {response.ReasonPhrase}+{endpoint}");
             }
 
             var json = await response.Content.ReadAsStringAsync();
@@ -90,7 +90,7 @@ namespace KofCWSCWebsite.Data
             }
             catch (Exception ex)
             {
-                Log.Error(Utils.FormatLogEntry(this, ex));
+                Log.Error(Utils.FormatLogEntry(this, ex,"POST"+endpoint));
                 return default;
             }
             
@@ -116,7 +116,7 @@ namespace KofCWSCWebsite.Data
             }
             catch (Exception ex)
             {
-                Log.Error(Utils.FormatLogEntry(this, ex));
+                Log.Error(Utils.FormatLogEntry(this, ex,"PUT"+endpoint));
                 return default;
 
             }
