@@ -85,7 +85,7 @@ namespace KofCWSCWebsite.Controllers
             _dataSetService.PrepareReport(model.WebReport.Report, _configuration, ShortForm, NextYear);
             return View(model);
         }
-        [Authorize(Roles = "Admin,StateOfficer")]
+        [Authorize(Roles = "Admin,StateOfficer,ConventionAdmin")]
         [Route("GetRollCallSheets/{Id}")]
         public IActionResult GetRollCallSheets(int Id)
         {
