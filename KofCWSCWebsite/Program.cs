@@ -10,27 +10,32 @@ using Serilog;
 using Serilog.AspNetCore;
 using Serilog.Sinks.Email;
 using Serilog.Extensions.Hosting;
+using Serilog.Enrichers;
 using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Http.Features;
 using System.Net;
 
-
-
 var builder = WebApplication.CreateBuilder(args);
 
+var kvURLAZ = builder.Configuration.GetSection("KV").GetValue(typeof(string), "VAULTURL");
+var kvclient = new SecretClient(new Uri((string)kvURLAZ), new DefaultAzureCredential());
+var vConnString = kvclient.GetSecret("AZEmailConnString").Value;
+string azureConnectionString = vConnString.Value;
+
+
 // Read the Azure connection string from configuration
-string azureConnectionString = builder.Configuration["Azure:CommunicationService:ConnectionString"];
+//string azureConnectionString = builder.Configuration["Azure:CommunicationService:ConnectionString"];
 string fromEmail = builder.Configuration["Azure:CommunicationService:FromEmail"];
 string toEmail = builder.Configuration["Azure:CommunicationService:ToEmail"];
 
-
-builder.Host.UseSerilog ((context, config) =>
-{
-    config
-    .Enrich.FromLogContext()
-    .WriteTo.Console()
-    .WriteTo.Sink(new AzureCommunicationEmailSink(azureConnectionString, fromEmail, toEmail));
-});
+//////////builder.Host.UseSerilog ((context, config) =>
+//////////{
+//////////    _ = config
+//////////    .Enrich.FromLogContext()
+//////////    .WriteTo.Console()
+//////////    .WriteTo.Sink(new AzureCommunicationEmailSink(azureConnectionString, fromEmail, toEmail))
+//////////    .WriteTo.File("logs/MyAppLog.txt", retainedFileCountLimit: 21, rollingInterval: RollingInterval.Day, shared: true);
+//////////});
 
 
 
@@ -39,7 +44,7 @@ Log.Logger = new LoggerConfiguration()
     .WriteTo.Console()
     .Enrich.FromLogContext()
     .WriteTo.File("logs/MyAppLog.txt", retainedFileCountLimit: 21, rollingInterval: RollingInterval.Day, shared: true)
-
+    .WriteTo.Sink(new AzureCommunicationEmailSink(azureConnectionString, fromEmail, toEmail))
     .CreateLogger();
 
 Log.Information("Initialized Serilog and Starting Application");

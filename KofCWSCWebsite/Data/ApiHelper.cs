@@ -13,6 +13,7 @@ using System.Text.RegularExpressions;
 using System.Text.Json.Nodes;
 using Microsoft.AspNetCore.Http.HttpResults;
 using KofCWSCWebsite.Services;
+using System.Diagnostics;
 
 namespace KofCWSCWebsite.Data
 {
@@ -45,19 +46,25 @@ namespace KofCWSCWebsite.Data
         // Generic GET method
         public async Task<T?> GetAsync<T>(string endpoint)
         {
-            var response = await _httpClient.GetAsync(endpoint);
+            ////////if (endpoint.Contains("IsKofCMember/2944485"))
+            ////////{
+            ////////    Debugger.Break();
+            ////////}
 
+            var response = await _httpClient.GetAsync(endpoint);
+            //*****************************************************************************
+            // 1/25/2025 Tim Philomeno
+            // I added this to prevent the exception beign thrown when the api returns
+            // nothing.  Specifically for IsKofCMember during the import of delegates.
+            // I realize that this may cause other issues so testing will be done.
+            if (response.ReasonPhrase == "Not Found") { return default(T); }
+            //______________________________________________________________________________
             if (!response.IsSuccessStatusCode)
             {
-                
                 Log.Error($"Thrown from inside apiHelper because response.IsSuccessStatusCode is {response.IsSuccessStatusCode.ToString()} for endpoint {endpoint} and baseaddress {_httpClient.BaseAddress.ToString()} ");
                 throw new HttpRequestException($"GET request failed. Status Code: {response.StatusCode}, Reason: {response.ReasonPhrase}+{endpoint}");
             }
-
             var json = await response.Content.ReadAsStringAsync();
-            //string myjson = Regex.Replace(json, @"\""", "");
-            //json = Regex.Replace(json, @"\""", "\"");
-
             try
             {
                 return JsonSerializer.Deserialize<T>(json, new JsonSerializerOptions { PropertyNameCaseInsensitive = true });

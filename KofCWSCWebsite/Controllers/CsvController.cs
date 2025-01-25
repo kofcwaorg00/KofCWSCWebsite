@@ -80,6 +80,7 @@ namespace KofCWSCWebsite.Controllers
             // pass this GUID to all logging processes and then get the full log
             // from the database and return it to the calling process
             Guid guid = Guid.NewGuid();
+            WriteToDelegateImportLog(guid, 0, "INFO", "BEGIN Import");
             //-------------------------------------------------------------------------
             if (model.CsvFile != null && model.CsvFile.Length > 0)
             {
@@ -177,6 +178,7 @@ namespace KofCWSCWebsite.Controllers
                     //----------------------------------------------------------------------------------------
                     // when we are all done then process the records on the server to add corrmemberoffices
                     //await ProcessDelegateImport(guid);
+                    WriteToDelegateImportLog(guid, 0, "INFO", "END Import");
                     var apiHelperLog = new ApiHelper(_dataSetService);
                     var myLog = await apiHelperLog.GetAsync<IEnumerable<CvnImpDelegatesLog>>($"/GetImpDelegatesLog/{guid}");
                     return View("Views/Convention/ImpDelegatesSuccess.cshtml", myLog);
@@ -214,6 +216,10 @@ namespace KofCWSCWebsite.Controllers
                                 await apiHelper.PostAsync<TblMasMember, TblMasMember>("/Member", myIsD1Member);
                                 WriteToDelegateImportLog(guid, cvnImpDelegate.D1MemberID, "INFO", "Adding New Member");
                             }
+                            else
+                            {
+                                WriteToDelegateImportLog(guid, cvnImpDelegate.D1MemberID, "INFO", "LOG ONLY Adding New Member");
+                            }
 
                         }
                     }
@@ -234,7 +240,11 @@ namespace KofCWSCWebsite.Controllers
                             {
                                 await apiHelper.PutAsync<TblMasMember, TblMasMember>($"/member/{myIsD1Member.MemberId}", myIsD1Member);
                                 WriteToDelegateImportLog(guid, cvnImpDelegate.D1MemberID, "INFO", "Updating Existing Member");
-                            };
+                            }
+                            else
+                            {
+                                WriteToDelegateImportLog(guid, cvnImpDelegate.D1MemberID, "INFO", "LOG ONLY Updating Existing Member");
+                            }
 
                         }
                     }
@@ -276,7 +286,10 @@ namespace KofCWSCWebsite.Controllers
                             {
                                 await apiHelper.PostAsync<TblMasMember, TblMasMember>("/Member", myIsD2Member);
                                 WriteToDelegateImportLog(guid, cvnImpDelegate.D2MemberID, "INFO", "Add a New Member");
-                            };
+                            }else
+                            {
+                                WriteToDelegateImportLog(guid, cvnImpDelegate.D2MemberID, "INFO", "LOG ONLY Add a New Member");
+                            }
 
                         }
                     }
@@ -296,7 +309,10 @@ namespace KofCWSCWebsite.Controllers
                             {
                                 await apiHelper.PutAsync<TblMasMember, TblMasMember>($"/member/{myIsD2Member.MemberId}", myIsD2Member);
                                 WriteToDelegateImportLog(guid, cvnImpDelegate.D2MemberID, "INFO", "Update an Existing Member");
-                            };
+                            }else
+                            {
+                                WriteToDelegateImportLog(guid, cvnImpDelegate.D2MemberID, "INFO", "LOG ONLY Update an Existing Member");
+                            }
 
                         }
                     }
@@ -337,7 +353,11 @@ namespace KofCWSCWebsite.Controllers
                             {
                                 await apiHelper.PostAsync<TblMasMember, TblMasMember>("/Member", myIsA1Member);
                                 WriteToDelegateImportLog(guid, cvnImpDelegate.A1MemberID, "INFO", "Add a New Member");
-                            };
+                            }
+                            else
+                            {
+                                WriteToDelegateImportLog(guid, cvnImpDelegate.A1MemberID, "INFO", "LOG ONLY Add a New Member");
+                            }
 
                         }
                     }
@@ -357,7 +377,11 @@ namespace KofCWSCWebsite.Controllers
                             {
                                 await apiHelper.PutAsync<TblMasMember, TblMasMember>($"/member/{myIsA1Member.MemberId}", myIsA1Member);
                                 WriteToDelegateImportLog(guid, cvnImpDelegate.A1MemberID, "INFO", "Update an Existing Member");
-                            };
+                            }
+                            else
+                            {
+                                WriteToDelegateImportLog(guid, cvnImpDelegate.A1MemberID, "INFO", "LOG ONLY Update an Existing Member");
+                            }
 
                         }
                     }
@@ -397,8 +421,13 @@ namespace KofCWSCWebsite.Controllers
                             if (_postFlag)
                             {
                                 await apiHelper.PostAsync<TblMasMember, TblMasMember>("/Member", myIsA2Member);
-                            };
-                            WriteToDelegateImportLog(guid, cvnImpDelegate.A2MemberID, "INFO", "Add a New Member");
+                                WriteToDelegateImportLog(guid, cvnImpDelegate.A2MemberID, "INFO", "Add a New Member");
+                            }
+                            else
+                            {
+                                WriteToDelegateImportLog(guid, cvnImpDelegate.A2MemberID, "INFO", "LOG ONLY Add a New Member");
+                            }
+                            
                         }
                     }
                     catch (Exception ex)
@@ -417,7 +446,11 @@ namespace KofCWSCWebsite.Controllers
                             {
                                 await apiHelper.PutAsync<TblMasMember, TblMasMember>($"/member/{myIsA2Member.MemberId}", myIsA2Member);
                                 WriteToDelegateImportLog(guid, cvnImpDelegate.A2MemberID, "INFO", "Update an Existing Member");
-                            };
+                            }
+                            else
+                            {
+                                WriteToDelegateImportLog(guid, cvnImpDelegate.A2MemberID, "INFO", "LOG ONLY Update an Existing Member");
+                            }
                         }
                     }
                     catch (Exception ex)
@@ -950,7 +983,7 @@ namespace KofCWSCWebsite.Controllers
             }
             catch (Exception ex)
             {
-                Log.Error(Utils.FormatLogEntry(this, ex));
+                Log.Error(Utils.FormatLogEntry(this, ex, "***"+ $"Adding Office {OfficeId} to Member {KofCID}"));
                 WriteToDelegateImportLog(guid, KofCID, "ERROR", $"Adding Office {OfficeId} to Member {KofCID}");
             }
 
