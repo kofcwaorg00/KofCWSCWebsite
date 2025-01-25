@@ -82,8 +82,19 @@ try
     // make sure we have a value from KeyVault. if not throw an exception
     if (connectionString.IsNullOrEmpty()) throw new Exception("APIURL is not defined");
     //------------------------------------------------------------------------------------------------------------------------------
+    //////////builder.Services.AddDbContext<ApplicationDbContext>(options =>
+    //////////    options.UseSqlServer(connectionString));
     builder.Services.AddDbContext<ApplicationDbContext>(options =>
-        options.UseSqlServer(connectionString));
+    options.UseSqlServer(
+        connectionString,
+        sqlServerOptions => sqlServerOptions.EnableRetryOnFailure(
+            maxRetryCount: 5,
+            maxRetryDelay: TimeSpan.FromSeconds(30),
+            errorNumbersToAdd: null
+        )
+    )
+);
+
 
     builder.Services.AddDbContext<IdentityDBContext>(options =>
         options.UseSqlServer(connectionString));

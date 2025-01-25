@@ -28,7 +28,9 @@ namespace KofCWSCWebsite.Services
             // usage: Log.Error(Utils.FormatLogEntry(this, ex));
             var method = new StackTrace(ex, true).GetFrame(0)?.GetMethod();
             var className = method?.DeclaringType?.FullName;
-            return thisme.GetType().Name + " - in method " + method + " - in class " + className + ex.Message + " - " + ex.InnerException + " - ***" + addData + "*** - "+ex.StackTrace;
+            DateTime date = DateTime.Now;
+            string env = Environment.GetEnvironmentVariable("ASPNETCORE_ENVIRONMENT");
+            return "WebApp" + " - " + env + " - " + date + " - " + thisme.GetType().Name + " - in method " + method + " - in class " + className + ex.Message + " - " + ex.InnerException + " - ***" + addData + "*** - "+ex.StackTrace;
             //-----------------------------------------------------------------------------------------------
         }
         public static string GetString(IHtmlContent content)
