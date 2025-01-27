@@ -121,6 +121,12 @@
 </style>
 <table>
     <tr>
+        <td style="text-align:center;padding-right:10px">
+            <label>Show Less</label>
+            <br />
+            <input type="checkbox" id="myddayFilter">
+
+        </td>
         <td>
             <input type="text" id="mydistrictFilter" placeholder="Type in a District Number to filter results" title="Type in a number">
         </td>
@@ -267,6 +273,7 @@
     // Elements
     const districtFilter = document.getElementById('mydistrictFilter');
     const councilFilter = document.getElementById('mycouncilFilter');
+    const ddaysFilter = document.getElementById('myddayFilter');
 
     const resetFilters = document.getElementById('resetFilters');
     const tableBody = document.getElementById('mytable');
@@ -296,10 +303,22 @@
         document.cookie = "councilFilter=" + councilFilter.value + "; path=/;"; //localStorage.setItem('councilFilter', councilFilter.value);
     }
 
+    function getCheckBoxTotal(myCell) {
+        var cell = myCell;
+        var checkbox = cell.querySelector('input[type="checkbox"]');
+        if (checkbox.checked) {
+            return 1;
+        }
+        else
+        {
+            return 0;
+        }
+    }
     // Filter the table
     function filterTable() {
         const districtValue = districtFilter.value.toLowerCase();
         const councilValue = councilFilter.value.toLowerCase();
+        const myddayValue = ddaysFilter.checked;
 
         var myTable = document.getElementById('myTable');
 
@@ -308,17 +327,20 @@
             if (row.parentNode.tagName.toLowerCase() === 'tbody') {
                 const district = row.cells[0].textContent.toLowerCase().trim();
                 const council = row.cells[1].textContent.toLowerCase().trim();
-
+                // now let's get the checkbox values to be able to filter
+                var myDelTot = getCheckBoxTotal(row.cells[3]) + getCheckBoxTotal(row.cells[4]) + getCheckBoxTotal(row.cells[5]) + getCheckBoxTotal(row.cells[6]) + getCheckBoxTotal(row.cells[7]) + getCheckBoxTotal(row.cells[8]);
+                
                 // Check each filter
 
                 const districtMatch = districtValue === '' || district === districtValue; // district.includes(districtValue);
                 const councilMatch = councilValue === '' || council.includes(councilValue);
+                if (!myddayValue) { myDelTot = 1 }
 
                 // hightlight the active filter(s)
                 if (districtValue === '') { districtFilter.style.backgroundColor = '' } else { districtFilter.style.backgroundColor = '#e8f0fe' }
                 if (councilValue === '') { councilFilter.style.backgroundColor = '' } else { councilFilter.style.backgroundColor = '#e8f0fe' }
                 // Show or hide the row based on filters
-                if (districtMatch && councilMatch) {
+                if (districtMatch && councilMatch && myDelTot) {
                     row.style.display = '';
                 } else {
                     row.style.display = 'none';
@@ -334,12 +356,14 @@
     resetFilters.addEventListener('click', () => {
         districtFilter.value = '';
         councilFilter.value = '';
+        ddaysFilter.checked = false;
         filterTable();
     });
 
     // Event listeners
     districtFilter.addEventListener('input', filterTable);
     councilFilter.addEventListener('input', filterTable);
+    ddaysFilter.addEventListener('input', filterTable);
 
     // Initialize
     restoreFilters();
