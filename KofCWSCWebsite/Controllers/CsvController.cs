@@ -180,15 +180,15 @@ namespace KofCWSCWebsite.Controllers
                     //----------------------------------------------------------------------------------------
                     // when we are all done then process the records on the server to add corrmemberoffices
                     // only allow the corrmemberoffices to be created if all KofCIDs are accounted for
-                    ////////var myDelegates = await _apiHelper.GetAsync<IEnumerable<TblCorrMemberOfficeVM>>("CheckForMissingDelegateMembersAndCreateDelegates");
-                    ////////if (myDelegates.Count() > 0)
-                    ////////{
-                    ////////    ViewBag.Message = @"We found member(s) in the import file in that are not in our database.
-                    ////////        Please make sure this/these members are added and rerun this process.
-                    ////////        NOTE: the MemberID Listed is the KofC MemberID";
-                    ////////    // then we need to present the issues to the user and stop here
-                    ////////    return View("Views/TblCorrMemberOffices/MissingDelegates.cshtml", myDelegates);
-                    ////////}
+                    var myDelegates = await _apiHelper.GetAsync<IEnumerable<TblCorrMemberOfficeVM>>("CheckForMissingDelegateMembersAndCreateDelegates");
+                    if (myDelegates.Count() > 0)
+                    {
+                        ViewBag.Message = @"We found member(s) in the import file in that are not in our database.
+                            Please make sure this/these members are added and rerun this process.
+                            NOTE: the MemberID Listed is the KofC MemberID";
+                        // then we need to present the issues to the user and stop here
+                        return View("Views/TblCorrMemberOffices/MissingDelegates.cshtml", myDelegates);
+                    }
                     //----------------------------------------------------------------------------------------
                     WriteToDelegateImportLog(guid, 0, "INFO", "END Import");
                     var apiHelperLog = new ApiHelper(_dataSetService);
@@ -973,6 +973,7 @@ namespace KofCWSCWebsite.Controllers
         {
             try
             {
+                return;
                 var apiHelper = new ApiHelper(_dataSetService);
 
                 TblCorrMemberOffice tblCorrMemberOffice = new TblCorrMemberOffice();
