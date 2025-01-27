@@ -91,6 +91,7 @@ namespace KofCWSCWebsite.Data
             }
 
             var json = await response.Content.ReadAsStringAsync();
+            if (string.IsNullOrWhiteSpace(json)) { return default; };
             try
             {
                 return JsonSerializer.Deserialize<TResponse>(json, new JsonSerializerOptions { PropertyNameCaseInsensitive = true });
@@ -117,6 +118,7 @@ namespace KofCWSCWebsite.Data
             }
 
             var json = await response.Content.ReadAsStringAsync();
+            if (string.IsNullOrWhiteSpace(json)) { return default; };
             try
             {
                 return JsonSerializer.Deserialize<TResponse>(json, new JsonSerializerOptions { PropertyNameCaseInsensitive = true });

@@ -37,6 +37,7 @@ namespace KofCWSCWebsite.Controllers
         private DataSetService _dataSetService;
         private ApiHelper _apiHelper;
         private static bool _postFlag = false;
+        private static int _fratyear;
         public CsvController(DataSetService dataSetService,ApiHelper apiHelper)
         {
             _dataSetService = dataSetService;
@@ -80,6 +81,7 @@ namespace KofCWSCWebsite.Controllers
             // pass this GUID to all logging processes and then get the full log
             // from the database and return it to the calling process
             Guid guid = Guid.NewGuid();
+            _fratyear = await _apiHelper.GetAsync<int>("GetFratYear/0");
             WriteToDelegateImportLog(guid, 0, "INFO", "BEGIN Import");
             //-------------------------------------------------------------------------
             if (model.CsvFile != null && model.CsvFile.Length > 0)
@@ -126,7 +128,7 @@ namespace KofCWSCWebsite.Controllers
                     var apiHelperD = new ApiHelper(_dataSetService);
                     var apiHelperC = new ApiHelper(_dataSetService);
                     WriteToDelegateImportLog(guid, 0, "INFO", $"Removing old Delegates in lieu of incoming ones.");
-                    await apiHelperD.GetAsync<int>($"/ClearDelegates/{await apiHelperC.GetAsync<int>($"/GetFratYear/{0}")}");
+                    await apiHelperD.GetAsync<int>($"/ClearDelegates/{_fratyear}");
 
                     //------------------------------------------------------------------------------------------------------
                     ViewBag.ImportedDelegates = records.Count();
@@ -177,7 +179,17 @@ namespace KofCWSCWebsite.Controllers
                     }
                     //----------------------------------------------------------------------------------------
                     // when we are all done then process the records on the server to add corrmemberoffices
-                    //await ProcessDelegateImport(guid);
+                    // only allow the corrmemberoffices to be created if all KofCIDs are accounted for
+                    ////////var myDelegates = await _apiHelper.GetAsync<IEnumerable<TblCorrMemberOfficeVM>>("CheckForMissingDelegateMembersAndCreateDelegates");
+                    ////////if (myDelegates.Count() > 0)
+                    ////////{
+                    ////////    ViewBag.Message = @"We found member(s) in the import file in that are not in our database.
+                    ////////        Please make sure this/these members are added and rerun this process.
+                    ////////        NOTE: the MemberID Listed is the KofC MemberID";
+                    ////////    // then we need to present the issues to the user and stop here
+                    ////////    return View("Views/TblCorrMemberOffices/MissingDelegates.cshtml", myDelegates);
+                    ////////}
+                    //----------------------------------------------------------------------------------------
                     WriteToDelegateImportLog(guid, 0, "INFO", "END Import");
                     var apiHelperLog = new ApiHelper(_dataSetService);
                     var myLog = await apiHelperLog.GetAsync<IEnumerable<CvnImpDelegatesLog>>($"/GetImpDelegatesLog/{guid}");
@@ -466,7 +478,7 @@ namespace KofCWSCWebsite.Controllers
 
         private bool FillD1(ref TblMasMember myMember, CvnImpDelegate myDelegate)
         {
-            string UpdatedBy = "Delgate Import API";
+            string UpdatedBy = "Delegate Import API";
             bool isUpdated = false;
 
             if (myMember == null)
@@ -535,7 +547,7 @@ namespace KofCWSCWebsite.Controllers
             {
                 myMember.Address = myDelegate.D1Address1;
                 myMember.AddressUpdated = DateTime.Now;
-                myMember.AddInfo2UpdatedBy = UpdatedBy;
+                myMember.AddressUpdatedBy = UpdatedBy;
                 isUpdated = true;
             }
             // CITY
@@ -583,7 +595,7 @@ namespace KofCWSCWebsite.Controllers
         }
         private bool FillD2(ref TblMasMember myMember, CvnImpDelegate myDelegate)
         {
-            string UpdatedBy = "Delgate Import API";
+            string UpdatedBy = "Delegate Import API";
             bool isUpdated = false;
 
             if (myMember == null)
@@ -652,7 +664,7 @@ namespace KofCWSCWebsite.Controllers
             {
                 myMember.Address = myDelegate.D2Address1;
                 myMember.AddressUpdated = DateTime.Now;
-                myMember.AddInfo2UpdatedBy = UpdatedBy;
+                myMember.AddressUpdatedBy = UpdatedBy;
                 isUpdated = true;
             }
             // CITY
@@ -700,7 +712,7 @@ namespace KofCWSCWebsite.Controllers
         }
         private bool FillA1(ref TblMasMember myMember, CvnImpDelegate myDelegate)
         {
-            string UpdatedBy = "Delgate Import API";
+            string UpdatedBy = "Delegate Import API";
             bool isUpdated = false;
 
             if (myMember == null)
@@ -769,7 +781,7 @@ namespace KofCWSCWebsite.Controllers
             {
                 myMember.Address = myDelegate.A1Address1;
                 myMember.AddressUpdated = DateTime.Now;
-                myMember.AddInfo2UpdatedBy = UpdatedBy;
+                myMember.AddressUpdatedBy = UpdatedBy;
                 isUpdated = true;
             }
             // CITY
@@ -817,7 +829,7 @@ namespace KofCWSCWebsite.Controllers
         }
         private bool FillA2(ref TblMasMember myMember, CvnImpDelegate myDelegate)
         {
-            string UpdatedBy = "Delgate Import API";
+            string UpdatedBy = "Delegate Import API";
             bool isUpdated = false;
 
             if (myMember == null)
@@ -886,7 +898,7 @@ namespace KofCWSCWebsite.Controllers
             {
                 myMember.Address = myDelegate.A2Address1;
                 myMember.AddressUpdated = DateTime.Now;
-                myMember.AddInfo2UpdatedBy = UpdatedBy;
+                myMember.AddressUpdatedBy = UpdatedBy;
                 isUpdated = true;
             }
             // CITY
@@ -973,7 +985,7 @@ namespace KofCWSCWebsite.Controllers
                 tblCorrMemberOffice.OfficeId = OfficeId;
                 tblCorrMemberOffice.MemberId = myID.MemberId;
                 tblCorrMemberOffice.PrimaryOffice = false;
-                tblCorrMemberOffice.Year = await apiHelper.GetAsync<int>($"/GetFratYear/{0}");
+                tblCorrMemberOffice.Year = _fratyear;
                 tblCorrMemberOffice.District = null;
                 tblCorrMemberOffice.Council = null;
                 tblCorrMemberOffice.Assembly = null;

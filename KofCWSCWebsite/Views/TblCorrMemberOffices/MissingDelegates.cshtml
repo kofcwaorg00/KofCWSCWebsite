@@ -1,0 +1,66 @@
+﻿@model IEnumerable<KofCWSCWebsite.Models.TblCorrMemberOfficeVM>
+
+@{
+    ViewData["Title"] = "Missing Delegate Members from Import";
+}
+
+<h3>@ViewBag.Message</h3>
+
+<table id="myTable" class="table">
+    <thead>
+        <tr>
+            <th>
+                @Html.DisplayNameFor(model => model.MemberId)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.OfficeDescription)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.PrimaryOffice)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Year)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.District)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Council)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Assembly)
+            </th>
+            @*<th style="width:50px"></th>
+                <th style="width:60px"></th>*@
+            <th style="width:60px"></th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var item in Model)
+        {
+            <tr>
+                <td>
+                    @Html.DisplayFor(modelItem => item.MemberId)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.OfficeDescription)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.PrimaryOffice)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Year)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.District)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Council)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Assembly)
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>
