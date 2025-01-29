@@ -197,7 +197,7 @@ namespace KofCWSCWebsite.Controllers
             // and return the same
             try
             {
-                var result = await _apiHelper.GetAsync<TblValCouncil>($"/Council/{id}");
+                var result = await _apiHelper.GetAsync<TblValCouncilFSEdit>($"/FSEditCouncil/{id}");
                 return View("FSEdit", result);
             }
             catch (Exception ex)
@@ -213,21 +213,41 @@ namespace KofCWSCWebsite.Controllers
         [HttpPost]
         [ValidateAntiForgeryToken]
         //public async Task<IActionResult> FSEdit(int id, [Bind("CNumber,CLocation,CName,PhyAddress,PhyCity,PhyState,PhyPostalCode,MailAddress,MailCity,MailState,MailPostalCode,MeetAddress,MeetCity,MeetState,MeetPostalCode,BMeetDOW,BMeetTime,OMeetDOW,OMeetTime,SMeetDOW,SMeetTime")] TblValCouncil tblValCouncil)
-        public async Task<IActionResult> FSEdit(int id, [Bind("CNumber,CLocation,CName,District,AddInfo1,AddInfo2,AddInfo3,LiabIns,DioceseId,Chartered,WebSiteUrl,BulletinUrl,Arbalance,Status,PhyAddress,PhyCity,PhyState,PhyPostalCode,MailAddress,MailCity,MailState,MailPostalCode,MeetAddress,MeetCity,MeetState,MeetPostalCode,BMeetDOW,BMeetTime,OMeetDOW,OMeetTime,SMeetDOW,SMeetTime")] TblValCouncil tblValCouncil)
+        public async Task<IActionResult> FSEdit(int id, [Bind("CNumber,CLocation,CName,District,AddInfo1,AddInfo2,AddInfo3,LiabIns,DioceseId,Chartered,WebSiteUrl,BulletinUrl,Arbalance,Status,PhyAddress,PhyCity,PhyState,PhyPostalCode,MailAddress,MailCity,MailState,MailPostalCode,MeetAddress,MeetCity,MeetState,MeetPostalCode,BMeetDOW,BMeetTime,OMeetDOW,OMeetTime,SMeetDOW,SMeetTime,FSAddress,FSCity,FSState,FSPostalCode")] TblValCouncilFSEdit tblValCouncilFSEdit)
         {
-            if (id != tblValCouncil.CNumber)
+            if (id != tblValCouncilFSEdit.CNumber)
             {
                 return NotFound();
             }
             if (ModelState.IsValid)
             {
                 //*****************************************************************************************************
-                // 12/05/2024 Tim Philomeno
-                // Now that we have a generic ApiHelper class, these are the only 2 lines that we should need to
-                // call the API
+                // 1/29/2024 Tim Philomeno
+                // we are only dealing with addresses and meeting data so take what we get and copy to what we have
                 try
                 {
-                    var result = await _apiHelper.PutAsync<TblValCouncil, TblMasMember>($"/Council/{id}", tblValCouncil);
+                    var existCouncil = await _apiHelper.GetAsync<TblValCouncil>($"/Council/{id}");
+
+                    existCouncil.PhyAddress = tblValCouncilFSEdit.PhyAddress;
+                    existCouncil.PhyCity = tblValCouncilFSEdit.PhyCity;
+                    existCouncil.PhyState = tblValCouncilFSEdit.PhyState;
+                    existCouncil.PhyPostalCode = tblValCouncilFSEdit.PhyPostalCode;
+                    existCouncil.MailAddress = tblValCouncilFSEdit.MailAddress;
+                    existCouncil.MailCity = tblValCouncilFSEdit.MailCity;
+                    existCouncil.MailState = tblValCouncilFSEdit.MailState;
+                    existCouncil.MailPostalCode = tblValCouncilFSEdit.MailPostalCode;
+                    existCouncil.MeetAddress = tblValCouncilFSEdit.MeetAddress;
+                    existCouncil.MeetCity = tblValCouncilFSEdit.MeetCity;
+                    existCouncil.MeetState = tblValCouncilFSEdit.MeetState;
+                    existCouncil.MeetPostalCode = tblValCouncilFSEdit.MeetPostalCode;
+                    existCouncil.BMeetDOW = tblValCouncilFSEdit.BMeetDOW;
+                    existCouncil.BMeetTime = tblValCouncilFSEdit.BMeetTime;
+                    existCouncil.OMeetDOW = tblValCouncilFSEdit.OMeetDOW;
+                    existCouncil.OMeetTime = tblValCouncilFSEdit.OMeetTime;
+                    existCouncil.SMeetDOW = tblValCouncilFSEdit.SMeetDOW;
+                    existCouncil.SMeetTime = tblValCouncilFSEdit.SMeetTime;
+
+                    var results = await _apiHelper.PutAsync<TblValCouncil, TblValCouncil>($"/Council/{id}",existCouncil);
                 }
                 catch (Exception ex)
                 {

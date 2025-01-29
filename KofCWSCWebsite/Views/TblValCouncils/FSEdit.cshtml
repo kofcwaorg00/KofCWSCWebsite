@@ -1,4 +1,4 @@
-﻿@model KofCWSCWebsite.Models.TblValCouncil
+﻿@model KofCWSCWebsite.Models.TblValCouncilFSEdit
 
 @{
     ViewData["Title"] = "Edit";
@@ -7,13 +7,20 @@
 <h1>Edit Council @Model.CNumber Addresses</h1>
 <h6>Council Status is (@Model.Status)</h6>
 <hr />
+<button onclick="CopyFSAddress()">Copy FS Address to Physical, Mailing and Meeting?</button>
 <button onclick="CopyAddress()">Copy Physical Address to Mailing and Meeting?</button>
 <div class="row">
-    @*<div class="col-md-4">*@
     <form asp-action="FSEdit">
+        <div style="display:none">
+            @Html.TextBoxFor(m => Model.Status)
+            @Html.TextBoxFor(m => Model.FSAddress)
+            @Html.TextBoxFor(m => Model.FSCity)
+            @Html.TextBoxFor(m => Model.FSState)
+            @Html.TextBoxFor(m => Model.FSPostalCode)
+        </div>
         <div asp-validation-summary="ModelOnly" class="text-danger"></div>
         <input type="hidden" asp-for="CNumber" />
-        <div style="display:none">
+        @*<div style="display:none">
             <div class="form-group">
                 <label asp-for="CLocation" class="control-label"></label>
                 <input asp-for="CLocation" class="form-control" />
@@ -79,7 +86,7 @@
                 <input asp-for="Status" class="form-control" />
                 <span asp-validation-for="Status" class="text-danger"></span>
             </div>
-        </div>
+        </div>*@
 
 
         <table class="table">
@@ -293,6 +300,43 @@
 }
 <script>
     function CopyAddress() {
+        var destMeetAddress = document.getElementById("MeetAddress");
+        destMeetAddress.value = document.getElementById("PhyAddress").value;
+
+        var destMailAddress = document.getElementById("MailAddress");
+        destMailAddress.value = document.getElementById("PhyAddress").value;
+
+        var destMeetCity = document.getElementById("MeetCity");
+        destMeetCity.value = document.getElementById("PhyCity").value;
+
+        var destMailCity = document.getElementById("MailCity");
+        destMailCity.value = document.getElementById("PhyCity").value;
+
+        var destMeetState = document.getElementById("MeetState");
+        destMeetState.value = document.getElementById("PhyState").value;
+
+        var destMailState = document.getElementById("MailState");
+        destMailState.value = document.getElementById("PhyState").value;
+
+        var destMeetPostalCode = document.getElementById("MeetPostalCode");
+        destMeetPostalCode.value = document.getElementById("PhyPostalCode").value;
+
+        var destMailPostalCode = document.getElementById("MailPostalCode");
+        destMailPostalCode.value = document.getElementById("PhyPostalCode").value;
+    }
+    function CopyFSAddress() {
+        var destPhyAddress = document.getElementById("PhyAddress");
+        destPhyAddress.value = document.getElementById("FSAddress").value;
+
+        var destPhyCity = document.getElementById("PhyCity");
+        destPhyCity.value = document.getElementById("FSCity").value;
+
+        var destPhyState = document.getElementById("PhyState");
+        destPhyState.value = document.getElementById("FSState").value;
+
+        var destPhyPostalCode = document.getElementById("PhyPostalCode");
+        destPhyPostalCode.value = document.getElementById("FSPostalCode").value;
+
         var destMeetAddress = document.getElementById("MeetAddress");
         destMeetAddress.value = document.getElementById("PhyAddress").value;
 

@@ -69,4 +69,10 @@ public partial class CvnMpd
     public bool PayMe { get; set; }
     public string? CouncilStatus { get; set; }
     public int GroupID { get; set; }
+
+    public string? CouncilLocation { get; set; }
+    public string? Address { get; set; }
+    public string? City { get; set; }
+    public string? State { get; set; }
+    public string? Zip { get; set; }
 }

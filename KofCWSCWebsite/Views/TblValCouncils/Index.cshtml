@@ -2,6 +2,7 @@
 
 @{
     ViewData["Title"] = "Councils";
+    string stars = "";
 }
 
 <h3 class="MyPageHdr">Washington State Councils</h3>
@@ -24,6 +25,9 @@
     <thead>
         <tr>
             <th class="MyColHdr">
+                <label title="Missing Addresses (P)hysical, (M)ailing, M(E)eting">MA</label>
+            </th>
+            <th class="MyColHdr">
                 @Html.DisplayNameFor(model => model.CNumber)
             </th>
             <th class="MyColHdr" style="text-align:center">
@@ -45,11 +49,11 @@
                 @Html.DisplayNameFor(model => model.Chartered) @*yakima 5/15/1094*@
             </th>
             @* <th>
-        @Html.DisplayNameFor(model => model.WebSiteUrl)
-        </th>
-        <th>
-        @Html.DisplayNameFor(model => model.BulletinUrl)
-        </th> *@
+                @Html.DisplayNameFor(model => model.WebSiteUrl)
+                </th>
+                <th>
+                @Html.DisplayNameFor(model => model.BulletinUrl)
+                </th> *@
             <th class="MyColHdr" style="text-align:center">
                 @Html.DisplayNameFor(model => model.Status)
             </th>
@@ -61,7 +65,25 @@
     <tbody>
         @foreach (var item in Model)
         {
+            stars = "";
             <tr>
+                <td>
+                    @if (item.PhyAddress is null || item.PhyAddress.Length == 0)
+                    {
+                        stars += "P";
+                    }
+                    @if (item.MailAddress is null || item.MailAddress.Length == 0)
+                    {
+                        stars += "M";
+                    }
+                    @if (item.MeetAddress is null || item.MeetAddress.Length == 0)
+                    {
+                        stars += "E";
+                    }
+
+                    <label title="Missing Addresses (P)hysical, (M)ailing, M(E)eting">@stars</label>
+
+                </td>
                 <td>
                     @Html.DisplayFor(modelItem => item.CNumber)
                 </td>
@@ -84,11 +106,11 @@
                     @Html.DisplayFor(modelItem => item.Chartered)
                 </td>
                 @* <td>
-        @Html.Raw(item.WebSiteUrl)
-        </td>
-        <td>
-        @Html.Raw(item.BulletinUrl)
-        </td> *@
+                    @Html.Raw(item.WebSiteUrl)
+                    </td>
+                    <td>
+                    @Html.Raw(item.BulletinUrl)
+                    </td> *@
                 <td style="text-align:center">
                     @Html.DisplayFor(modelItem => item.Status)
                 </td>
@@ -160,4 +182,6 @@
             }
         }
     }
+    var missing = document.getElementById("myMissingAddr");
+    missing.value = "**";
 </script>
