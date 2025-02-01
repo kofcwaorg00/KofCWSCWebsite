@@ -1,0 +1,7 @@
+﻿@model KofCAdmin.Models.PrintMPDChecks
+@{
+    <button class="btn-info">Export to PDF</button>
+    <div class="webreport">
+        @await Model.WebReport.Render()
+    </div>
+}

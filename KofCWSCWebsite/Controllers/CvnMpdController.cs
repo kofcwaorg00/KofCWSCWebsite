@@ -3,22 +3,27 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.AspNetCore.Mvc.Rendering;
-using Microsoft.EntityFrameworkCore;
 using KofCWSCWebsite.Data;
 using KofCWSCWebsite.Models;
 using KofCWSCWebsite.Services;
 using Serilog;
 using Microsoft.AspNetCore.Authorization;
+using FastReport.Web;
+using KofCAdmin.Models;
+
 
 namespace KofCWSCWebsite.Controllers
 {
     public class CvnMpdController : Controller
     {
         private readonly ApiHelper _apiHelper;
-        public CvnMpdController(ApiHelper apiHelper)
+        readonly DataSetService _dataSetService;
+        private IConfiguration _configuration;
+        public CvnMpdController(ApiHelper apiHelper,DataSetService dataSetService,IConfiguration configuration)
         {
             _apiHelper = apiHelper;
+            _dataSetService = dataSetService;
+            _configuration = configuration;
         }
 
         // GET: CvnMpd
@@ -101,139 +106,29 @@ namespace KofCWSCWebsite.Controllers
             
         }
         [Authorize(Roles = "Admin, ConventionAdmin")]
-        public async Task<ActionResult> PrintChecks()
+        public IActionResult PrintChecks(int NextCheckNumber,bool PrintCheckNumber)
         {
-            return View();
+            if(NextCheckNumber <= 0)
+            {
+                TempData["CheckNumberError"] = "Error...Check number must be > 0";
+                //RedirectToPage("GetCheckBatch", 25);
+                return RedirectToAction("GetCheckBatch","CvnMpd", new { id = 25 } );
+            }
+            int myPCN = PrintCheckNumber ? 1 : 0;
+
+            PrintMPDChecks model = new()
+            {
+                WebReport = new WebReport(),
+            };
+            var reportToLoad = "MPDChecksAPI";
+            model.WebReport.Report.Load(Path.Combine(_dataSetService.ReportsPath, $"{reportToLoad}.frx"));
+            _dataSetService.PrepareReport(model.WebReport.Report, _configuration, 25,NextCheckNumber,myPCN);
+            return View(model);
+
+
+
+
+            return RedirectToAction("GetCheckBatch", "CvnMpd", new { id = 25 });
         }
-
-
-        ////////////// GET: CvnMpd/Details/5
-        ////////////public async Task<IActionResult> Details(int? id)
-        ////////////{
-        ////////////    if (id == null)
-        ////////////    {
-        ////////////        return NotFound();
-        ////////////    }
-
-        ////////////    var cvnMpd = await _context.TblCvnTrxMpds
-        ////////////        .FirstOrDefaultAsync(m => m.Id == id);
-        ////////////    if (cvnMpd == null)
-        ////////////    {
-        ////////////        return NotFound();
-        ////////////    }
-
-        ////////////    return View(cvnMpd);
-        ////////////}
-
-        ////////////// GET: CvnMpd/Create
-        ////////////public IActionResult Create()
-        ////////////{
-        ////////////    return View();
-        ////////////}
-
-        ////////////// POST: CvnMpd/Create
-        ////////////// To protect from overposting attacks, enable the specific properties you want to bind to.
-        ////////////// For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
-        ////////////[HttpPost]
-        ////////////[ValidateAntiForgeryToken]
-        ////////////public async Task<IActionResult> Create([Bind("Id,MemberId,Council,District,Group,Office,Payee,CheckNumber,CheckDate,Day1,Day2,Day3,Day1G,Day2G,Day3G,Miles,CheckTotal,Location")] CvnMpd cvnMpd)
-        ////////////{
-        ////////////    if (ModelState.IsValid)
-        ////////////    {
-        ////////////        _context.Add(cvnMpd);
-        ////////////        await _context.SaveChangesAsync();
-        ////////////        return RedirectToAction(nameof(Index));
-        ////////////    }
-        ////////////    return View(cvnMpd);
-        ////////////}
-
-        ////////////// GET: CvnMpd/Edit/5
-        ////////////public async Task<IActionResult> Edit(int? id)
-        ////////////{
-        ////////////    if (id == null)
-        ////////////    {
-        ////////////        return NotFound();
-        ////////////    }
-
-        ////////////    var cvnMpd = await _context.TblCvnTrxMpds.FindAsync(id);
-        ////////////    if (cvnMpd == null)
-        ////////////    {
-        ////////////        return NotFound();
-        ////////////    }
-        ////////////    return View(cvnMpd);
-        ////////////}
-
-        ////////////// POST: CvnMpd/Edit/5
-        ////////////// To protect from overposting attacks, enable the specific properties you want to bind to.
-        ////////////// For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
-        ////////////[HttpPost]
-        ////////////[ValidateAntiForgeryToken]
-        ////////////public async Task<IActionResult> Edit(int id, [Bind("Id,MemberId,Council,District,Group,Office,Payee,CheckNumber,CheckDate,Day1,Day2,Day3,Day1G,Day2G,Day3G,Miles,CheckTotal,Location")] CvnMpd cvnMpd)
-        ////////////{
-        ////////////    if (id != cvnMpd.Id)
-        ////////////    {
-        ////////////        return NotFound();
-        ////////////    }
-
-        ////////////    if (ModelState.IsValid)
-        ////////////    {
-        ////////////        try
-        ////////////        {
-        ////////////            _context.Update(cvnMpd);
-        ////////////            await _context.SaveChangesAsync();
-        ////////////        }
-        ////////////        catch (DbUpdateConcurrencyException)
-        ////////////        {
-        ////////////            if (!CvnMpdExists(cvnMpd.Id))
-        ////////////            {
-        ////////////                return NotFound();
-        ////////////            }
-        ////////////            else
-        ////////////            {
-        ////////////                throw;
-        ////////////            }
-        ////////////        }
-        ////////////        return RedirectToAction(nameof(Index));
-        ////////////    }
-        ////////////    return View(cvnMpd);
-        ////////////}
-
-        ////////////// GET: CvnMpd/Delete/5
-        ////////////public async Task<IActionResult> Delete(int? id)
-        ////////////{
-        ////////////    if (id == null)
-        ////////////    {
-        ////////////        return NotFound();
-        ////////////    }
-
-        ////////////    var cvnMpd = await _context.TblCvnTrxMpds
-        ////////////        .FirstOrDefaultAsync(m => m.Id == id);
-        ////////////    if (cvnMpd == null)
-        ////////////    {
-        ////////////        return NotFound();
-        ////////////    }
-
-        ////////////    return View(cvnMpd);
-        ////////////}
-
-        ////////////// POST: CvnMpd/Delete/5
-        ////////////[HttpPost, ActionName("Delete")]
-        ////////////[ValidateAntiForgeryToken]
-        ////////////public async Task<IActionResult> DeleteConfirmed(int id)
-        ////////////{
-        ////////////    var cvnMpd = await _context.TblCvnTrxMpds.FindAsync(id);
-        ////////////    if (cvnMpd != null)
-        ////////////    {
-        ////////////        _context.TblCvnTrxMpds.Remove(cvnMpd);
-        ////////////    }
-
-        ////////////    await _context.SaveChangesAsync();
-        ////////////    return RedirectToAction(nameof(Index));
-        ////////////}
-
-        ////////////private bool CvnMpdExists(int id)
-        ////////////{
-        ////////////    return _context.TblCvnTrxMpds.Any(e => e.Id == id);
-        ////////////}
     }
 }

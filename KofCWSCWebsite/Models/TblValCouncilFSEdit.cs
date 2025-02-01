@@ -1,6 +1,7 @@
 ﻿using Microsoft.Identity.Client;
 using System.ComponentModel;
 using System.ComponentModel.DataAnnotations;
+using KofCWSCWebsite.Data;
 
 namespace KofCWSCWebsite.Models;
 
@@ -17,6 +18,7 @@ public partial class TblValCouncilFSEdit
     public string? AddInfo3 { get; set; }
 
     [DisplayName("Address")]
+    [NoPoBox]
     public string PhyAddress { get; set; } = "";
 
     [DisplayName("City")]

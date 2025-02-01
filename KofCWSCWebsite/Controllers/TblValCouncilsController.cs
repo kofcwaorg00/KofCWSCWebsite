@@ -261,6 +261,11 @@ namespace KofCWSCWebsite.Controllers
                     //------------------------------------------------------------------------------------------------------
                 }
             }
+            else
+            {
+
+                return View(tblValCouncilFSEdit);
+            }
             if (User.IsInRole("Admin"))
             {
                 return RedirectToAction("Index", "TblValCouncils");

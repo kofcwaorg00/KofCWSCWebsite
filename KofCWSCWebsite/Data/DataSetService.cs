@@ -72,7 +72,7 @@ namespace KofCWSCWebsite.Data
             }
         }
         
-        public Report PrepareReport(Report report, IConfiguration _conf,int param1,int param2=9)
+        public Report PrepareReport(Report report, IConfiguration _conf,int param1,int param2=9,int param3=9)
         {
             //***************************************************************************************************************
             // 10/05/2024 Tim Philomeno
@@ -100,13 +100,17 @@ namespace KofCWSCWebsite.Data
                     //string myHost = currString.Split('/')[2];
                     string myMethod = currString.Split('/')[3];
                     string schema = currString.Substring(currStringSemi, currStringLen - currStringSemi);
-                    if (param2 == 9)
+                    if (param2 == 9 && param3 == 9)
                     {
                         report.Dictionary.Connections[i].ConnectionString = myPre + "//" + myHost + "/" + myMethod + "/" + param1 + schema;
                     }
+                    else if (param3 == 9)
+                    {
+                        report.Dictionary.Connections[i].ConnectionString = myPre + "//" + myHost + "/" + myMethod + "/" + param1 + "/" + param2 + schema;
+                    }
                     else
                     {
-                        report.Dictionary.Connections[i].ConnectionString = myPre + "//" + myHost + "/" + myMethod + "/" + param1 +"/"+ param2 + schema;
+                        report.Dictionary.Connections[i].ConnectionString = myPre + "//" + myHost + "/" + myMethod + "/" + param1 +"/"+ param2 + "/" + param3 + schema;
                     }
                 }
                 return report;
