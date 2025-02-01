@@ -57,6 +57,7 @@ namespace KofCWSCWebsite.Controllers
                 ViewBag.GroupID = id;
                 if (id == 3) { ViewBag.Group = "District Deputies"; };
                 if (id == 25) { ViewBag.Group = "Delegate"; };
+
                 var result = await _apiHelper.GetAsync<IEnumerable<CvnMpd>>($"MPD/GetCheckBatch/{id}");
                 return View(result);
             }
@@ -106,13 +107,13 @@ namespace KofCWSCWebsite.Controllers
             
         }
         [Authorize(Roles = "Admin, ConventionAdmin")]
-        public IActionResult PrintChecks(int NextCheckNumber,bool PrintCheckNumber)
+        public IActionResult PrintChecks(int NextCheckNumber,bool PrintCheckNumber,int GroupID)
         {
             if(NextCheckNumber <= 0)
             {
                 TempData["CheckNumberError"] = "Error...Check number must be > 0";
                 //RedirectToPage("GetCheckBatch", 25);
-                return RedirectToAction("GetCheckBatch","CvnMpd", new { id = 25 } );
+                return RedirectToAction("GetCheckBatch","CvnMpd", new { id = GroupID } );
             }
             int myPCN = PrintCheckNumber ? 1 : 0;
 
@@ -122,7 +123,7 @@ namespace KofCWSCWebsite.Controllers
             };
             var reportToLoad = "MPDChecksAPI";
             model.WebReport.Report.Load(Path.Combine(_dataSetService.ReportsPath, $"{reportToLoad}.frx"));
-            _dataSetService.PrepareReport(model.WebReport.Report, _configuration, 25,NextCheckNumber,myPCN);
+            _dataSetService.PrepareReport(model.WebReport.Report, _configuration, GroupID,NextCheckNumber,myPCN);
             return View(model);
 
 

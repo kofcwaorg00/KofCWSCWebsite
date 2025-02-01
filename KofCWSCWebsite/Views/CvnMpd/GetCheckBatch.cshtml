@@ -74,8 +74,9 @@
                             <div id="CheckNumber" style="display:none;text-align:center">
 
                                 <form asp-controller="CvnMpd" asp-action="PrintChecks" method="get">
-                                    <label>Print Check#</label>
-                                    <input id="PrintCheckNumber" name="PrintCheckNumber" type="checkbox" value="true" />
+                                    <input id="GroupID" name="GroupID" type="text" value="@ViewBag.GroupID" hidden />
+                                    <label>Print Check#?</label>
+                                    <input id="PrintCheckNumber" name="PrintCheckNumber" type="checkbox" value="true" /><br />
                                     <label>Next Check#</label><br />
                                     <input type="number" name="NextCheckNumber" id="NextCheckNumber" style="width:150px" /><br />
                                     <button type="submit" class="btn btn-sm btn-success" id="submitButtonPrint">
