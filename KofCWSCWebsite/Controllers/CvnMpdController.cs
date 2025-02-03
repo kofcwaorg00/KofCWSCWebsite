@@ -10,6 +10,9 @@ using Serilog;
 using Microsoft.AspNetCore.Authorization;
 using FastReport.Web;
 using KofCAdmin.Models;
+using FastReport.Export.PdfSimple;
+using FastReport;
+using System.Text;
 
 
 namespace KofCWSCWebsite.Controllers
@@ -109,6 +112,9 @@ namespace KofCWSCWebsite.Controllers
         [Authorize(Roles = "Admin, ConventionAdmin")]
         public IActionResult PrintChecks(int NextCheckNumber,bool PrintCheckNumber,int GroupID)
         {
+            ViewBag.NextCheckNumber = NextCheckNumber;
+            ViewBag.PrintCheckNumber = PrintCheckNumber;
+            ViewBag.GroupID = GroupID;
             if(NextCheckNumber <= 0)
             {
                 TempData["CheckNumberError"] = "Error...Check number must be > 0";
@@ -125,11 +131,100 @@ namespace KofCWSCWebsite.Controllers
             model.WebReport.Report.Load(Path.Combine(_dataSetService.ReportsPath, $"{reportToLoad}.frx"));
             _dataSetService.PrepareReport(model.WebReport.Report, _configuration, GroupID,NextCheckNumber,myPCN);
             return View(model);
+        }
+
+        public IActionResult Pdf(int NextCheckNumber, bool PrintCheckNumber, int GroupID)
+        {
+            PrintMPDChecks model = new()
+            {
+                WebReport = new WebReport(),
+            };
 
 
+            int myPCN = PrintCheckNumber ? 1 : 0;
+            var reportToLoad = "MPDChecksAPI";
+            model.WebReport.Report.Load(Path.Combine(_dataSetService.ReportsPath, $"{reportToLoad}.frx"));
+            var myReport = _dataSetService.PrepareReport(model.WebReport.Report, _configuration, GroupID, NextCheckNumber, myPCN);
+            myReport.Prepare();
+
+            PDFSimpleExport pdfExport = new PDFSimpleExport();
+            
+            using (MemoryStream ms = new MemoryStream())
+            {
+                pdfExport.Export(myReport, ms);
+                ms.Position = 0; // Reset stream position
+
+                // Check if memory stream contains any data
+                if (ms.Length > 0)
+                {
+                    // Create a file content result
+                    var fileBytes = ms.ToArray(); // Copy the content to a byte array
+                    return File(fileBytes, "application/pdf", "CheckBatch.pdf");
+                }
+                else
+                {
+                    return BadRequest("Failed to generate the PDF. The report might be empty or not properly prepared.");
+                }
+            }
+        }
+
+        public async Task<IActionResult> ExportCSV(int GroupID)
+        {
+            var mydata = await _apiHelper.GetAsync<IEnumerable<CvnMpd>>($"GetMPDChecks/{GroupID}");
+
+            var csv = new StringBuilder();
+
+            var properties = typeof(CvnMpd).GetProperties(System.Reflection.BindingFlags.Public | System.Reflection.BindingFlags.Instance);
+
+            csv.AppendLine(string.Join(",", properties.Select(p => p.Name)));
+
+            foreach (var item in mydata)
+            {
+                var values = properties.Select(p => QuoteField(p.GetValue(item)?.ToString() ?? string.Empty));
+                csv.AppendLine(string.Join(",", values));
+            }
+
+            byte[] buffer = Encoding.UTF8.GetBytes(csv.ToString());
+
+            return File(buffer, "text/csv", "CheckBatch.csv");
+        }
 
 
-            return RedirectToAction("GetCheckBatch", "CvnMpd", new { id = 25 });
+        public async Task<IActionResult> ExportQB(int GroupID)
+        {
+            var mydata = await _apiHelper.GetAsync<IEnumerable<CvnMpd>>($"GetMPDChecks/{GroupID}");
+
+            var csv = new StringBuilder();
+
+            var properties = typeof(CvnMpd).GetProperties(System.Reflection.BindingFlags.Public | System.Reflection.BindingFlags.Instance);
+
+            csv.AppendLine(string.Join(",", properties.Select(p => p.Name)));
+
+            foreach (var item in mydata)
+            {
+                var values = properties.Select(p => QuoteField(p.GetValue(item)?.ToString() ?? string.Empty));
+                csv.AppendLine(string.Join(",", values));
+            }
+
+            byte[] buffer = Encoding.UTF8.GetBytes(csv.ToString());
+
+            return File(buffer, "text/csv", "CheckBatch.csv");
+        }
+
+        public async Task<IActionResult> ArchiveCheckBatch(int GroupID)
+        {
+            return RedirectToAction( "GetCheckBatch","CvnMpd",GroupID );
+        }
+
+        private static string QuoteField(string field)
+        {
+            if (field.Contains(","))
+            {
+                field = $"\"{field.Replace("\"", "\"\"")}\"";
+            }
+            return field;
         }
     }
+    
+
 }

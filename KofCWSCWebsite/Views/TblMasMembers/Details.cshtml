@@ -9,9 +9,12 @@
 <div>
     <h4>Member</h4>
     <hr />
-    <form method="post" asp-controller="MemberSuspensions" asp-action="CreateFrom" asp-route-KofCid="@Model.KofCid">
-        <button type="submit" class="btn btn-danger">Suspend Member</button>
-    </form>
+    @if (User.IsInRole("Admin"))
+    {
+        <form method="post" asp-controller="MemberSuspensions" asp-action="CreateFrom" asp-route-KofCid="@Model.KofCid">
+            <button type="submit" class="btn btn-danger">Suspend Member</button>
+        </form>
+    }
     <div class="container">
         <div class="row">
             <div class="col-sm-2">

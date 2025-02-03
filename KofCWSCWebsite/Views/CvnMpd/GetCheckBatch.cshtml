@@ -85,8 +85,9 @@
                                 </form>
                             </div>
                         </td>
-                        <td>
+                        @*<td>
                             <form asp-controller="CvnMpd" asp-action="ExportCSV" method="get">
+                                <input id="GroupID" name="GroupID" type="text" value="@ViewBag.GroupID" hidden />
                                 <button type="submit" class="btn btn-sm btn-success" id="submitButtonExCSV">
                                     Export Checks to CSV
                                 </button>
@@ -105,7 +106,7 @@
                                     Archive and Clear Check Batch
                                 </button>
                             </form>
-                        </td>
+                        </td>*@
                     </tr>
                 </table>
             </td>
