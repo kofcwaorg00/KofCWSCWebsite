@@ -13,6 +13,7 @@ using KofCAdmin.Models;
 using FastReport.Export.PdfSimple;
 using FastReport;
 using System.Text;
+using Microsoft.CodeAnalysis.VisualBasic.Syntax;
 
 
 namespace KofCWSCWebsite.Controllers
@@ -50,6 +51,10 @@ namespace KofCWSCWebsite.Controllers
         [Authorize(Roles = "Admin, ConventionAdmin")]
         public async Task<IActionResult> GetCheckBatch(int id)
         {
+            if (id == 0)
+            {
+                throw new Exception($"GetCheckBatch was called with a 0 from {Request.Path}");
+            }
             try
             {
                 Response.Cookies.Delete("councilFilter");
@@ -139,33 +144,43 @@ namespace KofCWSCWebsite.Controllers
             {
                 WebReport = new WebReport(),
             };
-
-
             int myPCN = PrintCheckNumber ? 1 : 0;
+
             var reportToLoad = "MPDChecksAPI";
+
             model.WebReport.Report.Load(Path.Combine(_dataSetService.ReportsPath, $"{reportToLoad}.frx"));
+
             var myReport = _dataSetService.PrepareReport(model.WebReport.Report, _configuration, GroupID, NextCheckNumber, myPCN);
+
             myReport.Prepare();
 
             PDFSimpleExport pdfExport = new PDFSimpleExport();
-            
-            using (MemoryStream ms = new MemoryStream())
-            {
-                pdfExport.Export(myReport, ms);
-                ms.Position = 0; // Reset stream position
 
-                // Check if memory stream contains any data
-                if (ms.Length > 0)
+            try
+            {
+                using (MemoryStream ms = new MemoryStream())
                 {
-                    // Create a file content result
-                    var fileBytes = ms.ToArray(); // Copy the content to a byte array
-                    return File(fileBytes, "application/pdf", "CheckBatch.pdf");
-                }
-                else
-                {
-                    return BadRequest("Failed to generate the PDF. The report might be empty or not properly prepared.");
+                    pdfExport.Export(myReport, ms);
+                    ms.Position = 0; // Reset stream position
+                    // Check if memory stream contains any data
+                    if (ms.Length > 0)
+                    {
+                        // Create a file content result
+                        var fileBytes = ms.ToArray(); // Copy the content to a byte array
+                        return File(fileBytes, "application/pdf", "CheckBatch.pdf");
+                    }
+                    else
+                    {
+                        return BadRequest("Failed to generate the PDF. The report might be empty or not properly prepared.");
+                    }
                 }
             }
+            catch (Exception ex)
+            {
+                Log.Error(Utils.FormatLogEntry(this, ex));
+                return BadRequest("Error in Memory Stream");
+            }
+            
         }
 
         public async Task<IActionResult> ExportCSV(int GroupID)
