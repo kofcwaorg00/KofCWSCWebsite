@@ -26,7 +26,6 @@ namespace KofCWSCWebsite.Controllers
 
         public SPController(ApplicationDbContext context, IConfiguration configuration, DataSetService dataSetService)
         {
-            Log.Information("Initializing SPController");
             _configuration = configuration;
             _dataSetService = dataSetService;
 
