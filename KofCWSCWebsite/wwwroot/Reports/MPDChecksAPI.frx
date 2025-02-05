@@ -1,5 +1,5 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
-<Report ScriptLanguage="CSharp" ReportInfo.Created="01/30/2025 07:54:58" ReportInfo.Modified="02/01/2025 10:00:05" ReportInfo.CreatorVersion="2024.1.3.0">
+<Report ScriptLanguage="CSharp" ReportInfo.Created="01/30/2025 07:54:58" ReportInfo.Modified="02/05/2025 11:34:43" ReportInfo.CreatorVersion="2024.1.3.0">
   <ScriptText>using System;
 using System.Collections;
 using System.Collections.Generic;
@@ -35,7 +35,7 @@ namespace FastReport
 }
 </ScriptText>
   <Dictionary>
-    <JsonDataSourceConnection Name="PrintMPDChecks" ConnectionString="rijcmlqbJsCNDUWD8zs7Fjc+Sa5CkWDNAmXKpuz0+mmAtZKm+tTWdTcubx364yfHmrduds+mlnH+soNm78SnkyZkdevEv5BGVS4FNJvgNAggXW1g3XqjaORyQEYewRQLeYMznTGWfL6UmgZwXHi/Kx8Z5BwqreWJ/ONGmg8976PJ+MOPmJbgSYGMoHPCbJQRem8kUugZ3ApwY1OEWJRIPgEZ+rZDGFbdhcacvGb23A2O65eEIk6Q2mXWi+bHTgl1Nbl0+420g+evQlTXjUmC8zrrz1Yu+ZDyocWaq8YpvTMY0iZ9iptze9D2tN+WqAPu6Lhp5qCVdRaRYeEsYJFNynwysP19l0ZaUn5OD6my1MrW0DCR9u6ftb/fLl5fan6mGDi1YraM5BTlSYE4sOBsbA9KvEB5511U7OrYHpwjr7Jsm7/a5oMtaitVBwNWV2HM+YThNiU896dCusfwiCB38AbNdcj8uZYDGQtvoEKc60FinrxRve8CoCcMKxyozhteAwCRnw9VAh/p13iv9eUnArwQXrf4xn0EGUkOWQLe49FYzanXARSuNZxfwNp+3ocQ0aXn8M5LHSPJMbn9BakHUihtXhqbEYUe6UOP7QD3JMp8ZyEpD8uX5ZVKkR1+aAEX3115AGNrOxTzsuiNUylfK1IokkZxEhrVWMiMNsXHs1Nx9lnCFM461W7yX6nHkK5F/6SZoB0bMIHHZs5y76hDLeIol8maLZsBMg8OQmJVwTqQoaNGLb/5edOhLXsOuSFJfy4PjpLuLm9ysNgPadN9B3lp/pSuSemxBsOPJhip0zWrLQzV7Q=">
+    <JsonDataSourceConnection Name="PrintMPDChecks" ConnectionString="rijcmlqbJsCNDUWD8zs7Fjc+Sa5CkWDNAmXKpuz0+mmAtZKm+tTWdTcubx364yfHmrduds+mlnH+soNm78SnkyZkdevEv5BGVS4FNJvgNAggXW1g3XqjaORyQEYewRQLeYMznTGWfL6UmgZwXHi/Kx8Z5BwqreWJ/ONGmg8976PJ+MOPmJbgSYGMoHPCbJQRem8kUugZ3ApwY1OEWJRIPgEZ+rZDGFbdhcacvGb23A2O65eEIk6Q2mXWi+bHTgl1Nbl0+420g+evQlTXjUmC8zrrz1Yu+ZDyocWaq8YpvTMY0iZ9iptze9D2tN+WqAPu6Lhp5qCVdRaRYeEsYJFNynwysP19l0ZaUn5OD6my1MrW0DCR9u6ftb/fLl5fan6mGDi1YraM5BTlSYE4sOBsbA9KvEB5511U7OrYHpwjr7Jsm7/a5oMtaitVBwNWV2HM+YThNiU896dCusfwiCB38AbNdcj8uZYDGQtvoEKc60FinrxRve8CoCcMKxyozhteAwCRnw9VAh/p13iv9eUnArwQXrf4xn0EGUkOWQLe49FYzanXARSuNZxfwNp+3ocQ0aXn8M5LHSPJMbn9BakHUihtXhqbEYUe6UOP7QD3JMp8ZyEpD8uX5ZVKkR1+aAEX3115AGNrOxTzsuiNUylfK1IokkZxEhrVWMiMNsXHs1Nx9lnCFM461W7yX6nHkK5F/6SZoB0bMIHHZs5y76hDLeIol8maLZsBMg8OQmJVwTqQoaNGLb/5edOhLXsOuSFJfy4PjpLuLm9ysNgPadN9B3lp/pSuS4xJ16siMnNxdxvwNqESWg=">
       <JsonTableDataSource Name="JSON" DataType="FastReport.Utils.Json.JsonArray" Enabled="true" TableName="JSON">
         <Column Name="index" DataType="System.Int32"/>
         <Column Name="item" DataType="FastReport.JsonBase">
@@ -65,8 +65,8 @@ namespace FastReport
   </Dictionary>
   <ReportPage Name="Page1" PaperWidth="215.9" PaperHeight="279.4" LeftMargin="0" TopMargin="0" RightMargin="0" BottomMargin="0" Watermark.Font="Arial, 60pt">
     <DataBand Name="Data1" Width="816.1" Height="1056.13" DataSource="JSON">
-      <TextObject Name="Text5" Left="96.01" Top="96.01" Width="519.75" Height="18.9" Text="[JSON.item.payee]" Font="Arial, 10pt"/>
-      <TextObject Name="Text6" Left="94.5" Top="134.4" Width="422.4" Height="18.9" Text="[JSON.AmountToWords]" Font="Arial, 10pt"/>
+      <TextObject Name="Text5" Left="96.01" Top="124.81" Width="519.75" Height="18.9" Text="[JSON.item.payee]" Font="Arial, 10pt"/>
+      <TextObject Name="Text6" Left="94.5" Top="153.6" Width="422.4" Height="18.9" Text="[JSON.AmountToWords]" Font="Arial, 10pt"/>
       <TextObject Name="Text8" Left="96" Top="220.8" Width="288" Height="19.2" Text="[JSON.item.payee]" Font="Arial, 10pt"/>
       <TextObject Name="Text9" Left="96" Top="240" Width="288" Height="19.2" Text="[JSON.item.address]" Font="Arial, 10pt"/>
       <TextObject Name="Text10" Left="96" Top="259.2" Width="288" Height="19.2" Text="[JSON.CSZ]" Font="Arial, 10pt"/>
@@ -95,9 +95,9 @@ namespace FastReport
       <TextObject Name="Text44" Left="220.8" Top="854.4" Width="374.4" Height="19.2" Text="[JSON.item.checkTotal]" Format="Number" Format.UseLocale="true" Format.DecimalDigits="2" WordWrap="false" Font="Arial, 10pt" Trimming="EllipsisCharacter"/>
       <TextObject Name="Text45" Left="220.8" Top="883.2" Width="96" Height="19.2" Text="5029" Font="Arial, 10pt"/>
       <TextObject Name="Text46" Left="96" Top="931.2" Width="528" Height="19.2" Text="[JSON.Memo]" Font="Arial, 10pt"/>
-      <TextObject Name="Text47" Left="643.2" Top="96" Width="96" Height="19.2" Text="[JSON.item.checkTotal]" Format="Number" Format.UseLocale="true" Format.DecimalDigits="2" HorzAlign="Right" WordWrap="false" Font="Arial, 10pt" Trimming="EllipsisCharacter"/>
-      <TextObject Name="Text48" Left="729.6" Top="48" Width="86.4" Height="19.2" Text="[JSON.FormattedDate]" Font="Arial, 10pt"/>
-      <TextObject Name="Text49" Left="748.8" Top="9.6" Width="67.2" Height="19.2" VisibleExpression="[JSON.item.printCheckNumber]" CanShrink="true" Text="[JSON.item.checkNumber]" Format="Custom" Format.Format="0" HorzAlign="Center" WordWrap="false" Font="Arial, 10pt" Trimming="EllipsisCharacter"/>
+      <TextObject Name="Text47" Left="643.2" Top="124.8" Width="96" Height="19.2" Text="[JSON.item.checkTotal]" Format="Number" Format.UseLocale="true" Format.DecimalDigits="2" HorzAlign="Right" WordWrap="false" Font="Arial, 10pt" Trimming="EllipsisCharacter"/>
+      <TextObject Name="Text48" Left="691.2" Top="76.8" Width="86.4" Height="19.2" Text="[JSON.FormattedDate]" Font="Arial, 10pt"/>
+      <TextObject Name="Text49" Left="720" Top="48" Width="67.2" Height="19.2" VisibleExpression="[JSON.item.printCheckNumber]" CanShrink="true" Text="[JSON.item.checkNumber]" Format="Custom" Format.Format="0" HorzAlign="Center" WordWrap="false" Font="Arial, 10pt" Trimming="EllipsisCharacter"/>
     </DataBand>
     <ReportSummaryBand Name="ReportSummary1" Top="1060.13" Width="816.1" Height="37.8"/>
   </ReportPage>
