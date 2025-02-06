@@ -229,7 +229,7 @@ namespace KofCWSCWebsite.Controllers
         public async Task<IActionResult> ArchiveCheckBatch(int GroupID)
         {
             var mydata = await _apiHelper.GetAsync<int>($"MPD/ArchiveMPD/{GroupID}");
-            return RedirectToAction( "Index","Home");
+            return RedirectToAction( "GetCheckBatch","CvnMpd",new { id = GroupID });
         }
 
         private static string QuoteField(string field)
