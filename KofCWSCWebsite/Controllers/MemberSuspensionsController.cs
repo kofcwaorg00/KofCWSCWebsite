@@ -10,6 +10,9 @@ using KofCWSCWebsite.Models;
 using KofCWSCWebsite.Services;
 using Serilog;
 using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNet.Identity;
+using KofCWSCWebsite.Areas.Identity.Data;
+using Microsoft.AspNetCore.Identity;
 
 namespace KofCWSCWebsite.Controllers
 {
@@ -17,11 +20,12 @@ namespace KofCWSCWebsite.Controllers
     {
         private DataSetService _dataSetService;
         private readonly ApiHelper _apiHelper;
-
-        public MemberSuspensionsController(DataSetService dataSetService)
+        private readonly Microsoft.AspNetCore.Identity.UserManager<KofCUser> _userManager;
+        public MemberSuspensionsController(DataSetService dataSetService, Microsoft.AspNetCore.Identity.UserManager<KofCUser> userManager)
         {
             _dataSetService = dataSetService;
             _apiHelper = new ApiHelper(_dataSetService);
+            _userManager = userManager; 
         }
 
         // GET: MemberSuspensions
@@ -72,6 +76,10 @@ namespace KofCWSCWebsite.Controllers
             {
                 if (ModelState.IsValid)
                 {
+                    var myuser = await _userManager.GetUserAsync(User);
+
+                    memberSuspension.Updated = DateTime.Now;
+                    memberSuspension.UpdatedBy = myuser.KofCMemberID;
                     await _apiHelper.PostAsync<MemberSuspension, MemberSuspension>($"/Suspensions/CreateFrom", memberSuspension);
                     //_context.Add(memberSuspension);
                     //await _context.SaveChangesAsync();
