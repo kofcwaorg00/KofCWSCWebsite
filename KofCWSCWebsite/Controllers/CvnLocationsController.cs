@@ -11,6 +11,7 @@ using KofCWSCWebsite.Services;
 using Serilog;
 using Microsoft.AspNetCore.Authorization;
 using KofCWSC.API.Models;
+using Microsoft.IdentityModel.Tokens;
 
 namespace KofCWSCWebsite.Controllers
 {
@@ -55,14 +56,14 @@ namespace KofCWSCWebsite.Controllers
             {
                 try
                 {
+                    // first add the new location
                     var result = await _apiHelper.PostAsync<CvnLocation, CvnLocation>("Locations", cvnLocation);
-                    var address = String.Concat(cvnLocation.City,", ",cvnLocation.State);
-                    var location = cvnLocation.Location;
+
                     // then get all councils and spin through them adding to the mileage table for all
                     var councils = await _apiHelper.GetAsync<IEnumerable<TblValCouncil>>($"Councils");
                     foreach (var council in councils)
                     {
-                        await AddorUpdateMileageTable(council, location, address);
+                        await AddorUpdateMileageTable(council, cvnLocation);
                     }
                 }
                 catch (Exception ex)
@@ -199,14 +200,18 @@ namespace KofCWSCWebsite.Controllers
             }
         }
 
-        private async Task<bool> AddorUpdateMileageTable(TblValCouncil council,string srclocation,string address)
+        private async Task<bool> AddorUpdateMileageTable(TblValCouncil council,CvnLocation cvnLocation)
         {
             try
             {
-                var destLocation = String.Concat(council.PhyCity, ", ", council.PhyState);
+                //*****************************************************************************************************
+                // 2/6/2025 Tim Philomeno
+                // we need to be able to use the address as well as city, state and zip if possible
+                var venueAddress = string.Concat(cvnLocation.Address,", ", cvnLocation.City,", ", cvnLocation.State," ", cvnLocation.ZipCode);
+                var councilAddress = string.Concat(council.PhyAddress,", ", council.PhyCity,", ", council.PhyState," ",council.PhyPostalCode);
                 // First see if the council already has a mileage entry for the incoming location
-                var existingCouncil = await _apiHelper.GetAsync<CvnMileage>($"MileageForCouncil/{council.CNumber}/{srclocation}");
-                var distance = await _apiHelper.GetAsync<AzureMapsDistance>($"DriveDistance/{destLocation}/{address}");
+                var existingCouncil = await _apiHelper.GetAsync<CvnMileage>($"MileageForCouncil/{council.CNumber}/{cvnLocation.Location}");
+                var distance = await _apiHelper.GetAsync<AzureMapsDistance>($"DriveDistance/{venueAddress}/{councilAddress}");
                 if (distance.DistanceInKilometers < 0)
                 {
                     // This is an error condition, probably one of the addresses is blank or invalid

@@ -65,6 +65,7 @@ namespace KofCWSCWebsite.Data
                 throw new HttpRequestException($"GET request failed. Status Code: {response.StatusCode}, Reason: {response.ReasonPhrase}+{endpoint}");
             }
             var json = await response.Content.ReadAsStringAsync();
+            if (string.IsNullOrWhiteSpace(json)) { return default; };
             try
             {
                 return JsonSerializer.Deserialize<T>(json, new JsonSerializerOptions { PropertyNameCaseInsensitive = true });

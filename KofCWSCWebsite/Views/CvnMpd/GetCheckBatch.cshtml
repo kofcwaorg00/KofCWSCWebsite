@@ -9,7 +9,7 @@
 @{
     TempData["CheckNumberError"] = "";
 }
-<h6 id="ErrorMessage"><span style="color:red">Errors Found see Delegate Column to Edit</span></h6>
+<h6 id="ErrorMessage"><span style="color:red">Missing Mileage for Councils Found.  Please add to Mileage table and start batch again. Scroll down to see the RED errors.</span></h6>
 
 @*<p>
         <a asp-action="Create">Create New</a>
@@ -86,27 +86,27 @@
                             </div>
                         </td>
                         @*<td>
-                            <form asp-controller="CvnMpd" asp-action="ExportCSV" method="get">
-                                <input id="GroupID" name="GroupID" type="text" value="@ViewBag.GroupID" hidden />
-                                <button type="submit" class="btn btn-sm btn-success" id="submitButtonExCSV">
-                                    Export Checks to CSV
-                                </button>
-                            </form>
-                        </td>
-                        <td>
-                            <form asp-controller="CvnMpd" asp-action="ExportQB" method="get">
-                                <button type="submit" class="btn btn-sm btn-success" id="submitButtonExQB">
-                                    Export Checks to QuickBooks
-                                </button>
-                            </form>
-                        </td>
-                        <td>
-                            <form asp-controller="CvnMpd" asp-action="Archive" method="get">
-                                <button type="submit" class="btn btn-sm btn-success" id="submitButtonArch">
-                                    Archive and Clear Check Batch
-                                </button>
-                            </form>
-                        </td>*@
+                                <form asp-controller="CvnMpd" asp-action="ExportCSV" method="get">
+                                    <input id="GroupID" name="GroupID" type="text" value="@ViewBag.GroupID" hidden />
+                                    <button type="submit" class="btn btn-sm btn-success" id="submitButtonExCSV">
+                                        Export Checks to CSV
+                                    </button>
+                                </form>
+                            </td>
+                            <td>
+                                <form asp-controller="CvnMpd" asp-action="ExportQB" method="get">
+                                    <button type="submit" class="btn btn-sm btn-success" id="submitButtonExQB">
+                                        Export Checks to QuickBooks
+                                    </button>
+                                </form>
+                            </td>
+                            <td>
+                                <form asp-controller="CvnMpd" asp-action="Archive" method="get">
+                                    <button type="submit" class="btn btn-sm btn-success" id="submitButtonArch">
+                                        Archive and Clear Check Batch
+                                    </button>
+                                </form>
+                            </td>*@
                     </tr>
                 </table>
             </td>
@@ -195,9 +195,9 @@
             <th>
                 @Html.DisplayNameFor(model => model.Location)
             </th>
-            @*<th>
-                    @Html.DisplayNameFor(model => model.PayMe)
-                </th>*@
+            <th>
+                @Html.DisplayNameFor(model => model.CouncilLocation)
+            </th>
             <th></th>
         </tr>
     </thead>
@@ -338,7 +338,18 @@
 
                 }
                 <td style="text-align:center">
-                    @Html.DisplayFor(modelItem => item.Miles)
+                    @{
+                        string myMiles = item.Miles.ToString();
+                    }
+                    @if (myMiles.Length == 0)
+                    {
+                        <span title="Missing Mileage for Council" style="color:white;background-color:red">Error</span>
+                    }
+                    else
+                    {
+                        @Html.DisplayFor(modelItem => item.Miles)
+                    }
+
                 </td>
                 <td>
                     @Html.DisplayFor(modelItem => item.CheckTotal)
@@ -346,9 +357,9 @@
                 <td>
                     @Html.DisplayFor(modelItem => item.Location)
                 </td>
-                @*<td>
-                        @Html.DisplayFor(modelItem => item.PayMe)
-                    </td>*@
+                <td>
+                    @Html.DisplayFor(modelItem => item.CouncilLocation)
+                </td>
                 @*
                     <td>
                         <a asp-action="Edit" asp-route-id="@item.Id">Edit</a> |
@@ -379,6 +390,7 @@
     const myPrintChecksButton = document.getElementById('PrintChecksButton');
 
     var CheckCounter = 0;
+    var MileageErrorCounter = 0;
     // Elements
     const districtFilter = document.getElementById('mydistrictFilter');
     const councilFilter = document.getElementById('mycouncilFilter');
@@ -443,8 +455,9 @@
         const myddayValue = ddaysFilter.checked;
 
         CheckCounter = 0;
-
+        MileageErrorCounter = 0;
         var myTable = document.getElementById('myTable');
+        var myTable2 = document.getElementById('myTable');
         Array.from(myTable.rows).forEach(row => {
             var myTotal = 0;
             // only affect the body rows not the header
@@ -452,10 +465,11 @@
                 const district = row.cells[0].textContent.toLowerCase().trim();
                 const council = row.cells[1].textContent.toLowerCase().trim();
                 const name = row.cells[2].textContent.toLowerCase().trim();
-                
+                const miles = row.cells[9].innerHTML;
+
                 if (myGroupIDV == 3) { myTotal = Number(row.cells[7].innerHTML); }
                 if (myGroupIDV == 25) { myTotal = Number(row.cells[10].innerHTML); }
-               
+
                 // Check each filter
                 const districtMatch = districtValue === '' || district === districtValue;
                 const councilMatch = councilValue === '' || council === councilValue;
@@ -466,13 +480,16 @@
                 if (districtMatch && councilMatch && nameMatch && myTotal) {
                     row.style.display = '';
                     CheckCounter = CheckCounter + 1;
+                    if (miles.includes('Error')) { MileageErrorCounter++; };
                 } else {
                     row.style.display = 'none';
                 }
             }
         });
+        
         myPrint.innerText = 'Print ' + CheckCounter.toString() + ' Checks'
-
+        // show error message if any councils are missing mileage
+        if (MileageErrorCounter > 0) { myErrorMessage.hidden = false; } else { myErrorMessage.hidden = true; }
         // Save filter values
         saveFilters();
     }
