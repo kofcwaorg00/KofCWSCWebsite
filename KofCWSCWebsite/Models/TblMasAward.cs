@@ -11,7 +11,9 @@ public partial class TblMasAward
 
     [DisplayName("Award")]
     public string? AwardName { get; set; }
-    [DisplayName("Description")]
+
+    [MaxLength(1000)]
+    [DisplayName("Description (max 1,000 chars)")]
     public string? AwardDescription { get; set; }
     [DisplayName("Due Date")]
     [DisplayFormat(DataFormatString = "{0:MM/dd/yyyy}")]
