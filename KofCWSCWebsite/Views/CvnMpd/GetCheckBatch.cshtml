@@ -456,6 +456,7 @@
 
         CheckCounter = 0;
         MileageErrorCounter = 0;
+        var milcol = 0;
         var myTable = document.getElementById('myTable');
         Array.from(myTable.rows).forEach(row => {
             var myTotal = 0;
@@ -464,7 +465,9 @@
                 const district = row.cells[0].textContent.toLowerCase().trim();
                 const council = row.cells[1].textContent.toLowerCase().trim();
                 const name = row.cells[2].textContent.toLowerCase().trim();
-                const miles = row.cells[9].innerHTML;
+                if (myGroupIDV == 25) { milcol = 9; };
+                if (myGroupIDV == 3) { milcol = 6; };
+                const miles = row.cells[milcol].innerHTML;
 
                 if (myGroupIDV == 3) { myTotal = Number(row.cells[7].innerHTML); }
                 if (myGroupIDV == 25) { myTotal = Number(row.cells[10].innerHTML); }
