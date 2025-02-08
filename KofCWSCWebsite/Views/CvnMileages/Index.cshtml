@@ -30,13 +30,26 @@
         </tr>
     </tbody>
 </table>
-<p>
-    <form asp-controller="CvnLocations" asp-action="Create" method="get">
-        <button type="submit" class="btn btn-sm btn-success">
-            Add a New Location
-        </button>
-    </form>
-</p>
+<table class="table" style="width:50%">
+    <tr>
+        <td>
+            <form asp-controller="CvnMileages" asp-action="Create" method="get">
+                <button type="submit" class="btn btn-sm btn-success">
+                    Add New Council Mileage Entry
+                </button>
+            </form>
+        </td>
+        <td>
+            <form asp-controller="CvnLocations" asp-action="Create" method="get">
+                <button type="submit" class="btn btn-sm btn-success">
+                    Add a New Location
+                </button>
+            </form>
+
+        </td>
+    </tr>
+
+</table>
 <table class="table" style="width:50%" id="myTable">
     <thead>
         <tr>

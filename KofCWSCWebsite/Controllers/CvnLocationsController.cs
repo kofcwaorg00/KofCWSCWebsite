@@ -20,7 +20,7 @@ namespace KofCWSCWebsite.Controllers
         private readonly ApiHelper _apiHelper;
         public CvnLocationsController(ApiHelper apiHelper)
         {
-            _apiHelper = apiHelper; 
+            _apiHelper = apiHelper;
         }
 
         // GET: CvnLocations
@@ -63,7 +63,12 @@ namespace KofCWSCWebsite.Controllers
                     var councils = await _apiHelper.GetAsync<IEnumerable<TblValCouncil>>($"Councils");
                     foreach (var council in councils)
                     {
-                        await AddorUpdateMileageTable(council, cvnLocation);
+                        if (!await AddorUpdateMileageTable(council, cvnLocation))
+                        {
+                            // allow this to continue and log the missing council information
+                            var ex = new Exception($"Council {council.CNumber} is missing mileage entry for {cvnLocation.Location}");
+                            Log.Information(Utils.FormatLogEntry(this, ex));
+                        };
                     }
                 }
                 catch (Exception ex)
@@ -200,19 +205,19 @@ namespace KofCWSCWebsite.Controllers
             }
         }
 
-        private async Task<bool> AddorUpdateMileageTable(TblValCouncil council,CvnLocation cvnLocation)
+        private async Task<bool> AddorUpdateMileageTable(TblValCouncil council, CvnLocation cvnLocation)
         {
             try
             {
                 //*****************************************************************************************************
                 // 2/6/2025 Tim Philomeno
                 // we need to be able to use the address as well as city, state and zip if possible
-                var venueAddress = string.Concat(cvnLocation.Address,", ", cvnLocation.City,", ", cvnLocation.State," ", cvnLocation.ZipCode);
-                var councilAddress = string.Concat(council.PhyAddress,", ", council.PhyCity,", ", council.PhyState," ",council.PhyPostalCode);
+                var venueEP = GetEndPointFromAddress(cvnLocation.Address, cvnLocation.City, cvnLocation.State, cvnLocation.ZipCode);
+                var councilEP = GetEndPointFromAddress(council.PhyAddress, council.PhyCity, council.PhyState, council.PhyPostalCode);
                 // First see if the council already has a mileage entry for the incoming location
                 var existingCouncil = await _apiHelper.GetAsync<CvnMileage>($"MileageForCouncil/{council.CNumber}/{cvnLocation.Location}");
-                var distance = await _apiHelper.GetAsync<AzureMapsDistance>($"DriveDistance/{venueAddress}/{councilAddress}");
-                if (distance.DistanceInKilometers < 0)
+                var distance = await _apiHelper.GetAsync<AzureMapsDistance>($"DriveDistance/{venueEP}/{councilEP}");
+                if (distance.DistanceInMiles < 0)
                 {
                     // This is an error condition, probably one of the addresses is blank or invalid
                     Exception ex = new Exception($"Council {council.CNumber} is missing Physical Address");
@@ -238,7 +243,30 @@ namespace KofCWSCWebsite.Controllers
                 Log.Error(Utils.FormatLogEntry(this, ex));
                 return false;
             }
-
+        }
+        private string GetEndPointFromAddress(string address, string city, string state, string zipcode)
+        {
+            //***************************************************************************************
+            // 2/7/2025 Tim Philomeno
+            //  We need a consistant way to deal with endpoints(address) to pass to the mapping API
+            //  so the incomming 
+            if (address.IsNullOrEmpty())
+            {
+                if (city.IsNullOrEmpty())
+                {
+                    if (state.IsNullOrEmpty())
+                    {
+                        if (zipcode.IsNullOrEmpty())
+                        {
+                            return "z";
+                        }
+                        return string.Concat(zipcode);
+                    }
+                    return string.Concat(state," ", zipcode);
+                }
+                return string.Concat(city,",",state," ", zipcode);
+            }
+            return string.Concat(address,", ",city,", ",state," ",zipcode);
         }
     }
 }
