@@ -2,6 +2,7 @@
 @using KofCWSCWebsite.Services;
 @{
     ViewData["Title"] = "KofCWSC Councils";
+    string stars = "";
 }
 
 
@@ -20,6 +21,9 @@
     <thead>
         <tr>
             <th class="MyColHdr">
+                <label title="Missing Addresses (P)hysical, (M)ailing, M(E)eting">MA</label>
+            </th>
+            <th class="MyColHdr">
                 @Html.DisplayNameFor(model => model.CouncilNo)
             </th>
             <th class="MyColHdr" style="max-width:25px" title="District">
@@ -35,20 +39,20 @@
                 @Html.DisplayNameFor(model => model.GrandKnight)
             </th>
             @*<th>
-                    @Html.DisplayNameFor(model => model.GKMemberID)
-                </th>*@
+            @Html.DisplayNameFor(model => model.GKMemberID)
+        </th>*@
             <th class="MyColHdr" style="min-width:150px">
                 @Html.DisplayNameFor(model => model.FinancialSecretary)
             </th>
             @*<th>
-                    @Html.DisplayNameFor(model => model.FSMemberID)
-                </th>*@
+            @Html.DisplayNameFor(model => model.FSMemberID)
+        </th>*@
             <th class="MyColHdr" style="min-width:150px">
                 @Html.DisplayNameFor(model => model.Chaplain)
             </th>
             @*<th>
-                    @Html.DisplayNameFor(model => model.ChapMemberID)
-                </th>*@
+            @Html.DisplayNameFor(model => model.ChapMemberID)
+        </th>*@
             <th class="MyColHdr">
                 @Html.DisplayNameFor(model => model.MeetingInfo)
             </th>
@@ -59,8 +63,8 @@
                 @Html.DisplayNameFor(model => model.WebSiteUrl)
             </th>
             @*<th>
-                    @Html.DisplayNameFor(model => model.Diocese)
-                </th>*@
+            @Html.DisplayNameFor(model => model.Diocese)
+        </th>*@
             <th class="MyColHdr">
                 @Html.DisplayNameFor(model => model.BulletinUrl)
             </th>
@@ -69,7 +73,25 @@
     <tbody>
         @foreach (var item in Model)
         {
+            stars = "";
             <tr>
+                <td>
+                    @if (item.PhyAddress is null || item.PhyAddress.Length == 0)
+                    {
+                        stars += "P";
+                    }
+                    @if (item.MailAddress is null || item.MailAddress.Length == 0)
+                    {
+                        stars += "M";
+                    }
+                    @if (item.MeetAddress is null || item.MeetAddress.Length == 0)
+                    {
+                        stars += "E";
+                    }
+
+                    <label style="color:red" title="Missing Addresses (P)hysical, (M)ailing, M(E)eting">@stars</label>
+
+                </td>
                 <td>
                     @Html.DisplayFor(modelItem => item.CouncilNo)
                 </td>
@@ -86,20 +108,20 @@
                     @Html.Raw(Utils.GetMemberNameLink(item.GrandKnight, item.GKMemberID, User.Identity.IsAuthenticated, Context.Request.Host.Value, "GetCouncils"))
                 </td>
                 @*<td>
-                        @Html.DisplayFor(modelItem => item.GKMemberID)
-                    </td>*@
+            @Html.DisplayFor(modelItem => item.GKMemberID)
+        </td>*@
                 <td>
                     @Html.Raw(Utils.GetMemberNameLink(item.FinancialSecretary, item.FSMemberID, User.Identity.IsAuthenticated, Context.Request.Host.Value, "GetCouncils"))
                 </td>
                 @*<td>
-                        @Html.DisplayFor(modelItem => item.FSMemberID)
-                    </td>*@
+            @Html.DisplayFor(modelItem => item.FSMemberID)
+        </td>*@
                 <td>
                     @Html.Raw(Utils.GetMemberNameLink(item.Chaplain, item.ChapMemberID, User.Identity.IsAuthenticated, Context.Request.Host.Value, "GetCouncils"))
                 </td>
                 @*<td>
-                        @Html.DisplayFor(modelItem => item.ChapMemberID)
-                    </td>*@
+            @Html.DisplayFor(modelItem => item.ChapMemberID)
+        </td>*@
                 <td>
                     @Html.DisplayFor(modelItem => item.MeetingInfo)
                 </td>
@@ -116,8 +138,8 @@
                     }
                 </td>
                 @*<td>
-                        @Html.DisplayFor(modelItem => item.Diocese)
-                    </td>*@
+            @Html.DisplayFor(modelItem => item.Diocese)
+        </td>*@
                 <td>
                     @{
                         string myBul = @Html.Raw(item.BulletinUrl).ToString();

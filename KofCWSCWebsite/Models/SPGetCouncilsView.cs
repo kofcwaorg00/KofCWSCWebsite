@@ -43,5 +43,8 @@ public partial class SPGetCouncilsView
     [DisplayName("Bulletin")]
     public string? BulletinUrl { get; set; }
     public string? Heading { get; set; }
-  
+    public string? PhyAddress { get; set; }
+    public string? MailAddress { get; set; }
+    public string? MeetAddress { get; set; }
+
 }
