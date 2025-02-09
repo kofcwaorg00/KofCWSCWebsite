@@ -56,6 +56,7 @@ namespace KofCWSCWebsite.Controllers
             {
                 try
                 {
+                    List<TblValCouncil> myMissMil = new List<TblValCouncil>();
                     // first add the new location
                     var result = await _apiHelper.PostAsync<CvnLocation, CvnLocation>("Locations", cvnLocation);
 
@@ -65,11 +66,14 @@ namespace KofCWSCWebsite.Controllers
                     {
                         if (!await AddorUpdateMileageTable(council, cvnLocation))
                         {
+                            myMissMil.Add(council);
                             // allow this to continue and log the missing council information
-                            var ex = new Exception($"Council {council.CNumber} is missing mileage entry for {cvnLocation.Location}");
-                            Log.Information(Utils.FormatLogEntry(this, ex));
+                            //var ex = new Exception($"Council {council.CNumber} is missing mileage entry for {cvnLocation.Location}");
+                            //Log.Information(Utils.FormatLogEntry(this, ex));
                         };
                     }
+                    // after we are done then report back councils that did not make it
+                    return View("CouncilsMissingMileage", myMissMil);
                 }
                 catch (Exception ex)
                 {
@@ -215,24 +219,34 @@ namespace KofCWSCWebsite.Controllers
                 var venueEP = GetEndPointFromAddress(cvnLocation.Address, cvnLocation.City, cvnLocation.State, cvnLocation.ZipCode);
                 var councilEP = GetEndPointFromAddress(council.PhyAddress, council.PhyCity, council.PhyState, council.PhyPostalCode);
                 // First see if the council already has a mileage entry for the incoming location
-                var existingCouncil = await _apiHelper.GetAsync<CvnMileage>($"MileageForCouncil/{council.CNumber}/{cvnLocation.Location}");
+                var existingCmil = await _apiHelper.GetAsync<CvnMileage>($"MileageForCouncil/{council.CNumber}/{cvnLocation.Location}");
                 var distance = await _apiHelper.GetAsync<AzureMapsDistance>($"DriveDistance/{venueEP}/{councilEP}");
+                int rounddistance = (int)Math.Ceiling(distance.DistanceInMiles);
                 if (distance.DistanceInMiles < 0)
                 {
                     // This is an error condition, probably one of the addresses is blank or invalid
-                    Exception ex = new Exception($"Council {council.CNumber} is missing Physical Address");
-                    Log.Error(Utils.FormatLogEntry(this, ex));
+                    //Exception ex = new Exception($"Council {council.CNumber} is missing Physical Address");
+                    //Log.Error(Utils.FormatLogEntry(this, ex));
                     return false;
                 }
 
-                if (existingCouncil is null)
+                if (existingCmil is null)
                 {
-                    // Add New
+                    // Add New a new one
+                    //var newMileage = new CvnMileage
+                    //{
+                    //    Council = council.CNumber,
+                    //    Location = cvnLocation.Location,
+                    //    Mileage = rounddistance
+                    //};
+                    //var addmil = await _apiHelper.PostAsync<CvnMileage, CvnMileage>($"Mileage",newMileage);
                     return true;
                 }
                 else
                 {
-                    // Update
+                    // Update the existing one
+                    //existingCmil.Mileage = rounddistance;
+                    //var updmil = await _apiHelper.PutAsync<CvnMileage, CvnMileage>($"Locations/{existingCmil.Id}",existingCmil);
                     return true;
                 }
 

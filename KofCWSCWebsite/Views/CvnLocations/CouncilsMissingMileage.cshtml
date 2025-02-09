@@ -1,0 +1,70 @@
+﻿@model IEnumerable<KofCWSCWebsite.Models.TblValCouncil>
+
+@{
+    ViewData["Title"] = "CouncilsMissingMileage";
+}
+
+<h1>Councils Missing Mileage Entires</h1>
+<h6>Probably because no physical address was found</h6>
+
+<table class="table">
+    <thead>
+        <tr>
+            <th>
+                @Html.DisplayNameFor(model => model.Status)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.CNumber)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.CLocation)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.CName)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.District)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.AddInfo1)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.AddInfo2)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.AddInfo3)
+            </th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var item in Model)
+        {
+            <tr>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Status)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.CNumber)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.CLocation)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.CName)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.District)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.AddInfo1)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.AddInfo2)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.AddInfo3)
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>
