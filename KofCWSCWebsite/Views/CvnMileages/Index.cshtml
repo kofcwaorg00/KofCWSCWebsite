@@ -1,4 +1,4 @@
-﻿@model IEnumerable<KofCWSCWebsite.Models.CvnMileage>
+﻿@model IEnumerable<KofCWSCWebsite.Models.CvnMileageC>
 
 @{
     ViewData["Title"] = "Index";
@@ -62,6 +62,9 @@
             <th style="width:50%;text-align:center">
                 @Html.DisplayNameFor(model => model.Mileage)
             </th>
+            <th style="text-align:center">
+                @Html.DisplayNameFor(model => model.Address)
+            </th>
             <th></th>
             <th></th>
             <th></th>
@@ -78,6 +81,9 @@
             </td>
             <td style="width:50%;text-align:center">
                 @Html.DisplayFor(modelItem => item.Mileage)
+            </td>
+            <td style="width:50%;text-align:center">
+                @Html.DisplayFor(modelItem => item.Address)
             </td>
             <td style="padding-right:0px">
                 @* <a asp-action="Edit" asp-route-id="@item.MemberId">Edit</a>&nbsp;|&nbsp;<a asp-action="Details" asp-route-id="@item.MemberId">Details</a>&nbsp;|&nbsp;<a asp-action="Delete" asp-route-id="@item.MemberId">Delete</a> *@

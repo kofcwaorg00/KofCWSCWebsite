@@ -28,7 +28,7 @@ namespace KofCWSCWebsite.Controllers
         {
             try
             {
-                var result = await _apiHelper.GetAsync<IEnumerable<CvnMileage>>("Mileage");
+                var result = await _apiHelper.GetAsync<IEnumerable<CvnMileageC>>("MileageForCouncils");
                 return View(result);
             }
             catch (Exception ex)
