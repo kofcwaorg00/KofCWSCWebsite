@@ -233,20 +233,20 @@ namespace KofCWSCWebsite.Controllers
                 if (existingCmil is null)
                 {
                     // Add New a new one
-                    //var newMileage = new CvnMileage
-                    //{
-                    //    Council = council.CNumber,
-                    //    Location = cvnLocation.Location,
-                    //    Mileage = rounddistance
-                    //};
-                    //var addmil = await _apiHelper.PostAsync<CvnMileage, CvnMileage>($"Mileage",newMileage);
+                    var newMileage = new CvnMileage
+                    {
+                        Council = council.CNumber,
+                        Location = cvnLocation.Location,
+                        Mileage = rounddistance
+                    };
+                    var addmil = await _apiHelper.PostAsync<CvnMileage, CvnMileage>($"Mileage", newMileage);
                     return true;
                 }
                 else
                 {
                     // Update the existing one
-                    //existingCmil.Mileage = rounddistance;
-                    //var updmil = await _apiHelper.PutAsync<CvnMileage, CvnMileage>($"Locations/{existingCmil.Id}",existingCmil);
+                    existingCmil.Mileage = rounddistance;
+                    var updmil = await _apiHelper.PutAsync<CvnMileage, CvnMileage>($"Locations/{existingCmil.Id}",existingCmil);
                     return true;
                 }
 
