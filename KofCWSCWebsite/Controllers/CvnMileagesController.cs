@@ -128,7 +128,7 @@ namespace KofCWSCWebsite.Controllers
             {
                 try
                 {
-                    var result = await _apiHelper.PutAsync<CvnMileage, CvnMileage>($"/Council/{id}", cvnMileage);
+                    var result = await _apiHelper.PutAsync<CvnMileage, CvnMileage>($"/Mileage/{id}", cvnMileage);
                 }
                 catch (Exception ex)
                 {

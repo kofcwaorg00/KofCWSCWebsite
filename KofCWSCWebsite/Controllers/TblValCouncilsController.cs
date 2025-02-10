@@ -200,7 +200,10 @@ namespace KofCWSCWebsite.Controllers
                 var result = await _apiHelper.GetAsync<TblValCouncilFSEdit>($"/FSEditCouncil/{id}");
                 if (result == null)
                 {
-                    return Ok($"Can't Retrief FS Address, FS missing for council {id}");
+                    // if there is no FS assigned, just send back the council record so we can still edit
+                    var noFSresult = await _apiHelper.GetAsync<TblValCouncilFSEdit>($"/Council/{id}");
+                    return View("FSEdit",noFSresult);
+                    //return Ok($"Can't Retrieve FS Address, FS missing for council {id}");
                 }
                 return View("FSEdit", result);
             }

@@ -16,6 +16,15 @@ public partial class TblValCouncilFSEdit
     public string? AddInfo1 { get; set; }
     public string? AddInfo2 { get; set; }
     public string? AddInfo3 { get; set; }
+    public bool? LiabIns { get; set; }
+
+    [DisplayName("Diocese")]
+    public string? DioceseId { get; set; }
+    [DisplayFormat(DataFormatString = "{0:MM/dd/yyyy}", ApplyFormatInEditMode = true)]
+    public DateTime? Chartered { get; set; }
+    public string? WebSiteUrl { get; set; }
+    public string? BulletinUrl { get; set; }
+    public decimal? Arbalance { get; set; }
 
     [DisplayName("Address")]
     [NoPoBox]
@@ -71,6 +80,13 @@ public partial class TblValCouncilFSEdit
 
     [DisplayName("Meeting Time (for example 7:30pm)")]
     public string? SMeetTime { get; set; }
+    public bool SeatedDelegateDay1D1 { get; set; }
+    public bool SeatedDelegateDay2D1 { get; set; }
+    public bool SeatedDelegateDay3D1 { get; set; }
+    public bool SeatedDelegateDay1D2 { get; set; }
+    public bool SeatedDelegateDay2D2 { get; set; }
+    public bool SeatedDelegateDay3D2 { get; set; }
+    public bool PaidMPD { get; set; }
     public string? FSAddress { get; set; }
     public string? FSCity { get; set; }
     public string? FSState { get; set; }
