@@ -12,9 +12,9 @@
         <form asp-action="Edit">
             <div asp-validation-summary="ModelOnly" class="text-danger"></div>
             <input type="hidden" asp-for="CNumber" />
-            <div style="display:none">
-                @*These need to be added to the form and hidden so that when the model is returned, they
-                    have the same data as when they were fetched and won't be all false*@
+            @*<div style="display:none">
+                        These need to be added to the form and hidden so that when the model is returned, they
+                    have the same data as when they were fetched
                 @Html.TextBoxFor(m => Model.PhyAddress)
                 @Html.TextBoxFor(m => Model.PhyCity)
                 @Html.TextBoxFor(m => Model.PhyState)
@@ -40,9 +40,10 @@
                 @Html.CheckBoxFor(m => Model.SeatedDelegateDay2D2)
                 @Html.CheckBoxFor(m => Model.SeatedDelegateDay3D1)
                 @Html.CheckBoxFor(m => Model.SeatedDelegateDay3D2)
-                </ div >
+                @Html.TextBoxFor(m => Model.PaidMPD)
+        </div>*@
 
-                < div class="form-group">
+            <div class="form-group">
                 <label asp-for="CLocation" class="control-label"></label>
                 <input asp-for="CLocation" class="form-control" />
                 <span asp-validation-for="CLocation" class="text-danger"></span>

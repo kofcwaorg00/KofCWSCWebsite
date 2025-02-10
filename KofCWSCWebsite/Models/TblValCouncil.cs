@@ -97,4 +97,5 @@ public partial class TblValCouncil
     public bool SeatedDelegateDay1D2 { get; set; }
     public bool SeatedDelegateDay2D2 { get; set; }
     public bool SeatedDelegateDay3D2 { get; set; }
+    public bool PaidMPD { get; set; }
 }
