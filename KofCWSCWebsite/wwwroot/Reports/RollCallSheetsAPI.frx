@@ -1,22 +1,7 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
-<Report ScriptLanguage="CSharp" ReportInfo.Created="11/12/2024 09:20:45" ReportInfo.Modified="11/12/2024 13:49:42" ReportInfo.CreatorVersion="2024.1.3.0">
+<Report ScriptLanguage="CSharp" ReportInfo.Created="11/12/2024 09:20:45" ReportInfo.Modified="02/11/2025 15:57:57" ReportInfo.CreatorVersion="2024.1.3.0">
   <Dictionary>
-    <JsonDataSourceConnection Name="GetRollCallDistricts" ConnectionString="rijcmlqbJsCNDUWD8zs7Fjc+Sa5ClnDCYwA067z0stgnWcP4y+rkRA2bsTPLEF5ZNUTdaTDaujRBtkX19Hhqzoj0cpgU1cUxBEPkULcTpjZpQWoHNZzjTc2ZgTwzlYfO5igTllJV2p07xqZzJLtlFPbz3s/1hIm2sigalg2SZP1QoJz475CcGCSCmHA1TdmiKOtldsVrcVoRxfQ9aYrXqDvt93UQkb2anw7A2tsiJIEQWjvgay8mFcdBb7PZUDdGBUSK2ReccG2mgL9qTItunA0KL6KM+sIurBTE7w5gd1WZooGThkeMUg9Brkpx3cV/dtzC32nCZN6PEQu3kOXDj6vCWqurWKGQupo72hCv6DHHunP8H05tvEj91FdJrWhZh+liRGbbWhFAEI3AmCsmtmTcJom9T/K2jqrXWj73+6yElh+3tuTsEYYX6pUiME3flW8gDki">
-      <JsonTableDataSource Name="JSON" Alias="RollCallDistricts" DataType="FastReport.Utils.Json.JsonArray" Enabled="true" TableName="JSON">
-        <Column Name="index" DataType="System.Int32"/>
-        <Column Name="item" DataType="FastReport.JsonBase">
-          <Column Name="groupName" DataType="System.String"/>
-          <Column Name="council" DataType="System.Double"/>
-          <Column Name="name" DataType="System.String"/>
-          <Column Name="district" DataType="System.Double"/>
-          <Column Name="day" DataType="System.String"/>
-          <Column Name="sortOrder" DataType="System.Double"/>
-        </Column>
-        <Column Name="array" DataType="FastReport.JsonBase"/>
-        <Column Name="DayTitle" DataType="System.Int32" PropName="Column" Calculated="true" Expression="&quot;DISTRICT No.&quot; + [RollCallDistricts.item.district]+&quot;  ROLL CALL - Day &quot;+[RollCallDistricts.item.day]"/>
-      </JsonTableDataSource>
-    </JsonDataSourceConnection>
-    <JsonDataSourceConnection Name="GetRollCallDDs" ConnectionString="rijcmlqbJsCNDUWD8zs7Fjc+Sa5ClnDCYwA067z0stgnWcP4y/j8b4MnJb5TGrjpdYSTqwvwINtpKiIThh5CkGIr08t4YZr28lATOkNjw2jfygCbqpL7TtBGtX/6G8D420b9tAAyEQOKGrL0awnENBpjumDpYJYyXtavdKgImpMrOhGrOszc5OttiNporrqRFGnIlfvsFOXRR5qFBH9udDruL9JzPfRrtIvBO9RlUN7qyDBIdgAPqw0cRPITcHxZuRSYJ2+stWRhgEW/4I2XyLDcW3i30U7qHm/4th8AnTUowqIO+BLW79kyo00IgmfQY0ulSrFvWiyaPtyWbaaXQ2yeG8s4dPEDdyf/+uGeHY/0Oszyf0U3fnSzstXnWjxx26HwIpDGR5ylum1iFiIk80++cGM4h8WCfICXIFkyX/awp2F5sk=">
+    <JsonDataSourceConnection Name="GetRollCallDDs" ConnectionString="rijcmlqbJsCNDUWD8zs7Fjc+Sa5ClnDCYwA067z0stgnWcP4y/j8b4MnJb5TGrjpdYSTqwvwINtpKiIThh5CkGIr08t4YZr28lATOkNjw2jfygCbqpL7TtBGtX/6G8D420b9tAAyEQOKGrL0awnENBpjumDpYJYyXtavdKgImpMrOhGrOszc5OttiNporrqRFGnIlfvsFOXRR5qFBH9udDruL9JzPfRrtIvBO9RlUN7qyDBIdgAPqw0cRPITcHxZuRSYJ2+stWRhgEW/4I2XyLDcW3i30U7qHm/4th8AnTUowqIO+BLW79kyo00IgmfQY0ulSrFvWiyaPtyWbaaXQ2yeG8s4dPEDdyf/+uGeHY/0Oszyf0U3fnSzstXnWjxx26HwIpDGR5ylum1iFiIk80++cGM4huIDDVqbQWn0IpIpF7FZ90=">
       <JsonTableDataSource Name="JSON1" Alias="RollCallDDs" DataType="FastReport.Utils.Json.JsonArray" Enabled="true" TableName="JSON">
         <Column Name="index" DataType="System.Int32"/>
         <Column Name="item" DataType="FastReport.JsonBase">
@@ -30,7 +15,7 @@
         <Column Name="array" DataType="FastReport.JsonBase"/>
       </JsonTableDataSource>
     </JsonDataSourceConnection>
-    <JsonDataSourceConnection Name="GetRollCallDelegates" ConnectionString="rijcmlqbJsCNDUWD8zs7Fjc+Sa5ClnDCYwA067z0stgnWcP4y9GKqDVNMAg0aKIfCqmhrlsIEWcyMJxW5eCVZBPo4qI4GTRZZ3WKlHc+zAtu3GZ3LSq8B7Wo4FFfLaVmHxaACTo3TgOQImCT2m8fABT6fV1OoRwuWlor6lszMesvGETI6YQve0qPqKfsp1NWdZV60xSFh/46NaMntkegA06CEoEbAUy7++dg2EhCQCaC06KgVsXn9Tax+du8Yiu05w9bfXaXT7wnJ93nU0fcU4wr0OxGlMn0wabJwx2vt3l9VjTJccAy7b7biCjR5AAVk0/gIiHn4D0zS9Ee7tDCGwzgCoYtd0VLwoQPSm1sBEScpWtHwBiF2K66yic2Rv0RcX/qtgKbomNMDkqOF3S8uDXXswALOLS/1ErUs78Uxuj+VUh5dnKlyZD8hvIcqm6Ojr94AqD">
+    <JsonDataSourceConnection Name="GetRollCallDelegates" ConnectionString="rijcmlqbJsCNDUWD8zs7Fjc+Sa5ClnDCYwA067z0stgnWcP4y9GKqDVNMAg0aKIfCqmhrls5x/qc2utrZV4Crbwg9rVHR6HfnA/N/MvHc9H3/7XS5v8/27pONBPTXEuYtN+G3A9MwWtO9d/jV+hLlAOP/kwisiqCdxL7Mwlq1VySLpJecVZB+kBnrvCxjDka8R7Xf7v9L9EoeEGYBR9tHJjZjB93pN6OB1IqGywgc+zdVkZ/DyGB8tSQpGo8QWKVlbVMIWSzy2a7zxnMgbog0GNBuDDCx9d4rGPxP49lhHERbH9a9uuz7xOaAX62aisO/ri4gRm+E++g6+JPydnYHtHRQuz3NZZlrON9sm6R64FDNWp6DGh9LbvUjWEFi3wMhvobIqp/P8Xw/r3pKolbLZ+50ouB2j6s97DEPWn9XPjQZK3peTfC2Wmr1yG4Vk7BHw902601/3l3v4ZQw7XXoRzifqVJkMExJrEeWoeR4mKYq98aXw=">
       <JsonTableDataSource Name="JSON2" Alias="RollCallDelegates" DataType="FastReport.Utils.Json.JsonArray" Enabled="true" TableName="JSON">
         <Column Name="index" DataType="System.Int32"/>
         <Column Name="item" DataType="FastReport.JsonBase">
@@ -40,11 +25,28 @@
           <Column Name="district" DataType="System.Double"/>
           <Column Name="day" DataType="System.String"/>
           <Column Name="sortOrder" DataType="System.Double"/>
+          <Column Name="dirSortOrder" DataType="System.Double"/>
         </Column>
         <Column Name="array" DataType="FastReport.JsonBase"/>
       </JsonTableDataSource>
     </JsonDataSourceConnection>
-    <JsonDataSourceConnection Name="GetRollCallOthers" ConnectionString="rijcmlqbJsCNDUWD8zs7Fjc+Sa5ClnDCYwA067z0stgnWcP4y8L49QStWu57BCChEAXCYTcNKBwycnRytns5ynJ240V00ru1F/zcYTyX8BKn0s9kgfYolAQA6GNx4k3EuHJgnfgYe28YoSAIxxbVI+bL/wQr8dXW3Od+BRDMNm+3nNkglAYFajTUc9YNT8+4cdktH5rC4AUjO8MksVvsenqoeLy7gjX4ZOAfr49Yy2JX19pEcTF69XftldSGA+LlYtfFbkTgvHCHkMtd2THiUHGWn1wc/ENqNOj1K6t1VYMBT67cwPNL6OvdhizkKivfuQgtl2JwhJIEdWG7gg5yuLNU+Rc6D1NULjSFHe3/Jf5cxeMPR23ZcMaVyUp5a44u1JI+YJEMJitzr6JG4/qa5bNPQ0DiRnhyNhOoiOok0jFYDnPAhBXIaF66OO0NMtf6lb0K62T">
+    <JsonDataSourceConnection Name="GetRollCallDistricts" ConnectionString="rijcmlqbJsCNDUWD8zs7Fjc+Sa5ClnDCYwA067z0stgnWcP4y+rkRA2bsTPLEF5ZNUTdaTDN7uNzwmlTxbcEZDC9dgRkQ3txjahx2kG3dDhDNl9/MpPTCgtWbXNfTQCH5Nc1I6C08B/s6qs29IOz0TNxBvo5pb8ZrO09VzIsiqEfyBxeYGKgwkK+nYYISTQBDHQoxlpnIYdN3YVezv+agr5sh92R2CE8qcXU1tkOcfevUmPgu7z6D6fnTfIqVTZ2MP6MI2YknTcdXF5W/yhxvLCMrilY0pGASf25o9LHm04mFaW6gyT10soAXSS39yjLpFmlQhcbERJZuLIC3Ks0kRGjKljd8rZsixL2H/zfW6Gd7ELX4Tp9pktFyeBaIiCDcjMhyExpwUGoqzlWzhxqDdOvlhOdxzWs/VSROL67Of90zAejUs9QdUzuffZIgUyEgBkb6YC92rojVsiDEBVxzsRjCQ4fbuMqMVBcEAdPIIXZYg5J9k=">
+      <JsonTableDataSource Name="JSON" Alias="RollCallDistricts" DataType="FastReport.Utils.Json.JsonArray" Enabled="true" TableName="JSON">
+        <Column Name="index" DataType="System.Int32"/>
+        <Column Name="item" DataType="FastReport.JsonBase">
+          <Column Name="groupName" DataType="System.String"/>
+          <Column Name="council" DataType="System.String"/>
+          <Column Name="name" DataType="System.String"/>
+          <Column Name="district" DataType="System.Double"/>
+          <Column Name="day" DataType="System.String"/>
+          <Column Name="sortOrder" DataType="System.Double"/>
+          <Column Name="dirSortOrder" DataType="System.Double"/>
+        </Column>
+        <Column Name="array" DataType="FastReport.JsonBase"/>
+        <Column Name="DayTitle" DataType="System.Int32" PropName="Column" Calculated="true" Expression="&quot;DISTRICT No.&quot; + [RollCallDistricts.item.district]+&quot;  ROLL CALL - Day &quot;+[RollCallDistricts.item.day]"/>
+      </JsonTableDataSource>
+    </JsonDataSourceConnection>
+    <JsonDataSourceConnection Name="GetRollCallOthers" ConnectionString="rijcmlqbJsCNDUWD8zs7Fjc+Sa5ClnDCYwA067z0stgnWcP4y8K8a2aLwnrW4MNBpMgp0+KR+EqCkNgsEI/lieESh8mCDgjlzEGEqH3/16tCRE0h43j/D5crszA2UmE4tUCFRJZXMyK6hh12iDkeWa51RizyAEGGyMAsCsM9s+MToYic0nPo+an/mr/4rH2GYt63knlSabesnt5SfNPg8h944K3lWqancc57kNX8VJv94hBYmct+sMzoPU93IErwdz8rjxhbPQBAqHyfU9P1/chaaOlibN02WV8uxydlKXCSCAgnvNIWuMcEFavwhLVyPr+h9oIuLOWoHohfnrsRGRo0CJt+prXxbBY0L1MocUAoZwBq9R1Cxes0JI4OJke+LDsJAmYMgYaZeKC+EREOkvDYA6uqGeZOmZ3sc5qqTenDcclhrxkcB+MXXdPo41JPqozNWP9ritA1UGEBaDHUu7p1zTN5mEaUNftnIFvSzI102fu60k=">
       <JsonTableDataSource Name="JSON3" Alias="RollCallOthers" DataType="FastReport.Utils.Json.JsonArray" Enabled="true" TableName="JSON">
         <Column Name="index" DataType="System.Int32"/>
         <Column Name="item" DataType="FastReport.JsonBase">
@@ -54,6 +56,7 @@
           <Column Name="district" DataType="System.Double"/>
           <Column Name="day" DataType="System.String"/>
           <Column Name="sortOrder" DataType="System.Double"/>
+          <Column Name="dirSortOrder" DataType="System.Double"/>
         </Column>
         <Column Name="array" DataType="FastReport.JsonBase"/>
       </JsonTableDataSource>
@@ -112,7 +115,7 @@
       <DataBand Name="Data3" Top="56" Width="718.2" Height="19.2" DataSource="JSON2" Filter="[RollCallDelegates.item.district]==[RollCallDistricts.item.district]">
         <TextObject Name="Text35" Width="364.8" Height="19.2" Text="[RollCallDelegates.item.name]" Font="Arial, 12pt"/>
         <Sort>
-          <Sort Expression="[RollCallDelegates.item.sortOrder]"/>
+          <Sort Expression="[RollCallDelegates.item.dirSortOrder]"/>
         </Sort>
       </DataBand>
     </GroupHeaderBand>
