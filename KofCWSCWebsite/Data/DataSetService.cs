@@ -18,7 +18,7 @@ namespace KofCWSCWebsite.Data
         private IWebHostEnvironment? _hostingEnvironment;
         private IHttpContextAccessor _httpContextAccessor;
         public string ReportsPath { get; private set; }
-        public DataSet DataSet { get; private set; } = new DataSet();
+        //public DataSet DataSet { get; private set; } = new DataSet();
 
         public DataSetService(IWebHostEnvironment hostingEnvironment,IConfiguration configuration,IHttpContextAccessor httpContextAccessor)
         {
@@ -61,16 +61,16 @@ namespace KofCWSCWebsite.Data
             throw new Exception(directory);
         }
         // this will cycle through all connection strings and set them to the current production string
-        public void SetConnectStrings(ApplicationDbContext context,FastReport.Report myReport)
-        {
-            var conn = context.Database.GetDbConnection();
-            var myConn = conn?.ConnectionString;
-            Debug.Write(myConn);
-            for (int i = 0; i < myReport.Dictionary.Connections.Count; i++)
-            {
-                myReport.Dictionary.Connections[i].ConnectionString = myConn;
-            }
-        }
+        //public void SetConnectStrings(ApplicationDbContext context,FastReport.Report myReport)
+        //{
+        //    var conn = context.Database.GetDbConnection();
+        //    var myConn = conn?.ConnectionString;
+        //    Debug.Write(myConn);
+        //    for (int i = 0; i < myReport.Dictionary.Connections.Count; i++)
+        //    {
+        //        myReport.Dictionary.Connections[i].ConnectionString = myConn;
+        //    }
+        //}
         
         public Report PrepareReport(Report report, IConfiguration _conf,int param1,int param2=9,int param3=9)
         {

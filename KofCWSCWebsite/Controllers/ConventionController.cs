@@ -15,12 +15,10 @@ namespace KofCWSCWebsite.Controllers
 {
     public class ConventionController : Controller
     {
-        private readonly ApplicationDbContext _context;
         private readonly DataSetService _dataSetService;
         private readonly ApiHelper _apiHelper;
-        public ConventionController(ApplicationDbContext context, DataSetService dataSetService)
+        public ConventionController(DataSetService dataSetService)
         {
-            _context = context;
             _dataSetService = dataSetService;
             _apiHelper = new ApiHelper(_dataSetService);
         }

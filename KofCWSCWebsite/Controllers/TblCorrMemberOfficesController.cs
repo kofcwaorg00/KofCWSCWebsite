@@ -22,7 +22,7 @@ namespace KofCWSCWebsite.Controllers
         // 8/25/2024 Tim Philomeno
         // NOTE: the API equivelent is just MemberOffices
         //*********************************************************************************
-        public TblCorrMemberOfficesController(ApplicationDbContext context, DataSetService dataSetService)
+        public TblCorrMemberOfficesController(DataSetService dataSetService)
         {
             _dataSetService = dataSetService;
         }

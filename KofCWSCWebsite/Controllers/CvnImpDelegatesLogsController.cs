@@ -21,7 +21,7 @@ namespace KofCWSCWebsite.Controllers
     public class CvnImpDelegatesLogsController : Controller
     {
         private readonly ApplicationDbContext _context;
-        private DataSetService _dataSetService;
+        private KofCWSCWebsite.Data. DataSetService _dataSetService;
 
         public CvnImpDelegatesLogsController(ApplicationDbContext context, DataSetService dataSetService)
         {

@@ -11,13 +11,11 @@ namespace KofCWSCWebsite.Controllers
 {
     public class HomeController : Controller
     {
-        private ApplicationDbContext _context;
         private DataSetService _dataSetService;
 
-        public HomeController(ApplicationDbContext context, DataSetService dataSetService)
+        public HomeController(DataSetService dataSetService)
         {
             _dataSetService = dataSetService; 
-            _context = context;
         }
 
         public async Task<IActionResult> Index()
@@ -27,22 +25,22 @@ namespace KofCWSCWebsite.Controllers
             //  We need to be able to give feedback as to which environment we are in during development
             //  and implementation
             //*****************************************************************************************************
-            if (_context.Database.GetDbConnection().ConnectionString.Contains("local") || _context.Database.GetDbConnection().ConnectionString.Contains("EXPRESS"))
-            {
-                ViewData["ConnectString"] = "Using LOCAL DATABASE";
-            }
-            else if (_context.Database.GetDbConnection().ConnectionString.Contains("KofCWSCWebDev"))
-            {
-                ViewData["ConnectString"] = "Using AZURE DEVELOPMENT DATABASE";
-            }
-            else if (_context.Database.GetDbConnection().ConnectionString.Contains("KofCWSCWeb"))
-            {
-                ViewData["ConnectString"] = "Using AZURE PRODUCTION DATABASE";
-            }
-            else
-            {
-                ViewData["ConnectString"] = "Using UNKNOWN DATABASE";
-            }
+            //if (_context.Database.GetDbConnection().ConnectionString.Contains("local") || _context.Database.GetDbConnection().ConnectionString.Contains("EXPRESS"))
+            //{
+            //    ViewData["ConnectString"] = "Using LOCAL DATABASE";
+            //}
+            //else if (_context.Database.GetDbConnection().ConnectionString.Contains("KofCWSCWebDev"))
+            //{
+            //    ViewData["ConnectString"] = "Using AZURE DEVELOPMENT DATABASE";
+            //}
+            //else if (_context.Database.GetDbConnection().ConnectionString.Contains("KofCWSCWeb"))
+            //{
+            //    ViewData["ConnectString"] = "Using AZURE PRODUCTION DATABASE";
+            //}
+            //else
+            //{
+            //    ViewData["ConnectString"] = "Using UNKNOWN DATABASE";
+            //}
             ViewData["APIURL"] = "and the APIURL is using " + _dataSetService.GetAPIBaseAddress();
             ViewData["ENV"] = Environment.GetEnvironmentVariable("ASPNETCORE_ENVIRONMENT");
             //*****************************************************************************************************

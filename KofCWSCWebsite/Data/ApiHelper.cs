@@ -44,7 +44,7 @@ namespace KofCWSCWebsite.Data
         }
 
         // Generic GET method
-        public async Task<T?> GetAsync<T>(string endpoint)
+        public async Task<T?> GetAsync<T>(string endpoint,string callingprocess = "")
         {
             ////////if (endpoint.Contains("IsKofCMember/2944485"))
             ////////{
@@ -59,6 +59,9 @@ namespace KofCWSCWebsite.Data
             // I realize that this may cause other issues so testing will be done.
             if (response.ReasonPhrase == "Not Found") { return default(T); }
             //______________________________________________________________________________
+            // 2/12/2025 Tim Philomeno
+            // trying to figure out why HOME is failing periodacally.  I think it is because
+            // the API has to fire up from a cold start
             if (!response.IsSuccessStatusCode)
             {
                 Log.Error($"Thrown from inside apiHelper because response.IsSuccessStatusCode is {response.IsSuccessStatusCode.ToString()} for endpoint {endpoint} and baseaddress {_httpClient.BaseAddress.ToString()} ");

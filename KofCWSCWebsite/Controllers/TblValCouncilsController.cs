@@ -20,12 +20,10 @@ namespace KofCWSCWebsite.Controllers
     {
         private DataSetService _dataSetService;
         private readonly ApiHelper _apiHelper;
-        private readonly ApplicationDbContext _context;
 
-        public TblValCouncilsController(DataSetService dataSetService, ApiHelper apiHelper, ApplicationDbContext context)
+        public TblValCouncilsController(DataSetService dataSetService, ApiHelper apiHelper)
         {
             _dataSetService = dataSetService;
-            _context = context;
             _apiHelper = new ApiHelper(_dataSetService);
         }
 

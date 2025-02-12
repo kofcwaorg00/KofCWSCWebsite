@@ -16,7 +16,7 @@ namespace KofCWSCWebsite.Controllers
     {
         private DataSetService _dataSetService;
 
-        public TblWebSelfPublishesController(ApplicationDbContext context, DataSetService dataSetService)
+        public TblWebSelfPublishesController(DataSetService dataSetService)
         {
             _dataSetService = dataSetService;
         }

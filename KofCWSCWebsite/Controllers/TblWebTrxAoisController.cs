@@ -10,42 +10,28 @@ using KofCWSCWebsite.Models;
 using Newtonsoft.Json;
 using Serilog;
 using Microsoft.AspNetCore.Authorization;
+using Microsoft.CodeAnalysis.VisualBasic.Syntax;
 
 namespace KofCWSCWebsite.Controllers
 {
     public class TblWebTrxAoisController : Controller
     {
         private DataSetService _dataSetService;
+        private readonly ApiHelper _apiHelper;
 
-        public TblWebTrxAoisController(DataSetService dataSetService)
+        public TblWebTrxAoisController(DataSetService dataSetService, ApiHelper apiHelper)
         {
             _dataSetService = dataSetService;
+            _apiHelper = apiHelper;
         }
 
         // GET: TblWebTrxAois
         public async Task<IActionResult> Index()
         {
-            Uri myURI = new Uri(_dataSetService.GetAPIBaseAddress() + "/Aois");
-
-            using (var client = new HttpClient())
-            {
-                var responseTask = client.GetAsync(myURI);
-                responseTask.Wait();
-                var result = responseTask.Result;
-                IEnumerable<TblWebTrxAoi> aois;
-                if (result.IsSuccessStatusCode)
-                {
-                    var readTask = result.Content.ReadAsAsync<IList<TblWebTrxAoi>>();
-                    readTask.Wait();
-                    aois = readTask.Result;
-                }
-                else
-                {
-                    aois = Enumerable.Empty<TblWebTrxAoi>();
-                    ModelState.AddModelError(string.Empty, "Server Error.  Please contact administrator.");
-                }
-                return View(aois);
-            }
+            var aois = await _apiHelper.GetAsync<IList<TblWebTrxAoi>>("/Aois");
+            // NOTE if aois is null, that usually means there we got a "NoContent" back
+            // from the API.  Our view has an if block that handles this
+            return View(aois);
         }
 
         // GET: TblWebTrxAois/Details/5
