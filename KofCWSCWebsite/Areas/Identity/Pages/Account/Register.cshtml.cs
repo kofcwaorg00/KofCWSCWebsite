@@ -142,13 +142,13 @@ namespace KofCWSCWebsite.Areas.Identity.Pages.Account
             //****************************************************************************************
             // 09/21/2024 Tim Philomeno
             // Need to add AOL email address validation here
-            if (Input.Email.ToLower().Contains("aol.com"))
-            {
-                string myer = "We are not able to support AOL email addresses. Please consider registering for a free email address at gmail, yahoo, or Microsoft Outlook (online)";
-                ModelState.AddModelError(string.Empty, myer);
-                Log.Error(myer + " - " + Input.Email);
-                return Page();
-            }
+            //////////////if (Input.Email.ToLower().Contains("aol.com"))
+            //////////////{
+            //////////////    string myer = "We are not able to support AOL email addresses. Please consider registering for a free email address at gmail, yahoo, or Microsoft Outlook (online)";
+            //////////////    ModelState.AddModelError(string.Empty, myer);
+            //////////////    Log.Error(myer + " - " + Input.Email);
+            //////////////    return Page();
+            //////////////}
             //----------------------------------------------------------------------------------------
             //****************************************************************************************
             // 09/21/2024 Tim Philomeno
