@@ -16,7 +16,7 @@ namespace KofCWSCWebsite.Controllers
     {
         private DataSetService _dataSetService;
 
-        public TblWebSelfPublishesController(ApplicationDbContext context, DataSetService dataSetService)
+        public TblWebSelfPublishesController(DataSetService dataSetService)
         {
             _dataSetService = dataSetService;
         }
@@ -140,7 +140,7 @@ namespace KofCWSCWebsite.Controllers
         // GET: TblWebSelfPublishes/Edit/5
         public async Task<IActionResult> Edit(string id)
         {
-            if (id == null)
+            if (id == null || id == "favicon.ico")
             {
                 return NotFound();
             }

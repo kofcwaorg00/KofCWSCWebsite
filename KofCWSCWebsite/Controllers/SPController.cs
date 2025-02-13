@@ -24,12 +24,10 @@ namespace KofCWSCWebsite.Controllers
         private IConfiguration _configuration;
         private DataSetService _dataSetService;
 
-        public SPController(ApplicationDbContext context, IConfiguration configuration, DataSetService dataSetService)
+        public SPController(IConfiguration configuration, DataSetService dataSetService)
         {
-            Log.Information("Initializing SPController");
             _configuration = configuration;
             _dataSetService = dataSetService;
-
         }
 
         // GET: GetAssys

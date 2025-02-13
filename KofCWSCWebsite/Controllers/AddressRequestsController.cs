@@ -25,7 +25,7 @@ namespace KofCWSCWebsite.Controllers
 
        
 
-        public AddressRequestsController(ApplicationDbContext context, IConfiguration configuration)
+        public AddressRequestsController(IConfiguration configuration)
         {
             //_context = context;
             _configuration = configuration;

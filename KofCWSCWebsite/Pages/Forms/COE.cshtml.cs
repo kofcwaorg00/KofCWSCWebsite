@@ -1,7 +1,7 @@
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 
-namespace KofCWSCWebsite.Pages
+namespace KofCWSCWebsite.Pages.Forms
 {
     public class COEModel : PageModel
     {

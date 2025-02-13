@@ -18,7 +18,7 @@ namespace KofCWSCWebsite.Data
         private IWebHostEnvironment? _hostingEnvironment;
         private IHttpContextAccessor _httpContextAccessor;
         public string ReportsPath { get; private set; }
-        public DataSet DataSet { get; private set; } = new DataSet();
+        //public DataSet DataSet { get; private set; } = new DataSet();
 
         public DataSetService(IWebHostEnvironment hostingEnvironment,IConfiguration configuration,IHttpContextAccessor httpContextAccessor)
         {
@@ -61,18 +61,18 @@ namespace KofCWSCWebsite.Data
             throw new Exception(directory);
         }
         // this will cycle through all connection strings and set them to the current production string
-        public void SetConnectStrings(ApplicationDbContext context,FastReport.Report myReport)
-        {
-            var conn = context.Database.GetDbConnection();
-            var myConn = conn?.ConnectionString;
-            Debug.Write(myConn);
-            for (int i = 0; i < myReport.Dictionary.Connections.Count; i++)
-            {
-                myReport.Dictionary.Connections[i].ConnectionString = myConn;
-            }
-        }
+        //public void SetConnectStrings(ApplicationDbContext context,FastReport.Report myReport)
+        //{
+        //    var conn = context.Database.GetDbConnection();
+        //    var myConn = conn?.ConnectionString;
+        //    Debug.Write(myConn);
+        //    for (int i = 0; i < myReport.Dictionary.Connections.Count; i++)
+        //    {
+        //        myReport.Dictionary.Connections[i].ConnectionString = myConn;
+        //    }
+        //}
         
-        public Report PrepareReport(Report report, IConfiguration _conf,int param1,int param2=9)
+        public Report PrepareReport(Report report, IConfiguration _conf,int param1,int param2=9,int param3=9)
         {
             //***************************************************************************************************************
             // 10/05/2024 Tim Philomeno
@@ -100,13 +100,17 @@ namespace KofCWSCWebsite.Data
                     //string myHost = currString.Split('/')[2];
                     string myMethod = currString.Split('/')[3];
                     string schema = currString.Substring(currStringSemi, currStringLen - currStringSemi);
-                    if (param2 == 9)
+                    if (param2 == 9 && param3 == 9)
                     {
                         report.Dictionary.Connections[i].ConnectionString = myPre + "//" + myHost + "/" + myMethod + "/" + param1 + schema;
                     }
+                    else if (param3 == 9)
+                    {
+                        report.Dictionary.Connections[i].ConnectionString = myPre + "//" + myHost + "/" + myMethod + "/" + param1 + "/" + param2 + schema;
+                    }
                     else
                     {
-                        report.Dictionary.Connections[i].ConnectionString = myPre + "//" + myHost + "/" + myMethod + "/" + param1 +"/"+ param2 + schema;
+                        report.Dictionary.Connections[i].ConnectionString = myPre + "//" + myHost + "/" + myMethod + "/" + param1 +"/"+ param2 + "/" + param3 + schema;
                     }
                 }
                 return report;

@@ -6,18 +6,19 @@ using Microsoft.AspNetCore.Mvc.ModelBinding;
 using Microsoft.EntityFrameworkCore;
 using Serilog;
 using System.Diagnostics;
+using System.Web.Helpers;
 
 namespace KofCWSCWebsite.Controllers
 {
     public class HomeController : Controller
     {
-        private ApplicationDbContext _context;
         private DataSetService _dataSetService;
+        private readonly ApiHelper _apiHelper;
 
-        public HomeController(ApplicationDbContext context, DataSetService dataSetService)
+        public HomeController(DataSetService dataSetService,ApiHelper apiHelper)
         {
-            _dataSetService = dataSetService; 
-            _context = context;
+            _dataSetService = dataSetService;
+            _apiHelper = apiHelper;
         }
 
         public async Task<IActionResult> Index()
@@ -27,24 +28,28 @@ namespace KofCWSCWebsite.Controllers
             //  We need to be able to give feedback as to which environment we are in during development
             //  and implementation
             //*****************************************************************************************************
-            if (_context.Database.GetDbConnection().ConnectionString.Contains("local") || _context.Database.GetDbConnection().ConnectionString.Contains("EXPRESS"))
-            {
-                ViewData["ConnectString"] = "Using LOCAL DATABASE";
-            }
-            else if (_context.Database.GetDbConnection().ConnectionString.Contains("KofCWSCWebDev"))
-            {
-                ViewData["ConnectString"] = "Using AZURE DEVELOPMENT DATABASE";
-            }
-            else if (_context.Database.GetDbConnection().ConnectionString.Contains("KofCWSCWeb"))
-            {
-                ViewData["ConnectString"] = "Using AZURE PRODUCTION DATABASE";
-            }
-            else
-            {
-                ViewData["ConnectString"] = "Using UNKNOWN DATABASE";
-            }
-            ViewData["APIURL"] = "and the APIURL is using " + _dataSetService.GetAPIBaseAddress();
+            //if (_context.Database.GetDbConnection().ConnectionString.Contains("local") || _context.Database.GetDbConnection().ConnectionString.Contains("EXPRESS"))
+            //{
+            //    ViewData["ConnectString"] = "Using LOCAL DATABASE";
+            //}
+            //else if (_context.Database.GetDbConnection().ConnectionString.Contains("KofCWSCWebDev"))
+            //{
+            //    ViewData["ConnectString"] = "Using AZURE DEVELOPMENT DATABASE";
+            //}
+            //else if (_context.Database.GetDbConnection().ConnectionString.Contains("KofCWSCWeb"))
+            //{
+            //    ViewData["ConnectString"] = "Using AZURE PRODUCTION DATABASE";
+            //}
+            //else
+            //{
+            //    ViewData["ConnectString"] = "Using UNKNOWN DATABASE";
+            //}
             ViewData["ENV"] = Environment.GetEnvironmentVariable("ASPNETCORE_ENVIRONMENT");
+            var myAPIURL = $"APIURL is using {_dataSetService.GetAPIBaseAddress()}. ";
+            var myENV = $"WebApp is using the {Environment.GetEnvironmentVariable("ASPNETCORE_ENVIRONMENT")} environment. ";
+            var myAPIEnv = $"API is using the {await _apiHelper.GetAsync<string>("HomeEnv")} environment.";
+            ViewData["ENVMessage"] = string.Concat(myAPIURL, myENV, myAPIEnv);
+            Log.Information(string.Concat(myAPIURL,myENV,myAPIEnv));
             //*****************************************************************************************************
             // 12/05/2024 Tim Philomeno
             // Now that we have a generic ApiHelper class, these are the only 2 lines that we should need to

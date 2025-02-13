@@ -9,6 +9,10 @@ using KofCWSCWebsite.Data;
 using KofCWSCWebsite.Models;
 using KofCWSCWebsite.Services;
 using Serilog;
+using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNet.Identity;
+using KofCWSCWebsite.Areas.Identity.Data;
+using Microsoft.AspNetCore.Identity;
 
 namespace KofCWSCWebsite.Controllers
 {
@@ -16,14 +20,16 @@ namespace KofCWSCWebsite.Controllers
     {
         private DataSetService _dataSetService;
         private readonly ApiHelper _apiHelper;
-
-        public MemberSuspensionsController(DataSetService dataSetService)
+        private readonly Microsoft.AspNetCore.Identity.UserManager<KofCUser> _userManager;
+        public MemberSuspensionsController(DataSetService dataSetService, Microsoft.AspNetCore.Identity.UserManager<KofCUser> userManager)
         {
             _dataSetService = dataSetService;
             _apiHelper = new ApiHelper(_dataSetService);
+            _userManager = userManager; 
         }
 
         // GET: MemberSuspensions
+        [Authorize(Roles = "Admin")]
         public async Task<ActionResult<IEnumerable<MemberSuspensionVM>>> Index()
         {
             return View(await _apiHelper.GetAsync<IEnumerable<MemberSuspensionVM>>("/Suspensions"));
@@ -33,6 +39,7 @@ namespace KofCWSCWebsite.Controllers
         }
 
         // GET: MemberSuspensions/Details/5
+        [Authorize(Roles = "Admin")]
         public async Task<IActionResult> Details(int? id)
         {
             if (id == null)
@@ -51,6 +58,7 @@ namespace KofCWSCWebsite.Controllers
         }
 
         // GET: MemberSuspensions/Create
+        [Authorize(Roles = "Admin")]
         public IActionResult Create()
         {
             return View();
@@ -61,12 +69,17 @@ namespace KofCWSCWebsite.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
+        [Authorize(Roles = "Admin")]
         public async Task<IActionResult> CreateFrom([Bind("Id,KofCid,Comment")] MemberSuspension memberSuspension)
         {
             try
             {
                 if (ModelState.IsValid)
                 {
+                    var myuser = await _userManager.GetUserAsync(User);
+
+                    memberSuspension.Updated = DateTime.Now;
+                    memberSuspension.UpdatedBy = myuser.KofCMemberID;
                     await _apiHelper.PostAsync<MemberSuspension, MemberSuspension>($"/Suspensions/CreateFrom", memberSuspension);
                     //_context.Add(memberSuspension);
                     //await _context.SaveChangesAsync();
@@ -88,6 +101,7 @@ namespace KofCWSCWebsite.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
+        [Authorize(Roles = "Admin")]
         public async Task<IActionResult> Create([Bind("Id,KofCid,Comment")] MemberSuspension memberSuspension)
         {
             try
@@ -110,6 +124,7 @@ namespace KofCWSCWebsite.Controllers
         }
 
         // GET: MemberSuspensions/Edit/5
+        [Authorize(Roles = "Admin")]
         public async Task<IActionResult> Edit(int? id)
         {
             if (id == null)
@@ -130,6 +145,7 @@ namespace KofCWSCWebsite.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
+        [Authorize(Roles = "Admin")]
         public async Task<IActionResult> Edit(int id, [Bind("Id,MemberId,KofCid,Comment")] MemberSuspension memberSuspension)
         {
             if (id != memberSuspension.Id)
@@ -162,6 +178,7 @@ namespace KofCWSCWebsite.Controllers
         }
 
         // GET: MemberSuspensions/Delete/5
+        [Authorize(Roles = "Admin")]
         public async Task<IActionResult> Delete(int? id)
         {
             if (id == null)
@@ -182,6 +199,7 @@ namespace KofCWSCWebsite.Controllers
         // POST: MemberSuspensions/Delete/5
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
+        [Authorize(Roles = "Admin")]
         public async Task<IActionResult> DeleteConfirmed(int id)
         {
             try

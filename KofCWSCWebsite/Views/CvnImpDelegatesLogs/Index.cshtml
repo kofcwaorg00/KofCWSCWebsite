@@ -4,12 +4,17 @@
     ViewData["Title"] = "Index";
 }
 
-<h1>Index</h1>
-
+<h1>Delegate Import Logs</h1>
 <p>
-    <a asp-action="Create">Create New</a>
+    <h6>Filter By:</h6>
+    <input type="text" id="myGUID" onkeyup="filterGUID()" placeholder="Type in a GUID to filter results" title="Type in a GUID" style="width:20%">
+    <input type="text" id="myRundate" onkeyup="filterRundate()" placeholder="Type in a RUNDATE to filter results" title="Type in a date" style="width:20%">
+    <input type="text" id="myType" onkeyup="filterType()" placeholder="Type in a TYPE to filter results" title="Type in a letters" style="width:20%">
+    <input type="text" id="myMemberID" onkeyup="filterMemberID()" placeholder="Type in a MEMBERID to filter results" title="Type in numbers" style="width:20%">
+    <button id="resetFilters" class="btn btn-outline-success">Reset Filters</button>
 </p>
-<table class="table">
+
+<table class="table" id="myTable" style="width:100%">
     <thead>
         <tr>
             <th>
@@ -27,7 +32,6 @@
             <th>
                 @Html.DisplayNameFor(model => model.Data)
             </th>
-            <th></th>
         </tr>
     </thead>
     <tbody>
@@ -48,12 +52,99 @@
             <td>
                 @Html.DisplayFor(modelItem => item.Data)
             </td>
-            <td>
-                <a asp-action="Edit" asp-route-id="@item.Id">Edit</a> |
-                <a asp-action="Details" asp-route-id="@item.Id">Details</a> |
-                <a asp-action="Delete" asp-route-id="@item.Id">Delete</a>
-            </td>
         </tr>
 }
     </tbody>
 </table>
+<script>
+    const resetFilters = document.getElementById('resetFilters');
+    const GUIDFilter = document.getElementById('myGUID');
+    const runDateFilter = document.getElementById('myRundate');
+    const typeFilter = document.getElementById('myType');
+    const memberidFilter = document.getElementById('myMemberID');
+
+    // Reset filters
+    resetFilters.addEventListener('click', () => {
+        GUIDFilter.value = '';
+        runDateFilter.value = '';
+        typeFilter.value = '';
+        memberidFilter.value = '';
+        filterGUID();
+        filterRundate();
+        filterType();
+        filterMemberID();
+    });
+
+    function filterGUID() {
+        var input, filter, table, tr, td, i, txtValue;
+        input = document.getElementById("myGUID");
+        filter = input.value.toUpperCase();
+        table = document.getElementById("myTable");
+        tr = table.getElementsByTagName("tr");
+        for (i = 0; i < tr.length; i++) {
+            td = tr[i].getElementsByTagName("td")[0];
+            if (td) {
+                txtValue = td.textContent || td.innerText;
+                if (txtValue.toUpperCase().indexOf(filter) > -1) {
+                    tr[i].style.display = "";
+                } else {
+                    tr[i].style.display = "none";
+                }
+            }
+        }
+    }
+    function filterRundate() {
+        var input, filter, table, tr, td, i, txtValue;
+        input = document.getElementById("myRundate");
+        filter = input.value.toUpperCase();
+        table = document.getElementById("myTable");
+        tr = table.getElementsByTagName("tr");
+        for (i = 0; i < tr.length; i++) {
+            td = tr[i].getElementsByTagName("td")[1];
+            if (td) {
+                txtValue = td.textContent || td.innerText;
+                if (txtValue.toUpperCase().indexOf(filter) > -1) {
+                    tr[i].style.display = "";
+                } else {
+                    tr[i].style.display = "none";
+                }
+            }
+        }
+    }
+    function filterType() {
+        var input, filter, table, tr, td, i, txtValue;
+        input = document.getElementById("myType");
+        filter = input.value.toUpperCase();
+        table = document.getElementById("myTable");
+        tr = table.getElementsByTagName("tr");
+        for (i = 0; i < tr.length; i++) {
+            td = tr[i].getElementsByTagName("td")[2];
+            if (td) {
+                txtValue = td.textContent || td.innerText;
+                if (txtValue.toUpperCase().indexOf(filter) > -1) {
+                    tr[i].style.display = "";
+                } else {
+                    tr[i].style.display = "none";
+                }
+            }
+        }
+    }
+    function filterMemberID() {
+        var input, filter, table, tr, td, i, txtValue;
+        input = document.getElementById("myMemberID");
+        filter = input.value.toUpperCase();
+        table = document.getElementById("myTable");
+        tr = table.getElementsByTagName("tr");
+        for (i = 0; i < tr.length; i++) {
+            td = tr[i].getElementsByTagName("td")[3];
+            if (td) {
+                txtValue = td.textContent || td.innerText;
+                if (txtValue.toUpperCase().indexOf(filter) > -1) {
+                    tr[i].style.display = "";
+                } else {
+                    tr[i].style.display = "none";
+                }
+            }
+        }
+    }
+</script>

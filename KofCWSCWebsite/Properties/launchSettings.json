@@ -13,7 +13,7 @@
       "commandName": "Project",
       "launchBrowser": true,
       "environmentVariables": {
-        "ASPNETCORE_ENVIRONMENT": "PRODUCTION"
+        "ASPNETCORE_ENVIRONMENT": "TEST"
       },
       "dotnetRunMessages": true,
       "applicationUrl": "https://localhost:7213;http://localhost:5013"

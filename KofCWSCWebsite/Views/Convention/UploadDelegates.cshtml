@@ -1,16 +1,24 @@
 ﻿@model CvnImpDelegateViewModel
-
-<form asp-action="Upload" asp-controller="Csv" method="post" enctype="multipart/form-data">
-    <div class="form-group">
-        <label for="CsvFile">Upload CSV</label>
-        <input type="file" name="CsvFile" id="CsvFile" class="form-control" />
-    </div>
-    <button type="submit" class="btn btn-primary">Upload Delegate CSV</button>
-</form>
-
-@if (ViewData["ErrorMessage"] != null)
-{
-    <div class="alert alert-danger">
-        @ViewData["ErrorMessage"]
-    </div>
-}
+    <div class="overlay" id="overlay"></div>
+    <div class="form-container">
+        <form asp-action="Upload" asp-controller="Csv" method="post" enctype="multipart/form-data" id="myForm">
+            <div class="form-group">
+                <label for="CsvFile">Upload CSV</label>
+                <input type="file" name="CsvFile" id="CsvFile" class="form-control" />
+            </div>
+            <button type="submit" class="btn btn-primary">Upload Delegate CSV</button>
+            <div class="spinner" id="spinner"></div>
+        </form>
+        </div>
+        @if (ViewData["ErrorMessage"] != null)
+        {
+            <div class="alert alert-danger">
+                @ViewData["ErrorMessage"]
+            </div>
+        }
+<script>
+    document.getElementById('myForm').addEventListener('submit', function (event) {
+        document.getElementById('overlay').style.display = 'block'; // Show the Overlay
+        document.getElementById('spinner').style.display = 'block'; // Show the spinner
+    });
+</script>

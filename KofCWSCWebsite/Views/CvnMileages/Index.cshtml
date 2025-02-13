@@ -1,4 +1,4 @@
-﻿@model IEnumerable<KofCWSCWebsite.Models.CvnMileage>
+﻿@model IEnumerable<KofCWSCWebsite.Models.CvnMileageC>
 
 @{
     ViewData["Title"] = "Index";
@@ -30,13 +30,26 @@
         </tr>
     </tbody>
 </table>
-<p>
-    <form asp-controller="CvnLocations" asp-action="Create" method="get">
-        <button type="submit" class="btn btn-sm btn-success">
-            Add a New Location
-        </button>
-    </form>
-</p>
+<table class="table" style="width:50%">
+    <tr>
+        <td>
+            <form asp-controller="CvnMileages" asp-action="Create" method="get">
+                <button type="submit" class="btn btn-sm btn-success">
+                    Add New Council Mileage Entry
+                </button>
+            </form>
+        </td>
+        <td>
+            <form asp-controller="CvnLocations" asp-action="Create" method="get">
+                <button type="submit" class="btn btn-sm btn-success">
+                    Add a New Location
+                </button>
+            </form>
+
+        </td>
+    </tr>
+
+</table>
 <table class="table" style="width:50%" id="myTable">
     <thead>
         <tr>
@@ -48,6 +61,12 @@
             </th>
             <th style="width:50%;text-align:center">
                 @Html.DisplayNameFor(model => model.Mileage)
+            </th>
+            <th style="text-align:center">
+                @Html.DisplayNameFor(model => model.CouncilAddress)
+            </th>
+            <th style="text-align:center">
+                @Html.DisplayNameFor(model => model.VenueAddress)
             </th>
             <th></th>
             <th></th>
@@ -65,6 +84,12 @@
             </td>
             <td style="width:50%;text-align:center">
                 @Html.DisplayFor(modelItem => item.Mileage)
+            </td>
+            <td style="width:50%;text-align:center">
+                @Html.DisplayFor(modelItem => item.CouncilAddress)
+            </td>
+            <td style="width:50%;text-align:center">
+                @Html.DisplayFor(modelItem => item.VenueAddress)
             </td>
             <td style="padding-right:0px">
                 @* <a asp-action="Edit" asp-route-id="@item.MemberId">Edit</a>&nbsp;|&nbsp;<a asp-action="Details" asp-route-id="@item.MemberId">Details</a>&nbsp;|&nbsp;<a asp-action="Delete" asp-route-id="@item.MemberId">Delete</a> *@

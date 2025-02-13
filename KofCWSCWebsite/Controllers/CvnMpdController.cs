@@ -3,24 +3,35 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.AspNetCore.Mvc.Rendering;
-using Microsoft.EntityFrameworkCore;
 using KofCWSCWebsite.Data;
 using KofCWSCWebsite.Models;
 using KofCWSCWebsite.Services;
 using Serilog;
+using Microsoft.AspNetCore.Authorization;
+using FastReport.Web;
+using KofCAdmin.Models;
+using FastReport.Export.PdfSimple;
+using FastReport;
+using System.Text;
+using Microsoft.CodeAnalysis.VisualBasic.Syntax;
+
 
 namespace KofCWSCWebsite.Controllers
 {
     public class CvnMpdController : Controller
     {
         private readonly ApiHelper _apiHelper;
-        public CvnMpdController(ApiHelper apiHelper)
+        readonly DataSetService _dataSetService;
+        private IConfiguration _configuration;
+        public CvnMpdController(ApiHelper apiHelper,DataSetService dataSetService,IConfiguration configuration)
         {
             _apiHelper = apiHelper;
+            _dataSetService = dataSetService;
+            _configuration = configuration;
         }
 
         // GET: CvnMpd
+        [Authorize(Roles = "Admin, ConventionAdmin")]
         public async Task<IActionResult> Index(int id)
         {
             try
@@ -37,8 +48,13 @@ namespace KofCWSCWebsite.Controllers
             }
         }
         [HttpGet("GetCheckBatch/{id}")]
+        [Authorize(Roles = "Admin, ConventionAdmin")]
         public async Task<IActionResult> GetCheckBatch(int id)
         {
+            if (id == 0)
+            {
+                throw new Exception($"GetCheckBatch was called with a 0 from {Request.Path}");
+            }
             try
             {
                 Response.Cookies.Delete("councilFilter");
@@ -49,6 +65,7 @@ namespace KofCWSCWebsite.Controllers
                 ViewBag.GroupID = id;
                 if (id == 3) { ViewBag.Group = "District Deputies"; };
                 if (id == 25) { ViewBag.Group = "Delegate"; };
+
                 var result = await _apiHelper.GetAsync<IEnumerable<CvnMpd>>($"MPD/GetCheckBatch/{id}");
                 return View(result);
             }
@@ -59,6 +76,7 @@ namespace KofCWSCWebsite.Controllers
             }
         }
         [HttpGet("ToggleCouncilDays/{id}/{day}/{del}/{groupid}")]
+        [Authorize(Roles = "Admin, ConventionAdmin")]
         public async Task<ActionResult<IEnumerable<CvnDelegateDays>>> ToggleCouncilDays(int id, int day,string del, int groupid)
         {
             //**************************************************************************************
@@ -79,6 +97,7 @@ namespace KofCWSCWebsite.Controllers
 
         }
         [HttpGet("ToggleDelegateDaysMPD/{id}/{day}/{groupid}")]
+        [Authorize(Roles = "Admin, ConventionAdmin")]
         public async Task<ActionResult<IEnumerable<CvnDelegateDays>>> ToggleDelegateDaysMPD(int id, int day,int groupid)
         {
             //**************************************************************************************
@@ -95,139 +114,133 @@ namespace KofCWSCWebsite.Controllers
             }
             
         }
-        public async Task<ActionResult> PrintChecks()
+        [Authorize(Roles = "Admin, ConventionAdmin")]
+        public IActionResult PrintChecks(int NextCheckNumber,bool PrintCheckNumber,int GroupID)
         {
-            return View();
+            ViewBag.NextCheckNumber = NextCheckNumber;
+            ViewBag.PrintCheckNumber = PrintCheckNumber;
+            ViewBag.GroupID = GroupID;
+            if(NextCheckNumber <= 0)
+            {
+                TempData["CheckNumberError"] = "Error...Check number must be > 0";
+                //RedirectToPage("GetCheckBatch", 25);
+                return RedirectToAction("GetCheckBatch","CvnMpd", new { id = GroupID } );
+            }
+            int myPCN = PrintCheckNumber ? 1 : 0;
+
+            PrintMPDChecks model = new()
+            {
+                WebReport = new WebReport(),
+            };
+            var reportToLoad = "MPDChecksAPI";
+            model.WebReport.Report.Load(Path.Combine(_dataSetService.ReportsPath, $"{reportToLoad}.frx"));
+            _dataSetService.PrepareReport(model.WebReport.Report, _configuration, GroupID,NextCheckNumber,myPCN);
+            return View(model);
+        }
+
+        public IActionResult Pdf(int NextCheckNumber, bool PrintCheckNumber, int GroupID)
+        {
+            PrintMPDChecks model = new()
+            {
+                WebReport = new WebReport(),
+            };
+            int myPCN = PrintCheckNumber ? 1 : 0;
+
+            var reportToLoad = "MPDChecksAPI";
+
+            model.WebReport.Report.Load(Path.Combine(_dataSetService.ReportsPath, $"{reportToLoad}.frx"));
+
+            var myReport = _dataSetService.PrepareReport(model.WebReport.Report, _configuration, GroupID, NextCheckNumber, myPCN);
+
+            myReport.Prepare();
+
+            PDFSimpleExport pdfExport = new PDFSimpleExport();
+
+            try
+            {
+                using (MemoryStream ms = new MemoryStream())
+                {
+                    pdfExport.Export(myReport, ms);
+                    ms.Position = 0; // Reset stream position
+                    // Check if memory stream contains any data
+                    if (ms.Length > 0)
+                    {
+                        // Create a file content result
+                        var fileBytes = ms.ToArray(); // Copy the content to a byte array
+                        return File(fileBytes, "application/pdf", "CheckBatch.pdf");
+                    }
+                    else
+                    {
+                        return BadRequest("Failed to generate the PDF. The report might be empty or not properly prepared.");
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                Log.Error(Utils.FormatLogEntry(this, ex));
+                return BadRequest("Error in Memory Stream");
+            }
+            
+        }
+
+        public async Task<IActionResult> ExportCSV(int GroupID)
+        {
+            var mydata = await _apiHelper.GetAsync<IEnumerable<CvnMpd>>($"GetMPDChecks/{GroupID}");
+
+            var csv = new StringBuilder();
+
+            var properties = typeof(CvnMpd).GetProperties(System.Reflection.BindingFlags.Public | System.Reflection.BindingFlags.Instance);
+
+            csv.AppendLine(string.Join(",", properties.Select(p => p.Name)));
+
+            foreach (var item in mydata)
+            {
+                var values = properties.Select(p => QuoteField(p.GetValue(item)?.ToString() ?? string.Empty));
+                csv.AppendLine(string.Join(",", values));
+            }
+
+            byte[] buffer = Encoding.UTF8.GetBytes(csv.ToString());
+
+            return File(buffer, "text/csv", "CheckBatch.csv");
         }
 
 
-        ////////////// GET: CvnMpd/Details/5
-        ////////////public async Task<IActionResult> Details(int? id)
-        ////////////{
-        ////////////    if (id == null)
-        ////////////    {
-        ////////////        return NotFound();
-        ////////////    }
+        public async Task<IActionResult> ExportQB(int GroupID)
+        {
+            var mydata = await _apiHelper.GetAsync<IEnumerable<CvnMpd>>($"GetMPDChecks/{GroupID}");
 
-        ////////////    var cvnMpd = await _context.TblCvnTrxMpds
-        ////////////        .FirstOrDefaultAsync(m => m.Id == id);
-        ////////////    if (cvnMpd == null)
-        ////////////    {
-        ////////////        return NotFound();
-        ////////////    }
+            var csv = new StringBuilder();
 
-        ////////////    return View(cvnMpd);
-        ////////////}
+            var properties = typeof(CvnMpd).GetProperties(System.Reflection.BindingFlags.Public | System.Reflection.BindingFlags.Instance);
 
-        ////////////// GET: CvnMpd/Create
-        ////////////public IActionResult Create()
-        ////////////{
-        ////////////    return View();
-        ////////////}
+            csv.AppendLine(string.Join(",", properties.Select(p => p.Name)));
 
-        ////////////// POST: CvnMpd/Create
-        ////////////// To protect from overposting attacks, enable the specific properties you want to bind to.
-        ////////////// For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
-        ////////////[HttpPost]
-        ////////////[ValidateAntiForgeryToken]
-        ////////////public async Task<IActionResult> Create([Bind("Id,MemberId,Council,District,Group,Office,Payee,CheckNumber,CheckDate,Day1,Day2,Day3,Day1G,Day2G,Day3G,Miles,CheckTotal,Location")] CvnMpd cvnMpd)
-        ////////////{
-        ////////////    if (ModelState.IsValid)
-        ////////////    {
-        ////////////        _context.Add(cvnMpd);
-        ////////////        await _context.SaveChangesAsync();
-        ////////////        return RedirectToAction(nameof(Index));
-        ////////////    }
-        ////////////    return View(cvnMpd);
-        ////////////}
+            foreach (var item in mydata)
+            {
+                var values = properties.Select(p => QuoteField(p.GetValue(item)?.ToString() ?? string.Empty));
+                csv.AppendLine(string.Join(",", values));
+            }
 
-        ////////////// GET: CvnMpd/Edit/5
-        ////////////public async Task<IActionResult> Edit(int? id)
-        ////////////{
-        ////////////    if (id == null)
-        ////////////    {
-        ////////////        return NotFound();
-        ////////////    }
+            byte[] buffer = Encoding.UTF8.GetBytes(csv.ToString());
 
-        ////////////    var cvnMpd = await _context.TblCvnTrxMpds.FindAsync(id);
-        ////////////    if (cvnMpd == null)
-        ////////////    {
-        ////////////        return NotFound();
-        ////////////    }
-        ////////////    return View(cvnMpd);
-        ////////////}
+            return File(buffer, "text/csv", "CheckBatch.csv");
+        }
 
-        ////////////// POST: CvnMpd/Edit/5
-        ////////////// To protect from overposting attacks, enable the specific properties you want to bind to.
-        ////////////// For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
-        ////////////[HttpPost]
-        ////////////[ValidateAntiForgeryToken]
-        ////////////public async Task<IActionResult> Edit(int id, [Bind("Id,MemberId,Council,District,Group,Office,Payee,CheckNumber,CheckDate,Day1,Day2,Day3,Day1G,Day2G,Day3G,Miles,CheckTotal,Location")] CvnMpd cvnMpd)
-        ////////////{
-        ////////////    if (id != cvnMpd.Id)
-        ////////////    {
-        ////////////        return NotFound();
-        ////////////    }
+        public async Task<IActionResult> ArchiveCheckBatch(int GroupID)
+        {
+            var mydata = await _apiHelper.GetAsync<int>($"MPD/ArchiveMPD/{GroupID}");
+            return RedirectToAction( "GetCheckBatch","CvnMpd",new { id = GroupID });
+        }
 
-        ////////////    if (ModelState.IsValid)
-        ////////////    {
-        ////////////        try
-        ////////////        {
-        ////////////            _context.Update(cvnMpd);
-        ////////////            await _context.SaveChangesAsync();
-        ////////////        }
-        ////////////        catch (DbUpdateConcurrencyException)
-        ////////////        {
-        ////////////            if (!CvnMpdExists(cvnMpd.Id))
-        ////////////            {
-        ////////////                return NotFound();
-        ////////////            }
-        ////////////            else
-        ////////////            {
-        ////////////                throw;
-        ////////////            }
-        ////////////        }
-        ////////////        return RedirectToAction(nameof(Index));
-        ////////////    }
-        ////////////    return View(cvnMpd);
-        ////////////}
-
-        ////////////// GET: CvnMpd/Delete/5
-        ////////////public async Task<IActionResult> Delete(int? id)
-        ////////////{
-        ////////////    if (id == null)
-        ////////////    {
-        ////////////        return NotFound();
-        ////////////    }
-
-        ////////////    var cvnMpd = await _context.TblCvnTrxMpds
-        ////////////        .FirstOrDefaultAsync(m => m.Id == id);
-        ////////////    if (cvnMpd == null)
-        ////////////    {
-        ////////////        return NotFound();
-        ////////////    }
-
-        ////////////    return View(cvnMpd);
-        ////////////}
-
-        ////////////// POST: CvnMpd/Delete/5
-        ////////////[HttpPost, ActionName("Delete")]
-        ////////////[ValidateAntiForgeryToken]
-        ////////////public async Task<IActionResult> DeleteConfirmed(int id)
-        ////////////{
-        ////////////    var cvnMpd = await _context.TblCvnTrxMpds.FindAsync(id);
-        ////////////    if (cvnMpd != null)
-        ////////////    {
-        ////////////        _context.TblCvnTrxMpds.Remove(cvnMpd);
-        ////////////    }
-
-        ////////////    await _context.SaveChangesAsync();
-        ////////////    return RedirectToAction(nameof(Index));
-        ////////////}
-
-        ////////////private bool CvnMpdExists(int id)
-        ////////////{
-        ////////////    return _context.TblCvnTrxMpds.Any(e => e.Id == id);
-        ////////////}
+        private static string QuoteField(string field)
+        {
+            if (field.Contains(","))
+            {
+                field = $"\"{field.Replace("\"", "\"\"")}\"";
+            }
+            return field;
+        }
     }
+    
+
 }

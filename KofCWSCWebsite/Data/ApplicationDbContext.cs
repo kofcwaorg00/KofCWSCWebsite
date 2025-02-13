@@ -6,6 +6,7 @@ using Microsoft.Data.SqlClient;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Data.SqlClient.AlwaysEncrypted.AzureKeyVaultProvider;
 using Serilog;
+using KofCWSCWebsite.Services;
 
 
 namespace KofCWSCWebsite.Data;
@@ -43,12 +44,14 @@ public partial class ApplicationDbContext : DbContext
         }
         catch (Exception ex)
         {
-            Log.Error(GetType() + " " + ex.Message + " " + ex.InnerException);
+            Log.Error(Utils.FormatLogEntry(this, ex, "in ApplicationDbContext ctor"));
             throw new Exception("SQL Azure Key Vault Initialization Failed");
         }
     }
 
     public virtual DbSet<TblValCouncil> TblValCouncils { get; set; }
+    public virtual DbSet<TblValCouncilMPD> TblValCouncilsMPD { get; set; }
+    public virtual DbSet<TblValCouncilFSEdit> TblValCouncilsFSEdit { get; set; }
     public virtual DbSet<TblWebSelfPublish> TblWebSelfPublishes { get; set; }
     public virtual DbSet<TblMasPso> TblMasPsos { get; set; }
     public virtual DbSet<TblMasAward> TblMasAwards { get; set; }
@@ -98,7 +101,14 @@ public partial class ApplicationDbContext : DbContext
         {
             entity.HasNoKey();
         });
-
+        modelBuilder.Entity<TblValCouncilMPD>(entity =>
+        {
+            entity.HasKey(e => e.CNumber);
+        });
+        modelBuilder.Entity<TblValCouncilFSEdit>(entity =>
+        {
+            entity.HasNoKey();
+        });
         modelBuilder.Entity<TblValCouncil>(entity =>
         {
             entity.HasKey(e => e.CNumber)

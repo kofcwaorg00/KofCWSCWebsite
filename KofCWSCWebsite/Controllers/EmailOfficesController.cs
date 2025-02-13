@@ -18,7 +18,7 @@ namespace KofCWSCWebsite.Controllers
         private readonly IConfiguration _configuration;
         private DataSetService _dataSetService;
 
-        public EmailOfficesController(ApplicationDbContext context, IConfiguration configuration, DataSetService dataSetService)
+        public EmailOfficesController(IConfiguration configuration, DataSetService dataSetService)
         {
             _configuration = configuration;
             _dataSetService = dataSetService;

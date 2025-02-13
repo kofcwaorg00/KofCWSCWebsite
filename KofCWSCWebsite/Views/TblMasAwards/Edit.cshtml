@@ -3,7 +3,14 @@
 @{
     ViewData["Title"] = "Edit";
 }
+<style>
+    .large-input {
+        width: 500px; /* Adjust the width as needed */
+        height: 500px; /* Adjust the height as needed */
+        overflow-wrap: break-word;
+    }
 
+</style>
 <h1>Edit</h1>
 
 <h4>TblMasAward</h4>
@@ -18,9 +25,9 @@
                 <input asp-for="AwardName" class="form-control" />
                 <span asp-validation-for="AwardName" class="text-danger"></span>
             </div>
-            <div class="form-group">
+            <div class="form-group" >
                 <label asp-for="AwardDescription" class="control-label"></label>
-                <input asp-for="AwardDescription" class="form-control" />
+                <textarea asp-for="AwardDescription" class="form-control large-input"></textarea>
                 <span asp-validation-for="AwardDescription" class="text-danger"></span>
             </div>
             <div class="form-group">

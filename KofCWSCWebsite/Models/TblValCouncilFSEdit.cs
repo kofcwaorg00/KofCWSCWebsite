@@ -1,44 +1,33 @@
-﻿using System.ComponentModel;
+﻿using Microsoft.Identity.Client;
+using System.ComponentModel;
 using System.ComponentModel.DataAnnotations;
+using KofCWSCWebsite.Data;
 
 namespace KofCWSCWebsite.Models;
 
-public partial class TblValCouncil
+public partial class TblValCouncilFSEdit
 {
     [DisplayName("No")]
     public int CNumber { get; set; }
-    [DisplayName("City")]
-    public string? CLocation { get; set; }
-    [DisplayName("Council Name")]
+    public string Status { get; set; } = null!;
+    public string? CLocation { get; set; } = null!;
     public string? CName { get; set; }
-    [DisplayName("Dist")]
-    public int? District { get; set; }
-
-    [DisplayName("For Reference")]
+    public int District { get; set; }
     public string? AddInfo1 { get; set; }
-    [DisplayName("For Reference")]
     public string? AddInfo2 { get; set; }
-    [DisplayName("For Reference")]
     public string? AddInfo3 { get; set; }
-
     public bool? LiabIns { get; set; }
 
     [DisplayName("Diocese")]
     public string? DioceseId { get; set; }
-
-    [DisplayFormat(ApplyFormatInEditMode = true, DataFormatString = "{0:yyyy-MM-dd}")]
-    [DataType(DataType.Date)]
+    [DisplayFormat(DataFormatString = "{0:MM/dd/yyyy}", ApplyFormatInEditMode = true)]
     public DateTime? Chartered { get; set; }
-
     public string? WebSiteUrl { get; set; }
-
     public string? BulletinUrl { get; set; }
-
     public decimal? Arbalance { get; set; }
 
-    public string Status { get; set; } = null!;
-
     [DisplayName("Address")]
+    [NoPoBox]
     public string PhyAddress { get; set; } = "";
 
     [DisplayName("City")]
@@ -98,4 +87,8 @@ public partial class TblValCouncil
     public bool SeatedDelegateDay2D2 { get; set; }
     public bool SeatedDelegateDay3D2 { get; set; }
     public bool PaidMPD { get; set; }
+    public string? FSAddress { get; set; }
+    public string? FSCity { get; set; }
+    public string? FSState { get; set; }
+    public string? FSPostalCode { get; set; }
 }

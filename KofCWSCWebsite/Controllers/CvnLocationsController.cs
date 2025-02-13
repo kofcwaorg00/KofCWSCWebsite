@@ -10,6 +10,8 @@ using KofCWSCWebsite.Models;
 using KofCWSCWebsite.Services;
 using Serilog;
 using Microsoft.AspNetCore.Authorization;
+using KofCWSC.API.Models;
+using Microsoft.IdentityModel.Tokens;
 
 namespace KofCWSCWebsite.Controllers
 {
@@ -18,10 +20,11 @@ namespace KofCWSCWebsite.Controllers
         private readonly ApiHelper _apiHelper;
         public CvnLocationsController(ApiHelper apiHelper)
         {
-            _apiHelper = apiHelper; 
+            _apiHelper = apiHelper;
         }
 
         // GET: CvnLocations
+        [Authorize(Roles = "Admin, ConventionAdmin")]
         public async Task<IActionResult> Index()
         {
             try
@@ -35,7 +38,7 @@ namespace KofCWSCWebsite.Controllers
                 return NotFound();
             }
         }
-
+        [Authorize(Roles = "Admin, ConventionAdmin")]
         public IActionResult Create()
         {
             return View();
@@ -46,13 +49,31 @@ namespace KofCWSCWebsite.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
+        [Authorize(Roles = "Admin, ConventionAdmin")]
         public async Task<IActionResult> Create([Bind("Id,Location,Address,City,State,ZipCode")] CvnLocation cvnLocation)
         {
             if (ModelState.IsValid)
             {
                 try
                 {
+                    List<TblValCouncil> myMissMil = new List<TblValCouncil>();
+                    // first add the new location
                     var result = await _apiHelper.PostAsync<CvnLocation, CvnLocation>("Locations", cvnLocation);
+
+                    // then get all councils and spin through them adding to the mileage table for all
+                    var councils = await _apiHelper.GetAsync<IEnumerable<TblValCouncil>>($"Councils");
+                    foreach (var council in councils)
+                    {
+                        if (!await AddorUpdateMileageTable(council, cvnLocation))
+                        {
+                            myMissMil.Add(council);
+                            // allow this to continue and log the missing council information
+                            //var ex = new Exception($"Council {council.CNumber} is missing mileage entry for {cvnLocation.Location}");
+                            //Log.Information(Utils.FormatLogEntry(this, ex));
+                        };
+                    }
+                    // after we are done then report back councils that did not make it
+                    return View("CouncilsMissingMileage", myMissMil);
                 }
                 catch (Exception ex)
                 {
@@ -63,6 +84,7 @@ namespace KofCWSCWebsite.Controllers
             }
             return RedirectToAction(nameof(Index));
         }
+        [Authorize(Roles = "Admin, ConventionAdmin")]
         public async Task<IActionResult> Edit(int? id)
         {
             if (id == null)
@@ -90,6 +112,7 @@ namespace KofCWSCWebsite.Controllers
         }
         [HttpPost]
         [ValidateAntiForgeryToken]
+        [Authorize(Roles = "Admin, ConventionAdmin")]
         public async Task<IActionResult> Edit(int id, [Bind("Id,Location,Address,City,State,ZipCode")] CvnLocation cvnLocation)
         {
             if (id != cvnLocation.Id)
@@ -120,7 +143,7 @@ namespace KofCWSCWebsite.Controllers
             }
             return RedirectToAction(nameof(Index));
         }
-
+        [Authorize(Roles = "Admin, ConventionAdmin")]
         public async Task<IActionResult> Details(int? id)
         {
             if (id == null)
@@ -146,6 +169,7 @@ namespace KofCWSCWebsite.Controllers
             //------------------------------------------------------------------------------------------------------
 
         }
+        [Authorize(Roles = "Admin, ConventionAdmin")]
         public async Task<IActionResult> Delete(int? id)
         {
             if (id == null)
@@ -169,6 +193,7 @@ namespace KofCWSCWebsite.Controllers
         // POST: CvnLocations/Delete/5
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
+        [Authorize(Roles = "Admin, ConventionAdmin")]
         public async Task<IActionResult> DeleteConfirmed(int id)
         {
             try
@@ -182,6 +207,80 @@ namespace KofCWSCWebsite.Controllers
                 Log.Error(Utils.FormatLogEntry(this, ex));
                 return View();
             }
+        }
+
+        private async Task<bool> AddorUpdateMileageTable(TblValCouncil council, CvnLocation cvnLocation)
+        {
+            try
+            {
+                //*****************************************************************************************************
+                // 2/6/2025 Tim Philomeno
+                // we need to be able to use the address as well as city, state and zip if possible
+                var venueEP = GetEndPointFromAddress(cvnLocation.Address, cvnLocation.City, cvnLocation.State, cvnLocation.ZipCode);
+                var councilEP = GetEndPointFromAddress(council.PhyAddress, council.PhyCity, council.PhyState, council.PhyPostalCode);
+                // First see if the council already has a mileage entry for the incoming location
+                var existingCmil = await _apiHelper.GetAsync<CvnMileage>($"MileageForCouncil/{council.CNumber}/{cvnLocation.Location}");
+                var distance = await _apiHelper.GetAsync<AzureMapsDistance>($"DriveDistance/{venueEP}/{councilEP}");
+                int rounddistance = (int)Math.Ceiling(distance.DistanceInMiles);
+                if (distance.DistanceInMiles < 0)
+                {
+                    // This is an error condition, probably one of the addresses is blank or invalid
+                    //Exception ex = new Exception($"Council {council.CNumber} is missing Physical Address");
+                    //Log.Error(Utils.FormatLogEntry(this, ex));
+                    return false;
+                }
+
+                if (existingCmil is null)
+                {
+                    // Add New a new one
+                    var newMileage = new CvnMileage
+                    {
+                        Council = council.CNumber,
+                        Location = cvnLocation.Location,
+                        Mileage = rounddistance
+                    };
+                    var addmil = await _apiHelper.PostAsync<CvnMileage, CvnMileage>($"Mileage", newMileage);
+                    return true;
+                }
+                else
+                {
+                    // Update the existing one
+                    existingCmil.Mileage = rounddistance;
+                    var updmil = await _apiHelper.PutAsync<CvnMileage, CvnMileage>($"Locations/{existingCmil.Id}",existingCmil);
+                    return true;
+                }
+
+
+            }
+            catch (Exception ex)
+            {
+                Log.Error(Utils.FormatLogEntry(this, ex));
+                return false;
+            }
+        }
+        private string GetEndPointFromAddress(string address, string city, string state, string zipcode)
+        {
+            //***************************************************************************************
+            // 2/7/2025 Tim Philomeno
+            //  We need a consistant way to deal with endpoints(address) to pass to the mapping API
+            //  so the incomming 
+            if (address.IsNullOrEmpty())
+            {
+                if (city.IsNullOrEmpty())
+                {
+                    if (state.IsNullOrEmpty())
+                    {
+                        if (zipcode.IsNullOrEmpty())
+                        {
+                            return "z";
+                        }
+                        return string.Concat(zipcode);
+                    }
+                    return string.Concat(state," ", zipcode);
+                }
+                return string.Concat(city,",",state," ", zipcode);
+            }
+            return string.Concat(address,", ",city,", ",state," ",zipcode);
         }
     }
 }

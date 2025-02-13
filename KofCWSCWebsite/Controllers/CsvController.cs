@@ -18,6 +18,8 @@ using Microsoft.CodeAnalysis.VisualBasic.Syntax;
 using Microsoft.AspNetCore.Mvc.ModelBinding;
 using Microsoft.AspNetCore.Http.Extensions;
 using System;
+using Microsoft.AspNetCore.Authorization;
+
 
 
 namespace KofCWSCWebsite.Controllers
@@ -35,6 +37,7 @@ namespace KofCWSCWebsite.Controllers
         private DataSetService _dataSetService;
         private ApiHelper _apiHelper;
         private static bool _postFlag = false;
+        private static int _fratyear;
         public CsvController(DataSetService dataSetService,ApiHelper apiHelper)
         {
             _dataSetService = dataSetService;
@@ -43,6 +46,7 @@ namespace KofCWSCWebsite.Controllers
 
         // GET: Display the form to upload CSV
         [Route("UploadDelegates/{id}")]
+        [Authorize(Roles = "Admin, ConventionAdmin")]
         public IActionResult UploadDelegates(int id)
         {
             //************************************************************************************************
@@ -68,6 +72,7 @@ namespace KofCWSCWebsite.Controllers
         }
         // POST: Handle the CSV file upload and parse it
         [HttpPost]
+        [Authorize(Roles = "Admin, ConventionAdmin")]
         public async Task<IActionResult> Upload(CvnImpDelegateViewModel model)
         {
             var records = new List<CvnImpDelegate>();
@@ -76,6 +81,8 @@ namespace KofCWSCWebsite.Controllers
             // pass this GUID to all logging processes and then get the full log
             // from the database and return it to the calling process
             Guid guid = Guid.NewGuid();
+            _fratyear = await _apiHelper.GetAsync<int>("GetFratYear/0");
+            WriteToDelegateImportLog(guid, 0, "INFO", "BEGIN Import");
             //-------------------------------------------------------------------------
             if (model.CsvFile != null && model.CsvFile.Length > 0)
             {
@@ -108,7 +115,7 @@ namespace KofCWSCWebsite.Controllers
                     // call the API
                     try
                     {
-                        var result = await _apiHelper.PostAsync<List<CvnImpDelegate>, CvnImpDelegate>("/ImpDelegates", records);
+                        var result = await _apiHelper.PostAsync<List<CvnImpDelegate>, string>("/ImpDelegates", records);
                     }
                     catch (Exception ex)
                     {
@@ -121,7 +128,7 @@ namespace KofCWSCWebsite.Controllers
                     var apiHelperD = new ApiHelper(_dataSetService);
                     var apiHelperC = new ApiHelper(_dataSetService);
                     WriteToDelegateImportLog(guid, 0, "INFO", $"Removing old Delegates in lieu of incoming ones.");
-                    await apiHelperD.GetAsync<int>($"/ClearDelegates/{await apiHelperC.GetAsync<int>($"/GetFratYear/{0}")}");
+                    await apiHelperD.GetAsync<int>($"/ClearDelegates/{_fratyear}");
 
                     //------------------------------------------------------------------------------------------------------
                     ViewBag.ImportedDelegates = records.Count();
@@ -172,7 +179,18 @@ namespace KofCWSCWebsite.Controllers
                     }
                     //----------------------------------------------------------------------------------------
                     // when we are all done then process the records on the server to add corrmemberoffices
-                    //await ProcessDelegateImport(guid);
+                    // only allow the corrmemberoffices to be created if all KofCIDs are accounted for
+                    var myDelegates = await _apiHelper.GetAsync<IEnumerable<TblCorrMemberOfficeVM>>("CheckForMissingDelegateMembersAndCreateDelegates");
+                    if (myDelegates.Count() > 0)
+                    {
+                        ViewBag.Message = @"We found member(s) in the import file in that are not in our database.
+                            Please make sure this/these members are added and rerun this process.
+                            NOTE: the MemberID Listed is the KofC MemberID";
+                        // then we need to present the issues to the user and stop here
+                        return View("Views/TblCorrMemberOffices/MissingDelegates.cshtml", myDelegates);
+                    }
+                    //----------------------------------------------------------------------------------------
+                    WriteToDelegateImportLog(guid, 0, "INFO", "END Import");
                     var apiHelperLog = new ApiHelper(_dataSetService);
                     var myLog = await apiHelperLog.GetAsync<IEnumerable<CvnImpDelegatesLog>>($"/GetImpDelegatesLog/{guid}");
                     return View("Views/Convention/ImpDelegatesSuccess.cshtml", myLog);
@@ -210,6 +228,10 @@ namespace KofCWSCWebsite.Controllers
                                 await apiHelper.PostAsync<TblMasMember, TblMasMember>("/Member", myIsD1Member);
                                 WriteToDelegateImportLog(guid, cvnImpDelegate.D1MemberID, "INFO", "Adding New Member");
                             }
+                            else
+                            {
+                                WriteToDelegateImportLog(guid, cvnImpDelegate.D1MemberID, "INFO", "LOG ONLY Adding New Member");
+                            }
 
                         }
                     }
@@ -230,7 +252,11 @@ namespace KofCWSCWebsite.Controllers
                             {
                                 await apiHelper.PutAsync<TblMasMember, TblMasMember>($"/member/{myIsD1Member.MemberId}", myIsD1Member);
                                 WriteToDelegateImportLog(guid, cvnImpDelegate.D1MemberID, "INFO", "Updating Existing Member");
-                            };
+                            }
+                            else
+                            {
+                                WriteToDelegateImportLog(guid, cvnImpDelegate.D1MemberID, "INFO", "LOG ONLY Updating Existing Member");
+                            }
 
                         }
                     }
@@ -272,7 +298,10 @@ namespace KofCWSCWebsite.Controllers
                             {
                                 await apiHelper.PostAsync<TblMasMember, TblMasMember>("/Member", myIsD2Member);
                                 WriteToDelegateImportLog(guid, cvnImpDelegate.D2MemberID, "INFO", "Add a New Member");
-                            };
+                            }else
+                            {
+                                WriteToDelegateImportLog(guid, cvnImpDelegate.D2MemberID, "INFO", "LOG ONLY Add a New Member");
+                            }
 
                         }
                     }
@@ -292,7 +321,10 @@ namespace KofCWSCWebsite.Controllers
                             {
                                 await apiHelper.PutAsync<TblMasMember, TblMasMember>($"/member/{myIsD2Member.MemberId}", myIsD2Member);
                                 WriteToDelegateImportLog(guid, cvnImpDelegate.D2MemberID, "INFO", "Update an Existing Member");
-                            };
+                            }else
+                            {
+                                WriteToDelegateImportLog(guid, cvnImpDelegate.D2MemberID, "INFO", "LOG ONLY Update an Existing Member");
+                            }
 
                         }
                     }
@@ -333,7 +365,11 @@ namespace KofCWSCWebsite.Controllers
                             {
                                 await apiHelper.PostAsync<TblMasMember, TblMasMember>("/Member", myIsA1Member);
                                 WriteToDelegateImportLog(guid, cvnImpDelegate.A1MemberID, "INFO", "Add a New Member");
-                            };
+                            }
+                            else
+                            {
+                                WriteToDelegateImportLog(guid, cvnImpDelegate.A1MemberID, "INFO", "LOG ONLY Add a New Member");
+                            }
 
                         }
                     }
@@ -353,7 +389,11 @@ namespace KofCWSCWebsite.Controllers
                             {
                                 await apiHelper.PutAsync<TblMasMember, TblMasMember>($"/member/{myIsA1Member.MemberId}", myIsA1Member);
                                 WriteToDelegateImportLog(guid, cvnImpDelegate.A1MemberID, "INFO", "Update an Existing Member");
-                            };
+                            }
+                            else
+                            {
+                                WriteToDelegateImportLog(guid, cvnImpDelegate.A1MemberID, "INFO", "LOG ONLY Update an Existing Member");
+                            }
 
                         }
                     }
@@ -393,8 +433,13 @@ namespace KofCWSCWebsite.Controllers
                             if (_postFlag)
                             {
                                 await apiHelper.PostAsync<TblMasMember, TblMasMember>("/Member", myIsA2Member);
-                            };
-                            WriteToDelegateImportLog(guid, cvnImpDelegate.A2MemberID, "INFO", "Add a New Member");
+                                WriteToDelegateImportLog(guid, cvnImpDelegate.A2MemberID, "INFO", "Add a New Member");
+                            }
+                            else
+                            {
+                                WriteToDelegateImportLog(guid, cvnImpDelegate.A2MemberID, "INFO", "LOG ONLY Add a New Member");
+                            }
+                            
                         }
                     }
                     catch (Exception ex)
@@ -413,7 +458,11 @@ namespace KofCWSCWebsite.Controllers
                             {
                                 await apiHelper.PutAsync<TblMasMember, TblMasMember>($"/member/{myIsA2Member.MemberId}", myIsA2Member);
                                 WriteToDelegateImportLog(guid, cvnImpDelegate.A2MemberID, "INFO", "Update an Existing Member");
-                            };
+                            }
+                            else
+                            {
+                                WriteToDelegateImportLog(guid, cvnImpDelegate.A2MemberID, "INFO", "LOG ONLY Update an Existing Member");
+                            }
                         }
                     }
                     catch (Exception ex)
@@ -429,7 +478,7 @@ namespace KofCWSCWebsite.Controllers
 
         private bool FillD1(ref TblMasMember myMember, CvnImpDelegate myDelegate)
         {
-            string UpdatedBy = "Delgate Import API";
+            string UpdatedBy = "Delegate Import API";
             bool isUpdated = false;
 
             if (myMember == null)
@@ -498,7 +547,7 @@ namespace KofCWSCWebsite.Controllers
             {
                 myMember.Address = myDelegate.D1Address1;
                 myMember.AddressUpdated = DateTime.Now;
-                myMember.AddInfo2UpdatedBy = UpdatedBy;
+                myMember.AddressUpdatedBy = UpdatedBy;
                 isUpdated = true;
             }
             // CITY
@@ -546,7 +595,7 @@ namespace KofCWSCWebsite.Controllers
         }
         private bool FillD2(ref TblMasMember myMember, CvnImpDelegate myDelegate)
         {
-            string UpdatedBy = "Delgate Import API";
+            string UpdatedBy = "Delegate Import API";
             bool isUpdated = false;
 
             if (myMember == null)
@@ -615,7 +664,7 @@ namespace KofCWSCWebsite.Controllers
             {
                 myMember.Address = myDelegate.D2Address1;
                 myMember.AddressUpdated = DateTime.Now;
-                myMember.AddInfo2UpdatedBy = UpdatedBy;
+                myMember.AddressUpdatedBy = UpdatedBy;
                 isUpdated = true;
             }
             // CITY
@@ -663,7 +712,7 @@ namespace KofCWSCWebsite.Controllers
         }
         private bool FillA1(ref TblMasMember myMember, CvnImpDelegate myDelegate)
         {
-            string UpdatedBy = "Delgate Import API";
+            string UpdatedBy = "Delegate Import API";
             bool isUpdated = false;
 
             if (myMember == null)
@@ -732,7 +781,7 @@ namespace KofCWSCWebsite.Controllers
             {
                 myMember.Address = myDelegate.A1Address1;
                 myMember.AddressUpdated = DateTime.Now;
-                myMember.AddInfo2UpdatedBy = UpdatedBy;
+                myMember.AddressUpdatedBy = UpdatedBy;
                 isUpdated = true;
             }
             // CITY
@@ -780,7 +829,7 @@ namespace KofCWSCWebsite.Controllers
         }
         private bool FillA2(ref TblMasMember myMember, CvnImpDelegate myDelegate)
         {
-            string UpdatedBy = "Delgate Import API";
+            string UpdatedBy = "Delegate Import API";
             bool isUpdated = false;
 
             if (myMember == null)
@@ -849,7 +898,7 @@ namespace KofCWSCWebsite.Controllers
             {
                 myMember.Address = myDelegate.A2Address1;
                 myMember.AddressUpdated = DateTime.Now;
-                myMember.AddInfo2UpdatedBy = UpdatedBy;
+                myMember.AddressUpdatedBy = UpdatedBy;
                 isUpdated = true;
             }
             // CITY
@@ -924,6 +973,7 @@ namespace KofCWSCWebsite.Controllers
         {
             try
             {
+                return;
                 var apiHelper = new ApiHelper(_dataSetService);
 
                 TblCorrMemberOffice tblCorrMemberOffice = new TblCorrMemberOffice();
@@ -936,7 +986,7 @@ namespace KofCWSCWebsite.Controllers
                 tblCorrMemberOffice.OfficeId = OfficeId;
                 tblCorrMemberOffice.MemberId = myID.MemberId;
                 tblCorrMemberOffice.PrimaryOffice = false;
-                tblCorrMemberOffice.Year = await apiHelper.GetAsync<int>($"/GetFratYear/{0}");
+                tblCorrMemberOffice.Year = _fratyear;
                 tblCorrMemberOffice.District = null;
                 tblCorrMemberOffice.Council = null;
                 tblCorrMemberOffice.Assembly = null;
@@ -946,7 +996,7 @@ namespace KofCWSCWebsite.Controllers
             }
             catch (Exception ex)
             {
-                Log.Error(Utils.FormatLogEntry(this, ex));
+                Log.Error(Utils.FormatLogEntry(this, ex, "***"+ $"Adding Office {OfficeId} to Member {KofCID}"));
                 WriteToDelegateImportLog(guid, KofCID, "ERROR", $"Adding Office {OfficeId} to Member {KofCID}");
             }
 

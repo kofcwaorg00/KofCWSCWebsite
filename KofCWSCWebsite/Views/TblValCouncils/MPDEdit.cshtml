@@ -1,0 +1,386 @@
+﻿@using KofCWSCWebsite.CustomTagHelpers
+@model List<KofCWSCWebsite.Models.TblValCouncilMPD>
+
+@{
+    ViewData["Title"] = "MPDEdit";
+}
+
+<h1>Update Council Delegate Days</h1>
+
+
+
+
+
+<style>
+
+
+    .form-container {
+        position: relative; /* Required for absolute positioning of spinner */
+    }
+
+    .form-container {
+        /*display: flex;*/ /* Aligns form fields and button horizontally */
+        gap: 20px; /* Space between the form fields and button */
+    }
+
+    .form-elements {
+        /*flex: 1;*/ /* Form fields take up the available space */
+    }
+
+    .form-buttons {
+        /*position: fixed;*/ /* Makes the button stay in a fixed position on the screen */
+        /*top: 300px;*/ /* Distance from the top of the viewport */
+        /*left: 100px;*/ /* Or adjust based on your layout */
+
+        position: fixed; /* The element stays fixed regardless of scrolling */
+        left: 100px; /* Aligns the element to the left edge of the viewport */
+        top: 40%; /* Centers it vertically (optional) */
+        transform: translateY(-50%); /* Centers the element vertically */
+        z-index: 1000; /* Ensures it stays above other elements */
+    }
+
+
+
+
+    .custom-checkbox input[type="checkbox"] {
+        display: none; /* Hide the default checkbox */
+        text-align: center;
+    }
+
+    .custom-checkbox {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        /*width: 20px;*/ /* Adjust size based on your image */
+        /*height: 20px;
+        background: url('/images/CheckBoxUnChecked.png') no-repeat center center;
+        background-position: center center;
+        background-repeat: no-repeat;
+        background-size: cover;
+        cursor: pointer;
+        transition: background 0.3s;*/
+    }
+
+    .checkbox-image {
+        width: 25px; /* Adjust size based on your image */
+        height: 25px;
+        background: url('/images/CheckBoxUnChecked.png') no-repeat center center;
+        background-position: center !important;
+        background-repeat: no-repeat;
+        background-size: cover;
+        cursor: pointer;
+        transition: background 0.3s;
+    }
+
+    .custom-checkbox input[type="checkbox"]:checked + .checkbox-image {
+        background: url('/images/CheckBoxChecked.png') no-repeat center center;
+        background-position: center center;
+        background-repeat: no-repeat;
+        background-size: cover;
+    }
+
+
+
+
+
+
+
+
+
+
+
+
+    /* Override styles for form-check-input */
+    .custom-check-input {
+        width: 27px;
+        height: 27px;
+        background-color: #f0f0f0;
+        border-radius: 5px;
+        border: 2px solid #007bff;
+        transition: background-color 0.3s ease;
+    }
+
+        .custom-check-input:checked {
+            background-color: #007bff;
+            border-color: #0056b3;
+            /*background-color: #f0f0f0;*/
+            color: red !important;
+        }
+
+    .light-border {
+        border-left: 1px solid #007bff; /* Blue color */
+    }
+
+    .lighter-borderL {
+        border-left: 0.5px solid #000; /* Half-pixel width */
+    }
+
+    .lighter-borderR {
+        border-right: 0.5px solid #000; /* Half-pixel width */
+    }
+</style>
+<table>
+    <tr>
+        <td style="text-align:center;padding-right:10px">
+            <label>Show Less</label>
+            <br />
+            <input type="checkbox" id="myddayFilter">
+        </td>
+        <td>
+            <input type="text" id="mydistrictFilter" placeholder="Type in a District Number to filter results" title="Type in a number">
+        </td>
+        <td>
+            <input type="text" id="mycouncilFilter" placeholder="Type in a Council Number to filter results" title="Type in a number">
+        </td>
+        <td>
+            <button id="resetFilters" class="btn btn-outline-success">Reset Filters</button>
+        </td>
+    </tr>
+</table>
+<div class="overlay" id="overlay"></div>
+<div class="form-container">
+    <form asp-action="MPDEdit" method="post" id="myForm">
+        @Html.AntiForgeryToken()
+        <div class="form-elements">
+            <table class="table" id="myTable">
+                <thead>
+                    <tr>
+                        <th></th>
+                        <th></th>
+                        <th></th>
+                        <th colspan="2" style="text-align:center" class="lighter-borderL">Day1</th>
+                        <th colspan="2" style="text-align:center" class="lighter-borderL">Day2</th>
+                        <th colspan="2" style="text-align:center" class="lighter-borderL lighter-borderR">Day3</th>
+                    </tr>
+                    <tr>
+                        <th style="text-align:center">District</th>
+                        <th style="text-align:center">Council</th>
+                        <th>Name</th>
+                        <th style="text-align:center" class="lighter-borderL">D1</th>
+                        <th style="text-align:center">D2</th>
+                        <th style="text-align:center" class="lighter-borderL">D1</th>
+                        <th style="text-align:center">D2</th>
+                        <th style="text-align:center" class="lighter-borderL">D1</th>
+                        <th style="text-align:center" class="lighter-borderR">D2</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @for (int i = 0; i < Model.Count; i++)
+                    {
+                        <tr>
+                            <td style="text-align:center;width:75px">
+                                @Html.DisplayFor(m => Model[i].District, new { htmlAttributes = new { @class = "form-control" } })
+                            </td>
+                            <td style="text-align:center">
+                                @Html.DisplayFor(m => Model[i].CNumber)
+                                @Html.HiddenFor(m => Model[i].CNumber)
+                            </td>
+                            <td style="width:300px">
+                                @Html.DisplayFor(m => Model[i].CName, new { htmlAttributes = new { @class = "form-control" } })
+                            </td>
+
+                            <td class="lighter-borderL">
+                                <div class="custom-checkbox">
+                                    @Html.CheckBoxFor(m => Model[i].SeatedDelegateDay1D1)
+                                    <div class="checkbox-image"></div>
+                                </div>
+                            </td>
+                            <td style="text-align:center">
+                                @*@Html.CheckBoxFor(m => Model[i].SeatedDelegateDay1D2, new { @class = "form-check-input custom-check-input" })*@
+                                <div class="custom-checkbox">
+                                    @Html.CheckBoxFor(m => Model[i].SeatedDelegateDay1D2)
+                                    <div class="checkbox-image"></div>
+                                </div>
+                            </td>
+                            <td class="lighter-borderL" style="text-align:center">
+                                <div class="custom-checkbox">
+                                    @Html.CheckBoxFor(m => Model[i].SeatedDelegateDay2D1)
+                                    <div class="checkbox-image"></div>
+                                </div>
+                            </td>
+                            <td style="text-align:center">
+                                <div class="custom-checkbox">
+                                    @Html.CheckBoxFor(m => Model[i].SeatedDelegateDay2D2)
+                                    <div class="checkbox-image"></div>
+                                </div>
+                            </td>
+                            <td class="lighter-borderL" style="text-align:center">
+                                <div class="custom-checkbox">
+                                    @Html.CheckBoxFor(m => Model[i].SeatedDelegateDay3D1)
+                                    <div class="checkbox-image"></div>
+                                </div>
+                            </td>
+                            <td class="lighter-borderR" style="text-align:center">
+                                <div class="custom-checkbox">
+                                    @Html.CheckBoxFor(m => Model[i].SeatedDelegateDay3D2)
+                                    <div class="checkbox-image"></div>
+                                </div>
+                            </td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        </div>
+        <div class="form-buttons">
+            <button type="submit" class="btn btn-primary">Save Changes</button>
+        </div>
+        <div class="spinner" id="spinner"></div>
+    </form>
+</div>
+
+<div>
+    <a asp-action="Index">Back to List</a>
+</div>
+
+<script>
+    document.getElementById('myForm').addEventListener('submit', function (event) {
+        document.getElementById('overlay').style.display = 'block'; // Show the Overlay
+        document.getElementById('spinner').style.display = 'block'; // Show the spinner
+    });
+</script>
+
+<script>
+    let isDirty = false;
+
+    window.addEventListener("beforeunload", function (e) {
+        if (isDirty) {
+            const confirmationMessage = "You have unsaved changes. Are you sure you want to leave?";
+            e.returnValue = confirmationMessage; // For most browsers
+            return confirmationMessage; // For some browsers
+        }
+    });
+
+    function markAsDirty() {
+        isDirty = true;
+    }
+
+    function markAsClean() {
+        isDirty = false;
+    }
+
+    /*document.querySelectorAll('form input, form textarea, form select').forEach(function (element) {*/
+    document.querySelectorAll('form input').forEach(function (element) {
+        element.addEventListener('change', markAsDirty);
+    });
+
+    document.querySelectorAll('form').forEach(function (form) {
+        form.addEventListener('submit', markAsClean);
+    });
+</script>
+
+<script>
+    // Elements
+    const districtFilter = document.getElementById('mydistrictFilter');
+    const councilFilter = document.getElementById('mycouncilFilter');
+    const ddaysFilter = document.getElementById('myddayFilter');
+
+    const resetFilters = document.getElementById('resetFilters');
+    const tableBody = document.getElementById('mytable');
+
+    function getCookie(name) {
+        const cookies = document.cookie.split('; '); // Split cookies into individual key=value pairs
+        for (let cookie of cookies) {
+            const [key, value] = cookie.split('='); // Split each cookie into key and value
+            if (key === name) {
+                return decodeURIComponent(value); // Decode and return the cookie value
+            }
+        }
+        return null; // Return null if the cookie isn't found
+    }
+    // Restore filters from localStorage
+    function restoreFilters() {
+        const saveddistrictFilter = getCookie("districtFilter") || ''; //localStorage.getItem('districtFilter') || '';
+        const savedcouncilFilter = getCookie("councilFilter") || ''; //localStorage.getItem('councilFilter') || '';
+
+        districtFilter.value = saveddistrictFilter;
+        councilFilter.value = savedcouncilFilter;
+    }
+
+    // Save filters to localStorage
+    function saveFilters() {
+        document.cookie = "districtFilter=" + districtFilter.value + "; path=/;"; //localStorage.setItem('districtFilter', districtFilter.value);
+        document.cookie = "councilFilter=" + councilFilter.value + "; path=/;"; //localStorage.setItem('councilFilter', councilFilter.value);
+    }
+
+    function getCheckBoxTotal(myCell) {
+        var cell = myCell;
+        var checkbox = cell.querySelector('input[type="checkbox"]');
+        if (checkbox.checked) {
+            return 1;
+        }
+        else
+        {
+            return 0;
+        }
+    }
+    // Filter the table
+    function filterTable() {
+        const districtValue = districtFilter.value.toLowerCase();
+        const councilValue = councilFilter.value.toLowerCase();
+        const myddayValue = ddaysFilter.checked;
+
+        var myTable = document.getElementById('myTable');
+
+        Array.from(myTable.rows).forEach(row => {
+            // only affect the body rows not the header
+            if (row.parentNode.tagName.toLowerCase() === 'tbody') {
+                const district = row.cells[0].textContent.toLowerCase().trim();
+                const council = row.cells[1].textContent.toLowerCase().trim();
+                // now let's get the checkbox values to be able to filter
+                var myDelTot = getCheckBoxTotal(row.cells[3]) + getCheckBoxTotal(row.cells[4]) + getCheckBoxTotal(row.cells[5]) + getCheckBoxTotal(row.cells[6]) + getCheckBoxTotal(row.cells[7]) + getCheckBoxTotal(row.cells[8]);
+                
+                // Check each filter
+
+                const districtMatch = districtValue === '' || district === districtValue; // district.includes(districtValue);
+                const councilMatch = councilValue === '' || council.includes(councilValue);
+                if (!myddayValue) { myDelTot = 1 }
+
+                // hightlight the active filter(s)
+                if (districtValue === '') { districtFilter.style.backgroundColor = '' } else { districtFilter.style.backgroundColor = '#e8f0fe' }
+                if (councilValue === '') { councilFilter.style.backgroundColor = '' } else { councilFilter.style.backgroundColor = '#e8f0fe' }
+                // Show or hide the row based on filters
+                if (districtMatch && councilMatch && myDelTot) {
+                    row.style.display = '';
+                } else {
+                    row.style.display = 'none';
+                }
+            }
+        });
+
+        // Save filter values
+        saveFilters();
+    }
+
+    // Reset filters
+    resetFilters.addEventListener('click', () => {
+        districtFilter.value = '';
+        councilFilter.value = '';
+        ddaysFilter.checked = false;
+        filterTable();
+    });
+
+    // Event listeners
+    districtFilter.addEventListener('input', filterTable);
+    councilFilter.addEventListener('input', filterTable);
+    ddaysFilter.addEventListener('input', filterTable);
+
+    // Initialize
+    restoreFilters();
+
+    filterTable();
+</script>
+<script>
+    document.querySelectorAll('.custom-checkbox .checkbox-image').forEach(function (element) {
+        element.addEventListener('click', function () {
+            const checkbox = element.previousElementSibling;
+            checkbox.checked = !checkbox.checked;
+            checkbox.dispatchEvent(new Event('change')); // Trigger change event
+        });
+    });
+</script>
+
+
+
+@section Scripts {
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+}

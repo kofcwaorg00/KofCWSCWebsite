@@ -9,21 +9,21 @@ using System.Windows.Forms;
 using Serilog;
 using FastReport.Utils;
 using Microsoft.AspNetCore.Mvc.RazorPages;
+using Microsoft.AspNetCore.Authorization;
 
 namespace KofCWSCWebsite.Controllers
 {
     public class ConventionController : Controller
     {
-        private readonly ApplicationDbContext _context;
         private readonly DataSetService _dataSetService;
         private readonly ApiHelper _apiHelper;
-        public ConventionController(ApplicationDbContext context, DataSetService dataSetService)
+        public ConventionController(DataSetService dataSetService)
         {
-            _context = context;
             _dataSetService = dataSetService;
             _apiHelper = new ApiHelper(_dataSetService);
         }
         [HttpGet("GetAttendeeDays/{council}/{groupid}")]
+        [Authorize(Roles = "Admin, ConventionAdmin")]
         public async Task<ActionResult<IEnumerable<CvnDelegateDays>>> GetAttendeeDays(int council,int groupid)
         {
             ViewBag.Council = council;
@@ -44,6 +44,7 @@ namespace KofCWSCWebsite.Controllers
             return View("Views/Convention/AttendeeDays.cshtml", myViewD);
         }
         [HttpGet("ToggleDelegateDays/{id}/{day}")]
+        [Authorize(Roles = "Admin, ConventionAdmin")]
         public async Task<ActionResult<IEnumerable<CvnDelegateDays>>> ToggleDelegateDays(int id, int day)
         {
             var myAffectedRows = _apiHelper.GetAsync<int>($"/ToggleDelegateDays/{id}/{day}");
@@ -53,6 +54,7 @@ namespace KofCWSCWebsite.Controllers
 
         }
         [HttpGet("ResetDelegates")]
+        [Authorize(Roles = "Admin, ConventionAdmin")]
         public async Task<ActionResult> ResetDelegates()
         {
             try

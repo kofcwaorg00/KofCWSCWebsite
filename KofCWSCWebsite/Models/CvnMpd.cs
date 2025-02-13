@@ -58,10 +58,10 @@ public partial class CvnMpd
     public string? Day3GD2 { get; set; }
 
     [DisplayName("Mileage One Way")]
-    public int Miles { get; set; }
+    public int? Miles { get; set; }
 
     [DisplayName("Check Total")]
-    public decimal CheckTotal { get; set; }
+    public decimal? CheckTotal { get; set; }
 
     [DisplayName("Venue Location")]
     public string Location { get; set; } = null!;
@@ -69,4 +69,11 @@ public partial class CvnMpd
     public bool PayMe { get; set; }
     public string? CouncilStatus { get; set; }
     public int GroupID { get; set; }
+
+    [DisplayName("Council Location")]
+    public string? CouncilLocation { get; set; }
+    public string? Address { get; set; }
+    public string? City { get; set; }
+    public string? State { get; set; }
+    public string? Zip { get; set; }
 }

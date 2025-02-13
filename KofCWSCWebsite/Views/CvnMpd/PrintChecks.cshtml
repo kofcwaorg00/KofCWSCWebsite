@@ -1,0 +1,31 @@
+﻿@model KofCAdmin.Models.PrintMPDChecks
+@{
+}
+@*<button class="btn-info" asp-controller="CvnMpd" asp-action="Pdf" asp-route-nextchecknumber="222" asp-route-printchecknumber="true" asp-all-route-groupid="3">Export to PDF</button>*@
+
+<div class="overlay" id="overlay"></div>
+<div style="position:relative">
+    <form id="myForm">
+        @*<button type="submit" class="btn btn-danger" asp-controller="CvnMpd" asp-action="Pdf" asp-route-nextchecknumber="@ViewBag.NextCheckNumber" asp-route-printchecknumber="@ViewBag.PrintCheckNumber" asp-route-groupid="@ViewBag.GroupID">Export PDF</button>*@
+        @*<a class="btn btn-danger" asp-controller="CvnMpd" asp-action="Pdf" asp-route-nextchecknumber="@ViewBag.NextCheckNumber" asp-route-printchecknumber="@ViewBag.PrintCheckNumber" asp-route-groupid="@ViewBag.GroupID">Export Check Batch to PDF</a>*@
+        <a class="btn btn-danger" asp-controller="CvnMpd" asp-action="ExportCSV" asp-route-groupid="@ViewBag.GroupID">Export Check Batch to CSV</a>
+        <a class="btn btn-danger" asp-controller="CvnMpd" asp-action="ExportQB" asp-route-groupid="@ViewBag.GroupID">Export Check Batch to QuickBooks</a>
+        <a class="btn btn-danger" asp-controller="CvnMpd" asp-action="ArchiveCheckBatch" asp-route-nextchecknumber="@ViewBag.NextCheckNumber" asp-route-printchecknumber="@ViewBag.PrintCheckNumber" asp-route-groupid="@ViewBag.GroupID">Archive and Clear Check Batch</a>
+        <div class="webreport">
+            @await Model.WebReport.Render()
+        </div>
+        <div class="spinner" id="spinner"></div>
+    </form>
+</div>
+<script>
+    // 2/1/2025 Tim Philomeno...trying to get the spinner to work but I have no way
+    // of turning it off after the file is downloaded
+    //document.getElementById('myForm').addEventListener('submit', function (event) {
+    //    document.getElementById('overlay').style.display = 'block'; // Show the Overlay
+    //    document.getElementById('spinner').style.display = 'block'; // Show the spinner
+    //});
+    //document.addEventListener('load', function (event) {
+    //    document.getElementById('overlay').style.display = 'none'; // Show the Overlay
+    //    document.getElementById('spinner').style.display = 'none'; // Show the spinner
+    //});
+</script>

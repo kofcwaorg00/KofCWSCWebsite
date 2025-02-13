@@ -60,19 +60,19 @@
 <table class="table" width="100%">
     <thead>
         <tr>
-            <th class="MyColHdr" style="text-align:center;width:200px">
+            <th class="MyColHdr" style="text-align:center;width:20%">
                 @Html.DisplayNameFor(model => model.AwardName)
             </th>
-            <th class="MyColHdr">
+            <th class="MyColHdr" style="width:50%">
                 @Html.DisplayNameFor(model => model.AwardDescription)
             </th>
-            <th class="MyColHdr">
+            <th class="MyColHdr" style="width:10%">
                 @Html.DisplayNameFor(model => model.AwardDueDate)
             </th>
-            <th class="MyColHdr">
+            <th class="MyColHdr" style="width:10%">
                 @Html.DisplayNameFor(model => model.LinkToTheAwardForm)
             </th>
-            <th class="MyColHdr" style="text-align:center;width:200px">
+            <th class="MyColHdr" style="text-align:center;width:10%">
                 @Html.DisplayNameFor(model => model.AwardSubmissionEmailAddress)
             </th>
             @if (User.IsInRole("Admin"))

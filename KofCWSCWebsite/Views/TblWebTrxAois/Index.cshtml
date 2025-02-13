@@ -15,115 +15,132 @@
 <p>
     <input type="text" id="myTitleText" onkeyup="myFunction1()" placeholder="Type in Title Text to filter results" title="Type in a number" style="width:25%">
 </p>
-<table class="table" id="myTable">
-    <thead>
-        <tr>
-            <th class="MyColHdr">
-                <div class="MyColHdr" style="width:25px">
-                    @Html.DisplayNameFor(model => model.Type)
-                </div>
-            </th>
-            <th class="MyColHdr">
-                <div style="width:250px">
-                    @Html.DisplayNameFor(model => model.Title)
-                </div>
-            </th>
-            @*<th>
-                    <div style="width:250px">
-                        @Html.DisplayNameFor(model => model.GraphicUrl)
-                    </div>
-                </th>*@
-            @*<th>
-                    <div style="width:30%">
-                        @Html.DisplayNameFor(model => model.Text)
-                    </div>
-                </th>*@
-            @*<th>
-                    <div style="width:20%">
-                        @Html.DisplayNameFor(model => model.LinkUrl)
-                    </div>
-                </th>*@
-            <th class="MyColHdr">
-                <div style="width:30%">
-                    @Html.DisplayNameFor(model => model.PostedDate)
-                </div>
-            </th>
-            <th class="MyColHdr">
-                <div style="width:10%">
-                    @Html.DisplayNameFor(model => model.Expired)
-                </div>
-            </th>
-            <th class="MyColHdr"></th>
-            <th class="MyColHdr"></th>
-            <th class="MyColHdr"></th>
-        </tr>
-    </thead>
-    <tbody>
-        @foreach (var item in Model)
-        {
-            <tr>
-                <td>
-                    <div style="width:25px">
-                        @Html.DisplayFor(modelItem => item.Type)
-                    </div>
-                </td>
-                <td>
-                    <div style="width:250px">
-                        @Html.DisplayFor(modelItem => item.Title)
-                    </div>
-                </td>
-                @*<td>
-                        <div style="width:250px">
-                            @Html.DisplayFor(modelItem => item.GraphicUrl)
-                        </div>
-                    </td>*@
-                @*<td>
-                        <div style="width:30%">
-                            @Html.DisplayFor(modelItem => item.Text)
-                        </div>
-                    </td>*@
-                @*<td>
-                        <div style="width:20%">
-                            @Html.DisplayFor(modelItem => item.LinkUrl)
-                        </div>
-                    </td>*@
-                <td>
-                    <div style="width:10%">
-                        @Html.DisplayFor(modelItem => item.PostedDate)
-                    </div>
-                </td>
-                <td>
-                    <div style="width:10%">
-                        @Html.DisplayFor(modelItem => item.Expired)
-                    </div>
-                </td>
-                <td style="padding-right:0px">
-                    @* <a asp-action="Edit" asp-route-id="@item.MemberId">Edit</a>&nbsp;|&nbsp;<a asp-action="Details" asp-route-id="@item.MemberId">Details</a>&nbsp;|&nbsp;<a asp-action="Delete" asp-route-id="@item.MemberId">Delete</a> *@
-                    <form asp-action="Edit" asp-route-id="@item.Id" method="get">
-                        <button type="submit" class="btn btn-sm btn-primary">
-                            Edit
-                        </button>
-                    </form>
-                </td>
-                <td style="padding-left:0px;padding-right:0px">
-                    <form asp-action="Details" asp-route-id="@item.Id" method="get">
-                        <button type="submit" class="btn btn-sm btn-warning">
-                            Details
-                        </button>
-                    </form>
-                </td>
-                <td style="padding-left:0px">
-                    <form asp-action="Delete" asp-route-id="@item.Id" method="get">
-                        <button type="submit" class="btn btn-sm btn-danger">
-                            Delete
-                        </button>
-                    </form>
+@if (Model == null)
+{
+    <div>
 
-                </td>
+
+        <h2>AOI Not Found</h2>
+        <p>
+            We are sorry but there are no Announcements or Of Interest Articles found
+            <a href='@Url.Action("Index", "Home" )'>Back to Home</a>
+        </p>
+    </div>
+}
+else
+{
+
+
+    <table class="table" id="myTable">
+        <thead>
+            <tr>
+                <th class="MyColHdr">
+                    <div class="MyColHdr" style="width:25px">
+                        @Html.DisplayNameFor(model => model.Type)
+                    </div>
+                </th>
+                <th class="MyColHdr">
+                    <div style="width:250px">
+                        @Html.DisplayNameFor(model => model.Title)
+                    </div>
+                </th>
+                @*<th>
+                        <div style="width:250px">
+                            @Html.DisplayNameFor(model => model.GraphicUrl)
+                        </div>
+                    </th>*@
+                @*<th>
+                        <div style="width:30%">
+                            @Html.DisplayNameFor(model => model.Text)
+                        </div>
+                    </th>*@
+                @*<th>
+                        <div style="width:20%">
+                            @Html.DisplayNameFor(model => model.LinkUrl)
+                        </div>
+                    </th>*@
+                <th class="MyColHdr">
+                    <div style="width:30%">
+                        @Html.DisplayNameFor(model => model.PostedDate)
+                    </div>
+                </th>
+                <th class="MyColHdr">
+                    <div style="width:10%">
+                        @Html.DisplayNameFor(model => model.Expired)
+                    </div>
+                </th>
+                <th class="MyColHdr"></th>
+                <th class="MyColHdr"></th>
+                <th class="MyColHdr"></th>
             </tr>
-        }
-    </tbody>
-</table>
+        </thead>
+        <tbody>
+            @foreach (var item in Model)
+            {
+                <tr>
+                    <td>
+                        <div style="width:25px">
+                            @Html.DisplayFor(modelItem => item.Type)
+                        </div>
+                    </td>
+                    <td>
+                        <div style="width:250px">
+                            @Html.DisplayFor(modelItem => item.Title)
+                        </div>
+                    </td>
+                    @*<td>
+                            <div style="width:250px">
+                                @Html.DisplayFor(modelItem => item.GraphicUrl)
+                            </div>
+                        </td>*@
+                    @*<td>
+                            <div style="width:30%">
+                                @Html.DisplayFor(modelItem => item.Text)
+                            </div>
+                        </td>*@
+                    @*<td>
+                            <div style="width:20%">
+                                @Html.DisplayFor(modelItem => item.LinkUrl)
+                            </div>
+                        </td>*@
+                    <td>
+                        <div style="width:10%">
+                            @Html.DisplayFor(modelItem => item.PostedDate)
+                        </div>
+                    </td>
+                    <td>
+                        <div style="width:10%">
+                            @Html.DisplayFor(modelItem => item.Expired)
+                        </div>
+                    </td>
+                    <td style="padding-right:0px">
+                        @* <a asp-action="Edit" asp-route-id="@item.MemberId">Edit</a>&nbsp;|&nbsp;<a asp-action="Details" asp-route-id="@item.MemberId">Details</a>&nbsp;|&nbsp;<a asp-action="Delete" asp-route-id="@item.MemberId">Delete</a> *@
+                        <form asp-action="Edit" asp-route-id="@item.Id" method="get">
+                            <button type="submit" class="btn btn-sm btn-primary">
+                                Edit
+                            </button>
+                        </form>
+                    </td>
+                    <td style="padding-left:0px;padding-right:0px">
+                        <form asp-action="Details" asp-route-id="@item.Id" method="get">
+                            <button type="submit" class="btn btn-sm btn-warning">
+                                Details
+                            </button>
+                        </form>
+                    </td>
+                    <td style="padding-left:0px">
+                        <form asp-action="Delete" asp-route-id="@item.Id" method="get">
+                            <button type="submit" class="btn btn-sm btn-danger">
+                                Delete
+                            </button>
+                        </form>
+
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+}
 <script>
     function myFunction1() {
         var input, filter, table, tr, td, i, txtValue;

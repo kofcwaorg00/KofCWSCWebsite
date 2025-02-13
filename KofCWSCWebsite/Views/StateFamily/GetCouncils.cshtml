@@ -2,6 +2,7 @@
 @using KofCWSCWebsite.Services;
 @{
     ViewData["Title"] = "KofCWSC Councils";
+    string stars = "";
 }
 
 
@@ -12,13 +13,18 @@
 
 
 <p>
-    <input type="text" id="myCnumber" onkeyup="myFunction1()" placeholder="Type in a Council Number to filter results" title="Type in a number" style="width:25%">
-    <input type="text" id="myCname" onkeyup="myFunction2()" placeholder="Type in a Council Name to filter results" title="Type in a name" style="width:25%">
-    <input type="text" id="myCity" onkeyup="myFunction3()" placeholder="Type in a City to filter results" title="Type in a name" style="width:25%">
+    Filter by:<br />
+    <input type="text" id="myCnumber" onkeyup="FilterCouncil()" placeholder="Type in a Council Number to filter results" title="Type in a number" style="width:20%">
+    <input type="text" id="myDistrict" onkeyup="FilterDistrict()" placeholder="Type in a District Number to filter results" title="Type in a number" style="width:20%">
+    <input type="text" id="myCname" onkeyup="FilterName()" placeholder="Type in a Council Name to filter results" title="Type in a name" style="width:20%">
+    <input type="text" id="myCity" onkeyup="FilterCity()" placeholder="Type in a City to filter results" title="Type in a name" style="width:20%">
 </p>
 <table class="table" style="font-size:small" id="myTable">
     <thead>
         <tr>
+            <th class="MyColHdr">
+                <label title="Missing Addresses (P)hysical, (M)ailing, M(E)eting">MA</label>
+            </th>
             <th class="MyColHdr">
                 @Html.DisplayNameFor(model => model.CouncilNo)
             </th>
@@ -69,7 +75,25 @@
     <tbody>
         @foreach (var item in Model)
         {
+            stars = "";
             <tr>
+                <td>
+                    @if (item.PhyAddress is null || item.PhyAddress.Length == 0)
+                    {
+                        stars += "P";
+                    }
+                    @if (item.MailAddress is null || item.MailAddress.Length == 0)
+                    {
+                        stars += "M";
+                    }
+                    @if (item.MeetAddress is null || item.MeetAddress.Length == 0)
+                    {
+                        stars += "E";
+                    }
+
+                    <label style="color:red" title="Missing Addresses (P)hysical, (M)ailing, M(E)eting">@stars</label>
+
+                </td>
                 <td>
                     @Html.DisplayFor(modelItem => item.CouncilNo)
                 </td>
@@ -132,14 +156,14 @@
     </tbody>
 </table>
 <script>
-    function myFunction1() {
+    function FilterCouncil() {
         var input, filter, table, tr, td, i, txtValue;
         input = document.getElementById("myCnumber");
         filter = input.value.toUpperCase();
         table = document.getElementById("myTable");
         tr = table.getElementsByTagName("tr");
         for (i = 0; i < tr.length; i++) {
-            td = tr[i].getElementsByTagName("td")[0];
+            td = tr[i].getElementsByTagName("td")[1];
             if (td) {
                 txtValue = td.textContent || td.innerText;
                 if (txtValue.toUpperCase().indexOf(filter) > -1) {
@@ -150,9 +174,27 @@
             }
         }
     }
-    function myFunction2() {
+    function FilterName() {
         var input, filter, table, tr, td, i, txtValue;
         input = document.getElementById("myCname");
+        filter = input.value.toUpperCase();
+        table = document.getElementById("myTable");
+        tr = table.getElementsByTagName("tr");
+        for (i = 0; i < tr.length; i++) {
+            td = tr[i].getElementsByTagName("td")[4];
+            if (td) {
+                txtValue = td.textContent || td.innerText;
+                if (txtValue.toUpperCase().indexOf(filter) > -1) {
+                    tr[i].style.display = "";
+                } else {
+                    tr[i].style.display = "none";
+                }
+            }
+        }
+    }
+    function FilterCity() {
+        var input, filter, table, tr, td, i, txtValue;
+        input = document.getElementById("myCity");
         filter = input.value.toUpperCase();
         table = document.getElementById("myTable");
         tr = table.getElementsByTagName("tr");
@@ -168,9 +210,9 @@
             }
         }
     }
-    function myFunction3() {
+    function FilterDistrict() {
         var input, filter, table, tr, td, i, txtValue;
-        input = document.getElementById("myCity");
+        input = document.getElementById("myDistrict");
         filter = input.value.toUpperCase();
         table = document.getElementById("myTable");
         tr = table.getElementsByTagName("tr");

@@ -13,20 +13,23 @@ using System.Collections;
 using Newtonsoft.Json;
 using Serilog;
 using Microsoft.AspNetCore.Authorization;
+using KofCWSCWebsite.Services;
 
 namespace KofCWSCWebsite.Controllers
 {
     public class TblMasMembersController : Controller
     {
         private DataSetService _dataSetService;
+        private readonly ApiHelper _apiHelper;
 
-        public TblMasMembersController(DataSetService dataSetService)
+        public TblMasMembersController(DataSetService dataSetService, ApiHelper apiHelper)
         {
             Log.Information("Creating MembersController");
             _dataSetService = dataSetService;
+            _apiHelper = apiHelper;
         }
         [Authorize(Roles = "Admin,StateOfficer,DataAdmin,StateMembership")]
-        public ActionResult Index(string lastname)
+        public async Task<ActionResult> Index(string lastname)
         {
             //********************************************************************************
             // 11/1/2024 Tim Philomeno
@@ -34,7 +37,7 @@ namespace KofCWSCWebsite.Controllers
             HttpContext.Response.Cookies.Append("IAgreeSensitive", "true", new CookieOptions
             {
                 //Expires = DateTime.MinValue,// DateTimeOffset.UtcNow.AddMinutes(30),
-                Path="/",
+                Path = "/",
                 HttpOnly = false, // Accessible only by the server
                 IsEssential = true // Required for GDPR compliance
             });
@@ -44,29 +47,36 @@ namespace KofCWSCWebsite.Controllers
             {
                 lastname = "aaa";
             }
+            string myEndpoint = "";
 
-            Uri myURI = new Uri(_dataSetService.GetAPIBaseAddress() + "/Members/LastName/" + lastname);
-
-            using (var client = new HttpClient())
+            bool isNumber = int.TryParse(lastname, out var KofCID);
+            //IEnumerable<TblMasMember> members;
+            if (isNumber)
             {
-                var responseTask = client.GetAsync(myURI);
-                responseTask.Wait();
-                var result = responseTask.Result;
-                IEnumerable<TblMasMember> members;
-                if (result.IsSuccessStatusCode)
-                {
-                    var readTask = result.Content.ReadAsAsync<IList<TblMasMember>>();
-                    readTask.Wait();
-                    members = readTask.Result;
-                    ViewData["NoMembers"] = "Found " + members.Count() + " Members";
-                }
-                else
-                {
-                    members = Enumerable.Empty<TblMasMember>();
-                    ModelState.AddModelError(string.Empty, "Server Error.  Please contact administrator.");
-                }
-                return View(members);
+                myEndpoint = $"Members/KofCID/{KofCID}";
             }
+            else
+            {
+                myEndpoint = $"Members/LastName/{lastname}";
+            }
+            IEnumerable<TblMasMember> members;
+
+            members = await _apiHelper.GetAsync<IEnumerable<TblMasMember>>(myEndpoint);
+
+            //ViewData["NoMembers"] = "Found " + members.Count() + " Members";
+
+            if (members is null)
+            {
+                members = Enumerable.Empty<TblMasMember>();
+                ModelState.AddModelError(string.Empty, "Server Error.  Please contact administrator.");
+            }
+            else
+            {
+                ViewData["NoMembers"] = "Found " + members.Count() + " Members";
+            }
+
+            return View(members);
+
         }
 
         // GET: TblMasMembers/Details/5
@@ -132,7 +142,7 @@ namespace KofCWSCWebsite.Controllers
                     }
                     catch (Exception ex)
                     {
-                        Log.Error(ex.Message + ' ' + ex.InnerException);
+                        Log.Error(Utils.FormatLogEntry(this, ex));
                     }
                     return RedirectToAction(nameof(Index), new { lastname = lastname });
                 }

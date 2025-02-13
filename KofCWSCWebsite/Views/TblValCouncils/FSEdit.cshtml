@@ -1,4 +1,4 @@
-﻿@model KofCWSCWebsite.Models.TblValCouncil
+﻿@model KofCWSCWebsite.Models.TblValCouncilFSEdit
 
 @{
     ViewData["Title"] = "Edit";
@@ -7,81 +7,40 @@
 <h1>Edit Council @Model.CNumber Addresses</h1>
 <h6>Council Status is (@Model.Status)</h6>
 <hr />
+<button onclick="CopyFSAddress()">Copy FS Address to Physical, Mailing and Meeting?</button>
 <button onclick="CopyAddress()">Copy Physical Address to Mailing and Meeting?</button>
 <div class="row">
-    @*<div class="col-md-4">*@
     <form asp-action="FSEdit">
+        <div style="display:none">
+            @Html.TextBoxFor(m => Model.Status)
+            @Html.TextBoxFor(m => Model.FSAddress)
+            @Html.TextBoxFor(m => Model.FSCity)
+            @Html.TextBoxFor(m => Model.FSState)
+            @Html.TextBoxFor(m => Model.FSPostalCode)
+            @Html.TextBoxFor(m => Model.CNumber)
+            @Html.TextBoxFor(m => Model.Status)
+            @Html.TextBoxFor(m => Model.CLocation)
+            @Html.TextBoxFor(m => Model.CName)
+            @Html.TextBoxFor(m => Model.District)
+            @Html.TextBoxFor(m => Model.AddInfo1)
+            @Html.TextBoxFor(m => Model.AddInfo2)
+            @Html.TextBoxFor(m => Model.AddInfo3)
+            @Html.TextBoxFor(m => Model.LiabIns)
+            @Html.TextBoxFor(m => Model.DioceseId)
+            @Html.TextBoxFor(m => Model.Chartered)
+            @Html.TextBoxFor(m => Model.WebSiteUrl)
+            @Html.TextBoxFor(m => Model.BulletinUrl)
+            @Html.TextBoxFor(m => Model.Arbalance)
+            @Html.TextBoxFor(m => Model.SeatedDelegateDay1D1)
+            @Html.TextBoxFor(m => Model.SeatedDelegateDay1D2)
+            @Html.TextBoxFor(m => Model.SeatedDelegateDay2D1)
+            @Html.TextBoxFor(m => Model.SeatedDelegateDay2D2)
+            @Html.TextBoxFor(m => Model.SeatedDelegateDay3D1)
+            @Html.TextBoxFor(m => Model.SeatedDelegateDay3D2)
+            @Html.TextBoxFor(m => Model.PaidMPD)
+        </div>
         <div asp-validation-summary="ModelOnly" class="text-danger"></div>
         <input type="hidden" asp-for="CNumber" />
-        <div style="display:none">
-            <div class="form-group">
-                <label asp-for="CLocation" class="control-label"></label>
-                <input asp-for="CLocation" class="form-control" />
-                <span asp-validation-for="CLocation" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="CName" class="control-label"></label>
-                <input asp-for="CName" class="form-control" />
-                <span asp-validation-for="CName" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="District" class="control-label"></label>
-                <input asp-for="District" class="form-control" />
-                <span asp-validation-for="District" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="AddInfo1" class="control-label"></label>
-                <input asp-for="AddInfo1" class="form-control" />
-                <span asp-validation-for="AddInfo1" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="AddInfo2" class="control-label"></label>
-                <input asp-for="AddInfo2" class="form-control" />
-                <span asp-validation-for="AddInfo2" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="AddInfo3" class="control-label"></label>
-                <input asp-for="AddInfo3" class="form-control" />
-                <span asp-validation-for="AddInfo3" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="LiabIns" class="control-label"></label>
-                <input asp-for="LiabIns" class="form-control" />
-                <span asp-validation-for="LiabIns" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="DioceseId" class="control-label"></label>
-                <input asp-for="DioceseId" class="form-control" />
-                <span asp-validation-for="DioceseId" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="Chartered" class="control-label"></label>
-                <input asp-for="Chartered" class="form-control" />
-                <span asp-validation-for="Chartered" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="WebSiteUrl" class="control-label"></label>
-                <input asp-for="WebSiteUrl" class="form-control" />
-                <span asp-validation-for="WebSiteUrl" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="BulletinUrl" class="control-label"></label>
-                <input asp-for="BulletinUrl" class="form-control" />
-                <span asp-validation-for="BulletinUrl" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="Arbalance" class="control-label"></label>
-                <input asp-for="Arbalance" class="form-control" />
-                <span asp-validation-for="Arbalance" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="Status" class="control-label"></label>
-                <input asp-for="Status" class="form-control" />
-                <span asp-validation-for="Status" class="text-danger"></span>
-            </div>
-        </div>
-
-
         <table class="table">
             <tr>
                 <td>
@@ -249,61 +208,109 @@
                         <input type="submit" value="Save" class="btn btn-primary" />
                     </div>
                 </td>
-                <td>
-                    <div style="width:25%">
-                        @*<form method="get" asp-controller="Home" asp-action="Index" asp-route-id="">*@
-                        <button type="submit" asp-controller="Home" asp-action="Index" class="btn btn-success">Cancel</button>
-                        @*</form>*@
-                    </div>
-                </td>
-                <td>
-                    <div style="width:25%">
-                        @*<form method="get" asp-controller="Home" asp-action="Index" asp-route-id="">*@
-                        <button type="reset" class="btn btn-info">Reset</button>
-                        @*</form>*@
-                    </div>
-                </td>
-            </tr>
-        </table>
-
-
-    </form>
-    <a asp-controller="Home" asp-action="Index">Cancel</a>
-
-    
+                <!--<td>
+                <div style="width:25%">-->
+        @*<form method="get" asp-controller="Home" asp-action="Index" asp-route-id="">*@
+<!--<button type="submit" asp-controller="Home" asp-action="Index" class="btn btn-success">Cancel</button>-->
+        @*</form>*@
+<!--</div>
+</td>-->
+<td>
+<div style="width:25%">
+        @*<form method="get" asp-controller="Home" asp-action="Index" asp-route-id="">*@
+<button type="reset" class="btn btn-info">Reset</button>
+        @*</form>*@
 </div>
+</td>
+</tr>
+</table>
 
-<div>
-    <a asp-action="Index">@*Back to List*@</a>
-</div>
 
-@section Scripts {
-    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+</form>
+@if (User.IsInRole("Admin"))
+{
+<a asp-action="Index">Cancel</a>
 }
-<script>
-    function CopyAddress() {
-        var destMeetAddress = document.getElementById("MeetAddress");
-        destMeetAddress.value = document.getElementById("PhyAddress").value;
+else
+{
+<a asp-controller="Home" asp-action="Index">Cancel</a>
+}
 
-        var destMailAddress = document.getElementById("MailAddress");
-        destMailAddress.value = document.getElementById("PhyAddress").value;
 
-        var destMeetCity = document.getElementById("MeetCity");
-        destMeetCity.value = document.getElementById("PhyCity").value;
 
-        var destMailCity = document.getElementById("MailCity");
-        destMailCity.value = document.getElementById("PhyCity").value;
 
-        var destMeetState = document.getElementById("MeetState");
-        destMeetState.value = document.getElementById("PhyState").value;
+</div>
 
-        var destMailState = document.getElementById("MailState");
-        destMailState.value = document.getElementById("PhyState").value;
+<!--<div>
+<a asp-action="Index">-->
+        @*Back to List*@
+            <!--</a>
+    </div>-->
 
-        var destMeetPostalCode = document.getElementById("MeetPostalCode");
-        destMeetPostalCode.value = document.getElementById("PhyPostalCode").value;
+            @section Scripts {
+                @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+            }
+            <script>
+                function CopyAddress() {
+                    var destMeetAddress = document.getElementById("MeetAddress");
+                    destMeetAddress.value = document.getElementById("PhyAddress").value;
 
-        var destMailPostalCode = document.getElementById("MailPostalCode");
-        destMailPostalCode.value = document.getElementById("PhyPostalCode").value;
-    }
-</script>
+                    var destMailAddress = document.getElementById("MailAddress");
+                    destMailAddress.value = document.getElementById("PhyAddress").value;
+
+                    var destMeetCity = document.getElementById("MeetCity");
+                    destMeetCity.value = document.getElementById("PhyCity").value;
+
+                    var destMailCity = document.getElementById("MailCity");
+                    destMailCity.value = document.getElementById("PhyCity").value;
+
+                    var destMeetState = document.getElementById("MeetState");
+                    destMeetState.value = document.getElementById("PhyState").value;
+
+                    var destMailState = document.getElementById("MailState");
+                    destMailState.value = document.getElementById("PhyState").value;
+
+                    var destMeetPostalCode = document.getElementById("MeetPostalCode");
+                    destMeetPostalCode.value = document.getElementById("PhyPostalCode").value;
+
+                    var destMailPostalCode = document.getElementById("MailPostalCode");
+                    destMailPostalCode.value = document.getElementById("PhyPostalCode").value;
+                }
+                function CopyFSAddress() {
+                    var destPhyAddress = document.getElementById("PhyAddress");
+                    destPhyAddress.value = document.getElementById("FSAddress").value;
+
+                    var destPhyCity = document.getElementById("PhyCity");
+                    destPhyCity.value = document.getElementById("FSCity").value;
+
+                    var destPhyState = document.getElementById("PhyState");
+                    destPhyState.value = document.getElementById("FSState").value;
+
+                    var destPhyPostalCode = document.getElementById("PhyPostalCode");
+                    destPhyPostalCode.value = document.getElementById("FSPostalCode").value;
+
+                    var destMeetAddress = document.getElementById("MeetAddress");
+                    destMeetAddress.value = document.getElementById("PhyAddress").value;
+
+                    var destMailAddress = document.getElementById("MailAddress");
+                    destMailAddress.value = document.getElementById("PhyAddress").value;
+
+                    var destMeetCity = document.getElementById("MeetCity");
+                    destMeetCity.value = document.getElementById("PhyCity").value;
+
+                    var destMailCity = document.getElementById("MailCity");
+                    destMailCity.value = document.getElementById("PhyCity").value;
+
+                    var destMeetState = document.getElementById("MeetState");
+                    destMeetState.value = document.getElementById("PhyState").value;
+
+                    var destMailState = document.getElementById("MailState");
+                    destMailState.value = document.getElementById("PhyState").value;
+
+                    var destMeetPostalCode = document.getElementById("MeetPostalCode");
+                    destMeetPostalCode.value = document.getElementById("PhyPostalCode").value;
+
+                    var destMailPostalCode = document.getElementById("MailPostalCode");
+                    destMailPostalCode.value = document.getElementById("PhyPostalCode").value;
+                }
+            </script>

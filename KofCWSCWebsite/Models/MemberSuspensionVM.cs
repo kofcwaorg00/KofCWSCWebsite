@@ -15,4 +15,6 @@ public partial class MemberSuspensionVM
     public string Name { get; set; }
 
     public string? Comment { get; set; }
+    public DateTime Updated { get; set; }
+    public string UpdatedBy { get; set; }
 }

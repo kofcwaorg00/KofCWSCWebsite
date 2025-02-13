@@ -2,27 +2,49 @@ using KofCWSCWebsite.Data;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using KofCWSCWebsite.Areas.Identity.Data;
-using Microsoft.AspNetCore.Identity.UI.Services;
 using KofCWSCWebsite.Services;
-using Microsoft.Extensions.Configuration;
-using Microsoft.AspNetCore;
 using Azure.Identity;
-
-using Microsoft.Azure.KeyVault;
 using Azure.Security.KeyVault.Secrets;
-using Microsoft.AspNetCore.DataProtection;
 using Microsoft.IdentityModel.Tokens;
 using Serilog;
-using Microsoft.AspNet.Identity;
-using Microsoft.AspNetCore.ResponseCompression;
+using Serilog.AspNetCore;
+using Serilog.Sinks.Email;
+using Serilog.Extensions.Hosting;
+using Serilog.Enrichers;
 using Microsoft.AspNetCore.Authentication.Cookies;
+using Microsoft.AspNetCore.Http.Features;
+using System.Net;
 
 var builder = WebApplication.CreateBuilder(args);
+
+var kvURLAZ = builder.Configuration.GetSection("KV").GetValue(typeof(string), "VAULTURL");
+var kvclient = new SecretClient(new Uri((string)kvURLAZ), new DefaultAzureCredential());
+var vConnString = kvclient.GetSecret("AZEmailConnString").Value;
+string azureConnectionString = vConnString.Value;
+
+
+// Read the Azure connection string from configuration
+//string azureConnectionString = builder.Configuration["Azure:CommunicationService:ConnectionString"];
+string fromEmail = builder.Configuration["Azure:CommunicationService:FromEmail"];
+string toEmail = builder.Configuration["Azure:CommunicationService:ToEmail"];
+
+//////////builder.Host.UseSerilog ((context, config) =>
+//////////{
+//////////    _ = config
+//////////    .Enrich.FromLogContext()
+//////////    .WriteTo.Console()
+//////////    .WriteTo.Sink(new AzureCommunicationEmailSink(azureConnectionString, fromEmail, toEmail))
+//////////    .WriteTo.File("logs/MyAppLog.txt", retainedFileCountLimit: 21, rollingInterval: RollingInterval.Day, shared: true);
+//////////});
+
+
+
 
 Log.Logger = new LoggerConfiguration()
     .WriteTo.Console()
     .Enrich.FromLogContext()
-    .WriteTo.File("logs/MyAppLog.txt", retainedFileCountLimit: 21, rollingInterval: RollingInterval.Day,shared: true)
+    .WriteTo.File("logs/MyAppLog.txt", retainedFileCountLimit: 21, rollingInterval: RollingInterval.Day, shared: true)
+    .WriteTo.Sink(new AzureCommunicationEmailSink(azureConnectionString, fromEmail, toEmail))
     .CreateLogger();
 
 Log.Information("Initialized Serilog and Starting Application");
@@ -51,20 +73,31 @@ try
     string connectionString = cnString.Value;
 
     //Log.Information("Found CS " + connectionString);
-    
 
 
-//------------------------------------------------------------------------------------------------------------------------------
-//////////////var connectionString = builder.Configuration.GetConnectionString("DASPDEVConnection") ?? throw new InvalidOperationException("Connection string 'DefaultConnection' not found.");
-//------------------------------------------------------------------------------------------------------------------------------
-// make sure we have a value from KeyVault. if not throw an exception
-if (connectionString.IsNullOrEmpty()) throw new Exception("APIURL is not defined");
-//------------------------------------------------------------------------------------------------------------------------------
-builder.Services.AddDbContext<ApplicationDbContext>(options =>
-    options.UseSqlServer(connectionString));
 
-builder.Services.AddDbContext<IdentityDBContext>(options =>
-    options.UseSqlServer(connectionString));
+    //------------------------------------------------------------------------------------------------------------------------------
+    //////////////var connectionString = builder.Configuration.GetConnectionString("DASPDEVConnection") ?? throw new InvalidOperationException("Connection string 'DefaultConnection' not found.");
+    //------------------------------------------------------------------------------------------------------------------------------
+    // make sure we have a value from KeyVault. if not throw an exception
+    if (connectionString.IsNullOrEmpty()) throw new Exception("APIURL is not defined");
+    //------------------------------------------------------------------------------------------------------------------------------
+    //////////builder.Services.AddDbContext<ApplicationDbContext>(options =>
+    //////////    options.UseSqlServer(connectionString));
+    builder.Services.AddDbContext<ApplicationDbContext>(options =>
+    options.UseSqlServer(
+        connectionString,
+        sqlServerOptions => sqlServerOptions.EnableRetryOnFailure(
+            maxRetryCount: 5,
+            maxRetryDelay: TimeSpan.FromSeconds(30),
+            errorNumbersToAdd: null
+        )
+    )
+);
+
+
+    builder.Services.AddDbContext<IdentityDBContext>(options =>
+        options.UseSqlServer(connectionString));
 
 }
 catch (Exception ex)
@@ -105,7 +138,7 @@ try
 }
 catch (Exception ex)
 {
-    Log.Error(ex.Message + " - " + ex.InnerException);  
+    Log.Error(ex.Message + " - " + ex.InnerException);
     throw;
 }
 
@@ -127,20 +160,51 @@ catch (Exception ex)
     Log.Error(ex.Message + " - " + ex.InnerException);
     throw;
 }
-
+builder.Services.Configure<FormOptions>(options => { options.ValueCountLimit = builder.Configuration.GetValue<int>("AspNetCore:FormOptions:ValueCountLimit"); });
 builder.Services.AddScoped<DataSetService, DataSetService>();
 builder.Services.AddScoped<ApiHelper, ApiHelper>();
-builder.Services.AddScoped<HttpClient,HttpClient>();
+builder.Services.AddScoped<HttpClient, HttpClient>();
 
 builder.Services.AddDatabaseDeveloperPageExceptionFilter();
 
-builder.Services.AddControllersWithViews();
+// this was added to properly handle binding to date controls on forms
+//builder.Services.AddControllersWithViews()
+builder.Services.AddControllersWithViews()
+        .AddMvcOptions(options =>
+        {
+            var supportedCultures = new[] { "en-US" };
+            var localizationOptions = new RequestLocalizationOptions()
+                .SetDefaultCulture(supportedCultures[0])
+                .AddSupportedCultures(supportedCultures)
+                .AddSupportedUICultures(supportedCultures);
+
+            options.ModelBinderProviders.Insert(0, new Microsoft.AspNetCore.Mvc.ModelBinding.Binders.DateTimeModelBinderProvider());
+        });
 
 builder.Services.AddTransient<ISenderEmail, EmailSender>();
 
 builder.Services.AddFastReport();
 
+
 var app = builder.Build();
+
+////////////app.UseSerilogRequestLogging();
+
+////////////app.Use(async (context, next) =>
+////////////{
+////////////    var emailSender = context.RequestServices.GetRequiredService<EmailSender>();
+////////////    try
+////////////    {
+////////////        await next();
+////////////    }
+////////////    catch (Exception ex)
+////////////    {
+
+////////////        Log.Error(ex, "Unhandled exception");
+////////////        await emailSender.SendEmailAsync("tphilomeno@kofc-wa.org", "Log Alert", $"An error occurred: {ex.Message}");
+////////////        throw;
+////////////    }
+////////////});
 
 // documentation says to call this before UseMvc or UseEndpoints
 app.UseFastReport();
