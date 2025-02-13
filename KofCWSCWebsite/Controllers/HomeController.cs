@@ -44,12 +44,11 @@ namespace KofCWSCWebsite.Controllers
             //{
             //    ViewData["ConnectString"] = "Using UNKNOWN DATABASE";
             //}
+            ViewData["ENV"] = Environment.GetEnvironmentVariable("ASPNETCORE_ENVIRONMENT");
             var myAPIURL = $"APIURL is using {_dataSetService.GetAPIBaseAddress()}. ";
-            ViewData["APIURL"] = myAPIURL;
-            var myENV = $"WebApp is using the {Environment.GetEnvironmentVariable("ASPNETCORE_ENVIRONMENT")} environment";
-            ViewData["ENV"] = myENV;
-            var myAPIEnv = await _apiHelper.GetAsync<string>("HomeEnv");
-            ViewData["APIENV"] = $"API is using the {myAPIEnv} environment";
+            var myENV = $"WebApp is using the {Environment.GetEnvironmentVariable("ASPNETCORE_ENVIRONMENT")} environment. ";
+            var myAPIEnv = $"API is using the {await _apiHelper.GetAsync<string>("HomeEnv")} environment.";
+            ViewData["ENVMessage"] = string.Concat(myAPIURL, myENV, myAPIEnv);
             Log.Information(string.Concat(myAPIURL,myENV,myAPIEnv));
             //*****************************************************************************************************
             // 12/05/2024 Tim Philomeno
