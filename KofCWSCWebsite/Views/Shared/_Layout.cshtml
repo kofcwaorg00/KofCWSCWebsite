@@ -65,12 +65,13 @@
     @if (myENV == "QC" || myENV == "DEVELOPMENT" || myENV == "TEST")
     {
         <p style="color:white;background-color:black">
+            @*<button style="width:1px;opacity:0.5" onclick="toggleEnv()"></button>*@
             @ViewData["ENVMessage"]
         </p>
     }
     else
     {
-        <button style="width:1px" onclick="toggleEnv()"></button>
+        <button style="width:1px;opacity:0.5" onclick="toggleEnv()"></button>
         <p style="color:white;background-color:black">
             <a style="color:white" href="https://kofcwa.sharepoint.com/:f:/s/WebsiteStorage/EseWn_V2JTtKgXGa5dQxmVcBqCfXjR9H4iT-1-mhOGYfqw?e=3x1VwN" target="_blank">Washington Bishops and Washington's State Deputy's invitation to all councils during PREPARES' 10th Year Anniversary</a>
         </p>
