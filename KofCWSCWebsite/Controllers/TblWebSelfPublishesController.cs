@@ -140,7 +140,7 @@ namespace KofCWSCWebsite.Controllers
         // GET: TblWebSelfPublishes/Edit/5
         public async Task<IActionResult> Edit(string id)
         {
-            if (id == null)
+            if (id == null || id == "favicon.ico")
             {
                 return NotFound();
             }

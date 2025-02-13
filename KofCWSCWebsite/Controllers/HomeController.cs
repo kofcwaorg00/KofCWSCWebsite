@@ -6,16 +6,19 @@ using Microsoft.AspNetCore.Mvc.ModelBinding;
 using Microsoft.EntityFrameworkCore;
 using Serilog;
 using System.Diagnostics;
+using System.Web.Helpers;
 
 namespace KofCWSCWebsite.Controllers
 {
     public class HomeController : Controller
     {
         private DataSetService _dataSetService;
+        private readonly ApiHelper _apiHelper;
 
-        public HomeController(DataSetService dataSetService)
+        public HomeController(DataSetService dataSetService,ApiHelper apiHelper)
         {
-            _dataSetService = dataSetService; 
+            _dataSetService = dataSetService;
+            _apiHelper = apiHelper;
         }
 
         public async Task<IActionResult> Index()
@@ -41,8 +44,10 @@ namespace KofCWSCWebsite.Controllers
             //{
             //    ViewData["ConnectString"] = "Using UNKNOWN DATABASE";
             //}
-            ViewData["APIURL"] = "and the APIURL is using " + _dataSetService.GetAPIBaseAddress();
+            ViewData["APIURL"] = "APIURL is using " + _dataSetService.GetAPIBaseAddress();
             ViewData["ENV"] = Environment.GetEnvironmentVariable("ASPNETCORE_ENVIRONMENT");
+            var myAPIEnv = await _apiHelper.GetAsync<string>("HomeEnv");
+            ViewData["APIENV"] = $"API is using the {myAPIEnv} Env";
             //*****************************************************************************************************
             // 12/05/2024 Tim Philomeno
             // Now that we have a generic ApiHelper class, these are the only 2 lines that we should need to
