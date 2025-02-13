@@ -44,10 +44,13 @@ namespace KofCWSCWebsite.Controllers
             //{
             //    ViewData["ConnectString"] = "Using UNKNOWN DATABASE";
             //}
-            ViewData["APIURL"] = "APIURL is using " + _dataSetService.GetAPIBaseAddress();
-            ViewData["ENV"] = Environment.GetEnvironmentVariable("ASPNETCORE_ENVIRONMENT");
+            var myAPIURL = "APIURL is using " + _dataSetService.GetAPIBaseAddress();
+            ViewData["APIURL"] = myAPIURL;
+            var myENV = Environment.GetEnvironmentVariable("ASPNETCORE_ENVIRONMENT");
+            ViewData["ENV"] = myENV;
             var myAPIEnv = await _apiHelper.GetAsync<string>("HomeEnv");
             ViewData["APIENV"] = $"API is using the {myAPIEnv} Env";
+            Log.Information(string.Concat(myAPIURL,myENV,myAPIEnv));
             //*****************************************************************************************************
             // 12/05/2024 Tim Philomeno
             // Now that we have a generic ApiHelper class, these are the only 2 lines that we should need to
