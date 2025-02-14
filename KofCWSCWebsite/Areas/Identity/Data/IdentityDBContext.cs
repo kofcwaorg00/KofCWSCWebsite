@@ -3,6 +3,7 @@ using KofCWSCWebsite.Models;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
+using Serilog;
 
 namespace KofCWSCWebsite.Areas.Identity.Data;
 
@@ -11,6 +12,7 @@ public class IdentityDBContext : IdentityDbContext<KofCUser>
     public IdentityDBContext(DbContextOptions<IdentityDBContext> options)
         : base(options)
     {
+        Log.Information("IdentityDBContext ctor ran.");
     }
 
     protected override void OnModelCreating(ModelBuilder builder)

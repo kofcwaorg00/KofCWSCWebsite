@@ -61,20 +61,32 @@ try
 {
     KeyVaultSecret cnString = null;
     var kvURL = builder.Configuration.GetSection("KV").GetValue(typeof(string), "VAULTURL");
-    var client = new SecretClient(new Uri((string)kvURL), new DefaultAzureCredential());
-    if (Environment.GetEnvironmentVariable("ASPNETCORE_ENVIRONMENT").ToLower() == "production")
+    var secretClient = new SecretClient(new Uri((string)kvURL), new DefaultAzureCredential());
+    //**************************************************************************************************
+    // Secrets for sql server db connect strings
+    // DBCONN = KofCWSC sql server KofCWSCWeb
+    // AZPROD = KofCWSC sql server KofCWSCWeb
+    // AZDEV = KofCWSC sql server KofCWSCWebDev
+    // DBCONNLOC = Tim's local sql server KofCWSCWebSite
+    // DBCONNLOCMARC = Marcus' local sql server KofCWeb
+    //---------------------------------------------------------------------------------------------------
+    string myEnv = Environment.GetEnvironmentVariable("ASPNETCORE_ENVIRONMENT").ToLower();
+    switch (myEnv)
     {
-        cnString = client.GetSecret("AZPROD").Value;
-    }
-    else
-    {
-        cnString = client.GetSecret("AZDEV").Value;
+        case "production":
+            cnString = secretClient.GetSecret("AZPROD").Value;
+            break;
+        case "development":
+            cnString = secretClient.GetSecret("DBCONNLOC").Value;
+            break;
+        case "test":
+            cnString = secretClient.GetSecret("AZDEV").Value;
+            break;
+        default:
+            cnString = secretClient.GetSecret("AZPROD").Value;
+            break;
     }
     string connectionString = cnString.Value;
-
-    //Log.Information("Found CS " + connectionString);
-
-
 
     //------------------------------------------------------------------------------------------------------------------------------
     //////////////var connectionString = builder.Configuration.GetConnectionString("DASPDEVConnection") ?? throw new InvalidOperationException("Connection string 'DefaultConnection' not found.");
