@@ -19,6 +19,9 @@ using Microsoft.AspNetCore.Mvc.ModelBinding;
 using Microsoft.AspNetCore.Http.Extensions;
 using System;
 using Microsoft.AspNetCore.Authorization;
+using Microsoft.IdentityModel.Tokens;
+using System.Reflection;
+using Microsoft.CodeAnalysis.CSharp.Syntax;
 
 
 
@@ -94,8 +97,16 @@ namespace KofCWSCWebsite.Controllers
 
                 }))
                 {
-                    var cvnImport = csv.GetRecords<CvnImpDelegate>(); // Parse CSV into CsvRecord objects
-                    records.AddRange(cvnImport);
+                    try
+                    {
+                        var cvnImport = csv.GetRecords<CvnImpDelegate>(); // Parse CSV into CsvRecord objects
+                        records.AddRange(cvnImport);
+                    }
+                    catch (Exception)
+                    {
+                        ViewBag.ImpError = "The CSV File is not formatted properly.  Please run the macro to fix.";
+                        return View("Views/Convention/ImpDelegatesFailed.cshtml", records);
+                    }
                     //****************************************************************************************
                     // 12/1/2024 Tim Philomeno Save the data to the database
                     //*****************************************************************************************************
@@ -106,6 +117,18 @@ namespace KofCWSCWebsite.Controllers
                         ViewBag.ImpError = "Duplicate Councils found in CSV File";
                         return View("Views/Convention/ImpDelegatesFailed.cshtml", records);
                     }
+                    
+                    ////////////PropertyInfo[] properties = typeof(CvnImpDelegate).GetProperties();
+                    ////////////for (int i = 0; i < properties.Length; i++)
+                    ////////////{
+                    ////////////    PropertyInfo prop = properties[i];
+                    ////////////    object value = prop.GetValue(model);
+                    ////////////    if (value == "D1")
+                    ////////////    {
+                    ////////////        ViewBag.ImpError = "CSV File is not foratted properly.  Please run the macro.";
+                    ////////////        return View("Views/Convention/ImpDelegatesFailed.cshtml", records);
+                    ////////////    }
+                    ////////////}
                     // Add records to list
                     //****************************************************************************************
                     // 12/1/2024 Tim Philomeno Save the data to the database
@@ -298,7 +321,8 @@ namespace KofCWSCWebsite.Controllers
                             {
                                 await apiHelper.PostAsync<TblMasMember, TblMasMember>("/Member", myIsD2Member);
                                 WriteToDelegateImportLog(guid, cvnImpDelegate.D2MemberID, "INFO", "Add a New Member");
-                            }else
+                            }
+                            else
                             {
                                 WriteToDelegateImportLog(guid, cvnImpDelegate.D2MemberID, "INFO", "LOG ONLY Add a New Member");
                             }
@@ -321,7 +345,8 @@ namespace KofCWSCWebsite.Controllers
                             {
                                 await apiHelper.PutAsync<TblMasMember, TblMasMember>($"/member/{myIsD2Member.MemberId}", myIsD2Member);
                                 WriteToDelegateImportLog(guid, cvnImpDelegate.D2MemberID, "INFO", "Update an Existing Member");
-                            }else
+                            }
+                            else
                             {
                                 WriteToDelegateImportLog(guid, cvnImpDelegate.D2MemberID, "INFO", "LOG ONLY Update an Existing Member");
                             }
@@ -439,7 +464,7 @@ namespace KofCWSCWebsite.Controllers
                             {
                                 WriteToDelegateImportLog(guid, cvnImpDelegate.A2MemberID, "INFO", "LOG ONLY Add a New Member");
                             }
-                            
+
                         }
                     }
                     catch (Exception ex)
@@ -511,7 +536,7 @@ namespace KofCWSCWebsite.Controllers
                 isUpdated = true;
             }
             // FIRSTNAME
-            if (myMember.FirstName != myDelegate.D1FirstName)
+            if (ShouldUpdate(myDelegate.D1FirstName, myMember.FirstName))
             {
                 myMember.FirstName = myDelegate.D1FirstName;
                 myMember.FirstNameUpdated = DateTime.Now;
@@ -519,7 +544,7 @@ namespace KofCWSCWebsite.Controllers
                 isUpdated = true;
             }
             // LASTNAME
-            if (myMember.LastName != myDelegate.D1LastName)
+            if (ShouldUpdate(myDelegate.D1LastName, myMember.LastName))
             {
                 myMember.LastName = myDelegate.D1LastName;
                 myMember.LastNameUpdated = DateTime.Now;
@@ -527,7 +552,7 @@ namespace KofCWSCWebsite.Controllers
                 isUpdated = true;
             }
             // MI
-            if (myMember.Mi != myDelegate.D1MiddleName)
+            if (ShouldUpdate(myDelegate.D1MiddleName, myMember.Mi))
             {
                 myMember.Mi = myDelegate.D1MiddleName;
                 myMember.Miupdated = DateTime.Now;
@@ -535,7 +560,7 @@ namespace KofCWSCWebsite.Controllers
                 isUpdated = true;
             }
             // SUFFIX
-            if (myMember.Suffix != myDelegate.D1Suffix)
+            if (ShouldUpdate(myDelegate.D1Suffix, myMember.Suffix))
             {
                 myMember.Suffix = myDelegate.D1Suffix;
                 myMember.SuffixUpdated = DateTime.Now;
@@ -543,7 +568,7 @@ namespace KofCWSCWebsite.Controllers
                 isUpdated = true;
             }
             // ADDRESS
-            if (myMember.Address != myDelegate.D1Address1)
+            if (ShouldUpdate(myDelegate.D1Address1, myMember.Address))
             {
                 myMember.Address = myDelegate.D1Address1;
                 myMember.AddressUpdated = DateTime.Now;
@@ -551,7 +576,7 @@ namespace KofCWSCWebsite.Controllers
                 isUpdated = true;
             }
             // CITY
-            if (myMember.City != myDelegate.D1City)
+            if (ShouldUpdate(myDelegate.D1City, myMember.City))
             {
                 myMember.City = myDelegate.D1City;
                 myMember.CityUpdated = DateTime.Now;
@@ -559,7 +584,7 @@ namespace KofCWSCWebsite.Controllers
                 isUpdated = true;
             }
             // STATE
-            if (myMember.State != myDelegate.D1State)
+            if (ShouldUpdate(myDelegate.D1State, myMember.State))
             {
                 myMember.State = myDelegate.D1State;
                 myMember.StateUpdated = DateTime.Now;
@@ -567,7 +592,7 @@ namespace KofCWSCWebsite.Controllers
                 isUpdated = true;
             }
             // POSTALCODE
-            if (myMember.PostalCode != myDelegate.D1ZipCode)
+            if (ShouldUpdate(myDelegate.D1ZipCode, myMember.PostalCode))
             {
                 myMember.PostalCode = myDelegate.D1ZipCode;
                 myMember.PostalCodeUpdated = DateTime.Now;
@@ -575,7 +600,7 @@ namespace KofCWSCWebsite.Controllers
                 isUpdated = true;
             }
             // PHONE
-            if (myMember.Phone != myDelegate.D1Phone)
+            if (ShouldUpdate(myDelegate.D1Phone, myMember.Phone))
             {
                 myMember.Phone = myDelegate.D1Phone;
                 myMember.PhoneUpdated = DateTime.Now;
@@ -583,7 +608,7 @@ namespace KofCWSCWebsite.Controllers
                 isUpdated = true;
             }
             // EMAIL
-            if (myMember.Email != myDelegate.D1Email)
+            if (ShouldUpdate(myDelegate.D1Email, myMember.Email))
             {
                 myMember.Email = myDelegate.D1Email;
                 myMember.EmailUpdated = DateTime.Now;
@@ -628,7 +653,7 @@ namespace KofCWSCWebsite.Controllers
                 isUpdated = true;
             }
             // FIRSTNAME
-            if (myMember.FirstName != myDelegate.D2FirstName)
+            if (ShouldUpdate(myDelegate.D2FirstName, myMember.FirstName))
             {
                 myMember.FirstName = myDelegate.D2FirstName;
                 myMember.FirstNameUpdated = DateTime.Now;
@@ -636,7 +661,7 @@ namespace KofCWSCWebsite.Controllers
                 isUpdated = true;
             }
             // LASTNAME
-            if (myMember.LastName != myDelegate.D2LastName)
+            if (ShouldUpdate(myDelegate.D2LastName, myMember.LastName))
             {
                 myMember.LastName = myDelegate.D2LastName;
                 myMember.LastNameUpdated = DateTime.Now;
@@ -644,7 +669,7 @@ namespace KofCWSCWebsite.Controllers
                 isUpdated = true;
             }
             // MI
-            if (myMember.Mi != myDelegate.D2MiddleName)
+            if (ShouldUpdate(myDelegate.D2MiddleName, myMember.Mi))
             {
                 myMember.Mi = myDelegate.D2MiddleName;
                 myMember.Miupdated = DateTime.Now;
@@ -652,7 +677,7 @@ namespace KofCWSCWebsite.Controllers
                 isUpdated = true;
             }
             // SUFFIX
-            if (myMember.Suffix != myDelegate.D2Suffix)
+            if (ShouldUpdate(myDelegate.D2Suffix, myMember.Suffix))
             {
                 myMember.Suffix = myDelegate.D2Suffix;
                 myMember.SuffixUpdated = DateTime.Now;
@@ -660,7 +685,7 @@ namespace KofCWSCWebsite.Controllers
                 isUpdated = true;
             }
             // ADDRESS
-            if (myMember.Address != myDelegate.D2Address1)
+            if (ShouldUpdate(myDelegate.D2Address1, myMember.Address))
             {
                 myMember.Address = myDelegate.D2Address1;
                 myMember.AddressUpdated = DateTime.Now;
@@ -668,7 +693,7 @@ namespace KofCWSCWebsite.Controllers
                 isUpdated = true;
             }
             // CITY
-            if (myMember.City != myDelegate.D2City)
+            if (ShouldUpdate(myDelegate.D2City, myMember.City))
             {
                 myMember.City = myDelegate.D2City;
                 myMember.CityUpdated = DateTime.Now;
@@ -676,7 +701,7 @@ namespace KofCWSCWebsite.Controllers
                 isUpdated = true;
             }
             // STATE
-            if (myMember.State != myDelegate.D2State)
+            if (ShouldUpdate(myDelegate.D2State, myMember.State))
             {
                 myMember.State = myDelegate.D2State;
                 myMember.StateUpdated = DateTime.Now;
@@ -684,7 +709,7 @@ namespace KofCWSCWebsite.Controllers
                 isUpdated = true;
             }
             // POSTALCODE
-            if (myMember.PostalCode != myDelegate.D2ZipCode)
+            if (ShouldUpdate(myDelegate.D2ZipCode, myMember.PostalCode))
             {
                 myMember.PostalCode = myDelegate.D2ZipCode;
                 myMember.PostalCodeUpdated = DateTime.Now;
@@ -692,7 +717,7 @@ namespace KofCWSCWebsite.Controllers
                 isUpdated = true;
             }
             // PHONE
-            if (myMember.Phone != myDelegate.D2Phone)
+            if (ShouldUpdate(myDelegate.D2Phone, myMember.Phone))
             {
                 myMember.Phone = myDelegate.D2Phone;
                 myMember.PhoneUpdated = DateTime.Now;
@@ -700,7 +725,7 @@ namespace KofCWSCWebsite.Controllers
                 isUpdated = true;
             }
             // EMAIL
-            if (myMember.Email != myDelegate.D2Email)
+            if (ShouldUpdate(myDelegate.D2Email, myMember.Email))
             {
                 myMember.Email = myDelegate.D2Email;
                 myMember.EmailUpdated = DateTime.Now;
@@ -745,7 +770,7 @@ namespace KofCWSCWebsite.Controllers
                 isUpdated = true;
             }
             // FIRSTNAME
-            if (myMember.FirstName != myDelegate.A1FirstName)
+            if (ShouldUpdate(myDelegate.A1FirstName, myMember.FirstName))
             {
                 myMember.FirstName = myDelegate.A1FirstName;
                 myMember.FirstNameUpdated = DateTime.Now;
@@ -753,7 +778,7 @@ namespace KofCWSCWebsite.Controllers
                 isUpdated = true;
             }
             // LASTNAME
-            if (myMember.LastName != myDelegate.A1LastName)
+            if (ShouldUpdate(myDelegate.A1LastName, myMember.LastName))
             {
                 myMember.LastName = myDelegate.A1LastName;
                 myMember.LastNameUpdated = DateTime.Now;
@@ -761,7 +786,7 @@ namespace KofCWSCWebsite.Controllers
                 isUpdated = true;
             }
             // MI
-            if (myMember.Mi != myDelegate.A1MiddleName)
+            if (ShouldUpdate(myDelegate.A1MiddleName, myMember.Mi))
             {
                 myMember.Mi = myDelegate.A1MiddleName;
                 myMember.Miupdated = DateTime.Now;
@@ -769,7 +794,7 @@ namespace KofCWSCWebsite.Controllers
                 isUpdated = true;
             }
             // SUFFIX
-            if (myMember.Suffix != myDelegate.A1Suffix)
+            if (ShouldUpdate(myDelegate.A1Suffix, myMember.Suffix))
             {
                 myMember.Suffix = myDelegate.A1Suffix;
                 myMember.SuffixUpdated = DateTime.Now;
@@ -777,7 +802,7 @@ namespace KofCWSCWebsite.Controllers
                 isUpdated = true;
             }
             // ADDRESS
-            if (myMember.Address != myDelegate.A1Address1)
+            if (ShouldUpdate(myDelegate.A1Address1, myMember.Address))
             {
                 myMember.Address = myDelegate.A1Address1;
                 myMember.AddressUpdated = DateTime.Now;
@@ -785,7 +810,7 @@ namespace KofCWSCWebsite.Controllers
                 isUpdated = true;
             }
             // CITY
-            if (myMember.City != myDelegate.A1City)
+            if (ShouldUpdate(myDelegate.A1City, myMember.City))
             {
                 myMember.City = myDelegate.A1City;
                 myMember.CityUpdated = DateTime.Now;
@@ -793,7 +818,7 @@ namespace KofCWSCWebsite.Controllers
                 isUpdated = true;
             }
             // STATE
-            if (myMember.State != myDelegate.A1State)
+            if (ShouldUpdate(myDelegate.A1State, myMember.State))
             {
                 myMember.State = myDelegate.A1State;
                 myMember.StateUpdated = DateTime.Now;
@@ -801,7 +826,7 @@ namespace KofCWSCWebsite.Controllers
                 isUpdated = true;
             }
             // POSTALCODE
-            if (myMember.PostalCode != myDelegate.A1ZipCode)
+            if (ShouldUpdate(myDelegate.A1ZipCode, myMember.PostalCode))
             {
                 myMember.PostalCode = myDelegate.A1ZipCode;
                 myMember.PostalCodeUpdated = DateTime.Now;
@@ -809,7 +834,7 @@ namespace KofCWSCWebsite.Controllers
                 isUpdated = true;
             }
             // PHONE
-            if (myMember.Phone != myDelegate.A1Phone)
+            if (ShouldUpdate(myDelegate.A1Phone, myMember.Phone))
             {
                 myMember.Phone = myDelegate.A1Phone;
                 myMember.PhoneUpdated = DateTime.Now;
@@ -817,7 +842,7 @@ namespace KofCWSCWebsite.Controllers
                 isUpdated = true;
             }
             // EMAIL
-            if (myMember.Email != myDelegate.A1Email)
+            if (ShouldUpdate(myDelegate.A1Email, myMember.Email))
             {
                 myMember.Email = myDelegate.A1Email;
                 myMember.EmailUpdated = DateTime.Now;
@@ -862,7 +887,7 @@ namespace KofCWSCWebsite.Controllers
                 isUpdated = true;
             }
             // FIRSTNAME
-            if (myMember.FirstName != myDelegate.A2FirstName)
+            if (ShouldUpdate(myDelegate.A2FirstName, myMember.FirstName))
             {
                 myMember.FirstName = myDelegate.A2FirstName;
                 myMember.FirstNameUpdated = DateTime.Now;
@@ -870,7 +895,7 @@ namespace KofCWSCWebsite.Controllers
                 isUpdated = true;
             }
             // LASTNAME
-            if (myMember.LastName != myDelegate.A2LastName)
+            if (ShouldUpdate(myDelegate.A2LastName, myMember.LastName))
             {
                 myMember.LastName = myDelegate.A2LastName;
                 myMember.LastNameUpdated = DateTime.Now;
@@ -878,7 +903,7 @@ namespace KofCWSCWebsite.Controllers
                 isUpdated = true;
             }
             // MI
-            if (myMember.Mi != myDelegate.A2MiddleName)
+            if (ShouldUpdate(myDelegate.A2MiddleName, myMember.Mi))
             {
                 myMember.Mi = myDelegate.A2MiddleName;
                 myMember.Miupdated = DateTime.Now;
@@ -886,7 +911,7 @@ namespace KofCWSCWebsite.Controllers
                 isUpdated = true;
             }
             // SUFFIX
-            if (myMember.Suffix != myDelegate.A2Suffix)
+            if (ShouldUpdate(myDelegate.A2Suffix, myMember.Suffix))
             {
                 myMember.Suffix = myDelegate.A2Suffix;
                 myMember.SuffixUpdated = DateTime.Now;
@@ -894,7 +919,7 @@ namespace KofCWSCWebsite.Controllers
                 isUpdated = true;
             }
             // ADDRESS
-            if (myMember.Address != myDelegate.A2Address1)
+            if (ShouldUpdate(myDelegate.A2Address1, myMember.Address))
             {
                 myMember.Address = myDelegate.A2Address1;
                 myMember.AddressUpdated = DateTime.Now;
@@ -902,7 +927,7 @@ namespace KofCWSCWebsite.Controllers
                 isUpdated = true;
             }
             // CITY
-            if (myMember.City != myDelegate.A2City)
+            if (ShouldUpdate(myDelegate.A2City, myMember.City))
             {
                 myMember.City = myDelegate.A2City;
                 myMember.CityUpdated = DateTime.Now;
@@ -910,7 +935,7 @@ namespace KofCWSCWebsite.Controllers
                 isUpdated = true;
             }
             // STATE
-            if (myMember.State != myDelegate.A2State)
+            if (ShouldUpdate(myDelegate.A2State, myMember.State))
             {
                 myMember.State = myDelegate.A2State;
                 myMember.StateUpdated = DateTime.Now;
@@ -918,7 +943,7 @@ namespace KofCWSCWebsite.Controllers
                 isUpdated = true;
             }
             // POSTALCODE
-            if (myMember.PostalCode != myDelegate.A2ZipCode)
+            if (ShouldUpdate(myDelegate.A2ZipCode, myMember.PostalCode))
             {
                 myMember.PostalCode = myDelegate.A2ZipCode;
                 myMember.PostalCodeUpdated = DateTime.Now;
@@ -926,7 +951,7 @@ namespace KofCWSCWebsite.Controllers
                 isUpdated = true;
             }
             // PHONE
-            if (myMember.Phone != myDelegate.A2Phone)
+            if (ShouldUpdate(myDelegate.A2Phone, myMember.Phone))
             {
                 myMember.Phone = myDelegate.A2Phone;
                 myMember.PhoneUpdated = DateTime.Now;
@@ -934,7 +959,7 @@ namespace KofCWSCWebsite.Controllers
                 isUpdated = true;
             }
             // EMAIL
-            if (myMember.Email != myDelegate.A2Email)
+            if (ShouldUpdate(myDelegate.A2Email, myMember.Email))
             {
                 myMember.Email = myDelegate.A2Email;
                 myMember.EmailUpdated = DateTime.Now;
@@ -996,7 +1021,7 @@ namespace KofCWSCWebsite.Controllers
             }
             catch (Exception ex)
             {
-                Log.Error(Utils.FormatLogEntry(this, ex, "***"+ $"Adding Office {OfficeId} to Member {KofCID}"));
+                Log.Error(Utils.FormatLogEntry(this, ex, "***" + $"Adding Office {OfficeId} to Member {KofCID}"));
                 WriteToDelegateImportLog(guid, KofCID, "ERROR", $"Adding Office {OfficeId} to Member {KofCID}");
             }
 
@@ -1012,6 +1037,17 @@ namespace KofCWSCWebsite.Controllers
                 }
             }
             return false;
+        }
+        private bool ShouldUpdate(string? inItem, string? exItem)
+        {
+            if (exItem != inItem && !inItem.IsNullOrEmpty())
+            {
+                return true;
+            }
+            else
+            {
+                return false;
+            }
         }
     }
 
