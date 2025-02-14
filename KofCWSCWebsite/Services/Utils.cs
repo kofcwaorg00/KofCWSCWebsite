@@ -14,6 +14,8 @@ using Azure.Communication.Email;
 using sun.tools.tree;
 using Microsoft.CodeAnalysis.VisualBasic.Syntax;
 using System.Diagnostics;
+using System.Text.RegularExpressions;
+using Microsoft.IdentityModel.Tokens;
 
 
 namespace KofCWSCWebsite.Services
@@ -222,6 +224,32 @@ namespace KofCWSCWebsite.Services
             //    return false;
             //    //Console.WriteLine($"Smtp send failed with the exception: {ex.Message}.");
             //}
+        }
+        public static string FormatPhoneNumber(string? phoneNumber)
+        {
+            if (phoneNumber.IsNullOrEmpty())
+            {
+                return null;
+                //return "(000) 000-0000";
+            }
+            else
+            {
+                // Remove any non-numeric characters
+                string cleanedPhoneNumber = Regex.Replace(phoneNumber, @"\D", "");
+
+                // Ensure the phone number has 10 digits
+                if (cleanedPhoneNumber.Length == 10)
+                {
+                    // Format the phone number
+                    string formattedPhoneNumber = $"({cleanedPhoneNumber.Substring(0, 3)}) {cleanedPhoneNumber.Substring(3, 3)}-{cleanedPhoneNumber.Substring(6, 4)}";
+                    return formattedPhoneNumber;
+                }
+                else
+                {
+                    // Return the original input if it doesn't have 10 digits
+                    return phoneNumber;
+                }
+            }
         }
         public static string GetMemberNameLink(string DisplayName, int MemberID, bool isAuth,string ServerName,string ReturnURL)
         {

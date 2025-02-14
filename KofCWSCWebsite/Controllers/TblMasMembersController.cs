@@ -14,6 +14,7 @@ using Newtonsoft.Json;
 using Serilog;
 using Microsoft.AspNetCore.Authorization;
 using KofCWSCWebsite.Services;
+using sun.rmi.server;
 
 namespace KofCWSCWebsite.Controllers
 {
@@ -89,27 +90,9 @@ namespace KofCWSCWebsite.Controllers
             {
                 return NotFound();
             }
+            var member = await _apiHelper.GetAsync<TblMasMember>($"/Member/{id}");
 
-            Uri myURI = new(_dataSetService.GetAPIBaseAddress() + "/Member/" + id);
-
-            using (var client = new HttpClient())
-            {
-                var responseTask = client.GetAsync(myURI);
-                responseTask.Wait();
-                var result = responseTask.Result;
-                TblMasMember? member;
-                if (result.IsSuccessStatusCode)
-                {
-                    string json = await result.Content.ReadAsStringAsync();
-                    member = JsonConvert.DeserializeObject<TblMasMember>(json);
-                }
-                else
-                {
-                    ModelState.AddModelError(string.Empty, "Server Error.  Please contact administrator.");
-                    member = null;
-                }
-                return View(member);
-            }
+            return View(member);
         }
 
         // GET: TblMasMembers/Create
@@ -127,25 +110,14 @@ namespace KofCWSCWebsite.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Create([Bind("MemberId,KofCid,Prefix,PrefixUpdated,PrefixUpdatedBy,FirstName,FirstNameUpdated,FirstNameUpdatedBy,NickName,NickNameUpdated,NickNameUpdatedBy,Mi,Miupdated,MiupdatedBy,LastName,LastNameUpdated,LastNameUpdatedBy,Suffix,SuffixUpdated,SuffixUpdatedBy,AddInfo1,AddInfo1Updated,AddInfo1UpdatedBy,Address,AddressUpdated,AddressUpdatedBy,City,CityUpdated,CityUpdatedBy,State,StateUpdated,StateUpdatedBy,PostalCode,PostalCodeUpdated,PostalCodeUpdatedBy,Phone,PhoneUpdated,PhoneUpdatedBy,WifesName,WifesNameUpdated,WifesNameUpdatedBy,AddInfo2,AddInfo2Updated,AddInfo2UpdatedBy,FaxNumber,FaxNumberUpdated,FaxNumberUpdatedBy,Council,CouncilUpdated,CouncilUpdatedBy,Assembly,AssemblyUpdated,AssemblyUpdatedBy,Circle,CircleUpdated,CircleUpdatedBy,Email,EmailUpdated,EmailUpdatedBy,Deceased,DeceasedUpdated,DeceasedUpdatedBy,CellPhone,CellPhoneUpdated,CellPhoneUpdatedBy,LastUpdated,SeatedDelegateDay1,SeatedDelegateDay2,SeatedDelegateDay3,PaidMpd,Bulletin,BulletinUpdated,BulletinUpdatedBy,UserId,Data,DataChanged,LastLoggedIn,CanEditAdmUi,DoNotEmail,HidePersonalInfo,WhyDoNotEmail")] TblMasMember tblMasMember)
         {
-            Log.Information("Starting Create");
             if (ModelState.IsValid)
             {
-                Uri myURI = new(_dataSetService.GetAPIBaseAddress() + "/Member");
-                string lastname = tblMasMember.LastName;
-                using (var client = new HttpClient())
-                {
-                    client.BaseAddress = myURI;
-                    var response = await client.PostAsJsonAsync(myURI, tblMasMember);
-                    try
-                    {
-                        response.EnsureSuccessStatusCode();
-                    }
-                    catch (Exception ex)
-                    {
-                        Log.Error(Utils.FormatLogEntry(this, ex));
-                    }
-                    return RedirectToAction(nameof(Index), new { lastname = lastname });
-                }
+                // format the phone number
+                tblMasMember.Phone = Utils.FormatPhoneNumber(tblMasMember.Phone);
+                // Save the new member
+                var results = await _apiHelper.PostAsync<TblMasMember, TblMasMember>("/Member", tblMasMember);
+
+                return RedirectToAction(nameof(Index), new { lastname = tblMasMember.LastName });
             }
             return View(tblMasMember);
         }
@@ -158,27 +130,9 @@ namespace KofCWSCWebsite.Controllers
             {
                 return NotFound();
             }
+            var member = await _apiHelper.GetAsync<TblMasMember>($"/Member/{id}");
 
-            Uri myURI = new(_dataSetService.GetAPIBaseAddress() + "/Member/" + id);
-
-            using (var client = new HttpClient())
-            {
-                var responseTask = client.GetAsync(myURI);
-                responseTask.Wait();
-                var result = responseTask.Result;
-                TblMasMember? member;
-                if (result.IsSuccessStatusCode)
-                {
-                    string json = await result.Content.ReadAsStringAsync();
-                    member = JsonConvert.DeserializeObject<TblMasMember>(json);
-                }
-                else
-                {
-                    ModelState.AddModelError(string.Empty, "Server Error.  Please contact administrator.");
-                    member = null;
-                }
-                return View(member);
-            }
+            return View(member);
         }
 
         // POST: TblMasMembers/Edit/5
@@ -189,7 +143,6 @@ namespace KofCWSCWebsite.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Edit(int id, [Bind("MemberId,KofCid,Prefix,PrefixUpdated,PrefixUpdatedBy,FirstName,FirstNameUpdated,FirstNameUpdatedBy,NickName,NickNameUpdated,NickNameUpdatedBy,Mi,Miupdated,MiupdatedBy,LastName,LastNameUpdated,LastNameUpdatedBy,Suffix,SuffixUpdated,SuffixUpdatedBy,AddInfo1,AddInfo1Updated,AddInfo1UpdatedBy,Address,AddressUpdated,AddressUpdatedBy,City,CityUpdated,CityUpdatedBy,State,StateUpdated,StateUpdatedBy,PostalCode,PostalCodeUpdated,PostalCodeUpdatedBy,Phone,PhoneUpdated,PhoneUpdatedBy,WifesName,WifesNameUpdated,WifesNameUpdatedBy,AddInfo2,AddInfo2Updated,AddInfo2UpdatedBy,FaxNumber,FaxNumberUpdated,FaxNumberUpdatedBy,Council,CouncilUpdated,CouncilUpdatedBy,Assembly,AssemblyUpdated,AssemblyUpdatedBy,Circle,CircleUpdated,CircleUpdatedBy,Email,EmailUpdated,EmailUpdatedBy,Deceased,DeceasedUpdated,DeceasedUpdatedBy,CellPhone,CellPhoneUpdated,CellPhoneUpdatedBy,LastUpdated,SeatedDelegateDay1,SeatedDelegateDay2,SeatedDelegateDay3,PaidMpd,Bulletin,BulletinUpdated,BulletinUpdatedBy,UserId,Data,DataChanged,LastLoggedIn,CanEditAdmUi,DoNotEmail,HidePersonalInfo,WhyDoNotEmail")] TblMasMember tblMasMember)
         {
-            Log.Information("Starting Edit of " + id);
             if (id != tblMasMember.MemberId)
             {
                 Log.Fatal("Member ID not found " + id);
@@ -199,22 +152,11 @@ namespace KofCWSCWebsite.Controllers
             string lastname = tblMasMember.LastName;
             if (ModelState.IsValid)
             {
-                Uri myURI = new(_dataSetService.GetAPIBaseAddress() + "/Member/" + id);
-                try
-                {
-                    using (var client = new HttpClient())
-                    {
-                        client.BaseAddress = myURI;
-                        var response = await client.PutAsJsonAsync(myURI, tblMasMember);
-                        var returnValue = await response.Content.ReadAsAsync<List<TblMasMember>>();
-                        Log.Information("Update of Member ID " + id + "Returned " + returnValue);
-                    }
-                }
-                catch (Exception ex)
-                {
-                    Log.Fatal(ex.Message);
-                }
-                Log.Information("Update Success Member ID " + id);
+                // validate phone number
+                tblMasMember.Phone = Utils.FormatPhoneNumber(tblMasMember.Phone);
+                // update the record
+                var results = await _apiHelper.PutAsync<TblMasMember, TblMasMember>($"/Member/{id}", tblMasMember);
+
                 return RedirectToAction(nameof(Index), new { lastname = lastname });
             }
             return View(tblMasMember);
@@ -229,27 +171,9 @@ namespace KofCWSCWebsite.Controllers
             {
                 return NotFound();
             }
+            var member = await _apiHelper.GetAsync<TblMasMember>($"/Member/{id}");
 
-            Uri myURI = new(_dataSetService.GetAPIBaseAddress() + "/Member/" + id);
-
-            using (var client = new HttpClient())
-            {
-                var responseTask = client.GetAsync(myURI);
-                responseTask.Wait();
-                var result = responseTask.Result;
-                TblMasMember? member;
-                if (result.IsSuccessStatusCode)
-                {
-                    string json = await result.Content.ReadAsStringAsync();
-                    member = JsonConvert.DeserializeObject<TblMasMember>(json);
-                }
-                else
-                {
-                    ModelState.AddModelError(string.Empty, "Server Error.  Please contact administrator.");
-                    member = null;
-                }
-                return View(member);
-            }
+            return View(member);
         }
 
         // POST: TblMasMembers/Delete/5
@@ -265,29 +189,12 @@ namespace KofCWSCWebsite.Controllers
                 return NotFound();
             }
 
-            Uri myURI = new(_dataSetService.GetAPIBaseAddress() + "/Member/" + id);
+            //            Uri myURI = new(_dataSetService.GetAPIBaseAddress() + "/Member/" + id);
             try
             {
-                using (var client = new HttpClient())
-                {
-                    var responseTask = client.DeleteAsync(myURI);
-                    responseTask.Wait();
-                    var result = responseTask.Result;
-                    TblMasMember? member;
-                    if (result.IsSuccessStatusCode)
-                    {
-                        Log.Information("Delete Member Success " + id);
-                        string json = await result.Content.ReadAsStringAsync();
-                        member = JsonConvert.DeserializeObject<TblMasMember>(json);
-                    }
-                    else
-                    {
-                        Log.Information("Delete Member Failed " + id);
-                        ModelState.AddModelError(string.Empty, "Server Error.  Please contact administrator.");
-                        member = null;
-                    }
-                    return RedirectToAction(nameof(Index));
-                }
+                await _apiHelper.DeleteAsync($"/Member/{id}");
+
+                return RedirectToAction(nameof(Index));
             }
             catch (Exception ex)
             {
