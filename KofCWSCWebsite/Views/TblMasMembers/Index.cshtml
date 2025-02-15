@@ -28,7 +28,8 @@
         <tr>
             @if (User.IsInRole("Admin") || User.IsInRole("DataAdmin"))
             {
-                <th style="width:150px"></th>
+                <th style="width:75px"></th>
+                <th style="width:75px"></th>
             }
             <th style="width:100px">
                 KofCID
@@ -76,21 +77,28 @@
                 {
                     <td>
                         <form asp-controller="TblCorrMemberOffices" asp-action="Index" asp-route-id="@item.MemberId" method="get">
-                            <button type="submit" class="btn btn-sm btn-primary">
-                                Manage Offices
+                            <button type="submit" class="btn btn-sm btn-primary" title="Manage offices for Member.">
+                                Offices
+                            </button>
+                        </form>
+                    </td>
+                    <td>
+                        <form asp-controller="TblMasMembers" asp-action="FormatMemberData" asp-route-id="@item.MemberId" method="get">
+                            <button type="submit" class="btn btn-sm btn-success" title="This will format the member's information, address/city/state/email will go ALLUP and phone number will be formatted (000) 000-0000.">
+                                Format
                             </button>
                         </form>
                     </td>
                 }
-                  <td>
+                <td>
                     @Html.DisplayFor(modelItem => item.KofCid)
-                    </td>
+                </td>
                 <td>
                     @Html.DisplayFor(modelItem => item.FirstName)
                 </td>
                 @*  <td>
-                    @Html.DisplayFor(modelItem => item.Mi)
-                    </td> *@
+        @Html.DisplayFor(modelItem => item.Mi)
+        </td> *@
                 <td>
                     @Html.DisplayFor(modelItem => item.LastName)
                 </td>
@@ -110,14 +118,14 @@
                     @Html.DisplayFor(modelItem => item.Phone)
                 </td>
                 @*  <td>
-                    @Html.DisplayFor(modelItem => item.WifesName)
-                    </td>
-                    <td>
-                    @Html.DisplayFor(modelItem => item.Council)
-                    </td>
-                    <td>
-                    @Html.DisplayFor(modelItem => item.Assembly)
-                    </td> *@
+        @Html.DisplayFor(modelItem => item.WifesName)
+        </td>
+        <td>
+        @Html.DisplayFor(modelItem => item.Council)
+        </td>
+        <td>
+        @Html.DisplayFor(modelItem => item.Assembly)
+        </td> *@
                 <td>
                     @Html.DisplayFor(modelItem => item.Email)
                 </td>

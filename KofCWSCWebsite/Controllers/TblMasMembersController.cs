@@ -29,7 +29,16 @@ namespace KofCWSCWebsite.Controllers
             _dataSetService = dataSetService;
             _apiHelper = apiHelper;
         }
+
         [Authorize(Roles = "Admin,StateOfficer,DataAdmin,StateMembership")]
+        public async Task<ActionResult> FormatMemberData(int id)
+        {
+            var results = await _apiHelper.GetAsync<string>($"/Members/FormatData/{id}");
+
+            return RedirectToAction(nameof(Index), new { lastname = results });
+        }
+
+            [Authorize(Roles = "Admin,StateOfficer,DataAdmin,StateMembership")]
         public async Task<ActionResult> Index(string lastname)
         {
             //********************************************************************************
