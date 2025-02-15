@@ -16,29 +16,17 @@ using Microsoft.AspNetCore.Http.Features;
 using System.Net;
 
 var builder = WebApplication.CreateBuilder(args);
-
+// Setup to use KeyVault
 var kvURLAZ = builder.Configuration.GetSection("KV").GetValue(typeof(string), "VAULTURL");
 var kvclient = new SecretClient(new Uri((string)kvURLAZ), new DefaultAzureCredential());
+// Get the AZEmailString
 var vConnString = kvclient.GetSecret("AZEmailConnString").Value;
 string azureConnectionString = vConnString.Value;
-
 
 // Read the Azure connection string from configuration
 //string azureConnectionString = builder.Configuration["Azure:CommunicationService:ConnectionString"];
 string fromEmail = builder.Configuration["Azure:CommunicationService:FromEmail"];
 string toEmail = builder.Configuration["Azure:CommunicationService:ToEmail"];
-
-//////////builder.Host.UseSerilog ((context, config) =>
-//////////{
-//////////    _ = config
-//////////    .Enrich.FromLogContext()
-//////////    .WriteTo.Console()
-//////////    .WriteTo.Sink(new AzureCommunicationEmailSink(azureConnectionString, fromEmail, toEmail))
-//////////    .WriteTo.File("logs/MyAppLog.txt", retainedFileCountLimit: 21, rollingInterval: RollingInterval.Day, shared: true);
-//////////});
-
-
-
 
 Log.Logger = new LoggerConfiguration()
     .WriteTo.Console()
@@ -60,8 +48,6 @@ Log.Information("ENV = " + Environment.GetEnvironmentVariable("ASPNETCORE_ENVIRO
 try
 {
     KeyVaultSecret cnString = null;
-    var kvURL = builder.Configuration.GetSection("KV").GetValue(typeof(string), "VAULTURL");
-    var secretClient = new SecretClient(new Uri((string)kvURL), new DefaultAzureCredential());
     //**************************************************************************************************
     // Secrets for sql server db connect strings
     // DBCONN = KofCWSC sql server KofCWSCWeb
@@ -74,28 +60,24 @@ try
     switch (myEnv)
     {
         case "production":
-            cnString = secretClient.GetSecret("AZPROD").Value;
+            cnString = kvclient.GetSecret("AZPROD").Value;
             break;
         case "development":
-            cnString = secretClient.GetSecret("DBCONNLOC").Value;
+            cnString = kvclient.GetSecret("DBCONNLOC").Value;
             break;
         case "test":
-            cnString = secretClient.GetSecret("AZDEV").Value;
+            cnString = kvclient.GetSecret("AZDEV").Value;
             break;
         default:
-            cnString = secretClient.GetSecret("AZPROD").Value;
+            cnString = kvclient.GetSecret("AZPROD").Value;
             break;
     }
     string connectionString = cnString.Value;
 
     //------------------------------------------------------------------------------------------------------------------------------
-    //////////////var connectionString = builder.Configuration.GetConnectionString("DASPDEVConnection") ?? throw new InvalidOperationException("Connection string 'DefaultConnection' not found.");
-    //------------------------------------------------------------------------------------------------------------------------------
     // make sure we have a value from KeyVault. if not throw an exception
     if (connectionString.IsNullOrEmpty()) throw new Exception("APIURL is not defined");
     //------------------------------------------------------------------------------------------------------------------------------
-    //////////builder.Services.AddDbContext<ApplicationDbContext>(options =>
-    //////////    options.UseSqlServer(connectionString));
     builder.Services.AddDbContext<ApplicationDbContext>(options =>
     options.UseSqlServer(
         connectionString,
@@ -199,24 +181,6 @@ builder.Services.AddFastReport();
 
 
 var app = builder.Build();
-
-////////////app.UseSerilogRequestLogging();
-
-////////////app.Use(async (context, next) =>
-////////////{
-////////////    var emailSender = context.RequestServices.GetRequiredService<EmailSender>();
-////////////    try
-////////////    {
-////////////        await next();
-////////////    }
-////////////    catch (Exception ex)
-////////////    {
-
-////////////        Log.Error(ex, "Unhandled exception");
-////////////        await emailSender.SendEmailAsync("tphilomeno@kofc-wa.org", "Log Alert", $"An error occurred: {ex.Message}");
-////////////        throw;
-////////////    }
-////////////});
 
 // documentation says to call this before UseMvc or UseEndpoints
 app.UseFastReport();
