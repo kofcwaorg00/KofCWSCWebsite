@@ -1,5 +1,6 @@
 ﻿@page
 @model KofCWSCWebsite.Pages.Helper.ShowSenseModel
+@attribute [Microsoft.AspNetCore.Authorization.Authorize]
 @{
 }
 <head>
@@ -72,14 +73,12 @@
             //alert(myAgree);
             if (myAgree) {
                 showBusyIndicator();
-                if ($("#myGo3").attr("id"))
-                {
+                if ($("#myGo3").attr("id")) {
                     Do3();
                 }
-                else if($("#myGo5").attr("id")){
+                else if ($("#myGo5").attr("id")) {
                     Do5();
-                }else
-                {
+                } else {
                     window.location.href = $("#myGo").attr("href");
                 }
             } else {
