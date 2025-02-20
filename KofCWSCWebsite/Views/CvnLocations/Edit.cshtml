@@ -10,7 +10,8 @@
 <hr />
 <div class="row">
     <div class="col-md-4">
-        <form asp-action="Edit">
+        <div class="overlay" id="overlay"></div>
+        <form asp-action="Edit" id="myForm">
             <div asp-validation-summary="ModelOnly" class="text-danger"></div>
             <input type="hidden" asp-for="Id" />
             <div class="form-group">
@@ -41,6 +42,7 @@
             <div class="form-group">
                 <input type="submit" value="Save" class="btn btn-primary" />
             </div>
+            <div class="spinner" id="spinner"></div>
         </form>
     </div>
 </div>
@@ -52,3 +54,9 @@
 @section Scripts {
     @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
 }
+<script>
+    document.getElementById('myForm').addEventListener('submit', function (event) {
+        document.getElementById('overlay').style.display = 'block'; // Show the Overlay
+        document.getElementById('spinner').style.display = 'block'; // Show the spinner
+    });
+</script>

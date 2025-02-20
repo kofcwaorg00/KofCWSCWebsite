@@ -121,6 +121,32 @@ namespace KofCWSCWebsite.Controllers
             }
             if (ModelState.IsValid)
             {
+                // Need to check to see if there is a valid location address
+                USPSAddress myAddr = new USPSAddress();
+                myAddr.Address = new Address 
+                { 
+                    StreetAddress = cvnLocation.Address,
+                    City = cvnLocation.City,
+                    State = cvnLocation.State,
+                    ZIPCode = cvnLocation.ZipCode
+                };
+
+
+                var myValidAddr = await _apiHelper.PostAsync<USPSAddress,USPSAddress>($"ValidateAddress",myAddr);
+                if (myValidAddr.Address == null)
+                {
+                    ModelState.AddModelError(string.Empty,"Address is invalid");
+                    return View(cvnLocation);
+                }
+                else
+                {
+                    // go ahead and update what was entered with what we got back
+                    // from the USPS
+                    cvnLocation.Address = myValidAddr.Address.StreetAddress;
+                    cvnLocation.City = myValidAddr.Address.City;
+                    cvnLocation.State = myValidAddr.Address.State;
+                    cvnLocation.ZipCode = myValidAddr.Address.ZIPCode;
+                }
                 //*****************************************************************************************************
                 // 12/05/2024 Tim Philomeno
                 // Now that we have a generic ApiHelper class, these are the only 2 lines that we should need to
@@ -128,6 +154,24 @@ namespace KofCWSCWebsite.Controllers
                 try
                 {
                     var result = await _apiHelper.PutAsync<CvnLocation, CvnLocation>($"/Locations/{id}", cvnLocation);
+                    // ok now that we know we have a valid address and it has been posted, now update the mileage
+
+                    List<TblValCouncil> myMissMil = new List<TblValCouncil>();
+
+                    // then get all councils and spin through them adding to the mileage table for all
+                    var councils = await _apiHelper.GetAsync<IEnumerable<TblValCouncil>>($"Councils");
+                    foreach (var council in councils)
+                    {
+                        if (!await AddorUpdateMileageTable(council, cvnLocation))
+                        {
+                            myMissMil.Add(council);
+                            // allow this to continue and log the missing council information
+                            //var ex = new Exception($"Council {council.CNumber} is missing mileage entry for {cvnLocation.Location}");
+                            //Log.Information(Utils.FormatLogEntry(this, ex));
+                        };
+                    }
+                    // after we are done then report back councils that did not make it
+                    return View("CouncilsMissingMileage", myMissMil);
                 }
                 catch (Exception ex)
                 {
@@ -246,7 +290,7 @@ namespace KofCWSCWebsite.Controllers
                 {
                     // Update the existing one
                     existingCmil.Mileage = rounddistance;
-                    var updmil = await _apiHelper.PutAsync<CvnMileage, CvnMileage>($"Locations/{existingCmil.Id}",existingCmil);
+                    var updmil = await _apiHelper.PutAsync<CvnMileage, CvnMileage>($"Mileage/{existingCmil.Id}",existingCmil);
                     return true;
                 }
 

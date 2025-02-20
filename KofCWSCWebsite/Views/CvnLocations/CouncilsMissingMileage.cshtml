@@ -2,10 +2,19 @@
 
 @{
     ViewData["Title"] = "CouncilsMissingMileage";
+    var myCount = Model.Count();
 }
 
 <h1>Councils Missing Mileage Entires</h1>
-<h6>Probably because no physical address was found</h6>
+
+@if (myCount == 0)
+{
+    <h6>No Councils Found Missing Mileage Entries</h6>
+}
+else
+{
+    <h6>Probably because no physical address was found</h6>
+}
 
 <table class="table">
     <thead>
