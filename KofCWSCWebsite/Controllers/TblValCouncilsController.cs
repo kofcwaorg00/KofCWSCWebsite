@@ -13,6 +13,8 @@ using Serilog;
 using Microsoft.AspNetCore.Authorization;
 using com.sun.xml.@internal.bind.v2.model.core;
 using com.sun.tools.corba.se.logutil;
+using KofCWSCWebsite.Areas.Identity.Data;
+using Microsoft.AspNet.Identity;
 
 namespace KofCWSCWebsite.Controllers
 {
@@ -20,11 +22,13 @@ namespace KofCWSCWebsite.Controllers
     {
         private DataSetService _dataSetService;
         private readonly ApiHelper _apiHelper;
-
-        public TblValCouncilsController(DataSetService dataSetService, ApiHelper apiHelper)
+        private readonly Microsoft.AspNetCore.Identity.UserManager<KofCUser> _userManager;
+        
+        public TblValCouncilsController(DataSetService dataSetService, ApiHelper apiHelper, Microsoft.AspNetCore.Identity.UserManager<KofCUser> userManager)
         {
             _dataSetService = dataSetService;
             _apiHelper = new ApiHelper(_dataSetService);
+            _userManager = userManager;
         }
 
         // GET: TblValCouncils
@@ -139,6 +143,10 @@ namespace KofCWSCWebsite.Controllers
                 // should the return from here be to INDEX or the newly created council????
                 try
                 {
+                    var myuser = await _userManager.GetUserAsync(User);
+                    tblValCouncil.Updated = DateTime.Now;
+                    tblValCouncil.UpdatedBy = myuser.KofCMemberID;
+
                     var apiHelper = new ApiHelper(_dataSetService);
                     var result = await apiHelper.PostAsync<TblValCouncil, TblValCouncil>("/Council/", tblValCouncil);
                     return RedirectToAction(nameof(Index));
@@ -218,7 +226,7 @@ namespace KofCWSCWebsite.Controllers
         [HttpPost]
         [ValidateAntiForgeryToken]
         //public async Task<IActionResult> FSEdit(int id, [Bind("CNumber,CLocation,CName,PhyAddress,PhyCity,PhyState,PhyPostalCode,MailAddress,MailCity,MailState,MailPostalCode,MeetAddress,MeetCity,MeetState,MeetPostalCode,BMeetDOW,BMeetTime,OMeetDOW,OMeetTime,SMeetDOW,SMeetTime")] TblValCouncil tblValCouncil)
-        public async Task<IActionResult> FSEdit(int id, [Bind("CNumber,CLocation,CName,District,AddInfo1,AddInfo2,AddInfo3,LiabIns,DioceseId,Chartered,WebSiteUrl,BulletinUrl,Arbalance,Status,PhyAddress,PhyCity,PhyState,PhyPostalCode,MailAddress,MailCity,MailState,MailPostalCode,MeetAddress,MeetCity,MeetState,MeetPostalCode,BMeetDOW,BMeetTime,OMeetDOW,OMeetTime,SMeetDOW,SMeetTime,FSAddress,FSCity,FSState,FSPostalCode")] TblValCouncilFSEdit tblValCouncilFSEdit)
+        public async Task<IActionResult> FSEdit(int id,TblValCouncilFSEdit tblValCouncilFSEdit)
         {
             if (id != tblValCouncilFSEdit.CNumber)
             {
@@ -231,28 +239,30 @@ namespace KofCWSCWebsite.Controllers
                 // we are only dealing with addresses and meeting data so take what we get and copy to what we have
                 try
                 {
-                    var existCouncil = await _apiHelper.GetAsync<TblValCouncil>($"/Council/{id}");
+                    //var existCouncil = await _apiHelper.GetAsync<TblValCouncil>($"/Council/{id}");
 
-                    existCouncil.PhyAddress = tblValCouncilFSEdit.PhyAddress;
-                    existCouncil.PhyCity = tblValCouncilFSEdit.PhyCity;
-                    existCouncil.PhyState = tblValCouncilFSEdit.PhyState;
-                    existCouncil.PhyPostalCode = tblValCouncilFSEdit.PhyPostalCode;
-                    existCouncil.MailAddress = tblValCouncilFSEdit.MailAddress;
-                    existCouncil.MailCity = tblValCouncilFSEdit.MailCity;
-                    existCouncil.MailState = tblValCouncilFSEdit.MailState;
-                    existCouncil.MailPostalCode = tblValCouncilFSEdit.MailPostalCode;
-                    existCouncil.MeetAddress = tblValCouncilFSEdit.MeetAddress;
-                    existCouncil.MeetCity = tblValCouncilFSEdit.MeetCity;
-                    existCouncil.MeetState = tblValCouncilFSEdit.MeetState;
-                    existCouncil.MeetPostalCode = tblValCouncilFSEdit.MeetPostalCode;
-                    existCouncil.BMeetDOW = tblValCouncilFSEdit.BMeetDOW;
-                    existCouncil.BMeetTime = tblValCouncilFSEdit.BMeetTime;
-                    existCouncil.OMeetDOW = tblValCouncilFSEdit.OMeetDOW;
-                    existCouncil.OMeetTime = tblValCouncilFSEdit.OMeetTime;
-                    existCouncil.SMeetDOW = tblValCouncilFSEdit.SMeetDOW;
-                    existCouncil.SMeetTime = tblValCouncilFSEdit.SMeetTime;
-
-                    var results = await _apiHelper.PutAsync<TblValCouncil, TblValCouncil>($"/Council/{id}",existCouncil);
+                    //existCouncil.PhyAddress = tblValCouncilFSEdit.PhyAddress;
+                    //existCouncil.PhyCity = tblValCouncilFSEdit.PhyCity;
+                    //existCouncil.PhyState = tblValCouncilFSEdit.PhyState;
+                    //existCouncil.PhyPostalCode = tblValCouncilFSEdit.PhyPostalCode;
+                    //existCouncil.MailAddress = tblValCouncilFSEdit.MailAddress;
+                    //existCouncil.MailCity = tblValCouncilFSEdit.MailCity;
+                    //existCouncil.MailState = tblValCouncilFSEdit.MailState;
+                    //existCouncil.MailPostalCode = tblValCouncilFSEdit.MailPostalCode;
+                    //existCouncil.MeetAddress = tblValCouncilFSEdit.MeetAddress;
+                    //existCouncil.MeetCity = tblValCouncilFSEdit.MeetCity;
+                    //existCouncil.MeetState = tblValCouncilFSEdit.MeetState;
+                    //existCouncil.MeetPostalCode = tblValCouncilFSEdit.MeetPostalCode;
+                    //existCouncil.BMeetDOW = tblValCouncilFSEdit.BMeetDOW;
+                    //existCouncil.BMeetTime = tblValCouncilFSEdit.BMeetTime;
+                    //existCouncil.OMeetDOW = tblValCouncilFSEdit.OMeetDOW;
+                    //existCouncil.OMeetTime = tblValCouncilFSEdit.OMeetTime;
+                    //existCouncil.SMeetDOW = tblValCouncilFSEdit.SMeetDOW;
+                    //existCouncil.SMeetTime = tblValCouncilFSEdit.SMeetTime;
+                    var myuser = await _userManager.GetUserAsync(User);
+                    tblValCouncilFSEdit.Updated = DateTime.Now;
+                    tblValCouncilFSEdit.UpdatedBy = myuser.KofCMemberID;
+                    var results = await _apiHelper.PutAsync<TblValCouncilFSEdit, TblValCouncilFSEdit>($"/Council/FSEdit/{id}", tblValCouncilFSEdit);
                 }
                 catch (Exception ex)
                 {
@@ -297,12 +307,17 @@ namespace KofCWSCWebsite.Controllers
 
             if (ModelState.IsValid)
             {
+                var myuser = await _userManager.GetUserAsync(User);
+                
                 foreach (var updatedCouncil in tblValCouncils)
                 {
                     if (updatedCouncil != null)
                     {
                         if (IsMPDModifed(updatedCouncil))
                         {
+                            // dont want to update these for MPD Edit
+                            //updatedCouncil.Updated = DateTime.Now;
+                            //updatedCouncil.UpdatedBy = myuser.KofCMemberID;
                             var result = await _apiHelper.PutAsync<TblValCouncilMPD, TblValCouncil>($"/Council/MPD/{updatedCouncil.CNumber}", updatedCouncil);
                         }
                         ////var council = new TblValCouncil { CNumber = updatedCouncil.CNumber };
@@ -324,9 +339,9 @@ namespace KofCWSCWebsite.Controllers
         [Authorize(Roles = "Admin,DataAdmin")]
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("CNumber,CLocation,CName,District,AddInfo1,AddInfo2,AddInfo3,LiabIns,DioceseId,Chartered,WebSiteUrl,BulletinUrl,Arbalance,Status,PhyAddress,PhyCity,PhyState,PhyPostalCode,MailAddress,MailCity,MailState,MailPostalCode,MeetAddress,MeetCity,MeetState,MeetPostalCode,BMeetDOW,BMeetTime,OMeetDOW,OMeetTime,SMeetDOW,SMeetTime,SeatedDelegateDay1D1,SeatedDelegateDay1D2,SeatedDelegateDay2D1,SeatedDelegateDay2D2,SeatedDelegateDay3D1,SeatedDelegateDay3D2")] TblValCouncil tblValCouncil)
+        //public async Task<IActionResult> Edit(int id, [Bind("CNumber,CLocation,CName,District,AddInfo1,AddInfo2,AddInfo3,LiabIns,DioceseId,Chartered,WebSiteUrl,BulletinUrl,Arbalance,Status,PhyAddress,PhyCity,PhyState,PhyPostalCode,MailAddress,MailCity,MailState,MailPostalCode,MeetAddress,MeetCity,MeetState,MeetPostalCode,BMeetDOW,BMeetTime,OMeetDOW,OMeetTime,SMeetDOW,SMeetTime,SeatedDelegateDay1D1,SeatedDelegateDay1D2,SeatedDelegateDay2D1,SeatedDelegateDay2D2,SeatedDelegateDay3D1,SeatedDelegateDay3D2")] TblValCouncil tblValCouncil)
         //public async Task<IActionResult> Edit(int id, [Bind("CNumber,CLocation,CName,District,AddInfo1,AddInfo2,AddInfo3,LiabIns,DioceseId,Chartered,WebSiteUrl,BulletinUrl,Arbalance,Status")] TblValCouncil tblValCouncil)
-        //public async Task<IActionResult> Edit(int id,TblValCouncil tblValCouncil)
+        public async Task<IActionResult> Edit(int id,TblValCouncil tblValCouncil)
         {
             if (id != tblValCouncil.CNumber)
             {
@@ -340,6 +355,9 @@ namespace KofCWSCWebsite.Controllers
                 // call the API
                 try
                 {
+                    //var myuser = await _userManager.GetUserAsync(User);
+                    //tblValCouncil.Updated = DateTime.Now;
+                    //tblValCouncil.UpdatedBy = myuser.KofCMemberID;
                     var result = await _apiHelper.PutAsync<TblValCouncil, TblValCouncil>($"/Council/{id}", tblValCouncil);
                 }
                 catch (Exception ex)

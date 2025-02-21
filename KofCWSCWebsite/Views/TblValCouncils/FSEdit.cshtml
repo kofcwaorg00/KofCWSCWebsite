@@ -11,36 +11,17 @@
 <button onclick="CopyAddress()">Copy Physical Address to Mailing and Meeting?</button>
 <div class="row">
     <form asp-action="FSEdit">
-        <div style="display:none">
-            @Html.TextBoxFor(m => Model.Status)
-            @Html.TextBoxFor(m => Model.FSAddress)
-            @Html.TextBoxFor(m => Model.FSCity)
-            @Html.TextBoxFor(m => Model.FSState)
-            @Html.TextBoxFor(m => Model.FSPostalCode)
-            @Html.TextBoxFor(m => Model.CNumber)
-            @Html.TextBoxFor(m => Model.Status)
-            @Html.TextBoxFor(m => Model.CLocation)
-            @Html.TextBoxFor(m => Model.CName)
-            @Html.TextBoxFor(m => Model.District)
-            @Html.TextBoxFor(m => Model.AddInfo1)
-            @Html.TextBoxFor(m => Model.AddInfo2)
-            @Html.TextBoxFor(m => Model.AddInfo3)
-            @Html.TextBoxFor(m => Model.LiabIns)
-            @Html.TextBoxFor(m => Model.DioceseId)
-            @Html.TextBoxFor(m => Model.Chartered)
-            @Html.TextBoxFor(m => Model.WebSiteUrl)
-            @Html.TextBoxFor(m => Model.BulletinUrl)
-            @Html.TextBoxFor(m => Model.Arbalance)
-            @Html.TextBoxFor(m => Model.SeatedDelegateDay1D1)
-            @Html.TextBoxFor(m => Model.SeatedDelegateDay1D2)
-            @Html.TextBoxFor(m => Model.SeatedDelegateDay2D1)
-            @Html.TextBoxFor(m => Model.SeatedDelegateDay2D2)
-            @Html.TextBoxFor(m => Model.SeatedDelegateDay3D1)
-            @Html.TextBoxFor(m => Model.SeatedDelegateDay3D2)
-            @Html.TextBoxFor(m => Model.PaidMPD)
-        </div>
         <div asp-validation-summary="ModelOnly" class="text-danger"></div>
         <input type="hidden" asp-for="CNumber" />
+        <input type="hidden" asp-for="District" />
+        <input type="hidden" asp-for="CName" />
+        <input type="hidden" asp-for="CLocation" />
+        <input type="hidden" asp-for="AddInfo1" />
+        <input type="hidden" asp-for="AddInfo2" />
+        <input type="hidden" asp-for="AddInfo3" />
+        <input type="hidden" asp-for="Status" />
+        <input type="hidden" asp-for="Updated" />
+        <input type="hidden" asp-for="UpdatedBy" />
         <table class="table">
             <tr>
                 <td>
@@ -209,24 +190,24 @@
                     </div>
                 </td>
                 <!--<td>
-                <div style="width:25%">-->
-        @*<form method="get" asp-controller="Home" asp-action="Index" asp-route-id="">*@
-<!--<button type="submit" asp-controller="Home" asp-action="Index" class="btn btn-success">Cancel</button>-->
-        @*</form>*@
-<!--</div>
-</td>-->
-<td>
-<div style="width:25%">
-        @*<form method="get" asp-controller="Home" asp-action="Index" asp-route-id="">*@
-<button type="reset" class="btn btn-info">Reset</button>
-        @*</form>*@
-</div>
-</td>
-</tr>
-</table>
+            <div style="width:25%">-->
+                @*<form method="get" asp-controller="Home" asp-action="Index" asp-route-id="">*@
+                <!--<button type="submit" asp-controller="Home" asp-action="Index" class="btn btn-success">Cancel</button>-->
+                @*</form>*@
+                <!--</div>
+            </td>-->
+                <td>
+                    <div style="width:25%">
+                        @*<form method="get" asp-controller="Home" asp-action="Index" asp-route-id="">*@
+                        <button type="reset" class="btn btn-info">Reset</button>
+                        @*</form>*@
+                    </div>
+                </td>
+            </tr>
+        </table>
 
 
-</form>
+    </form>
 @if (User.IsInRole("Admin"))
 {
 <a asp-action="Index">Cancel</a>

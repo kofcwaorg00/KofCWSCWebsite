@@ -16,5 +16,6 @@ namespace KofCWSCWebsite.Models
         public bool SeatedDelegateDay2D2 { get; set; }
         public bool SeatedDelegateDay3D1 { get; set; }
         public bool SeatedDelegateDay3D2 { get; set; }
+
     }
 }

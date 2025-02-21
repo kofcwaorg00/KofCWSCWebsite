@@ -12,36 +12,34 @@
         <form asp-action="Edit">
             <div asp-validation-summary="ModelOnly" class="text-danger"></div>
             <input type="hidden" asp-for="CNumber" />
-            @*<div style="display:none">
-                        These need to be added to the form and hidden so that when the model is returned, they
-                    have the same data as when they were fetched
-                @Html.TextBoxFor(m => Model.PhyAddress)
-                @Html.TextBoxFor(m => Model.PhyCity)
-                @Html.TextBoxFor(m => Model.PhyState)
-                @Html.TextBoxFor(m => Model.PhyPostalCode)
-                @Html.TextBoxFor(m => Model.MailAddress)
-                @Html.TextBoxFor(m => Model.MailCity)
-                @Html.TextBoxFor(m => Model.MailState)
-                @Html.TextBoxFor(m => Model.MailPostalCode)
-                @Html.TextBoxFor(m => Model.MeetAddress)
-                @Html.TextBoxFor(m => Model.MeetCity)
-                @Html.TextBoxFor(m => Model.MeetState)
-                @Html.TextBoxFor(m => Model.MeetPostalCode)
-                @Html.TextBoxFor(m => Model.BMeetDOW)
-                @Html.TextBoxFor(m => Model.BMeetTime)
-                @Html.TextBoxFor(m => Model.OMeetDOW)
-                @Html.TextBoxFor(m => Model.OMeetTime)
-                @Html.TextBoxFor(m => Model.SMeetDOW)
-                @Html.TextBoxFor(m => Model.SMeetTime)
+            <input type="hidden" asp-for="Updated" />
+            <input type="hidden" asp-for="UpdatedBy" />
+            <input type="hidden" asp-for="PhyAddress" />
+            <input type="hidden" asp-for="PhyCity" />
+            <input type="hidden" asp-for="PhyState" />
+            <input type="hidden" asp-for="PhyPostalCode" />
+            <input type="hidden" asp-for="MailAddress" />
+            <input type="hidden" asp-for="MailCity" />
+            <input type="hidden" asp-for="MailState" />
+            <input type="hidden" asp-for="MailPostalCode" />
+            <input type="hidden" asp-for="MeetAddress" />
+            <input type="hidden" asp-for="MeetCity" />
+            <input type="hidden" asp-for="MeetState" />
+            <input type="hidden" asp-for="MeetPostalCode" />
+            <input type="hidden" asp-for="BMeetDOW" />
+            <input type="hidden" asp-for="BMeetTime" />
+            <input type="hidden" asp-for="OMeetDOW" />
+            <input type="hidden" asp-for="OMeetTime" />
+            <input type="hidden" asp-for="SMeetDOW" />
+            <input type="hidden" asp-for="SMeetTime" />
 
-                @Html.CheckBoxFor(m => Model.SeatedDelegateDay1D1)
-                @Html.CheckBoxFor(m => Model.SeatedDelegateDay1D2)
-                @Html.CheckBoxFor(m => Model.SeatedDelegateDay2D1)
-                @Html.CheckBoxFor(m => Model.SeatedDelegateDay2D2)
-                @Html.CheckBoxFor(m => Model.SeatedDelegateDay3D1)
-                @Html.CheckBoxFor(m => Model.SeatedDelegateDay3D2)
-                @Html.TextBoxFor(m => Model.PaidMPD)
-        </div>*@
+            <input type="hidden" asp-for="SeatedDelegateDay1D1" />
+            <input type="hidden" asp-for="SeatedDelegateDay1D2" />
+            <input type="hidden" asp-for="SeatedDelegateDay2D1" />
+            <input type="hidden" asp-for="SeatedDelegateDay2D2" />
+            <input type="hidden" asp-for="SeatedDelegateDay3D1" />
+            <input type="hidden" asp-for="SeatedDelegateDay3D2" />
+            <input type="hidden" asp-for="PaidMPD" />
 
             <div class="form-group">
                 <label asp-for="CLocation" class="control-label"></label>
