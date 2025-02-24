@@ -14,6 +14,7 @@ using System.Text.Json.Nodes;
 using Microsoft.AspNetCore.Http.HttpResults;
 using KofCWSCWebsite.Services;
 using System.Diagnostics;
+using Microsoft.CodeAnalysis.VisualBasic.Syntax;
 
 namespace KofCWSCWebsite.Data
 {
@@ -64,7 +65,8 @@ namespace KofCWSCWebsite.Data
             // the API has to fire up from a cold start
             if (!response.IsSuccessStatusCode)
             {
-                Log.Error($"Thrown from inside apiHelper because response.IsSuccessStatusCode is {response.IsSuccessStatusCode.ToString()} for endpoint {endpoint} and baseaddress {_httpClient.BaseAddress.ToString()} - Reason: {response.ReasonPhrase}+{endpoint} ");
+                Exception myex = new Exception($"Thrown from inside apiHelper because response.IsSuccessStatusCode is {response.IsSuccessStatusCode.ToString()} for endpoint {endpoint} and baseaddress {_httpClient.BaseAddress.ToString()} - Reason: {response.ReasonPhrase}+{endpoint} ");
+                Log.Error(Utils.FormatLogEntry(this,myex));
                 throw new HttpRequestException($"GET request failed. Status Code: {response.StatusCode}, Reason: {response.ReasonPhrase}+{endpoint}");
             }
             var json = await response.Content.ReadAsStringAsync();
