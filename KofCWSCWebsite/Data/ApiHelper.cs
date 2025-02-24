@@ -64,7 +64,7 @@ namespace KofCWSCWebsite.Data
             // the API has to fire up from a cold start
             if (!response.IsSuccessStatusCode)
             {
-                Log.Error($"Thrown from inside apiHelper because response.IsSuccessStatusCode is {response.IsSuccessStatusCode.ToString()} for endpoint {endpoint} and baseaddress {_httpClient.BaseAddress.ToString()} ");
+                Log.Error($"Thrown from inside apiHelper because response.IsSuccessStatusCode is {response.IsSuccessStatusCode.ToString()} for endpoint {endpoint} and baseaddress {_httpClient.BaseAddress.ToString()} - Reason: {response.ReasonPhrase}+{endpoint} ");
                 throw new HttpRequestException($"GET request failed. Status Code: {response.StatusCode}, Reason: {response.ReasonPhrase}+{endpoint}");
             }
             var json = await response.Content.ReadAsStringAsync();
