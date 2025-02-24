@@ -13,7 +13,7 @@ namespace KofCWSCWebsite.Data;
 
 public partial class ApplicationDbContext : DbContext
 {
-    private static bool isKVInit;
+    private static bool isKVInit = false;
     public ApplicationDbContext()
     {
     }

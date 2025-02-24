@@ -88,8 +88,8 @@ namespace KofCWSCWebsite.Areas.Identity.Pages.Account
                     Input.Email,
                     "Confirm your email",
                     $"You have received this email as a registered member of Washington State Council, Knights of Columbus. For any support questions please email support@kofc-wa.org.<br /><br />" +
-                    $"Please confirm your account by <a href='{HtmlEncoder.Default.Encode(callbackUrl)}'>clicking here</a>.<br />" +
-                    $"<br /><br /><br /><br /><br />" +
+                    $"Please confirm your account by <a href='{HtmlEncoder.Default.Encode(callbackUrl)}'>clicking here</a>.<br /><br />" +
+                    $"NOTE: This confirmation email expires in 20 minutes.<br /><br /><br /><br />" +
                     $"This email was sent to " + Input.Email + " by Washington State Council, Knights of Columbus.©1995-" + DateTime.Now.Year + " Washington State Council. All Rights Reserved"
                     );
                 //$"Please confirm your account by clicking here {HtmlEncoder.Default.Encode(callbackUrl)}");
