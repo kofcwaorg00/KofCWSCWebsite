@@ -167,7 +167,7 @@ namespace KofCWSCWebsite.Areas.Identity.Pages.Account
                 if (myAns == "false" || myAns.ToLower().Contains("invalid"))
                 {
                     string myError = string.Concat("Member Number ",KofCMemberID, " is not found in our database.");
-                    string myLogError = string.Concat("Member Number ", KofCMemberID, " is not found in our database.", "Using IP Address => ", HttpContext.Request.HttpContext.Connection.RemoteIpAddress.ToString());
+                    string myLogError = string.Concat("Member Number ", KofCMemberID, " is not found in our database.", "Using IP Address => ", HttpContext.Request.Headers["X-Forwarded-For"]);
                     Log.Error(myType + myLogError);
                     ModelState.AddModelError(string.Empty, myError);
                     return Page();
