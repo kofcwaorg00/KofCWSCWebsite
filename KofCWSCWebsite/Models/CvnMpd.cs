@@ -77,4 +77,6 @@ public partial class CvnMpd
     public string? State { get; set; }
     public string? Zip { get; set; }
     public string? Memo { get; set; }
+    public string? CheckAccount { get; set; }
+    public string? Category { get; set; }
 }

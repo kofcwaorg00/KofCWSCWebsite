@@ -201,7 +201,7 @@ namespace KofCWSCWebsite.Controllers
 
             byte[] buffer = Encoding.UTF8.GetBytes(csv.ToString());
 
-            return File(buffer, "text/csv", "CheckBatch.csv");
+            return File(buffer, "text/csv", $"CheckBatch{GroupID.ToString()}.csv");
         }
 
 
@@ -209,13 +209,32 @@ namespace KofCWSCWebsite.Controllers
         {
             var mydata = await _apiHelper.GetAsync<IEnumerable<CvnMpd>>($"GetMPDChecks/{GroupID}");
 
+            // transfer the data to our export model
+            var myExp = new List<CvnMPDCheckExportQB>();
+            foreach (var item in mydata)
+            {
+                var myItem = new CvnMPDCheckExportQB();
+                myItem.RefNumber = item.CheckNumber.ToString();
+                myItem.BankAccount = item.CheckAccount;
+                myItem.Vendor = item.Payee;
+                myItem.VendorAddress = item.Address;
+                myItem.VendorCity = item.City;
+                myItem.VendorState = item.State;
+                myItem.VendorZip = item.Zip;
+                myItem.TxnDate = item.CheckDate;
+                myItem.Amount = item.CheckTotal;
+                myItem.Memo = item.Memo;
+                myItem.ExpenseAccount = item.Category;
+                myItem.ExpenseAmount = item.CheckTotal;
+                myExp.Add(myItem);
+            }
             var csv = new StringBuilder();
 
-            var properties = typeof(CvnMpd).GetProperties(System.Reflection.BindingFlags.Public | System.Reflection.BindingFlags.Instance);
+            var properties = typeof(CvnMPDCheckExportQB).GetProperties(System.Reflection.BindingFlags.Public | System.Reflection.BindingFlags.Instance);
 
             csv.AppendLine(string.Join(",", properties.Select(p => p.Name)));
 
-            foreach (var item in mydata)
+            foreach (var item in myExp)
             {
                 var values = properties.Select(p => QuoteField(p.GetValue(item)?.ToString() ?? string.Empty));
                 csv.AppendLine(string.Join(",", values));
@@ -223,7 +242,7 @@ namespace KofCWSCWebsite.Controllers
 
             byte[] buffer = Encoding.UTF8.GetBytes(csv.ToString());
 
-            return File(buffer, "text/csv", "CheckBatch.csv");
+            return File(buffer, "text/csv", $"CheckBatchExpQB{GroupID.ToString()}.csv");
         }
 
         public async Task<IActionResult> ArchiveCheckBatch(int GroupID)
