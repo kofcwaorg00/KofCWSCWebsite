@@ -8,6 +8,7 @@ using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using System.Text;
 using System.Text.Encodings.Web;
+using System.Net;
 using System.Threading;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Authentication;
@@ -24,6 +25,7 @@ using KofCWSCWebsite.Data;
 using KofCWSCWebsite.Pages.AOI;
 using Serilog;
 using Microsoft.AspNetCore.Http.Extensions;
+using Microsoft.Extensions.Primitives;
 
 
 namespace KofCWSCWebsite.Areas.Identity.Pages.Account
@@ -167,7 +169,8 @@ namespace KofCWSCWebsite.Areas.Identity.Pages.Account
                 if (myAns == "false" || myAns.ToLower().Contains("invalid"))
                 {
                     string myError = string.Concat("Member Number ",KofCMemberID, " is not found in our database.");
-                    string myLogError = string.Concat("Member Number ", KofCMemberID, " is not found in our database.", "Using IP Address => ", HttpContext.Request.Headers["X-Forwarded-For"]);
+                    string myLogError = string.Concat("Member Number ", KofCMemberID, " is not found in our database.", "Using IP Address => ", GetClientIpAddress(HttpContext));
+                    
                     Log.Error(myType + myLogError);
                     ModelState.AddModelError(string.Empty, myError);
                     return Page();
@@ -266,6 +269,23 @@ namespace KofCWSCWebsite.Areas.Identity.Pages.Account
                 throw new NotSupportedException("The default UI requires a user store with email support.");
             }
             return (IUserEmailStore<KofCUser>)_userStore;
+        }
+        private string GetClientIpAddress(HttpContext context)
+        {
+            string ipAddress = context.Request.Headers["X-Forwarded-For"];
+
+            if (StringValues.IsNullOrEmpty(ipAddress))
+            {
+                ipAddress = context.Connection.RemoteIpAddress?.ToString();
+            }
+            else
+            {
+                // Sometimes the X-Forwarded-For header contains a list of IP addresses
+                // The client's IP is the first one
+                ipAddress = ipAddress.Split(',').FirstOrDefault();
+            }
+
+            return ipAddress;
         }
     }
 }
