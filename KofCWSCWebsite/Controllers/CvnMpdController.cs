@@ -214,18 +214,19 @@ namespace KofCWSCWebsite.Controllers
             foreach (var item in mydata)
             {
                 var myItem = new CvnMPDCheckExportQB();
-                myItem.RefNumber = item.CheckNumber.ToString();
+                myItem.CheckNo = item.CheckNumber.ToString();
                 myItem.BankAccount = item.CheckAccount;
-                myItem.Vendor = item.Payee;
-                myItem.VendorAddress = item.Address;
-                myItem.VendorCity = item.City;
-                myItem.VendorState = item.State;
-                myItem.VendorZip = item.Zip;
-                myItem.TxnDate = item.CheckDate;
+                myItem.Payee = item.Payee;
+                myItem.Address = string.Concat(item.Address,", ",item.City,", ",item.State,", ",item.Zip);
+                DateOnly myDO = (DateOnly)item.CheckDate;
+                DateTime myDT = myDO.ToDateTime(TimeOnly.MinValue);
+                string myFD = myDT.ToString("MM/dd/yyyy");
+                myItem.Date = myFD; // item.CheckDate.ToString();
                 myItem.Amount = item.CheckTotal;
                 myItem.Memo = item.Memo;
-                myItem.ExpenseAccount = item.Category;
-                myItem.ExpenseAmount = item.CheckTotal;
+                myItem.Category = item.Category;
+                myItem.Description = "Convention MPD Import";
+                myItem.Type = "Category Details";
                 myExp.Add(myItem);
             }
             var csv = new StringBuilder();
