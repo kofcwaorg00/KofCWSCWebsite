@@ -128,11 +128,11 @@
         // strange ReturnURL has value sometimes and sometimes not
         if (myRefer.Length == 0 || myRefer.Contains("TblMasMembers"))
         {
-            <a asp-area="" asp-action="@Context.Request.Query["ReturnURL"]">Back</a>
+            <a asp-area="" asp-action="@Context.Request.Query["ReturnURL"]" asp-route-nextyear="0">Back</a>
         }
         else
         {
-            myRetVal = "https://" + myHost + "/" + myRefer;
+            myRetVal = "https://" + myHost + "/" + myRefer + "/0";
             <a href="@myRetVal">Back</a>
         }
     }
