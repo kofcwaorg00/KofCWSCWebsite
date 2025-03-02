@@ -23,70 +23,74 @@ namespace KofCWSCWebsite.Controllers
         //******************************************************************************************
         private IConfiguration _configuration;
         private DataSetService _dataSetService;
-
-        public SPController(IConfiguration configuration, DataSetService dataSetService)
+        private ApiHelper _apiHelper;
+        public SPController(IConfiguration configuration, DataSetService dataSetService, ApiHelper apiHelper)
         {
             _configuration = configuration;
             _dataSetService = dataSetService;
+            _apiHelper = apiHelper;
         }
 
         // GET: GetAssys
-        [Route("GetAssys")]
-        public IActionResult GetAssys()
+        [Route("GetAssys/{nextyear}")]
+        public async Task<IActionResult> GetAssys(int nextyear = 0)
         {
             ViewData["HostName"] = _dataSetService.GetMyHost();
+            var assys = await _apiHelper.GetAsync<IList<SPGetAssysView>>($"GetAssys/{nextyear}");
             // each one of these should follow the same pattern
             // set the URI, setup thew client, call the client, return the results
-            Uri myURI = new Uri(_dataSetService.GetAPIBaseAddress() + "/GetAssys");
+            //Uri myURI = new Uri(_dataSetService.GetAPIBaseAddress() + "/GetAssys");
 
-            using (var client = new HttpClient())
-            {
-                //client.BaseAddress = new Uri(myURI);
-                var responseTask = client.GetAsync(myURI);
-                responseTask.Wait();
-                var result = responseTask.Result;
-                IEnumerable<SPGetAssysView> assys;
-                if (result.IsSuccessStatusCode)
-                {
-                    var readTask = result.Content.ReadAsAsync<IList<SPGetAssysView>>();
-                    readTask.Wait();
-                    assys = readTask.Result;
-                }
-                else
-                {
-                    assys = Enumerable.Empty<SPGetAssysView>();
-                    ModelState.AddModelError(string.Empty, "Server Error.  Please contact administrator.");
-                }
-                return View("Views/StateFamily/GetAssys.cshtml", assys);
-            }
+            //using (var client = new HttpClient())
+            //{
+            //    //client.BaseAddress = new Uri(myURI);
+            //    var responseTask = client.GetAsync(myURI);
+            //    responseTask.Wait();
+            //    var result = responseTask.Result;
+            //    IEnumerable<SPGetAssysView> assys;
+            //    if (result.IsSuccessStatusCode)
+            //    {
+            //        var readTask = result.Content.ReadAsAsync<IList<SPGetAssysView>>();
+            //        readTask.Wait();
+            //        assys = readTask.Result;
+            //    }
+            //    else
+            //    {
+            //        assys = Enumerable.Empty<SPGetAssysView>();
+            //        ModelState.AddModelError(string.Empty, "Server Error.  Please contact administrator.");
+            //    }
+            //    return View("Views/StateFamily/GetAssys.cshtml", assys);
+            //}
+            return View("Views/StateFamily/GetAssys.cshtml", assys);
         }
         // GET: GetCouncils
-        [Route("GetCouncils")]
-        public IActionResult GetCouncils()
+        [Route("GetCouncils/{nextyear}")]
+        public async Task<IActionResult> GetCouncils(int nextyear = 0)
         {
             ViewData["HostName"] = _dataSetService.GetMyHost();
-            Uri myURI = new Uri(_dataSetService.GetAPIBaseAddress() + "/GetCouncils");
+            var councils = await _apiHelper.GetAsync<IList<SPGetCouncilsView>>($"GetCouncils/{nextyear}");
+            //Uri myURI = new Uri(_dataSetService.GetAPIBaseAddress() + "/GetCouncils");
 
-            using (var client = new HttpClient())
-            {
-                //client.BaseAddress = new Uri(myURI);
-                var responseTask = client.GetAsync(myURI);
-                responseTask.Wait();
-                var result = responseTask.Result;
-                IEnumerable<SPGetCouncilsView> councils;
-                if (result.IsSuccessStatusCode)
-                {
-                    var readTask = result.Content.ReadAsAsync<IList<SPGetCouncilsView>>();
-                    readTask.Wait();
-                    councils = readTask.Result;
-                }
-                else
-                {
-                    councils = Enumerable.Empty<SPGetCouncilsView>();
-                    ModelState.AddModelError(string.Empty, "Server Error.  Please contact administrator.");
-                }
-                return View("Views/StateFamily/GetCouncils.cshtml", councils);
-            }
+            //using (var client = new HttpClient())
+            //{
+            //    //client.BaseAddress = new Uri(myURI);
+            //    var responseTask = client.GetAsync(myURI);
+            //    responseTask.Wait();
+            //    var result = responseTask.Result;
+            //    IEnumerable<SPGetCouncilsView> councils;
+            //    if (result.IsSuccessStatusCode)
+            //    {
+            //        var readTask = result.Content.ReadAsAsync<IList<SPGetCouncilsView>>();
+            //        readTask.Wait();
+            //        councils = readTask.Result;
+            //    }
+            //    else
+            //    {
+            //        councils = Enumerable.Empty<SPGetCouncilsView>();
+            //        ModelState.AddModelError(string.Empty, "Server Error.  Please contact administrator.");
+            //    }
+            //}
+            return View("Views/StateFamily/GetCouncils.cshtml", councils);
         }
 
         // GET: GetSOS
@@ -187,93 +191,99 @@ namespace KofCWSCWebsite.Controllers
             }
         }
         // GET: Chairmen
-        [Route("GetChairmen")]
-        public IActionResult GetChairmen()
+        [Route("GetChairmen/{nextyear}")]
+        public async Task<IActionResult> GetChairmen(int nextyear = 0)
         {
             ViewData["HostName"] = _dataSetService.GetMyHost();
-            Uri myURI = new Uri(_dataSetService.GetAPIBaseAddress() + "/GetChairmen");
+            var chairmen = await _apiHelper.GetAsync<IList<SPGetChairmen>>($"GetChairmen/{nextyear}");
+            //Uri myURI = new Uri(_dataSetService.GetAPIBaseAddress() + "/GetChairmen");
 
-            using (var client = new HttpClient())
-            {
+            //using (var client = new HttpClient())
+            //{
 
-                //client.BaseAddress = new Uri(myURI);
-                var responseTask = client.GetAsync(myURI);
-                responseTask.Wait();
-                var result = responseTask.Result;
-                IEnumerable<SPGetChairmen> chairmen;
-                if (result.IsSuccessStatusCode)
-                {
-                    var readTask = result.Content.ReadAsAsync<IList<SPGetChairmen>>();
-                    readTask.Wait();
-                    chairmen = readTask.Result;
-                }
-                else
-                {
-                    chairmen = Enumerable.Empty<SPGetChairmen>();
-                    ModelState.AddModelError(string.Empty, "Server Error.  Please contact administrator.");
-                }
-                return View("Views/StateFamily/GetChairmen.cshtml", chairmen);
-            }
+            //    //client.BaseAddress = new Uri(myURI);
+            //    var responseTask = client.GetAsync(myURI);
+            //    responseTask.Wait();
+            //    var result = responseTask.Result;
+            //    IEnumerable<SPGetChairmen> chairmen;
+            //    if (result.IsSuccessStatusCode)
+            //    {
+            //        var readTask = result.Content.ReadAsAsync<IList<SPGetChairmen>>();
+            //        readTask.Wait();
+            //        chairmen = readTask.Result;
+            //    }
+            //    else
+            //    {
+            //        chairmen = Enumerable.Empty<SPGetChairmen>();
+            //        ModelState.AddModelError(string.Empty, "Server Error.  Please contact administrator.");
+            //    }
+            //    return View("Views/StateFamily/GetChairmen.cshtml", chairmen);
+            //}
+            return View("Views/StateFamily/GetChairmen.cshtml", chairmen);
         }
         // GET: ChairmanInfoBlock
-        [Route("GetChairmanInfoBlock")]
-        public IActionResult GetChairmanInfoBlock(int id)
+        [Route("GetChairmanInfoBlock/{id}/{nextyear}")]
+        public async Task<IActionResult> GetChairmanInfoBlock(int id,int nextyear = 0)
         {
             if (id == 0)
             {
                 return NotFound();
             }
-            Uri myURI = new Uri(_dataSetService.GetAPIBaseAddress() + "/GetChairmanInfoBlock/" + id.ToString());
+            var cib = await _apiHelper.GetAsync<IList<SPGetChairmanInfoBlock>>($"GetChairmanInfoBlock/{id}/{nextyear}");
+            //Uri myURI = new Uri(_dataSetService.GetAPIBaseAddress() + "/GetChairmanInfoBlock/" + id.ToString());
 
-            using (var client = new HttpClient())
-            {
-                //client.BaseAddress = new Uri(myURI);
-                var responseTask = client.GetAsync(myURI);
-                responseTask.Wait();
-                var result = responseTask.Result;
-                IEnumerable<SPGetChairmanInfoBlock> cib;
-                if (result.IsSuccessStatusCode)
-                {
-                    var readTask = result.Content.ReadAsAsync<IList<SPGetChairmanInfoBlock>>();
-                    readTask.Wait();
-                    cib = readTask.Result;
-                }
-                else
-                {
-                    cib = Enumerable.Empty<SPGetChairmanInfoBlock>();
-                    ModelState.AddModelError(string.Empty, "Server Error.  Please contact administrator.");
-                }
-                return View("Views/StateFamily/ChairmanDetails.cshtml", cib);
-            }
+            //using (var client = new HttpClient())
+            //{
+            //    //client.BaseAddress = new Uri(myURI);
+            //    var responseTask = client.GetAsync(myURI);
+            //    responseTask.Wait();
+            //    var result = responseTask.Result;
+            //    IEnumerable<SPGetChairmanInfoBlock> cib;
+            //    if (result.IsSuccessStatusCode)
+            //    {
+            //        var readTask = result.Content.ReadAsAsync<IList<SPGetChairmanInfoBlock>>();
+            //        readTask.Wait();
+            //        cib = readTask.Result;
+            //    }
+            //    else
+            //    {
+            //        cib = Enumerable.Empty<SPGetChairmanInfoBlock>();
+            //        ModelState.AddModelError(string.Empty, "Server Error.  Please contact administrator.");
+            //    }
+            //    return View("Views/StateFamily/ChairmanDetails.cshtml", cib);
+            //}
+            return View("Views/StateFamily/ChairmanDetails.cshtml", cib);
         }
 
         // GET: Chairmen
-        [Route("GetDDs")]
-        public IActionResult GetDDs()
+        [Route("GetDDs/{nextyear}")]
+        public async Task<IActionResult> GetDDs(int nextyear = 0)
         {
             ViewData["HostName"] = _dataSetService.GetMyHost();
-            Uri myURI = new Uri(_dataSetService.GetAPIBaseAddress() + "/GetDDs");
+            var dds = await _apiHelper.GetAsync<IList<SPGetDDs>>($"GetDDs/{nextyear}");
+            //Uri myURI = new Uri(_dataSetService.GetAPIBaseAddress() + "/GetDDs");
 
-            using (var client = new HttpClient())
-            {
-                //client.BaseAddress = new Uri(myURI);
-                var responseTask = client.GetAsync(myURI);
-                responseTask.Wait();
-                var result = responseTask.Result;
-                IEnumerable<SPGetDDs> dds;
-                if (result.IsSuccessStatusCode)
-                {
-                    var readTask = result.Content.ReadAsAsync<IList<SPGetDDs>>();
-                    readTask.Wait();
-                    dds = readTask.Result;
-                }
-                else
-                {
-                    dds = Enumerable.Empty<SPGetDDs>();
-                    ModelState.AddModelError(string.Empty, "Server Error.  Please contact administrator.");
-                }
-                return View("Views/StateFamily/GetDDs.cshtml", dds);
-            }
+            //using (var client = new HttpClient())
+            //{
+            //    //client.BaseAddress = new Uri(myURI);
+            //    var responseTask = client.GetAsync(myURI);
+            //    responseTask.Wait();
+            //    var result = responseTask.Result;
+            //    IEnumerable<SPGetDDs> dds;
+            //    if (result.IsSuccessStatusCode)
+            //    {
+            //        var readTask = result.Content.ReadAsAsync<IList<SPGetDDs>>();
+            //        readTask.Wait();
+            //        dds = readTask.Result;
+            //    }
+            //    else
+            //    {
+            //        dds = Enumerable.Empty<SPGetDDs>();
+            //        ModelState.AddModelError(string.Empty, "Server Error.  Please contact administrator.");
+            //    }
+            //    return View("Views/StateFamily/GetDDs.cshtml", dds);
+            //}
+            return View("Views/StateFamily/GetDDs.cshtml", dds);
         }
 
         // GET: FourthDegreeOfficers
@@ -326,7 +336,7 @@ namespace KofCWSCWebsite.Controllers
                         readTask.Wait();
                         var myID = readTask.Result;
                         myID = myID.Replace("[", "");
-                        myID = myID.Replace("]","");
+                        myID = myID.Replace("]", "");
                         ViewBag.NextTempID = myID;
                         //------------------------------------------------------------
                     }
