@@ -201,7 +201,7 @@ namespace KofCWSCWebsite.Controllers
 
             byte[] buffer = Encoding.UTF8.GetBytes(csv.ToString());
 
-            return File(buffer, "text/csv", $"CheckBatch{GetGroupString(GroupID)}.csv");
+            return File(buffer, "text/csv", $"RawCheckBatch{GetGroupString(GroupID)}.csv");
         }
 
         public async Task<IActionResult> ExportPayees(int GroupID)
@@ -243,7 +243,7 @@ namespace KofCWSCWebsite.Controllers
 
             byte[] buffer = Encoding.UTF8.GetBytes(csv.ToString());
             string myGroup = "DDs";
-            return File(buffer, "text/csv", $"CheckBatchPayeeExpQB{GetGroupString(GroupID)}.csv");
+            return File(buffer, "text/csv", $"PayeesQB{GetGroupString(GroupID)}.csv");
         }
         public async Task<IActionResult> ExportQB(int GroupID)
         {
@@ -284,7 +284,7 @@ namespace KofCWSCWebsite.Controllers
 
             byte[] buffer = Encoding.UTF8.GetBytes(csv.ToString());
 
-            return File(buffer, "text/csv", $"CheckBatchExpQB{GetGroupString(GroupID)}.csv");
+            return File(buffer, "text/csv", $"CheckBatchQB{GetGroupString(GroupID)}.csv");
         }
 
         public async Task<IActionResult> ArchiveCheckBatch(int GroupID)
