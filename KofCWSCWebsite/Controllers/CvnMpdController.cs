@@ -267,6 +267,7 @@ namespace KofCWSCWebsite.Controllers
                 myItem.Category = item.Category;
                 myItem.Description = "Convention MPD Import";
                 myItem.Type = "Category Details";
+                myItem.PrintLater = "true";
                 myExp.Add(myItem);
             }
             var csv = new StringBuilder();
