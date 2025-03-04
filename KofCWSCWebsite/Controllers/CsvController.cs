@@ -100,9 +100,10 @@ namespace KofCWSCWebsite.Controllers
                     try
                     {
                         var cvnImport = csv.GetRecords<CvnImpDelegate>(); // Parse CSV into CsvRecord objects
+                        
                         records.AddRange(cvnImport);
                     }
-                    catch (Exception)
+                    catch (Exception ex)
                     {
                         ViewBag.ImpError = "The CSV File is not formatted properly.  Please run the macro to fix.";
                         return View("Views/Convention/ImpDelegatesFailed.cshtml", records);

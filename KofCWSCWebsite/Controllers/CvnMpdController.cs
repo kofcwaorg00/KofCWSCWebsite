@@ -201,7 +201,7 @@ namespace KofCWSCWebsite.Controllers
 
             byte[] buffer = Encoding.UTF8.GetBytes(csv.ToString());
 
-            return File(buffer, "text/csv", $"CheckBatch{GroupID.ToString()}.csv");
+            return File(buffer, "text/csv", $"CheckBatch{GetGroupString(GroupID)}.csv");
         }
 
         public async Task<IActionResult> ExportPayees(int GroupID)
@@ -242,8 +242,8 @@ namespace KofCWSCWebsite.Controllers
             }
 
             byte[] buffer = Encoding.UTF8.GetBytes(csv.ToString());
-
-            return File(buffer, "text/csv", $"CheckBatchPayeeExpQB{GroupID.ToString()}.csv");
+            string myGroup = "DDs";
+            return File(buffer, "text/csv", $"CheckBatchPayeeExpQB{GetGroupString(GroupID)}.csv");
         }
         public async Task<IActionResult> ExportQB(int GroupID)
         {
@@ -283,7 +283,7 @@ namespace KofCWSCWebsite.Controllers
 
             byte[] buffer = Encoding.UTF8.GetBytes(csv.ToString());
 
-            return File(buffer, "text/csv", $"CheckBatchExpQB{GroupID.ToString()}.csv");
+            return File(buffer, "text/csv", $"CheckBatchExpQB{GetGroupString(GroupID)}.csv");
         }
 
         public async Task<IActionResult> ArchiveCheckBatch(int GroupID)
@@ -299,6 +299,18 @@ namespace KofCWSCWebsite.Controllers
                 field = $"\"{field.Replace("\"", "\"\"")}\"";
             }
             return field;
+        }
+        private static string GetGroupString(int GroupID)
+        {
+            switch (GroupID)
+            {
+                case 3:
+                    return "DDs";
+                case 25:
+                    return "Councils";
+                default:
+                    return "";
+            }
         }
     }
     
