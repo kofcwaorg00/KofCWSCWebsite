@@ -204,7 +204,47 @@ namespace KofCWSCWebsite.Controllers
             return File(buffer, "text/csv", $"CheckBatch{GroupID.ToString()}.csv");
         }
 
+        public async Task<IActionResult> ExportPayees(int GroupID)
+        {
+            var mydata = await _apiHelper.GetAsync<IEnumerable<CvnMpd>>($"GetMPDChecks/{GroupID}");
 
+            // transfer the data to our export model
+            var myExp = new List<CvnMPDPayeeExportQB>();
+            foreach (var item in mydata)
+            {
+                var myItem = new CvnMPDPayeeExportQB();
+                myItem.Name = item.Payee;
+                myItem.Company = item.Payee;
+                myItem.Email = "";
+                myItem.Phone = "";
+                myItem.Mobile = "";
+                myItem.Fax = "";
+                myItem.Website = "";
+                myItem.Street = item.Address;
+                myItem.City = item.City;
+                myItem.State = item.State;
+                myItem.Zip = item.Zip;
+                myItem.Country = "United States";
+                myItem.OpeningBalance = 0;
+                myItem.TaxID = "";
+                myExp.Add(myItem);
+            }
+            var csv = new StringBuilder();
+
+            var properties = typeof(CvnMPDPayeeExportQB).GetProperties(System.Reflection.BindingFlags.Public | System.Reflection.BindingFlags.Instance);
+
+            csv.AppendLine(string.Join(",", properties.Select(p => p.Name)));
+
+            foreach (var item in myExp)
+            {
+                var values = properties.Select(p => QuoteField(p.GetValue(item)?.ToString() ?? string.Empty));
+                csv.AppendLine(string.Join(",", values));
+            }
+
+            byte[] buffer = Encoding.UTF8.GetBytes(csv.ToString());
+
+            return File(buffer, "text/csv", $"CheckBatchPayeeExpQB{GroupID.ToString()}.csv");
+        }
         public async Task<IActionResult> ExportQB(int GroupID)
         {
             var mydata = await _apiHelper.GetAsync<IEnumerable<CvnMpd>>($"GetMPDChecks/{GroupID}");

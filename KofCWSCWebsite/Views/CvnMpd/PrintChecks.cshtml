@@ -9,8 +9,9 @@
         @*<button type="submit" class="btn btn-danger" asp-controller="CvnMpd" asp-action="Pdf" asp-route-nextchecknumber="@ViewBag.NextCheckNumber" asp-route-printchecknumber="@ViewBag.PrintCheckNumber" asp-route-groupid="@ViewBag.GroupID">Export PDF</button>*@
         @*<a class="btn btn-danger" asp-controller="CvnMpd" asp-action="Pdf" asp-route-nextchecknumber="@ViewBag.NextCheckNumber" asp-route-printchecknumber="@ViewBag.PrintCheckNumber" asp-route-groupid="@ViewBag.GroupID">Export Check Batch to PDF</a>*@
         @*<a class="btn btn-danger" asp-controller="CvnMpd" asp-action="ExportQB" asp-route-groupid="@ViewBag.GroupID">Export Check Batch to QuickBooks</a>*@
+        <a class="btn btn-danger" asp-controller="CvnMpd" asp-action="ExportPayees" asp-route-groupid="@ViewBag.GroupID">Export Payees for QB</a>
         <a class="btn btn-danger" asp-controller="CvnMpd" asp-action="ExportCSV" asp-route-groupid="@ViewBag.GroupID">Export Check Batch to CSV</a>
-        <a class="btn btn-danger" asp-controller="CvnMpd" asp-action="ExportQB" asp-route-groupid="@ViewBag.GroupID">Export Check Batch to QuickBooks</a>
+        <a class="btn btn-danger" asp-controller="CvnMpd" asp-action="ExportQB" asp-route-groupid="@ViewBag.GroupID">Export Check Batch for QB</a>
         <a class="btn btn-danger" asp-controller="CvnMpd" asp-action="ArchiveCheckBatch" asp-route-nextchecknumber="@ViewBag.NextCheckNumber" asp-route-printchecknumber="@ViewBag.PrintCheckNumber" asp-route-groupid="@ViewBag.GroupID">Archive and Clear Check Batch</a>
         <div class="webreport">
             @await Model.WebReport.Render()
