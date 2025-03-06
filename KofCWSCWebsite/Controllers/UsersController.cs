@@ -1,10 +1,14 @@
-﻿using KofCWSCWebsite.Data;
+﻿using KofCWSCWebsite.Areas.Identity.Data;
+using KofCWSCWebsite.Data;
 using KofCWSCWebsite.Models;
+//using Microsoft.AspNet.Identity;
 using Microsoft.AspNetCore.Http.Extensions;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
 using Serilog;
+using Microsoft.AspNetCore.Identity;
+
 
 namespace KofCWSCWebsite.Controllers
 {
@@ -14,12 +18,27 @@ namespace KofCWSCWebsite.Controllers
         //private readonly ApplicationDbContext _context;
         private DataSetService _dataSetService;
         private readonly ApiHelper _apiHelper;
+        private UserManager<KofCUser> _userManager;
 
-        public UsersController(DataSetService dataSetService, ApiHelper apiHelper)
+        public UsersController(DataSetService dataSetService, ApiHelper apiHelper,UserManager<KofCUser> userManager)
         {
             _dataSetService = dataSetService;
-            _apiHelper = apiHelper; 
+            _apiHelper = apiHelper;
+            _userManager = userManager;
         }
+
+        public async Task<IActionResult> UserRoles(string userId)
+        {
+            var user = await _userManager.FindByNameAsync(userId);
+            if (user == null)
+            {
+                return NotFound($"user {userId} not found!"); // Handle user not found
+            }
+
+            var roles = await _userManager.GetRolesAsync(user);
+            return View(roles); // Pass roles to the view
+        }
+
 
         [Route("VerifyLogin")]
         public IActionResult VerifyLogin()

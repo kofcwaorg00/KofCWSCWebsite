@@ -374,44 +374,41 @@
                                         <li><hr class="dropdown-divider"></li>
                                         <li><a class="dropdown-item MyMenuLink" asp-area="" asp-controller="MemberSuspensions" asp-action="Index" asp-route-id="">Member Suspensions</a></li>
                                         <li><a class="dropdown-item MyMenuLink" asp-area="" asp-controller="AddressRequests" asp-action="Create" asp-route-id="" title="Test Address Request">Test Address Request</a></li>
+                                        <li><a class="dropdown-item MyMenuLink" asp-area="" asp-controller="Users" asp-action="UserRoles" asp-route-userid="tphilomeno1955@gmail.com" title="Test Address Request">List User Roles</a></li>
                                     }
                                 </ul>
                             </li>
-                            @if (User.IsInRole("Admin") || User.IsInRole("ConventionAdmin"))
-                            {
-                                <li class="nav-item dropdown">
-                                    <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown1" role="button" data-bs-toggle="dropdown" aria-expanded="false">
-                                        Convention
-                                    </a>
-                                    <ul class="dropdown-menu" aria-labelledby="navbarDropdown1">
+                        }
+                        @if (User.IsInRole("ConventionAdmin") || User.IsInRole("Admin"))
+                        {
+                            <li class="nav-item dropdown">
+                                <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown1" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                                    Convention
+                                </a>
+                                <ul class="dropdown-menu" aria-labelledby="navbarDropdown1">
 
-                                        <li><a class="dropdown-item MyMenuLink" asp-area="" asp-controller="CvnLocations" asp-action="Index" asp-route-id="" title="Convention Locations">1. Manage Convention Locations/Venues</a></li>
-                                        <li><a class="dropdown-item MyMenuLink" asp-area="" asp-controller="CvnMileages" asp-action="Index" asp-route-id="" title="Convention Locations">2. Manage Convention Mileage</a></li>
-                                        <li><hr class="dropdown-divider"></li>
-                                        <li><a class="dropdown-item MyMenuLink" asp-area="" asp-controller="CvnControls" asp-action="Edit" asp-route-id="1" title="Update the Convention Title for the New Year">3. Update Convention Control Information</a></li>
-                                        <li><hr class="dropdown-divider"></li>
-                                        <li><a class="dropdown-item MyMenuLink" asp-area="" asp-controller="Csv" asp-action="UploadDelegates" asp-route-id="0" title="Import a CSV of Exported Credentials from JotForm">4a. Import Convention Delegates (LOG ONLY)</a></li>
-                                        <li><a class="dropdown-item MyMenuLink" asp-area="" asp-controller="Csv" asp-action="UploadDelegates" asp-route-id="1" title="Import a CSV of Exported Credentials from JotForm">4b. Import Convention Delegates (PROCESS)</a></li>
-                                        <li><hr class="dropdown-divider"></li>
-                                        <li><a class="dropdown-item MyMenuLink" asp-area="" asp-controller="Reports" asp-action="GetRollCallSheets" asp-route-id="1">5a. Print Rollcall Sheets Day 1</a></li>
-                                        <li><a class="dropdown-item MyMenuLink" asp-area="" asp-controller="Reports" asp-action="GetRollCallSheets" asp-route-id="2">5b. Print Rollcall Sheets Day 2</a></li>
-                                        <li><a class="dropdown-item MyMenuLink" asp-area="" asp-controller="Reports" asp-action="GetRollCallSheets" asp-route-id="3">5c. Print Rollcall Sheets Day 3</a></li>
-                                        <li><hr class="dropdown-divider"></li>
-                                        <li><a class="dropdown-item MyMenuLink" asp-area="" asp-controller="Convention" asp-action="GetAttendeeDays" asp-route-council="0" asp-route-groupid="0" title="Update Convention Attendees Days">6a. Update Convention Attendees Days</a></li>
-                                        <li><a class="dropdown-item MyMenuLink" asp-area="" asp-controller="TblValCouncils" asp-action="MPDEdit" asp-route-id="" title="Update Council Delegate Days">6b. Update Council Delegate Days</a></li>
-                                        <li><hr class="dropdown-divider"></li>
-                                        <li><a class="dropdown-item MyMenuLink" asp-area="" asp-controller="CvnMpd" asp-action="GetCheckBatch" asp-route-id="3">7a. Create, Review and Process DD Check Batch</a></li>
-                                        <li><a class="dropdown-item MyMenuLink" asp-area="" asp-controller="CvnMpd" asp-action="GetCheckBatch" asp-route-id="25">7b. Create, Review and Process Delegate Check Batch</a></li>
-                                        <li><hr class="dropdown-divider"></li>
-                                        <li><a class="dropdown-item MyMenuLink" asp-area="" asp-controller="CvnImpDelegatesLogs" asp-action="Index" asp-route-id="" title="Convention Locations">View Delegate Import Logs</a></li>
-                                        <li><a class="dropdown-item MyMenuLink" href="https://kofcwa.sharepoint.com/:b:/s/WebsiteStorage/Ef9VFa5bx79IgMPDVi6Us6cB_kEryzMIzfBE9E3Qx7BrEQ?e=yyTf7j" target="kofcwa-sharepoint">Convention MPD Documentation</a></li>
-
-                                        
-
-
-                                    </ul>
-                                </li>
-                            }
+                                    <li><a class="dropdown-item MyMenuLink" asp-area="" asp-controller="CvnLocations" asp-action="Index" asp-route-id="" title="Convention Locations">1. Manage Convention Locations/Venues</a></li>
+                                    <li><a class="dropdown-item MyMenuLink" asp-area="" asp-controller="CvnMileages" asp-action="Index" asp-route-id="" title="Convention Locations">2. Manage Convention Mileage</a></li>
+                                    <li><hr class="dropdown-divider"></li>
+                                    <li><a class="dropdown-item MyMenuLink" asp-area="" asp-controller="CvnControls" asp-action="Edit" asp-route-id="1" title="Update the Convention Title for the New Year">3. Update Convention Control Information</a></li>
+                                    <li><hr class="dropdown-divider"></li>
+                                    <li><a class="dropdown-item MyMenuLink" asp-area="" asp-controller="Csv" asp-action="UploadDelegates" asp-route-id="0" title="Import a CSV of Exported Credentials from JotForm">4a. Import Convention Delegates (LOG ONLY)</a></li>
+                                    <li><a class="dropdown-item MyMenuLink" asp-area="" asp-controller="Csv" asp-action="UploadDelegates" asp-route-id="1" title="Import a CSV of Exported Credentials from JotForm">4b. Import Convention Delegates (PROCESS)</a></li>
+                                    <li><hr class="dropdown-divider"></li>
+                                    <li><a class="dropdown-item MyMenuLink" asp-area="" asp-controller="Reports" asp-action="GetRollCallSheets" asp-route-id="1">5a. Print Rollcall Sheets Day 1</a></li>
+                                    <li><a class="dropdown-item MyMenuLink" asp-area="" asp-controller="Reports" asp-action="GetRollCallSheets" asp-route-id="2">5b. Print Rollcall Sheets Day 2</a></li>
+                                    <li><a class="dropdown-item MyMenuLink" asp-area="" asp-controller="Reports" asp-action="GetRollCallSheets" asp-route-id="3">5c. Print Rollcall Sheets Day 3</a></li>
+                                    <li><hr class="dropdown-divider"></li>
+                                    <li><a class="dropdown-item MyMenuLink" asp-area="" asp-controller="Convention" asp-action="GetAttendeeDays" asp-route-council="0" asp-route-groupid="0" title="Update Convention Attendees Days">6a. Update Convention Attendees Days</a></li>
+                                    <li><a class="dropdown-item MyMenuLink" asp-area="" asp-controller="TblValCouncils" asp-action="MPDEdit" asp-route-id="" title="Update Council Delegate Days">6b. Update Council Delegate Days</a></li>
+                                    <li><hr class="dropdown-divider"></li>
+                                    <li><a class="dropdown-item MyMenuLink" asp-area="" asp-controller="CvnMpd" asp-action="GetCheckBatch" asp-route-id="3">7a. Create, Review and Process DD Check Batch</a></li>
+                                    <li><a class="dropdown-item MyMenuLink" asp-area="" asp-controller="CvnMpd" asp-action="GetCheckBatch" asp-route-id="25">7b. Create, Review and Process Delegate Check Batch</a></li>
+                                    <li><hr class="dropdown-divider"></li>
+                                    <li><a class="dropdown-item MyMenuLink" asp-area="" asp-controller="CvnImpDelegatesLogs" asp-action="Index" asp-route-id="" title="Convention Locations">View Delegate Import Logs</a></li>
+                                    <li><a class="dropdown-item MyMenuLink" href="https://kofcwa.sharepoint.com/:b:/s/WebsiteStorage/Ef9VFa5bx79IgMPDVi6Us6cB_kEryzMIzfBE9E3Qx7BrEQ?e=yyTf7j" target="kofcwa-sharepoint">Convention MPD Documentation</a></li>
+                                </ul>
+                            </li>
                         }
                     </ul>
                     @*<form class="d-flex">

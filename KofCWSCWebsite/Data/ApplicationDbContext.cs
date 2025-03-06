@@ -440,7 +440,8 @@ public partial class ApplicationDbContext : DbContext
         //    });
         modelBuilder.Entity<CvnImpDelegate>(entity =>
         {
-            entity.HasKey(e => e.ID);
+            //entity.HasKey(e => e.ID);
+            entity.HasNoKey();
             entity.ToTable("tblCVN_ImpDelegates");
 
             entity.Property(e => e.A1Address1)
@@ -586,9 +587,9 @@ public partial class ApplicationDbContext : DbContext
             entity.Property(e => e.FormSubmitterSEmail)
                 .HasMaxLength(255)
                 .HasColumnName("FormSubmitterSEmail");
-            entity.Property(e => e.ID)
-                .ValueGeneratedOnAdd()
-                .HasColumnName("ID");
+            //entity.Property(e => e.ID)
+            //    .ValueGeneratedOnAdd()
+            //    .HasColumnName("ID");
             entity.Property(e => e.SubmissionDate)
                 .HasColumnType("datetime")
                 .HasColumnName("SubmissionDate");

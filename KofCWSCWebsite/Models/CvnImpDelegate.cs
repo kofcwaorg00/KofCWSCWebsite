@@ -109,6 +109,4 @@ public partial class CvnImpDelegate
     public string? A2Phone { get; set; }
 
     public string? A2Email { get; set; }
-
-    public int ID { get; set; }
 }
