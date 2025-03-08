@@ -34,8 +34,17 @@ namespace KofCWSCWebsite.Controllers
         public async Task<IActionResult> Index()
         {
             var results = await _apiHelper.GetAsync<IEnumerable<CvnImpDelegatesLog>>("ImpDelegateLogs");
-
-            return View(results.OrderBy(o => o.Rundate));
+            if (results == null)
+            {
+                IEnumerable<CvnImpDelegatesLog> myresults = new List<CvnImpDelegatesLog>();
+                //myresults.Guid = new Guid();
+                return View(myresults);
+            }
+            else
+            {
+                return View(results.OrderBy(o => o.Rundate));
+            }
+            
         }
 
         //// GET: CvnImpDelegatesLogs/Details/5
