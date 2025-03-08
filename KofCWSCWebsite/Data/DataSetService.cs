@@ -20,7 +20,7 @@ namespace KofCWSCWebsite.Data
         public string ReportsPath { get; private set; }
         //public DataSet DataSet { get; private set; } = new DataSet();
 
-        public DataSetService(IWebHostEnvironment hostingEnvironment,IConfiguration configuration,IHttpContextAccessor httpContextAccessor)
+        public DataSetService(IWebHostEnvironment hostingEnvironment, IConfiguration configuration, IHttpContextAccessor httpContextAccessor)
         {
             _hostingEnvironment = hostingEnvironment;
             _configuration = configuration;
@@ -37,11 +37,12 @@ namespace KofCWSCWebsite.Data
             if (myhost == null)
             {
                 return "https://localhost:7213";
-            } else
+            }
+            else
             {
                 return myhost;
             }
-            
+
 
         }
         private string FindReportsFolder(string startDir)
@@ -71,8 +72,8 @@ namespace KofCWSCWebsite.Data
         //        myReport.Dictionary.Connections[i].ConnectionString = myConn;
         //    }
         //}
-        
-        public Report PrepareReport(Report report, IConfiguration _conf,int param1,int param2=9,int param3=9)
+
+        public Report PrepareReport(Report report, IConfiguration _conf, int param1, int param2 = 9, int param3 = 9)
         {
             //***************************************************************************************************************
             // 10/05/2024 Tim Philomeno
@@ -110,7 +111,7 @@ namespace KofCWSCWebsite.Data
                     }
                     else
                     {
-                        report.Dictionary.Connections[i].ConnectionString = myPre + "//" + myHost + "/" + myMethod + "/" + param1 +"/"+ param2 + "/" + param3 + schema;
+                        report.Dictionary.Connections[i].ConnectionString = myPre + "//" + myHost + "/" + myMethod + "/" + param1 + "/" + param2 + "/" + param3 + schema;
                     }
                 }
                 return report;
@@ -144,8 +145,74 @@ namespace KofCWSCWebsite.Data
             }
 
         }
+        public string GetStateAbbreviation(string stateName)
+        {
+            var states = new Dictionary<string, string>(StringComparer.OrdinalIgnoreCase)
+    {
+        { "Alabama", "AL" },
+        { "Alaska", "AK" },
+        { "Arizona", "AZ" },
+        { "Arkansas", "AR" },
+        { "California", "CA" },
+        { "Colorado", "CO" },
+        { "Connecticut", "CT" },
+        { "Delaware", "DE" },
+        { "Florida", "FL" },
+        { "Georgia", "GA" },
+        { "Hawaii", "HI" },
+        { "Idaho", "ID" },
+        { "Illinois", "IL" },
+        { "Indiana", "IN" },
+        { "Iowa", "IA" },
+        { "Kansas", "KS" },
+        { "Kentucky", "KY" },
+        { "Louisiana", "LA" },
+        { "Maine", "ME" },
+        { "Maryland", "MD" },
+        { "Massachusetts", "MA" },
+        { "Michigan", "MI" },
+        { "Minnesota", "MN" },
+        { "Mississippi", "MS" },
+        { "Missouri", "MO" },
+        { "Montana", "MT" },
+        { "Nebraska", "NE" },
+        { "Nevada", "NV" },
+        { "New Hampshire", "NH" },
+        { "New Jersey", "NJ" },
+        { "New Mexico", "NM" },
+        { "New York", "NY" },
+        { "North Carolina", "NC" },
+        { "North Dakota", "ND" },
+        { "Ohio", "OH" },
+        { "Oklahoma", "OK" },
+        { "Oregon", "OR" },
+        { "Pennsylvania", "PA" },
+        { "Rhode Island", "RI" },
+        { "South Carolina", "SC" },
+        { "South Dakota", "SD" },
+        { "Tennessee", "TN" },
+        { "Texas", "TX" },
+        { "Utah", "UT" },
+        { "Vermont", "VT" },
+        { "Virginia", "VA" },
+        { "Washington", "WA" },
+        { "West Virginia", "WV" },
+        { "Wisconsin", "WI" },
+        { "Wyoming", "WY" }
+    };
 
-        
+            if (states.TryGetValue(stateName, out string abbreviation))
+            {
+                return abbreviation;
+            }
+            else
+            {
+                throw new ArgumentException($"State name '{stateName}' is not recognized.");
+            }
+        }
+
+
+
     }
-    
+
 }

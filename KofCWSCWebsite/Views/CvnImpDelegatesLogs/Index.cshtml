@@ -6,11 +6,11 @@
 
 <h1>Delegate Import Logs</h1>
 <p>
-    <h6>Filter By:</h6>
-    <input type="text" id="myGUID" onkeyup="filterGUID()" placeholder="Type in a GUID to filter results" title="Type in a GUID" style="width:20%">
-    <input type="text" id="myRundate" onkeyup="filterRundate()" placeholder="Type in a RUNDATE to filter results" title="Type in a date" style="width:20%">
-    <input type="text" id="myType" onkeyup="filterType()" placeholder="Type in a TYPE to filter results" title="Type in a letters" style="width:20%">
-    <input type="text" id="myMemberID" onkeyup="filterMemberID()" placeholder="Type in a MEMBERID to filter results" title="Type in numbers" style="width:20%">
+    <h6>Filter By: NOTE: by default the GUID filter is set to the last log session</h6>
+    <input type="text" id="myGUID" placeholder="Type in a GUID to filter results" title="Type in a GUID" style="width:20%" value="0">
+    <input type="text" id="myRundate" placeholder="Type in a RUNDATE to filter results" title="Type in a date" style="width:20%">
+    <input type="text" id="myType" placeholder="Type in a TYPE to filter results" title="Type in a letters" style="width:20%">
+    <input type="text" id="myMemberID" placeholder="Type in a MEMBERID to filter results" title="Type in numbers" style="width:20%">
     <button id="resetFilters" class="btn btn-outline-success">Reset Filters</button>
 </p>
 
@@ -57,6 +57,125 @@
     </tbody>
 </table>
 <script>
+    const myGUID = document.getElementById('myGUID');
+    const myRundate = document.getElementById('myRundate');
+    const myType = document.getElementById('myType');
+    const myMemberID = document.getElementById('myMemberID');
+
+    
+
+    // Elements
+    const guidFilter = document.getElementById('myGUID');
+    const rundateFilter = document.getElementById('myRundate');
+    const typeFilter = document.getElementById('myType');
+    const memberidFilter = document.getElementById('myMemberID');
+    //const errorsFilter = document.getElementById('myerrorsFilter')
+
+    const resetFilters = document.getElementById('resetFilters');
+    const tableBody = document.getElementById('mytable');
+
+    //function getCookie(name) {
+    //    const cookies = document.cookie.split('; '); // Split cookies into individual key=value pairs
+    //    for (let cookie of cookies) {
+    //        const [key, value] = cookie.split('='); // Split each cookie into key and value
+    //        if (key === name) {
+    //            return decodeURIComponent(value); // Decode and return the cookie value
+    //        }
+    //    }
+    //    return null; // Return null if the cookie isn't found
+    //}
+    //// Restore filters from localStorage
+    //function restoreFilters() {
+    //    const saveddistrictFilter = getCookie("districtFilter") || ''; //localStorage.getItem('districtFilter') || '';
+    //    const savedcouncilFilter = getCookie("councilFilter") || ''; //localStorage.getItem('councilFilter') || '';
+    //    const savednameFilter = getCookie("nameFilter") || ''; //localStorage.getItem('nameFilter') || '';
+    //    //const savederrorsFilter = getCookie("errorsFilter") || '';
+
+    //    districtFilter.value = saveddistrictFilter;
+    //    councilFilter.value = savedcouncilFilter;
+    //    nameFilter.value = savednameFilter;
+    //    //errorsFilter.checked = savederrorsFilter;
+    //}
+
+    //// Save filters to localStorage
+    //function saveFilters() {
+    //    document.cookie = "districtFilter=" + districtFilter.value + "; path=/;"; //localStorage.setItem('districtFilter', districtFilter.value);
+    //    document.cookie = "councilFilter=" + councilFilter.value + "; path=/;"; //localStorage.setItem('councilFilter', councilFilter.value);
+    //    document.cookie = "nameFilter=" + nameFilter.value + "; path=/;"; //localStorage.setItem('nameFilter', nameFilter.value);
+    //    //document.cookie = "errorsFilter=" + errorsFilter.checked + "; path=/";
+    //}
+
+    //function getPath() {
+    //    return window.location.pathname;
+    //}
+    // Filter the table
+    function filterTable() {
+        var guidValue = guidFilter.value.toLowerCase();
+        const rundateValue = rundateFilter.value.toLowerCase();
+        const typeValue = typeFilter.value.toLowerCase();
+        const memberidValue = memberidFilter.value.toLowerCase();
+
+        var mydefguid = "";
+        
+        var myTable = document.getElementById('myTable');
+        Array.from(myTable.rows).forEach(row => {
+            
+            // only affect the body rows not the header
+            if (row.parentNode.tagName.toLowerCase() === 'tbody') {
+                const guid = row.cells[0].textContent.toLowerCase().trim();
+                const rundate = row.cells[1].textContent.toLowerCase().trim();
+                const type = row.cells[2].textContent.toLowerCase().trim();
+                const memberid = row.cells[3].textContent.toLowerCase().trim();
+                mydefguid = guid;
+                // Check each filter
+                const guidMatch = guidValue === '' || guid === guidValue;
+                const rundateMatch = rundateValue === '' || rundate.includes(rundateValue);
+                const typeMatch = typeValue === '' || type.includes(typeValue);
+                const memberidMatch = memberidValue === '' || memberid.includes(memberidValue);
+                //alert(guidMatch);
+                //alert(rundateMatch);
+                //alert(typeMatch);
+                //alert(memberidMatch);
+                //alert(memberidValue);
+                // Show or hide the row based on filters
+                if (guidMatch && rundateMatch && typeMatch && memberidMatch) {
+                    row.style.display = '';
+                } else {
+                    row.style.display = 'none';
+                }
+            }
+        });
+        if (guidFilter.value == '0') {
+            //alert("setting filter to" + mydefguid)
+            guidFilter.value = mydefguid;
+            filterTable();
+        }
+
+        //saveFilters();
+    }
+
+    // Reset filters
+    resetFilters.addEventListener('click', () => {
+        guidFilter.value = '';
+        rundateFilter.value = '';
+        typeFilter.value = '';
+        memberidFilter.value = '';
+        filterTable();
+    });
+
+
+
+    // Event listeners
+    guidFilter.addEventListener('input', filterTable);
+    rundateFilter.addEventListener('input', filterTable);
+    typeFilter.addEventListener('input', filterTable);
+    memberidFilter.addEventListener('input', filterTable);
+
+    // Initialize
+    //restoreFilters();
+    filterTable();
+</script>
+@*<script>
     const resetFilters = document.getElementById('resetFilters');
     const GUIDFilter = document.getElementById('myGUID');
     const runDateFilter = document.getElementById('myRundate');
@@ -147,4 +266,4 @@
             }
         }
     }
-</script>
+</script>*@

@@ -41,7 +41,8 @@ namespace KofCWSCWebsite.Controllers
         private ApiHelper _apiHelper;
         private static bool _postFlag = false;
         private static int _fratyear;
-        public CsvController(DataSetService dataSetService,ApiHelper apiHelper)
+        private static Guid _guid;
+        public CsvController(DataSetService dataSetService, ApiHelper apiHelper)
         {
             _dataSetService = dataSetService;
             _apiHelper = apiHelper;
@@ -83,9 +84,9 @@ namespace KofCWSCWebsite.Controllers
             // 12/3/2024 Tim Philomeno
             // pass this GUID to all logging processes and then get the full log
             // from the database and return it to the calling process
-            Guid guid = Guid.NewGuid();
+            _guid = Guid.NewGuid();
             _fratyear = await _apiHelper.GetAsync<int>("GetFratYear/0");
-            WriteToDelegateImportLog(guid, 0, "INFO", "BEGIN Import");
+            WriteToDelegateImportLog(_guid, 0, "INFO", "BEGIN Import");
             //-------------------------------------------------------------------------
             if (model.CsvFile != null && model.CsvFile.Length > 0)
             {
@@ -100,7 +101,7 @@ namespace KofCWSCWebsite.Controllers
                     try
                     {
                         var cvnImport = csv.GetRecords<CvnImpDelegate>(); // Parse CSV into CsvRecord objects
-                        
+
                         records.AddRange(cvnImport);
                     }
                     catch (Exception ex)
@@ -118,7 +119,7 @@ namespace KofCWSCWebsite.Controllers
                         ViewBag.ImpError = "Duplicate Councils found in CSV File";
                         return View("Views/Convention/ImpDelegatesFailed.cshtml", records);
                     }
-                    
+
                     ////////////PropertyInfo[] properties = typeof(CvnImpDelegate).GetProperties();
                     ////////////for (int i = 0; i < properties.Length; i++)
                     ////////////{
@@ -151,7 +152,7 @@ namespace KofCWSCWebsite.Controllers
                     // first let's remove the currrent delegates in favor of the ones we are about to add
                     var apiHelperD = new ApiHelper(_dataSetService);
                     var apiHelperC = new ApiHelper(_dataSetService);
-                    WriteToDelegateImportLog(guid, 0, "INFO", $"Removing old Delegates in lieu of incoming ones.");
+                    WriteToDelegateImportLog(_guid, 0, "INFO", $"Removing old Delegates in lieu of incoming ones.");
                     await apiHelperD.GetAsync<int>($"/ClearDelegates/{_fratyear}");
 
                     //------------------------------------------------------------------------------------------------------
@@ -159,36 +160,36 @@ namespace KofCWSCWebsite.Controllers
                     //****************************************************************************************
                     // now reset and prime council and dd seated days
                     var affected = await _apiHelper.GetAsync<int>("PrimeCouncilDelegatesAndDDDays");
-                    WriteToDelegateImportLog(guid, 0, "INFO", $"Resetting and priming council and dd seated days. {affected} records affected.");
+                    WriteToDelegateImportLog(_guid, 0, "INFO", $"Resetting and priming council and dd seated days. {affected} records affected.");
                     //------------------------------------------------------------------------------------------------------
                     // 12/1/2024 Tim PHilomeno then add or update the members as needed
                     foreach (var myDel in records)
                     {
                         try
                         {
-                            WriteToDelegateImportLog(guid, myDel.D1MemberID, "INFO", $"Processing of Council {myDel.CouncilNumber} Started");
+                            WriteToDelegateImportLog(_guid, myDel.D1MemberID, "INFO", $"Processing of Council {myDel.CouncilNumber} Started");
                             //bool D1 = await ProcessCouncilD1(myDel);
-                            if (!await ProcessCouncilD1(myDel, guid))
+                            if (!await ProcessCouncilD1(myDel))
                             {
-                                WriteToDelegateImportLog(guid, myDel.D1MemberID, "ERROR", $"Processing of Council {myDel.CouncilNumber} D1, MemberID {myDel.D1MemberID} Failed");
+                                WriteToDelegateImportLog(_guid, myDel.D1MemberID, "ERROR", $"Processing of Council {myDel.CouncilNumber} D1, MemberID {myDel.D1MemberID} Failed");
                                 throw new Exception($"Processing of {myDel.CouncilNumber} for MemberID D1 {myDel.D1MemberID} Failed");
                             }
                             //bool D2 = await ProcessCouncilD2(myDel);
-                            if (!await ProcessCouncilD2(myDel, guid))
+                            if (!await ProcessCouncilD2(myDel))
                             {
-                                WriteToDelegateImportLog(guid, myDel.D2MemberID, "ERROR", $"Processing of Council {myDel.CouncilNumber} D2, MemberID {myDel.D2MemberID} Failed");
+                                WriteToDelegateImportLog(_guid, myDel.D2MemberID, "ERROR", $"Processing of Council {myDel.CouncilNumber} D2, MemberID {myDel.D2MemberID} Failed");
                                 throw new Exception($"Processing of {myDel.CouncilNumber} for MemberID D2 {myDel.D2MemberID} Failed");
                             }
                             //bool A1 = await ProcessCouncilA1(myDel);
-                            if (!await ProcessCouncilA1(myDel, guid))
+                            if (!await ProcessCouncilA1(myDel))
                             {
-                                WriteToDelegateImportLog(guid, myDel.A1MemberID, "ERROR", $"Processing of Council {myDel.CouncilNumber} A1, MemberID {myDel.A1MemberID} Failed");
+                                WriteToDelegateImportLog(_guid, myDel.A1MemberID, "ERROR", $"Processing of Council {myDel.CouncilNumber} A1, MemberID {myDel.A1MemberID} Failed");
                                 throw new Exception($"Processing of {myDel.CouncilNumber} for MemberID A1 {myDel.A1MemberID} Failed");
                             }
                             //bool A2 = await ProcessCouncilA2(myDel);
-                            if (!await ProcessCouncilA2(myDel, guid))
+                            if (!await ProcessCouncilA2(myDel))
                             {
-                                WriteToDelegateImportLog(guid, myDel.A2MemberID, "ERROR", $"Processing of Council {myDel.CouncilNumber} A2, MemberID {myDel.A2MemberID} Failed");
+                                WriteToDelegateImportLog(_guid, myDel.A2MemberID, "ERROR", $"Processing of Council {myDel.CouncilNumber} A2, MemberID {myDel.A2MemberID} Failed");
                                 throw new Exception($"Processing of {myDel.CouncilNumber} for MemberID A2 {myDel.A2MemberID} Failed");
                             }
 
@@ -214,9 +215,9 @@ namespace KofCWSCWebsite.Controllers
                         return View("Views/TblCorrMemberOffices/MissingDelegates.cshtml", myDelegates);
                     }
                     //----------------------------------------------------------------------------------------
-                    WriteToDelegateImportLog(guid, 0, "INFO", "END Import");
+                    WriteToDelegateImportLog(_guid, 0, "INFO", "END Import");
                     var apiHelperLog = new ApiHelper(_dataSetService);
-                    var myLog = await apiHelperLog.GetAsync<IEnumerable<CvnImpDelegatesLog>>($"/GetImpDelegatesLog/{guid}");
+                    var myLog = await apiHelperLog.GetAsync<IEnumerable<CvnImpDelegatesLog>>($"/GetImpDelegatesLog/{_guid}");
                     return View("Views/Convention/ImpDelegatesSuccess.cshtml", myLog);
                 }
             }
@@ -224,7 +225,7 @@ namespace KofCWSCWebsite.Controllers
             ViewBag.ImpError = "CSV File is invalid";
             return View("Views/Convention/ImpDelegatesFailed.cshtml", null);
         }
-        private async Task<bool> ProcessCouncilD1(CvnImpDelegate cvnImpDelegate, Guid guid)
+        private async Task<bool> ProcessCouncilD1(CvnImpDelegate cvnImpDelegate)
         {
             //**********************************************************************************************
             // 11/30/2024 Tim Philomeno
@@ -233,7 +234,7 @@ namespace KofCWSCWebsite.Controllers
             //----------------------------------------------------------------------------------------------
             if (cvnImpDelegate.D1MemberID is not null)
             {
-                WriteToDelegateImportLog(guid, 0, "INFO", $"Processing of Council {cvnImpDelegate.CouncilNumber} D1 Started");
+                WriteToDelegateImportLog(_guid, cvnImpDelegate.D1MemberID, "INFO", $"Processing of Council {cvnImpDelegate.CouncilNumber} D1 Started");
                 // first see if the D1 member exists
                 TblMasMember? myIsD1Member = null;
 
@@ -250,11 +251,11 @@ namespace KofCWSCWebsite.Controllers
                             if (_postFlag)
                             {
                                 await apiHelper.PostAsync<TblMasMember, TblMasMember>("/Member", myIsD1Member);
-                                WriteToDelegateImportLog(guid, cvnImpDelegate.D1MemberID, "INFO", "Adding New Member");
+                                WriteToDelegateImportLog(_guid, cvnImpDelegate.D1MemberID, "ADD", "Adding New Member");
                             }
                             else
                             {
-                                WriteToDelegateImportLog(guid, cvnImpDelegate.D1MemberID, "INFO", "LOG ONLY Adding New Member");
+                                WriteToDelegateImportLog(_guid, cvnImpDelegate.D1MemberID, "INFO", "LOG ONLY Adding New Member");
                             }
 
                         }
@@ -274,12 +275,12 @@ namespace KofCWSCWebsite.Controllers
                         {
                             if (_postFlag)
                             {
-                                await apiHelper.PutAsync<TblMasMember, TblMasMember>($"/member/{myIsD1Member.MemberId}", myIsD1Member);
-                                WriteToDelegateImportLog(guid, cvnImpDelegate.D1MemberID, "INFO", "Updating Existing Member");
+                                //await apiHelper.PutAsync<TblMasMember, TblMasMember>($"/member/{myIsD1Member.MemberId}", myIsD1Member);
+                                WriteToDelegateImportLog(_guid, cvnImpDelegate.D1MemberID, "INFO", "Updating Existing Member - NOTE: Member Update is Disabled");
                             }
                             else
                             {
-                                WriteToDelegateImportLog(guid, cvnImpDelegate.D1MemberID, "INFO", "LOG ONLY Updating Existing Member");
+                                WriteToDelegateImportLog(_guid, cvnImpDelegate.D1MemberID, "INFO", "LOG ONLY Updating Existing Member - NOTE: Member Update is Disabled");
                             }
 
                         }
@@ -291,11 +292,11 @@ namespace KofCWSCWebsite.Controllers
                     }
                 }
                 // add the office here
-                AddDelegate((int)cvnImpDelegate.D1MemberID, (int)DelegateOffices.D1, guid);
+                AddDelegateOffice((int)cvnImpDelegate.D1MemberID, (int)DelegateOffices.D1);
             }
             return true;
         }
-        private async Task<bool> ProcessCouncilD2(CvnImpDelegate cvnImpDelegate, Guid guid)
+        private async Task<bool> ProcessCouncilD2(CvnImpDelegate cvnImpDelegate)
         {
             //**********************************************************************************************
             // 11/30/2024 Tim Philomeno
@@ -304,7 +305,7 @@ namespace KofCWSCWebsite.Controllers
             //----------------------------------------------------------------------------------------------
             if (cvnImpDelegate.D2MemberID is not null)
             {
-                WriteToDelegateImportLog(guid, cvnImpDelegate.D2MemberID, "INFO", $"Processing of Council {cvnImpDelegate.CouncilNumber} D2 Started");
+                WriteToDelegateImportLog(_guid, cvnImpDelegate.D2MemberID, "INFO", $"Processing of Council {cvnImpDelegate.CouncilNumber} D2 Started");
                 // first see if the D2 member exists
                 TblMasMember? myIsD2Member = null;
 
@@ -321,11 +322,11 @@ namespace KofCWSCWebsite.Controllers
                             if (_postFlag)
                             {
                                 await apiHelper.PostAsync<TblMasMember, TblMasMember>("/Member", myIsD2Member);
-                                WriteToDelegateImportLog(guid, cvnImpDelegate.D2MemberID, "INFO", "Add a New Member");
+                                WriteToDelegateImportLog(_guid, cvnImpDelegate.D2MemberID, "ADD", "Add a New Member");
                             }
                             else
                             {
-                                WriteToDelegateImportLog(guid, cvnImpDelegate.D2MemberID, "INFO", "LOG ONLY Add a New Member");
+                                WriteToDelegateImportLog(_guid, cvnImpDelegate.D2MemberID, "INFO", "LOG ONLY Add a New Member");
                             }
 
                         }
@@ -344,12 +345,12 @@ namespace KofCWSCWebsite.Controllers
                         {
                             if (_postFlag)
                             {
-                                await apiHelper.PutAsync<TblMasMember, TblMasMember>($"/member/{myIsD2Member.MemberId}", myIsD2Member);
-                                WriteToDelegateImportLog(guid, cvnImpDelegate.D2MemberID, "INFO", "Update an Existing Member");
+                                //await apiHelper.PutAsync<TblMasMember, TblMasMember>($"/member/{myIsD2Member.MemberId}", myIsD2Member);
+                                WriteToDelegateImportLog(_guid, cvnImpDelegate.D2MemberID, "INFO", "Update an Existing Member - NOTE: Member Update is Disabled");
                             }
                             else
                             {
-                                WriteToDelegateImportLog(guid, cvnImpDelegate.D2MemberID, "INFO", "LOG ONLY Update an Existing Member");
+                                WriteToDelegateImportLog(_guid, cvnImpDelegate.D2MemberID, "INFO", "LOG ONLY Update an Existing Member - NOTE: Member Update is Disabled");
                             }
 
                         }
@@ -360,11 +361,11 @@ namespace KofCWSCWebsite.Controllers
                         return false;
                     }
                 }
-                AddDelegate((int)cvnImpDelegate.D2MemberID, (int)DelegateOffices.D2, guid);
+                AddDelegateOffice((int)cvnImpDelegate.D2MemberID, (int)DelegateOffices.D2);
             }
             return true;
         }
-        private async Task<bool> ProcessCouncilA1(CvnImpDelegate cvnImpDelegate, Guid guid)
+        private async Task<bool> ProcessCouncilA1(CvnImpDelegate cvnImpDelegate)
         {
             //**********************************************************************************************
             // 11/30/2024 Tim Philomeno
@@ -373,7 +374,7 @@ namespace KofCWSCWebsite.Controllers
             //----------------------------------------------------------------------------------------------
             if (cvnImpDelegate.A1MemberID is not null)
             {
-                WriteToDelegateImportLog(guid, cvnImpDelegate.A1MemberID, "INFO", $"Processing of Council {cvnImpDelegate.CouncilNumber} A1 Started");
+                WriteToDelegateImportLog(_guid, cvnImpDelegate.A1MemberID, "INFO", $"Processing of Council {cvnImpDelegate.CouncilNumber} A1 Started");
                 // first see if the A1 member exists
                 TblMasMember? myIsA1Member = null;
 
@@ -390,11 +391,11 @@ namespace KofCWSCWebsite.Controllers
                             if (_postFlag)
                             {
                                 await apiHelper.PostAsync<TblMasMember, TblMasMember>("/Member", myIsA1Member);
-                                WriteToDelegateImportLog(guid, cvnImpDelegate.A1MemberID, "INFO", "Add a New Member");
+                                WriteToDelegateImportLog(_guid, cvnImpDelegate.A1MemberID, "ADD", "Add a New Member");
                             }
                             else
                             {
-                                WriteToDelegateImportLog(guid, cvnImpDelegate.A1MemberID, "INFO", "LOG ONLY Add a New Member");
+                                WriteToDelegateImportLog(_guid, cvnImpDelegate.A1MemberID, "INFO", "LOG ONLY Add a New Member");
                             }
 
                         }
@@ -413,12 +414,12 @@ namespace KofCWSCWebsite.Controllers
                         {
                             if (_postFlag)
                             {
-                                await apiHelper.PutAsync<TblMasMember, TblMasMember>($"/member/{myIsA1Member.MemberId}", myIsA1Member);
-                                WriteToDelegateImportLog(guid, cvnImpDelegate.A1MemberID, "INFO", "Update an Existing Member");
+                                //await apiHelper.PutAsync<TblMasMember, TblMasMember>($"/member/{myIsA1Member.MemberId}", myIsA1Member);
+                                WriteToDelegateImportLog(_guid, cvnImpDelegate.A1MemberID, "INFO", "Update an Existing Member - NOTE: Member Update is Disabled");
                             }
                             else
                             {
-                                WriteToDelegateImportLog(guid, cvnImpDelegate.A1MemberID, "INFO", "LOG ONLY Update an Existing Member");
+                                WriteToDelegateImportLog(_guid, cvnImpDelegate.A1MemberID, "INFO", "LOG ONLY Update an Existing Member - NOTE: Member Update is Disabled");
                             }
 
                         }
@@ -429,11 +430,11 @@ namespace KofCWSCWebsite.Controllers
                         return false;
                     }
                 }
-                AddDelegate((int)cvnImpDelegate.A1MemberID, (int)DelegateOffices.A1, guid);
+                AddDelegateOffice((int)cvnImpDelegate.A1MemberID, (int)DelegateOffices.A1);
             }
             return true;
         }
-        private async Task<bool> ProcessCouncilA2(CvnImpDelegate cvnImpDelegate, Guid guid)
+        private async Task<bool> ProcessCouncilA2(CvnImpDelegate cvnImpDelegate)
         {
             //**********************************************************************************************
             // 11/30/2024 Tim Philomeno
@@ -442,7 +443,7 @@ namespace KofCWSCWebsite.Controllers
             //----------------------------------------------------------------------------------------------
             if (cvnImpDelegate.A2MemberID is not null)
             {
-                WriteToDelegateImportLog(guid, cvnImpDelegate.A2MemberID, "INFO", $"Processing of Council {cvnImpDelegate.CouncilNumber} A2 Started");
+                WriteToDelegateImportLog(_guid, cvnImpDelegate.A2MemberID, "INFO", $"Processing of Council {cvnImpDelegate.CouncilNumber} A2 Started");
                 // first see if the A2 member exists
                 TblMasMember? myIsA2Member = null;
 
@@ -459,11 +460,11 @@ namespace KofCWSCWebsite.Controllers
                             if (_postFlag)
                             {
                                 await apiHelper.PostAsync<TblMasMember, TblMasMember>("/Member", myIsA2Member);
-                                WriteToDelegateImportLog(guid, cvnImpDelegate.A2MemberID, "INFO", "Add a New Member");
+                                WriteToDelegateImportLog(_guid, cvnImpDelegate.A2MemberID, "ADD", "Add a New Member");
                             }
                             else
                             {
-                                WriteToDelegateImportLog(guid, cvnImpDelegate.A2MemberID, "INFO", "LOG ONLY Add a New Member");
+                                WriteToDelegateImportLog(_guid, cvnImpDelegate.A2MemberID, "INFO", "LOG ONLY Add a New Member");
                             }
 
                         }
@@ -482,12 +483,12 @@ namespace KofCWSCWebsite.Controllers
                         {
                             if (_postFlag)
                             {
-                                await apiHelper.PutAsync<TblMasMember, TblMasMember>($"/member/{myIsA2Member.MemberId}", myIsA2Member);
-                                WriteToDelegateImportLog(guid, cvnImpDelegate.A2MemberID, "INFO", "Update an Existing Member");
+                                //await apiHelper.PutAsync<TblMasMember, TblMasMember>($"/member/{myIsA2Member.MemberId}", myIsA2Member);
+                                WriteToDelegateImportLog(_guid, cvnImpDelegate.A2MemberID, "INFO", "Update an Existing Member - NOTE: Member Update is Disabled");
                             }
                             else
                             {
-                                WriteToDelegateImportLog(guid, cvnImpDelegate.A2MemberID, "INFO", "LOG ONLY Update an Existing Member");
+                                WriteToDelegateImportLog(_guid, cvnImpDelegate.A2MemberID, "INFO", "LOG ONLY Update an Existing Member - NOTE: Member Update is Disabled");
                             }
                         }
                     }
@@ -497,7 +498,7 @@ namespace KofCWSCWebsite.Controllers
                         return false;
                     }
                 }
-                AddDelegate((int)cvnImpDelegate.A2MemberID, (int)DelegateOffices.A2, guid);
+                AddDelegateOffice((int)cvnImpDelegate.A2MemberID, (int)DelegateOffices.A2);
             }
             return true;
         }
@@ -537,7 +538,7 @@ namespace KofCWSCWebsite.Controllers
                 isUpdated = true;
             }
             // FIRSTNAME
-            if (ShouldUpdate(myDelegate.D1FirstName, myMember.FirstName))
+            if (ShouldUpdate(myDelegate.D1FirstName, myMember.FirstName, myMember, "FirstName"))
             {
                 myMember.FirstName = myDelegate.D1FirstName;
                 myMember.FirstNameUpdated = DateTime.Now;
@@ -545,7 +546,7 @@ namespace KofCWSCWebsite.Controllers
                 isUpdated = true;
             }
             // LASTNAME
-            if (ShouldUpdate(myDelegate.D1LastName, myMember.LastName))
+            if (ShouldUpdate(myDelegate.D1LastName, myMember.LastName, myMember, "LastName"))
             {
                 myMember.LastName = myDelegate.D1LastName;
                 myMember.LastNameUpdated = DateTime.Now;
@@ -553,7 +554,7 @@ namespace KofCWSCWebsite.Controllers
                 isUpdated = true;
             }
             // MI
-            if (ShouldUpdate(myDelegate.D1MiddleName, myMember.Mi))
+            if (ShouldUpdate(myDelegate.D1MiddleName, myMember.Mi, myMember, "MiddleName"))
             {
                 myMember.Mi = myDelegate.D1MiddleName;
                 myMember.Miupdated = DateTime.Now;
@@ -561,7 +562,7 @@ namespace KofCWSCWebsite.Controllers
                 isUpdated = true;
             }
             // SUFFIX
-            if (ShouldUpdate(myDelegate.D1Suffix, myMember.Suffix))
+            if (ShouldUpdate(myDelegate.D1Suffix, myMember.Suffix, myMember, "Suffix"))
             {
                 myMember.Suffix = myDelegate.D1Suffix;
                 myMember.SuffixUpdated = DateTime.Now;
@@ -569,7 +570,7 @@ namespace KofCWSCWebsite.Controllers
                 isUpdated = true;
             }
             // ADDRESS
-            if (ShouldUpdate(myDelegate.D1Address1, myMember.Address))
+            if (ShouldUpdate(myDelegate.D1Address1, myMember.Address, myMember, "Address"))
             {
                 myMember.Address = myDelegate.D1Address1;
                 myMember.AddressUpdated = DateTime.Now;
@@ -577,7 +578,7 @@ namespace KofCWSCWebsite.Controllers
                 isUpdated = true;
             }
             // CITY
-            if (ShouldUpdate(myDelegate.D1City, myMember.City))
+            if (ShouldUpdate(myDelegate.D1City, myMember.City, myMember, "City"))
             {
                 myMember.City = myDelegate.D1City;
                 myMember.CityUpdated = DateTime.Now;
@@ -585,15 +586,15 @@ namespace KofCWSCWebsite.Controllers
                 isUpdated = true;
             }
             // STATE
-            if (ShouldUpdate(myDelegate.D1State, myMember.State))
+            if (ShouldUpdate(GetStateAbbr(myDelegate.D1State), myMember.State, myMember, "State"))
             {
-                myMember.State = myDelegate.D1State;
+                myMember.State = GetStateAbbr(myDelegate.D1State);
                 myMember.StateUpdated = DateTime.Now;
                 myMember.StateUpdatedBy = UpdatedBy;
                 isUpdated = true;
             }
             // POSTALCODE
-            if (ShouldUpdate(myDelegate.D1ZipCode, myMember.PostalCode))
+            if (ShouldUpdate(myDelegate.D1ZipCode, myMember.PostalCode, myMember, "PostalCode"))
             {
                 myMember.PostalCode = myDelegate.D1ZipCode;
                 myMember.PostalCodeUpdated = DateTime.Now;
@@ -601,7 +602,7 @@ namespace KofCWSCWebsite.Controllers
                 isUpdated = true;
             }
             // PHONE
-            if (ShouldUpdate(myDelegate.D1Phone, myMember.Phone))
+            if (ShouldUpdate(myDelegate.D1Phone, myMember.Phone, myMember, "Phone"))
             {
                 myMember.Phone = myDelegate.D1Phone;
                 myMember.PhoneUpdated = DateTime.Now;
@@ -609,7 +610,7 @@ namespace KofCWSCWebsite.Controllers
                 isUpdated = true;
             }
             // EMAIL
-            if (ShouldUpdate(myDelegate.D1Email, myMember.Email))
+            if (ShouldUpdate(myDelegate.D1Email, myMember.Email, myMember, "Email"))
             {
                 myMember.Email = myDelegate.D1Email;
                 myMember.EmailUpdated = DateTime.Now;
@@ -654,7 +655,7 @@ namespace KofCWSCWebsite.Controllers
                 isUpdated = true;
             }
             // FIRSTNAME
-            if (ShouldUpdate(myDelegate.D2FirstName, myMember.FirstName))
+            if (ShouldUpdate(myDelegate.D2FirstName, myMember.FirstName, myMember, "FirstName"))
             {
                 myMember.FirstName = myDelegate.D2FirstName;
                 myMember.FirstNameUpdated = DateTime.Now;
@@ -662,7 +663,7 @@ namespace KofCWSCWebsite.Controllers
                 isUpdated = true;
             }
             // LASTNAME
-            if (ShouldUpdate(myDelegate.D2LastName, myMember.LastName))
+            if (ShouldUpdate(myDelegate.D2LastName, myMember.LastName, myMember, "LastName"))
             {
                 myMember.LastName = myDelegate.D2LastName;
                 myMember.LastNameUpdated = DateTime.Now;
@@ -670,7 +671,7 @@ namespace KofCWSCWebsite.Controllers
                 isUpdated = true;
             }
             // MI
-            if (ShouldUpdate(myDelegate.D2MiddleName, myMember.Mi))
+            if (ShouldUpdate(myDelegate.D2MiddleName, myMember.Mi, myMember, "MiddleName"))
             {
                 myMember.Mi = myDelegate.D2MiddleName;
                 myMember.Miupdated = DateTime.Now;
@@ -678,7 +679,7 @@ namespace KofCWSCWebsite.Controllers
                 isUpdated = true;
             }
             // SUFFIX
-            if (ShouldUpdate(myDelegate.D2Suffix, myMember.Suffix))
+            if (ShouldUpdate(myDelegate.D2Suffix, myMember.Suffix, myMember, "Suffix"))
             {
                 myMember.Suffix = myDelegate.D2Suffix;
                 myMember.SuffixUpdated = DateTime.Now;
@@ -686,7 +687,7 @@ namespace KofCWSCWebsite.Controllers
                 isUpdated = true;
             }
             // ADDRESS
-            if (ShouldUpdate(myDelegate.D2Address1, myMember.Address))
+            if (ShouldUpdate(myDelegate.D2Address1, myMember.Address, myMember, "Address"))
             {
                 myMember.Address = myDelegate.D2Address1;
                 myMember.AddressUpdated = DateTime.Now;
@@ -694,7 +695,7 @@ namespace KofCWSCWebsite.Controllers
                 isUpdated = true;
             }
             // CITY
-            if (ShouldUpdate(myDelegate.D2City, myMember.City))
+            if (ShouldUpdate(myDelegate.D2City, myMember.City, myMember, "City"))
             {
                 myMember.City = myDelegate.D2City;
                 myMember.CityUpdated = DateTime.Now;
@@ -702,15 +703,15 @@ namespace KofCWSCWebsite.Controllers
                 isUpdated = true;
             }
             // STATE
-            if (ShouldUpdate(myDelegate.D2State, myMember.State))
+            if (ShouldUpdate(GetStateAbbr(myDelegate.D2State), myMember.State, myMember, "State"))
             {
-                myMember.State = myDelegate.D2State;
+                myMember.State = GetStateAbbr(myDelegate.D2State);
                 myMember.StateUpdated = DateTime.Now;
                 myMember.StateUpdatedBy = UpdatedBy;
                 isUpdated = true;
             }
             // POSTALCODE
-            if (ShouldUpdate(myDelegate.D2ZipCode, myMember.PostalCode))
+            if (ShouldUpdate(myDelegate.D2ZipCode, myMember.PostalCode, myMember, "PostalCode"))
             {
                 myMember.PostalCode = myDelegate.D2ZipCode;
                 myMember.PostalCodeUpdated = DateTime.Now;
@@ -718,7 +719,7 @@ namespace KofCWSCWebsite.Controllers
                 isUpdated = true;
             }
             // PHONE
-            if (ShouldUpdate(myDelegate.D2Phone, myMember.Phone))
+            if (ShouldUpdate(myDelegate.D2Phone, myMember.Phone, myMember, "Phone"))
             {
                 myMember.Phone = myDelegate.D2Phone;
                 myMember.PhoneUpdated = DateTime.Now;
@@ -726,7 +727,7 @@ namespace KofCWSCWebsite.Controllers
                 isUpdated = true;
             }
             // EMAIL
-            if (ShouldUpdate(myDelegate.D2Email, myMember.Email))
+            if (ShouldUpdate(myDelegate.D2Email, myMember.Email, myMember, "Email"))
             {
                 myMember.Email = myDelegate.D2Email;
                 myMember.EmailUpdated = DateTime.Now;
@@ -771,7 +772,7 @@ namespace KofCWSCWebsite.Controllers
                 isUpdated = true;
             }
             // FIRSTNAME
-            if (ShouldUpdate(myDelegate.A1FirstName, myMember.FirstName))
+            if (ShouldUpdate(myDelegate.A1FirstName, myMember.FirstName, myMember, "FirstName"))
             {
                 myMember.FirstName = myDelegate.A1FirstName;
                 myMember.FirstNameUpdated = DateTime.Now;
@@ -779,7 +780,7 @@ namespace KofCWSCWebsite.Controllers
                 isUpdated = true;
             }
             // LASTNAME
-            if (ShouldUpdate(myDelegate.A1LastName, myMember.LastName))
+            if (ShouldUpdate(myDelegate.A1LastName, myMember.LastName, myMember, "LastName"))
             {
                 myMember.LastName = myDelegate.A1LastName;
                 myMember.LastNameUpdated = DateTime.Now;
@@ -787,7 +788,7 @@ namespace KofCWSCWebsite.Controllers
                 isUpdated = true;
             }
             // MI
-            if (ShouldUpdate(myDelegate.A1MiddleName, myMember.Mi))
+            if (ShouldUpdate(myDelegate.A1MiddleName, myMember.Mi, myMember, "MiddleName"))
             {
                 myMember.Mi = myDelegate.A1MiddleName;
                 myMember.Miupdated = DateTime.Now;
@@ -795,7 +796,7 @@ namespace KofCWSCWebsite.Controllers
                 isUpdated = true;
             }
             // SUFFIX
-            if (ShouldUpdate(myDelegate.A1Suffix, myMember.Suffix))
+            if (ShouldUpdate(myDelegate.A1Suffix, myMember.Suffix, myMember, "Suffix"))
             {
                 myMember.Suffix = myDelegate.A1Suffix;
                 myMember.SuffixUpdated = DateTime.Now;
@@ -803,7 +804,7 @@ namespace KofCWSCWebsite.Controllers
                 isUpdated = true;
             }
             // ADDRESS
-            if (ShouldUpdate(myDelegate.A1Address1, myMember.Address))
+            if (ShouldUpdate(myDelegate.A1Address1, myMember.Address, myMember, "Address"))
             {
                 myMember.Address = myDelegate.A1Address1;
                 myMember.AddressUpdated = DateTime.Now;
@@ -811,7 +812,7 @@ namespace KofCWSCWebsite.Controllers
                 isUpdated = true;
             }
             // CITY
-            if (ShouldUpdate(myDelegate.A1City, myMember.City))
+            if (ShouldUpdate(myDelegate.A1City, myMember.City, myMember, "City"))
             {
                 myMember.City = myDelegate.A1City;
                 myMember.CityUpdated = DateTime.Now;
@@ -819,15 +820,15 @@ namespace KofCWSCWebsite.Controllers
                 isUpdated = true;
             }
             // STATE
-            if (ShouldUpdate(myDelegate.A1State, myMember.State))
+            if (ShouldUpdate(GetStateAbbr(myDelegate.A1State), myMember.State, myMember, "State"))
             {
-                myMember.State = myDelegate.A1State;
+                myMember.State = GetStateAbbr(myDelegate.A1State);
                 myMember.StateUpdated = DateTime.Now;
                 myMember.StateUpdatedBy = UpdatedBy;
                 isUpdated = true;
             }
             // POSTALCODE
-            if (ShouldUpdate(myDelegate.A1ZipCode, myMember.PostalCode))
+            if (ShouldUpdate(myDelegate.A1ZipCode, myMember.PostalCode, myMember, "PostalCode"))
             {
                 myMember.PostalCode = myDelegate.A1ZipCode;
                 myMember.PostalCodeUpdated = DateTime.Now;
@@ -835,7 +836,7 @@ namespace KofCWSCWebsite.Controllers
                 isUpdated = true;
             }
             // PHONE
-            if (ShouldUpdate(myDelegate.A1Phone, myMember.Phone))
+            if (ShouldUpdate(myDelegate.A1Phone, myMember.Phone, myMember, "Phone"))
             {
                 myMember.Phone = myDelegate.A1Phone;
                 myMember.PhoneUpdated = DateTime.Now;
@@ -843,7 +844,7 @@ namespace KofCWSCWebsite.Controllers
                 isUpdated = true;
             }
             // EMAIL
-            if (ShouldUpdate(myDelegate.A1Email, myMember.Email))
+            if (ShouldUpdate(myDelegate.A1Email, myMember.Email, myMember, "Email"))
             {
                 myMember.Email = myDelegate.A1Email;
                 myMember.EmailUpdated = DateTime.Now;
@@ -888,7 +889,7 @@ namespace KofCWSCWebsite.Controllers
                 isUpdated = true;
             }
             // FIRSTNAME
-            if (ShouldUpdate(myDelegate.A2FirstName, myMember.FirstName))
+            if (ShouldUpdate(myDelegate.A2FirstName, myMember.FirstName, myMember, "FirstName"))
             {
                 myMember.FirstName = myDelegate.A2FirstName;
                 myMember.FirstNameUpdated = DateTime.Now;
@@ -896,7 +897,7 @@ namespace KofCWSCWebsite.Controllers
                 isUpdated = true;
             }
             // LASTNAME
-            if (ShouldUpdate(myDelegate.A2LastName, myMember.LastName))
+            if (ShouldUpdate(myDelegate.A2LastName, myMember.LastName, myMember, "LastName"))
             {
                 myMember.LastName = myDelegate.A2LastName;
                 myMember.LastNameUpdated = DateTime.Now;
@@ -904,7 +905,7 @@ namespace KofCWSCWebsite.Controllers
                 isUpdated = true;
             }
             // MI
-            if (ShouldUpdate(myDelegate.A2MiddleName, myMember.Mi))
+            if (ShouldUpdate(myDelegate.A2MiddleName, myMember.Mi, myMember, "MiddleName"))
             {
                 myMember.Mi = myDelegate.A2MiddleName;
                 myMember.Miupdated = DateTime.Now;
@@ -912,7 +913,7 @@ namespace KofCWSCWebsite.Controllers
                 isUpdated = true;
             }
             // SUFFIX
-            if (ShouldUpdate(myDelegate.A2Suffix, myMember.Suffix))
+            if (ShouldUpdate(myDelegate.A2Suffix, myMember.Suffix, myMember, "Suffix"))
             {
                 myMember.Suffix = myDelegate.A2Suffix;
                 myMember.SuffixUpdated = DateTime.Now;
@@ -920,7 +921,7 @@ namespace KofCWSCWebsite.Controllers
                 isUpdated = true;
             }
             // ADDRESS
-            if (ShouldUpdate(myDelegate.A2Address1, myMember.Address))
+            if (ShouldUpdate(myDelegate.A2Address1, myMember.Address, myMember, "Address"))
             {
                 myMember.Address = myDelegate.A2Address1;
                 myMember.AddressUpdated = DateTime.Now;
@@ -928,7 +929,7 @@ namespace KofCWSCWebsite.Controllers
                 isUpdated = true;
             }
             // CITY
-            if (ShouldUpdate(myDelegate.A2City, myMember.City))
+            if (ShouldUpdate(myDelegate.A2City, myMember.City, myMember, "City"))
             {
                 myMember.City = myDelegate.A2City;
                 myMember.CityUpdated = DateTime.Now;
@@ -936,15 +937,15 @@ namespace KofCWSCWebsite.Controllers
                 isUpdated = true;
             }
             // STATE
-            if (ShouldUpdate(myDelegate.A2State, myMember.State))
+            if (ShouldUpdate(GetStateAbbr(myDelegate.A2State), myMember.State, myMember, "State"))
             {
-                myMember.State = myDelegate.A2State;
+                myMember.State = GetStateAbbr(myDelegate.A2State);
                 myMember.StateUpdated = DateTime.Now;
                 myMember.StateUpdatedBy = UpdatedBy;
                 isUpdated = true;
             }
             // POSTALCODE
-            if (ShouldUpdate(myDelegate.A2ZipCode, myMember.PostalCode))
+            if (ShouldUpdate(myDelegate.A2ZipCode, myMember.PostalCode, myMember, "PostalCode"))
             {
                 myMember.PostalCode = myDelegate.A2ZipCode;
                 myMember.PostalCodeUpdated = DateTime.Now;
@@ -952,7 +953,7 @@ namespace KofCWSCWebsite.Controllers
                 isUpdated = true;
             }
             // PHONE
-            if (ShouldUpdate(myDelegate.A2Phone, myMember.Phone))
+            if (ShouldUpdate(myDelegate.A2Phone, myMember.Phone, myMember, "Phone"))
             {
                 myMember.Phone = myDelegate.A2Phone;
                 myMember.PhoneUpdated = DateTime.Now;
@@ -960,7 +961,7 @@ namespace KofCWSCWebsite.Controllers
                 isUpdated = true;
             }
             // EMAIL
-            if (ShouldUpdate(myDelegate.A2Email, myMember.Email))
+            if (ShouldUpdate(myDelegate.A2Email, myMember.Email, myMember, "Email"))
             {
                 myMember.Email = myDelegate.A2Email;
                 myMember.EmailUpdated = DateTime.Now;
@@ -995,7 +996,7 @@ namespace KofCWSCWebsite.Controllers
             var apiHelper = new ApiHelper(_dataSetService);
             await apiHelper.PostAsync<CvnImpDelegatesLog, CvnImpDelegatesLog>("/CreateImpDelegatesLog", cvnImpDelegatesLog);
         }
-        private async void AddDelegate(int KofCID, int OfficeId, Guid guid)
+        private async void AddDelegateOffice(int KofCID, int OfficeId)
         {
             try
             {
@@ -1006,7 +1007,7 @@ namespace KofCWSCWebsite.Controllers
                 TblMasMember myID = await apiHelper.GetAsync<TblMasMember>($"/IsKofCMember/{KofCID}");
                 if (myID == null)
                 {
-                    WriteToDelegateImportLog(guid, 0, "INFO", $"Unable to add Office {OfficeId} for missing Member {KofCID}");
+                    WriteToDelegateImportLog(_guid, 0, "INFO", $"Unable to add Office {OfficeId} for missing Member {KofCID}");
                     return;
                 }
                 tblCorrMemberOffice.OfficeId = OfficeId;
@@ -1018,12 +1019,12 @@ namespace KofCWSCWebsite.Controllers
                 tblCorrMemberOffice.Assembly = null;
 
                 await apiHelper.PostAsync<TblCorrMemberOffice, TblCorrMemberOffice>("/MemberOffice", tblCorrMemberOffice);
-                WriteToDelegateImportLog(guid, myID.MemberId, "INFO", $"Adding Office {OfficeId} to Member {myID.MemberId}");
+                WriteToDelegateImportLog(_guid, myID.MemberId, "INFO", $"Adding Office {OfficeId} to Member {myID.MemberId}");
             }
             catch (Exception ex)
             {
                 Log.Error(Utils.FormatLogEntry(this, ex, "***" + $"Adding Office {OfficeId} to Member {KofCID}"));
-                WriteToDelegateImportLog(guid, KofCID, "ERROR", $"Adding Office {OfficeId} to Member {KofCID}");
+                WriteToDelegateImportLog(_guid, KofCID, "ERROR", $"Adding Office {OfficeId} to Member {KofCID}");
             }
 
         }
@@ -1039,15 +1040,37 @@ namespace KofCWSCWebsite.Controllers
             }
             return false;
         }
-        private bool ShouldUpdate(string? inItem, string? exItem)
+        private bool ShouldUpdate(string? inItem, string? exItem, TblMasMember member, string what)
         {
-            if (exItem != inItem && !inItem.IsNullOrEmpty())
+            // if we are adding a new member then the exItem will be null or blank
+            if (!exItem.IsNullOrEmpty())
             {
-                return true;
+                // if we are updating an existing item but the incoming value is null or blank don't update
+                if (!inItem.IsNullOrEmpty())
+                {
+                    if (exItem.ToUpper() != inItem.ToUpper())
+                    {
+                        WriteToDelegateImportLog(_guid, member.KofCid, "UPD", $"Update an Existing Member - {what} - our data={exItem} - delegate data={inItem}");
+                        return true;
+                    }
+                    else
+                    {
+                        return false;
+                    }
+                }
+                return false;
+            }
+            return true ;
+        }
+        private string GetStateAbbr(string state)
+        {
+            if (state.Length > 2)
+            {
+                return _dataSetService.GetStateAbbreviation(state);
             }
             else
             {
-                return false;
+                return state;
             }
         }
     }
