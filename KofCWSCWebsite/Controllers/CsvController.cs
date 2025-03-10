@@ -106,6 +106,7 @@ namespace KofCWSCWebsite.Controllers
                     }
                     catch (Exception ex)
                     {
+                        Log.Error(Utils.FormatLogEntry(this, ex));
                         ViewBag.ImpError = "The CSV File is not formatted properly.  Please run the macro to fix.";
                         return View("Views/Convention/ImpDelegatesFailed.cshtml", records);
                     }
@@ -218,7 +219,9 @@ namespace KofCWSCWebsite.Controllers
                     WriteToDelegateImportLog(_guid, 0, "INFO", "END Import");
                     var apiHelperLog = new ApiHelper(_dataSetService);
                     var myLog = await apiHelperLog.GetAsync<IEnumerable<CvnImpDelegatesLog>>($"/GetImpDelegatesLog/{_guid}");
-                    return View("Views/Convention/ImpDelegatesSuccess.cshtml", myLog);
+                    //return View("Views/Convention/ImpDelegatesSuccess.cshtml", myLog);
+                    TempData["Message"] = $"Import of {records.Count()} Councils was Successful ";
+                    return RedirectToAction("Index", "CvnImpDelegates");
                 }
             }
             ModelState.AddModelError("", "Please upload a valid CSV file.");
@@ -1073,7 +1076,7 @@ namespace KofCWSCWebsite.Controllers
                 return state;
             }
         }
+        
     }
-
 }
 

@@ -1,0 +1,393 @@
+﻿@model IEnumerable<KofCWSCWebsite.Models.CvnImpDelegate>
+
+@{
+    ViewData["Title"] = "Index";
+}
+
+<h1>Edit Imported Delegates</h1>
+<h6>@ViewBag.Message</h6>
+
+<p>
+    <a asp-action="Create">Create New</a>
+</p>
+<table class="table">
+    <thead>
+        <tr>
+            <th title="Rec Type" style="text-align:center">
+                RT
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.SubmissionDate)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.FormSubmitterSEmail)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.CouncilName)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.CouncilNumber)
+            </th>
+            @*<th>
+                    @Html.DisplayNameFor(model => model.D1FirstName)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.D1MiddleName)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.D1LastName)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.D1Suffix)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.D1MemberID)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.D1Address1)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.D1Address2)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.D1City)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.D1State)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.D1ZipCode)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.D1Phone)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.D1Email)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.D2FirstName)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.D2MiddleName)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.D2LastName)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.D2Suffix)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.D2MemberID)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.D2Address1)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.D2Address2)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.D2City)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.D2State)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.D2ZipCode)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.D2Phone)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.D2Email)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.A1FirstName)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.A1MiddleName)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.A1LastName)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.A1Suffix)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.A1MemberID)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.A1Address1)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.A1Address2)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.A1City)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.A1State)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.A1ZipCode)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.A1Phone)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.A1Email)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.A2FirstName)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.A2MiddleName)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.A2LastName)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.A2Suffix)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.A2MemberID)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.A2Address1)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.A2Address2)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.A2City)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.A2State)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.A2ZipCode)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.A2Phone)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.A2Email)
+                </th>*@
+            <th></th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var item in Model)
+        {
+            string myValid = "";
+            string myValidTitle = "";
+
+            if (item.Validation.Contains("VC=FALSE"))
+            {
+                myValid = "style=background-color:red";
+                myValidTitle += "Council does not exist; ";
+            }
+            if (item.Validation.Contains("D1=FALSE"))
+            {
+                myValid = "style=background-color:red";
+                myValidTitle += "Delegate 1 Member does not exist; ";
+            }
+            if (item.Validation.Contains("D2=FALSE"))
+            {
+                myValid = "style=background-color:red";
+                myValidTitle += "Delegate 2 Member does not exist; ";
+            }
+            if (item.Validation.Contains("A1=FALSE"))
+            {
+                myValid = "style=background-color:red";
+                myValidTitle += "Alternate 1 Member does not exist; ";
+            }
+            if (item.Validation.Contains("A2=FALSE"))
+            {
+                myValid = "style=background-color:red";
+                myValidTitle += "Alternate 2 Member does not exist; ";
+            }
+            string myTitle = "";
+
+            if (item.RecType == "I")
+            {
+                myTitle = "Imported";
+            }
+            else
+            {
+                myTitle = "Manual";
+            }
+
+            <tr>
+                <td style="text-align:center" title="@myTitle">
+
+                    @Html.DisplayFor(modelItem => item.RecType)
+                </td>
+                <td @myValid title="@myValidTitle">
+                    @Html.DisplayFor(modelItem => item.SubmissionDate)
+                </td>
+                <td @myValid title="@myValidTitle" >
+                    @Html.DisplayFor(modelItem => item.FormSubmitterSEmail)
+                </td>
+                <td @myValid title="@myValidTitle">
+                    @Html.DisplayFor(modelItem => item.CouncilName)
+                </td>
+                <td @myValid title="@myValidTitle">
+                    @Html.DisplayFor(modelItem => item.CouncilNumber)
+                </td>
+                @*<td>
+                        @Html.DisplayFor(modelItem => item.D1FirstName)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.D1MiddleName)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.D1LastName)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.D1Suffix)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.D1MemberID)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.D1Address1)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.D1Address2)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.D1City)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.D1State)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.D1ZipCode)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.D1Phone)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.D1Email)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.D2FirstName)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.D2MiddleName)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.D2LastName)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.D2Suffix)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.D2MemberID)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.D2Address1)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.D2Address2)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.D2City)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.D2State)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.D2ZipCode)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.D2Phone)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.D2Email)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.A1FirstName)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.A1MiddleName)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.A1LastName)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.A1Suffix)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.A1MemberID)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.A1Address1)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.A1Address2)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.A1City)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.A1State)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.A1ZipCode)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.A1Phone)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.A1Email)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.A2FirstName)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.A2MiddleName)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.A2LastName)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.A2Suffix)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.A2MemberID)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.A2Address1)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.A2Address2)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.A2City)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.A2State)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.A2ZipCode)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.A2Phone)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.A2Email)
+                    </td>*@
+                <td>
+                    <a asp-action="Edit" asp-route-id="@item.Id">Edit</a> |
+                    <a asp-action="Details" asp-route-id="@item.Id">Details</a> |
+                    <a asp-action="Delete" asp-route-id="@item.Id">Delete</a>
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Validation)
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>

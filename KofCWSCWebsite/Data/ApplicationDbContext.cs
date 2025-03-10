@@ -440,8 +440,7 @@ public partial class ApplicationDbContext : DbContext
         //    });
         modelBuilder.Entity<CvnImpDelegate>(entity =>
         {
-            //entity.HasKey(e => e.ID);
-            entity.HasNoKey();
+            entity.HasKey(e => e.Id);
             entity.ToTable("tblCVN_ImpDelegates");
 
             entity.Property(e => e.A1Address1)
