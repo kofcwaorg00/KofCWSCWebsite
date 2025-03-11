@@ -7,11 +7,43 @@
 <h1>Edit Convention Delegate Import</h1>
 
 <h4>Raw Imported Data from the CSV Import for Council @Model.CouncilNumber - @Model.CouncilName</h4>
+@ViewBag.Validate
+@{
+    string myValidate = ViewBag.Validate;
+    string myMemVD1 = "";
+    string myMemVD2 = "";
+    string myMemVA1 = "";
+    string myMemVA2 = "";
+    string myMemD1Title = "";
+    string myMemD2Title = "";
+    string myMemA1Title = "";
+    string myMemA2Title = "";
+    if (myValidate.Contains("VMD1"))
+    {
+        myMemVD1 = "style=color:red";
+        myMemD2Title = "Delegate #1 is missing from our data";
+    }
+    if (myValidate.Contains("VMD2"))
+    {
+        myMemVD2 = "style=color:red";
+        myMemD2Title = "Delegate #2 is missing from our data";
+    }
+    if (myValidate.Contains("VMA1"))
+    {
+        myMemVA1 = "style=color:red";
+        myMemA1Title = "Alternate #1 is missing from our data";
+    }
+    if (myValidate.Contains("VMA2"))
+    {
+        myMemVA2 = "style=color:red";
+        myMemA2Title = "Alternate #2 is missing from our data";
+    }
+}
 <hr />
 <div class="row">
     <div class="col-md-4">
-        <form asp-action="Edit">
-            <input asp-for="RecType" type="hidden" class="form-control" />
+        <form asp-action="CreateFromDelImp" asp-controller="TblMasMembers" asp-route-id="@Model.Id">
+            <input asp-for="RecType" type="hidden" class="form-control" value="U" />
             <div asp-validation-summary="ModelOnly" class="text-danger"></div>
             <table class="table">
                 <tr>
@@ -45,7 +77,16 @@
                     </td>
                 </tr>
                 <tr style="border-top:solid;border-left:solid;border-right:solid">
-                    <td colspan="4"><h3>Delegate #1</h3></td>
+                    <td @myMemVD1 title="@myMemD1Title"><h3>Delegate #1</h3></td>
+                    <td></td>
+                    <td></td>
+                    <td>
+                        @if (myValidate.Contains("VMD1"))
+                        {
+                            <input type="submit" name="action" value="Add D1 as New Member" class="btn btn-primary" />
+                        }
+
+                    </td>
                 </tr>
                 <tr style="border-left:solid;border-right:solid">
                     <td>
@@ -135,7 +176,16 @@
                 <tr style="border-left:solid;border-right:solid;border-bottom:solid">
                 </tr>
                 <tr style="border-top:solid;border-left:solid;border-right:solid">
-                    <td colspan="4"><h3>Delegate #2</h3></td>
+                    <td @myMemVD2 title="@myMemD2Title"><h3>Delegate #2</h3></td>
+                    <td></td>
+                    <td></td>
+                    <td>
+                        @if (myValidate.Contains("VMD2"))
+                        {
+                            <input type="submit" name="action" value="Add D2 as New Member" class="btn btn-primary" />
+                        }
+
+                    </td>
                 </tr>
                 <tr style="border-left:solid;border-right:solid">
                     <td>
@@ -225,7 +275,16 @@
                 <tr style="border-left:solid;border-right:solid;border-bottom:solid">
                 </tr>
                 <tr style="border-top:solid;border-left:solid;border-right:solid">
-                    <td colspan="4"><h3>Alternate #1</h3></td>
+                    <td @myMemVA1 title="@myMemA1Title"><h3>Alternate #1</h3></td>
+                    <td></td>
+                    <td></td>
+                    <td>
+                        @if (myValidate.Contains("VMA1"))
+                        {
+                            <input type="submit" name="action" value="Add A1 as New Member" class="btn btn-primary" />
+                        }
+
+                    </td>
                 </tr>
                 <tr style="border-left:solid;border-right:solid">
                     <td>
@@ -315,7 +374,16 @@
                 <tr style="border-left:solid;border-right:solid;border-bottom:solid">
                 </tr>
                 <tr style="border-top:solid;border-left:solid;border-right:solid">
-                    <td colspan="4"><h3>Alternate #2</h3></td>
+                    <td @myMemVA2 title="@myMemA2Title"><h3>Alternate #2</h3></td>
+                    <td></td>
+                    <td></td>
+                    <td>
+                        @if (myValidate.Contains("VMA2"))
+                        {
+                            <input type="submit" name="action" value="Add A2 as New Member" class="btn btn-primary" />
+                        }
+
+                    </td>
                 </tr>
                 <tr style="border-left:solid;border-right:solid">
                     <td>
@@ -405,13 +473,8 @@
                 <tr style="border-left:solid;border-right:solid;border-bottom:solid">
                 </tr>
             </table>
-
-
-
-
-            <input type="hidden" asp-for="Id" />
             <div class="form-group">
-                <input type="submit" value="Save" class="btn btn-primary" />
+                <input type="submit" name="action" value="Save Delegate Changes" class="btn btn-primary" />
             </div>
         </form>
     </div>

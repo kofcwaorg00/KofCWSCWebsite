@@ -130,6 +130,14 @@ namespace KofCWSCWebsite.Controllers
             }
             return View(tblMasMember);
         }
+        [Authorize(Roles = "Admin,DataAdmin,ConventionAdmin")]
+        [HttpPost("CreateFromDelImput")]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> CreateFromDelImp(CvnImpDelegate cvnImpDelegate,string action,int Id)
+        {
+
+            return RedirectToAction("Index", "CvnImpDelegates");
+        }
 
         // GET: TblMasMembers/Edit/5
         [Authorize(Roles = "Admin,DataAdmin")]

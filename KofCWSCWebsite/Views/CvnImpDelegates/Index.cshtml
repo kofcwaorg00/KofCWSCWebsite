@@ -8,12 +8,16 @@
 <h6>@ViewBag.Message</h6>
 
 <p>
-    <a asp-action="Create">Create New</a>
+    <form asp-controller="CvnImpDelegates" asp-action="Create" method="get">
+        <button type="submit" class="btn btn-sm btn-success">
+            Create A New Council
+        </button>
+    </form>
 </p>
 <table class="table">
     <thead>
         <tr>
-            <th title="Rec Type" style="text-align:center">
+            <th title="Record Type (M)anual, (I)mported, (U)pdated" style="text-align:center">
                 RT
             </th>
             <th>
@@ -184,30 +188,46 @@
 
             if (item.Validation.Contains("VC=FALSE"))
             {
-                myValid = "style=background-color:red";
+                myValid = "style=background-color:red;color:white";
                 myValidTitle += "Council does not exist; ";
             }
             if (item.Validation.Contains("D1=FALSE"))
             {
-                myValid = "style=background-color:red";
+                myValid = "style=background-color:green;color:white";
                 myValidTitle += "Delegate 1 Member does not exist; ";
             }
             if (item.Validation.Contains("D2=FALSE"))
             {
-                myValid = "style=background-color:red";
+                myValid = "style=background-color:green;color:white";
                 myValidTitle += "Delegate 2 Member does not exist; ";
             }
             if (item.Validation.Contains("A1=FALSE"))
             {
-                myValid = "style=background-color:red";
+                myValid = "style=background-color:green;color:white";
                 myValidTitle += "Alternate 1 Member does not exist; ";
             }
             if (item.Validation.Contains("A2=FALSE"))
             {
-                myValid = "style=background-color:red";
+                myValid = "style=background-color:green;color:white";
                 myValidTitle += "Alternate 2 Member does not exist; ";
             }
             string myTitle = "";
+
+            switch (item.RecType)
+            {
+                case "I":
+                    myTitle = "Imported";
+                    break;
+                case "M":
+                    myTitle = "Manual";
+                    break;
+                case "U":
+                    myTitle = "Updated";
+                    break;
+                default:
+                    myTitle = "Unknown";
+                    break;
+            }
 
             if (item.RecType == "I")
             {
@@ -226,7 +246,7 @@
                 <td @myValid title="@myValidTitle">
                     @Html.DisplayFor(modelItem => item.SubmissionDate)
                 </td>
-                <td @myValid title="@myValidTitle" >
+                <td @myValid title="@myValidTitle">
                     @Html.DisplayFor(modelItem => item.FormSubmitterSEmail)
                 </td>
                 <td @myValid title="@myValidTitle">
@@ -236,153 +256,172 @@
                     @Html.DisplayFor(modelItem => item.CouncilNumber)
                 </td>
                 @*<td>
-                        @Html.DisplayFor(modelItem => item.D1FirstName)
-                    </td>
-                    <td>
-                        @Html.DisplayFor(modelItem => item.D1MiddleName)
-                    </td>
-                    <td>
-                        @Html.DisplayFor(modelItem => item.D1LastName)
-                    </td>
-                    <td>
-                        @Html.DisplayFor(modelItem => item.D1Suffix)
-                    </td>
-                    <td>
-                        @Html.DisplayFor(modelItem => item.D1MemberID)
-                    </td>
-                    <td>
-                        @Html.DisplayFor(modelItem => item.D1Address1)
-                    </td>
-                    <td>
-                        @Html.DisplayFor(modelItem => item.D1Address2)
-                    </td>
-                    <td>
-                        @Html.DisplayFor(modelItem => item.D1City)
-                    </td>
-                    <td>
-                        @Html.DisplayFor(modelItem => item.D1State)
-                    </td>
-                    <td>
-                        @Html.DisplayFor(modelItem => item.D1ZipCode)
-                    </td>
-                    <td>
-                        @Html.DisplayFor(modelItem => item.D1Phone)
-                    </td>
-                    <td>
-                        @Html.DisplayFor(modelItem => item.D1Email)
-                    </td>
-                    <td>
-                        @Html.DisplayFor(modelItem => item.D2FirstName)
-                    </td>
-                    <td>
-                        @Html.DisplayFor(modelItem => item.D2MiddleName)
-                    </td>
-                    <td>
-                        @Html.DisplayFor(modelItem => item.D2LastName)
-                    </td>
-                    <td>
-                        @Html.DisplayFor(modelItem => item.D2Suffix)
-                    </td>
-                    <td>
-                        @Html.DisplayFor(modelItem => item.D2MemberID)
-                    </td>
-                    <td>
-                        @Html.DisplayFor(modelItem => item.D2Address1)
-                    </td>
-                    <td>
-                        @Html.DisplayFor(modelItem => item.D2Address2)
-                    </td>
-                    <td>
-                        @Html.DisplayFor(modelItem => item.D2City)
-                    </td>
-                    <td>
-                        @Html.DisplayFor(modelItem => item.D2State)
-                    </td>
-                    <td>
-                        @Html.DisplayFor(modelItem => item.D2ZipCode)
-                    </td>
-                    <td>
-                        @Html.DisplayFor(modelItem => item.D2Phone)
-                    </td>
-                    <td>
-                        @Html.DisplayFor(modelItem => item.D2Email)
-                    </td>
-                    <td>
-                        @Html.DisplayFor(modelItem => item.A1FirstName)
-                    </td>
-                    <td>
-                        @Html.DisplayFor(modelItem => item.A1MiddleName)
-                    </td>
-                    <td>
-                        @Html.DisplayFor(modelItem => item.A1LastName)
-                    </td>
-                    <td>
-                        @Html.DisplayFor(modelItem => item.A1Suffix)
-                    </td>
-                    <td>
-                        @Html.DisplayFor(modelItem => item.A1MemberID)
-                    </td>
-                    <td>
-                        @Html.DisplayFor(modelItem => item.A1Address1)
-                    </td>
-                    <td>
-                        @Html.DisplayFor(modelItem => item.A1Address2)
-                    </td>
-                    <td>
-                        @Html.DisplayFor(modelItem => item.A1City)
-                    </td>
-                    <td>
-                        @Html.DisplayFor(modelItem => item.A1State)
-                    </td>
-                    <td>
-                        @Html.DisplayFor(modelItem => item.A1ZipCode)
-                    </td>
-                    <td>
-                        @Html.DisplayFor(modelItem => item.A1Phone)
-                    </td>
-                    <td>
-                        @Html.DisplayFor(modelItem => item.A1Email)
-                    </td>
-                    <td>
-                        @Html.DisplayFor(modelItem => item.A2FirstName)
-                    </td>
-                    <td>
-                        @Html.DisplayFor(modelItem => item.A2MiddleName)
-                    </td>
-                    <td>
-                        @Html.DisplayFor(modelItem => item.A2LastName)
-                    </td>
-                    <td>
-                        @Html.DisplayFor(modelItem => item.A2Suffix)
-                    </td>
-                    <td>
-                        @Html.DisplayFor(modelItem => item.A2MemberID)
-                    </td>
-                    <td>
-                        @Html.DisplayFor(modelItem => item.A2Address1)
-                    </td>
-                    <td>
-                        @Html.DisplayFor(modelItem => item.A2Address2)
-                    </td>
-                    <td>
-                        @Html.DisplayFor(modelItem => item.A2City)
-                    </td>
-                    <td>
-                        @Html.DisplayFor(modelItem => item.A2State)
-                    </td>
-                    <td>
-                        @Html.DisplayFor(modelItem => item.A2ZipCode)
-                    </td>
-                    <td>
-                        @Html.DisplayFor(modelItem => item.A2Phone)
-                    </td>
-                    <td>
-                        @Html.DisplayFor(modelItem => item.A2Email)
-                    </td>*@
-                <td>
-                    <a asp-action="Edit" asp-route-id="@item.Id">Edit</a> |
-                    <a asp-action="Details" asp-route-id="@item.Id">Details</a> |
-                    <a asp-action="Delete" asp-route-id="@item.Id">Delete</a>
+            @Html.DisplayFor(modelItem => item.D1FirstName)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.D1MiddleName)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.D1LastName)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.D1Suffix)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.D1MemberID)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.D1Address1)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.D1Address2)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.D1City)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.D1State)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.D1ZipCode)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.D1Phone)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.D1Email)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.D2FirstName)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.D2MiddleName)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.D2LastName)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.D2Suffix)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.D2MemberID)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.D2Address1)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.D2Address2)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.D2City)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.D2State)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.D2ZipCode)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.D2Phone)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.D2Email)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.A1FirstName)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.A1MiddleName)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.A1LastName)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.A1Suffix)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.A1MemberID)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.A1Address1)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.A1Address2)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.A1City)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.A1State)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.A1ZipCode)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.A1Phone)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.A1Email)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.A2FirstName)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.A2MiddleName)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.A2LastName)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.A2Suffix)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.A2MemberID)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.A2Address1)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.A2Address2)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.A2City)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.A2State)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.A2ZipCode)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.A2Phone)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.A2Email)
+        </td>*@
+                <td style="padding-right:0px">
+                    @* <a asp-action="Edit" asp-route-id="@item.MemberId">Edit</a>&nbsp;|&nbsp;<a asp-action="Details" asp-route-id="@item.MemberId">Details</a>&nbsp;|&nbsp;<a asp-action="Delete" asp-route-id="@item.MemberId">Delete</a> *@
+                    <form asp-action="Edit" asp-route-id="@item.Id" asp-route-validate="@item.Validation" method="get">
+                        <button type="submit" class="btn btn-sm btn-primary">
+                            Edit
+                        </button>
+                    </form>
+                    
+                </td>
+                <td style="padding-left:0px;padding-right:0px">
+                    <form asp-action="Details" asp-route-id="@item.Id" method="get">
+                        <button type="submit" class="btn btn-sm btn-warning">
+                            Details
+                        </button>
+                    </form>
+                </td>
+                <td style="padding-left:0px">
+                    <form asp-action="Delete" asp-route-id="@item.Id" method="get">
+                        <button type="submit" class="btn btn-sm btn-danger">
+                            Delete
+                        </button>
+                    </form>
+
                 </td>
                 <td>
                     @Html.DisplayFor(modelItem => item.Validation)

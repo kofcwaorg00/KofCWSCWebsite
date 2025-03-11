@@ -71,8 +71,10 @@ namespace KofCWSCWebsite.Controllers
         }
 
         // GET: CvnImpDelegates/Edit/5
-        public async Task<IActionResult> Edit(int? id)
+        [HttpGet("Edit/{id}/{validate}")]
+        public async Task<IActionResult> Edit(int? id,string? validate)
         {
+            ViewBag.Validate = validate;
             if (id == null)
             {
                 return NotFound();
