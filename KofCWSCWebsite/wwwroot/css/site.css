@@ -151,3 +151,9 @@ body {
     background-color: rgba(0, 0, 0, 0.5); /* Semi-transparent grey */
     z-index: 9998; /* Below the spinner */
 }
+.info-bubble {
+    margin-left: 8px;
+    cursor: pointer;
+    color: #007bff; /* Blue color */
+    font-size: 1.2em;
+}

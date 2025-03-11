@@ -3,11 +3,17 @@
 @{
     ViewData["Title"] = "Edit";
 }
-
+<style>
+    .ExistingData {
+        background-color: lightgray;
+        color: black;
+    }
+</style>
 <h1>Edit Convention Delegate Import</h1>
 
 <h4>Raw Imported Data from the CSV Import for Council @Model.CouncilNumber - @Model.CouncilName</h4>
 @ViewBag.Validate
+@ViewBag.Validate2
 @{
     string myValidate = ViewBag.Validate;
     string myMemVD1 = "";
@@ -18,6 +24,8 @@
     string myMemD2Title = "";
     string myMemA1Title = "";
     string myMemA2Title = "";
+    string myValidate2 = ViewBag.Validate2;
+    string myMemD1IPH = myValidate2.Contains("D1IPH") ? "color:red" : "";
     if (myValidate.Contains("VMD1"))
     {
         myMemVD1 = "style=color:red";
@@ -83,7 +91,11 @@
                     <td>
                         @if (myValidate.Contains("VMD1"))
                         {
-                            <input type="submit" name="action" value="Add D1 as New Member" class="btn btn-primary" />
+                            <input type="submit" name="action" value="Add D1 New Member" class="btn btn-primary" />
+                        }
+                        @if (myValidate2.Contains("D1I"))
+                        {
+                            <input type="submit" name="action" value="Update D1 Existing Member" class="btn btn-primary" />
                         }
 
                     </td>
@@ -95,12 +107,22 @@
                             <input asp-for="D1MemberID" class="form-control" />
                             <span asp-validation-for="D1MemberID" class="text-danger"></span>
                         </div>
+                        <div class="form-group ExistingData">
+                            <label asp-for="ED1MemberID" class="control-label" style="font-weight:bold"></label>
+                            <input asp-for="ED1MemberID" class="form-control ExistingData" />
+                            <span asp-validation-for="ED1MemberID" class="text-danger"></span>
+                        </div>
                     </td>
                     <td>
                         <div class="form-group">
                             <label asp-for="D1Phone" class="control-label" style="font-weight:bold"></label>
-                            <input asp-for="D1Phone" class="form-control" />
+                            <input asp-for="D1Phone" class="form-control" style="@myMemD1IPH" />
                             <span asp-validation-for="D1Phone" class="text-danger"></span>
+                        </div>
+                        <div class="form-group ExistingData">
+                            <label asp-for="ED1Phone" class="control-label" style="font-weight:bold"></label>
+                            <input asp-for="ED1Phone" class="form-control ExistingData" style="@myMemD1IPH" />
+                            <span asp-validation-for="ED1Phone" class="text-danger"></span>
                         </div>
                     </td>
                     <td colspan="2">
@@ -108,6 +130,11 @@
                             <label asp-for="D1Email" class="control-label" style="font-weight:bold"></label>
                             <input asp-for="D1Email" class="form-control" />
                             <span asp-validation-for="D1Email" class="text-danger"></span>
+                        </div>
+                        <div class="form-group ExistingData">
+                            <label asp-for="ED1Email" class="control-label" style="font-weight:bold"></label>
+                            <input asp-for="ED1Email" class="form-control ExistingData" />
+                            <span asp-validation-for="ED1Email" class="text-danger"></span>
                         </div>
                     </td>
                 </tr>
@@ -119,12 +146,22 @@
                             <input asp-for="D1FirstName" class="form-control" />
                             <span asp-validation-for="D1FirstName" class="text-danger"></span>
                         </div>
+                        <div class="form-group ExistingData">
+                            <label asp-for="ED1FirstName" class="control-label" style="font-weight:bold"></label>
+                            <input asp-for="ED1FirstName" class="form-control ExistingData" />
+                            <span asp-validation-for="ED1FirstName" class="text-danger"></span>
+                        </div>
                     </td>
                     <td>
                         <div class="form-group">
                             <label asp-for="D1MiddleName" class="control-label" style="font-weight:bold"></label>
                             <input asp-for="D1MiddleName" class="form-control" style="width:auto" />
                             <span asp-validation-for="D1MiddleName" class="text-danger"></span>
+                        </div>
+                        <div class="form-group ExistingData">
+                            <label asp-for="ED1MiddleName" class="control-label" style="font-weight:bold"></label>
+                            <input asp-for="ED1MiddleName" class="form-control ExistingData" style="width:auto" />
+                            <span asp-validation-for="ED1MiddleName" class="text-danger"></span>
                         </div>
                     </td>
                     <td>
@@ -133,6 +170,11 @@
                             <input asp-for="D1LastName" class="form-control" style="width:auto" />
                             <span asp-validation-for="D1LastName" class="text-danger"></span>
                         </div>
+                        <div class="form-group ExistingData">
+                            <label asp-for="ED1LastName" class="control-label" style="font-weight:bold"></label>
+                            <input asp-for="ED1LastName" class="form-control ExistingData" style="width:auto" />
+                            <span asp-validation-for="ED1LastName" class="text-danger"></span>
+                        </div>
                     </td>
                     <td>
                         <div class="form-group">
@@ -140,6 +182,12 @@
                             <input asp-for="D1Suffix" class="form-control" />
                             <span asp-validation-for="D1Suffix" class="text-danger"></span>
                         </div>
+                        <div class="form-group ExistingData">
+                            <label asp-for="ED1Suffix" class="control-label" style="font-weight:bold"></label>
+                            <input asp-for="ED1Suffix" class="form-control ExistingData" />
+                            <span asp-validation-for="ED1Suffix" class="text-danger"></span>
+                        </div>
+
                     </td>
                 </tr>
 
@@ -150,12 +198,22 @@
                             <input asp-for="D1Address1" class="form-control" style="width:auto" />
                             <span asp-validation-for="D1Address1" class="text-danger"></span>
                         </div>
+                        <div class="form-group ExistingData">
+                            <label asp-for="ED1Address1" class="control-label" style="font-weight:bold"></label>
+                            <input asp-for="ED1Address1" class="form-control ExistingData"  style="width:auto" />
+                            <span asp-validation-for="ED1Address1" class="text-danger"></span>
+                        </div>
                     </td>
                     <td>
                         <div class="form-group">
                             <label asp-for="D1City" class="control-label" style="font-weight:bold"></label>
                             <input asp-for="D1City" class="form-control" />
                             <span asp-validation-for="D1City" class="text-danger"></span>
+                        </div>
+                        <div class="form-group ExistingData">
+                            <label asp-for="ED1City" class="control-label" style="font-weight:bold"></label>
+                            <input asp-for="ED1City" class="form-control ExistingData" />
+                            <span asp-validation-for="ED1City" class="text-danger"></span>
                         </div>
                     </td>
                     <td>
@@ -164,12 +222,22 @@
                             <input asp-for="D1State" class="form-control" />
                             <span asp-validation-for="D1State" class="text-danger"></span>
                         </div>
+                        <div class="form-group ExistingData">
+                            <label asp-for="ED1State" class="control-label" style="font-weight:bold"></label>
+                            <input asp-for="ED1State" class="form-control ExistingData" />
+                            <span asp-validation-for="ED1State" class="text-danger"></span>
+                        </div>
                     </td>
                     <td>
                         <div class="form-group">
                             <label asp-for="D1ZipCode" class="control-label" style="font-weight:bold"></label>
                             <input asp-for="D1ZipCode" class="form-control" style="width:auto" />
                             <span asp-validation-for="D1ZipCode" class="text-danger"></span>
+                        </div>
+                        <div class="form-group ExistingData">
+                            <label asp-for="ED1ZipCode" class="control-label" style="font-weight:bold"></label>
+                            <input asp-for="ED1ZipCode" class="form-control ExistingData" style="width:auto" />
+                            <span asp-validation-for="ED1ZipCode" class="text-danger"></span>
                         </div>
                     </td>
                 </tr>

@@ -71,21 +71,31 @@ namespace KofCWSCWebsite.Controllers
         }
 
         // GET: CvnImpDelegates/Edit/5
-        [HttpGet("Edit/{id}/{validate}")]
-        public async Task<IActionResult> Edit(int? id,string? validate)
+        [HttpGet("Edit/{id}/{validate}/{validate2}")]
+        public async Task<ActionResult<CvnImpDelegate>> Edit(int? id,string? validate,string? validate2)
         {
             ViewBag.Validate = validate;
-            if (id == null)
-            {
-                return NotFound();
-            }
+            ViewBag.Validate2 = validate2;
+            return View( _context.Database
+                   .SqlQuery<CvnImpDelegate>($"EXECUTE uspCVN_GetImpDelegatesByID {id}")
+                   .AsEnumerable()
+                   .FirstOrDefault());
+                   
 
-            var cvnImpDelegate = await _context.CvnImpDelegates.FindAsync(id);
-            if (cvnImpDelegate == null)
-            {
-                return NotFound();
-            }
-            return View(cvnImpDelegate);
+
+
+
+            //if (id == null)
+            //{
+            //    return NotFound();
+            //}
+
+            //var cvnImpDelegate = await _context.CvnImpDelegates.FindAsync(id);
+            //if (cvnImpDelegate == null)
+            //{
+            //    return NotFound();
+            //}
+            //return View(cvnImpDelegate);
         }
 
         // POST: CvnImpDelegates/Edit/5

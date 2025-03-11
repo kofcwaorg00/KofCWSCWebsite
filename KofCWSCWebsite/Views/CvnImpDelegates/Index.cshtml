@@ -1,4 +1,5 @@
-﻿@model IEnumerable<KofCWSCWebsite.Models.CvnImpDelegate>
+﻿@using KofCWSCWebsite.Services;
+@model IEnumerable<KofCWSCWebsite.Models.CvnImpDelegate>
 
 @{
     ViewData["Title"] = "Index";
@@ -183,6 +184,7 @@
     <tbody>
         @foreach (var item in Model)
         {
+            string myCMI = Utils.CompareMemberInfo(item);
             string myValid = "";
             string myValidTitle = "";
 
@@ -193,22 +195,22 @@
             }
             if (item.Validation.Contains("D1=FALSE"))
             {
-                myValid = "style=background-color:green;color:white";
+                myValid = "style=background-color:yellow";
                 myValidTitle += "Delegate 1 Member does not exist; ";
             }
             if (item.Validation.Contains("D2=FALSE"))
             {
-                myValid = "style=background-color:green;color:white";
+                myValid = "style=background-color:yellow";
                 myValidTitle += "Delegate 2 Member does not exist; ";
             }
             if (item.Validation.Contains("A1=FALSE"))
             {
-                myValid = "style=background-color:green;color:white";
+                myValid = "style=background-color:yellow";
                 myValidTitle += "Alternate 1 Member does not exist; ";
             }
             if (item.Validation.Contains("A2=FALSE"))
             {
-                myValid = "style=background-color:green;color:white";
+                myValid = "style=background-color:yellow";
                 myValidTitle += "Alternate 2 Member does not exist; ";
             }
             string myTitle = "";
@@ -240,7 +242,7 @@
 
             <tr>
                 <td style="text-align:center" title="@myTitle">
-
+                    @myCMI
                     @Html.DisplayFor(modelItem => item.RecType)
                 </td>
                 <td @myValid title="@myValidTitle">
@@ -401,7 +403,7 @@
         </td>*@
                 <td style="padding-right:0px">
                     @* <a asp-action="Edit" asp-route-id="@item.MemberId">Edit</a>&nbsp;|&nbsp;<a asp-action="Details" asp-route-id="@item.MemberId">Details</a>&nbsp;|&nbsp;<a asp-action="Delete" asp-route-id="@item.MemberId">Delete</a> *@
-                    <form asp-action="Edit" asp-route-id="@item.Id" asp-route-validate="@item.Validation" method="get">
+                    <form asp-action="Edit" asp-route-id="@item.Id" asp-route-validate="@item.Validation" asp-route-validate2="@myCMI" method="get">
                         <button type="submit" class="btn btn-sm btn-primary">
                             Edit
                         </button>

@@ -16,6 +16,7 @@ using Microsoft.CodeAnalysis.VisualBasic.Syntax;
 using System.Diagnostics;
 using System.Text.RegularExpressions;
 using Microsoft.IdentityModel.Tokens;
+using KofCWSCWebsite.Models;
 
 
 namespace KofCWSCWebsite.Services
@@ -286,6 +287,25 @@ namespace KofCWSCWebsite.Services
             }
             
             
+        }
+
+        public static string CompareMemberInfo(CvnImpDelegate cvnImpDelegate)
+        {
+            string retval = "";
+            // D1
+            if (cvnImpDelegate.D1MemberID.ToString().IsNullOrEmpty()) { return "EMPTY"; }
+            if (!(cvnImpDelegate.D1MemberID.ToString().IsNullOrEmpty() && cvnImpDelegate.ED1MemberID.ToString().IsNullOrEmpty() ) && cvnImpDelegate.D1MemberID != cvnImpDelegate.ED1MemberID) { retval += "D1IID;"; }
+            if (!(cvnImpDelegate.D1FirstName.IsNullOrEmpty() && cvnImpDelegate.ED1FirstName.IsNullOrEmpty()) && cvnImpDelegate.D1FirstName != cvnImpDelegate.ED1FirstName) { retval += "D1IFN;"; }
+            if (!(cvnImpDelegate.D1MiddleName.IsNullOrEmpty() && cvnImpDelegate.ED1MiddleName.IsNullOrEmpty()) && cvnImpDelegate.D1MiddleName != cvnImpDelegate.ED1MiddleName) { retval += "D1IMN;"; }
+            if (!(cvnImpDelegate.D1LastName.IsNullOrEmpty() && cvnImpDelegate.ED1LastName.IsNullOrEmpty()) && cvnImpDelegate.D1LastName != cvnImpDelegate.ED1LastName) { retval += "D1ILN;"; }
+            if (!(cvnImpDelegate.D1Suffix.IsNullOrEmpty() && cvnImpDelegate.ED1Suffix.IsNullOrEmpty()) && cvnImpDelegate.D1Suffix != cvnImpDelegate.ED1Suffix) { retval += "D1ISX;"; }
+            if (!(cvnImpDelegate.D1Address1.IsNullOrEmpty() && cvnImpDelegate.ED1Address1.IsNullOrEmpty()) && cvnImpDelegate.D1Address1 != cvnImpDelegate.ED1Address1) { retval += "D1IAD;"; }
+            if (!(cvnImpDelegate.D1City.IsNullOrEmpty() && cvnImpDelegate.ED1City.IsNullOrEmpty()) && cvnImpDelegate.D1City != cvnImpDelegate.ED1City) { retval += "D1ICT;"; }
+            if (!(cvnImpDelegate.D1State.IsNullOrEmpty() && cvnImpDelegate.ED1State.IsNullOrEmpty()) && cvnImpDelegate.D1State != cvnImpDelegate.ED1State) { retval += "D1IST;"; }
+            if (!(cvnImpDelegate.D1ZipCode.IsNullOrEmpty() && cvnImpDelegate.ED1ZipCode.IsNullOrEmpty()) && cvnImpDelegate.D1ZipCode != cvnImpDelegate.ED1ZipCode) { retval += "D1IZP;"; }
+            if (!(cvnImpDelegate.D1Phone.IsNullOrEmpty() && cvnImpDelegate.ED1Phone.IsNullOrEmpty()) && cvnImpDelegate.D1Phone != cvnImpDelegate.ED1Phone) { retval += "D1IPH;"; }
+            if (!(cvnImpDelegate.D1Email.IsNullOrEmpty() && cvnImpDelegate.ED1Email.IsNullOrEmpty()) && cvnImpDelegate.D1Email != cvnImpDelegate.ED1Email) { retval += "D1IEM;"; }
+            return retval;
         }
     }
 }

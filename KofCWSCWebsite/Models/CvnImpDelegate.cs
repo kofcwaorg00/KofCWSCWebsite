@@ -2,6 +2,7 @@
 using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
 
 namespace KofCWSCWebsite.Models;
 
@@ -109,4 +110,99 @@ public partial class CvnImpDelegate
     public int Id { get; set; }
     public string? Validation {  get; set; }
     public string? RecType { get; set; }
+
+    public string? ED1FirstName { get; set; }
+    public string? ED1MiddleName { get; set; }
+
+    public string? ED1LastName { get; set; }
+
+    public string? ED1Suffix { get; set; }
+    
+    public int? ED1MemberID { get; set; }
+
+    public string? ED1Address1 { get; set; }
+
+    public string? ED1Address2 { get; set; }
+
+    public string? ED1City { get; set; }
+
+    public string? ED1State { get; set; }
+
+    public string? ED1ZipCode { get; set; }
+    
+    public string? ED1Phone { get; set; }
+    
+    public string? ED1Email { get; set; }
+
+    public string? ED2FirstName { get; set; }
+
+    public string? ED2MiddleName { get; set; }
+
+    public string? ED2LastName { get; set; }
+
+    public string? ED2Suffix { get; set; }
+
+    public int? ED2MemberID { get; set; }
+
+    public string? ED2Address1 { get; set; }
+
+    public string? ED2Address2 { get; set; }
+
+    public string? ED2City { get; set; }
+
+    public string? ED2State { get; set; }
+
+    public string? ED2ZipCode { get; set; }
+
+    public string? ED2Phone { get; set; }
+
+    public string? ED2Email { get; set; }
+
+    public string? EA1FirstName { get; set; }
+
+    public string? EA1MiddleName { get; set; }
+
+    public string? EA1LastName { get; set; }
+
+    public string? EA1Suffix { get; set; }
+
+    public int? EA1MemberID { get; set; }
+
+    public string? EA1Address1 { get; set; }
+
+    public string? EA1Address2 { get; set; }
+
+    public string? EA1City { get; set; }
+
+    public string? EA1State { get; set; }
+
+    public string? EA1ZipCode { get; set; }
+
+    public string? EA1Phone { get; set; }
+
+    public string? EA1Email { get; set; }
+
+    public string? EA2FirstName { get; set; }
+
+    public string? EA2MiddleName { get; set; }
+
+    public string? EA2LastName { get; set; }
+
+    public string? EA2Suffix { get; set; }
+
+    public int? EA2MemberID { get; set; }
+
+    public string? EA2Address1 { get; set; }
+
+    public string? EA2Address2 { get; set; }
+
+    public string? EA2City { get; set; }
+
+    public string? EA2State { get; set; }
+
+    public string? EA2ZipCode { get; set; }
+
+    public string? EA2Phone { get; set; }
+
+    public string? EA2Email { get; set; }
 }
