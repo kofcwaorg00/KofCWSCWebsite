@@ -79,7 +79,7 @@ namespace KofCWSCWebsite.Controllers
         [Authorize(Roles = "Admin, ConventionAdmin")]
         public async Task<IActionResult> Upload(CvnImpDelegateViewModel model)
         {
-            var records = new List<CvnImpDelegate>();
+            var records = new List<CvnImpDelegateIMP>();
             //*************************************************************************
             // 12/3/2024 Tim Philomeno
             // pass this GUID to all logging processes and then get the full log
@@ -93,6 +93,7 @@ namespace KofCWSCWebsite.Controllers
                 using (var reader = new StreamReader(model.CsvFile.OpenReadStream(), Encoding.UTF8))
                 using (var csv = new CsvReader(reader, new CsvConfiguration(CultureInfo.InvariantCulture)
                 {
+                    //HeaderValidated = null,
                     Delimiter = ",",
                     HasHeaderRecord = true,
 
@@ -100,7 +101,7 @@ namespace KofCWSCWebsite.Controllers
                 {
                     try
                     {
-                        var cvnImport = csv.GetRecords<CvnImpDelegate>(); // Parse CSV into CsvRecord objects
+                        var cvnImport = csv.GetRecords<CvnImpDelegateIMP>(); // Parse CSV into CsvRecord objects
 
                         records.AddRange(cvnImport);
                     }
@@ -141,7 +142,7 @@ namespace KofCWSCWebsite.Controllers
                     // call the API
                     try
                     {
-                        var result = await _apiHelper.PostAsync<List<CvnImpDelegate>, string>("/ImpDelegates", records);
+                        var result = await _apiHelper.PostAsync<List<CvnImpDelegateIMP>, string>("/ImpDelegates", records);
                     }
                     catch (Exception ex)
                     {
@@ -228,7 +229,7 @@ namespace KofCWSCWebsite.Controllers
             ViewBag.ImpError = "CSV File is invalid";
             return View("Views/Convention/ImpDelegatesFailed.cshtml", null);
         }
-        private async Task<bool> ProcessCouncilD1(CvnImpDelegate cvnImpDelegate)
+        private async Task<bool> ProcessCouncilD1(CvnImpDelegateIMP cvnImpDelegate)
         {
             //**********************************************************************************************
             // 11/30/2024 Tim Philomeno
@@ -299,7 +300,7 @@ namespace KofCWSCWebsite.Controllers
             }
             return true;
         }
-        private async Task<bool> ProcessCouncilD2(CvnImpDelegate cvnImpDelegate)
+        private async Task<bool> ProcessCouncilD2(CvnImpDelegateIMP cvnImpDelegate)
         {
             //**********************************************************************************************
             // 11/30/2024 Tim Philomeno
@@ -368,7 +369,7 @@ namespace KofCWSCWebsite.Controllers
             }
             return true;
         }
-        private async Task<bool> ProcessCouncilA1(CvnImpDelegate cvnImpDelegate)
+        private async Task<bool> ProcessCouncilA1(CvnImpDelegateIMP cvnImpDelegate)
         {
             //**********************************************************************************************
             // 11/30/2024 Tim Philomeno
@@ -437,7 +438,7 @@ namespace KofCWSCWebsite.Controllers
             }
             return true;
         }
-        private async Task<bool> ProcessCouncilA2(CvnImpDelegate cvnImpDelegate)
+        private async Task<bool> ProcessCouncilA2(CvnImpDelegateIMP cvnImpDelegate)
         {
             //**********************************************************************************************
             // 11/30/2024 Tim Philomeno
@@ -506,7 +507,7 @@ namespace KofCWSCWebsite.Controllers
             return true;
         }
 
-        private bool FillD1(ref TblMasMember myMember, CvnImpDelegate myDelegate)
+        private bool FillD1(ref TblMasMember myMember, CvnImpDelegateIMP myDelegate)
         {
             string UpdatedBy = "Delegate Import API";
             bool isUpdated = false;
@@ -623,7 +624,7 @@ namespace KofCWSCWebsite.Controllers
 
             return isUpdated;
         }
-        private bool FillD2(ref TblMasMember myMember, CvnImpDelegate myDelegate)
+        private bool FillD2(ref TblMasMember myMember, CvnImpDelegateIMP myDelegate)
         {
             string UpdatedBy = "Delegate Import API";
             bool isUpdated = false;
@@ -740,7 +741,7 @@ namespace KofCWSCWebsite.Controllers
 
             return isUpdated;
         }
-        private bool FillA1(ref TblMasMember myMember, CvnImpDelegate myDelegate)
+        private bool FillA1(ref TblMasMember myMember, CvnImpDelegateIMP myDelegate)
         {
             string UpdatedBy = "Delegate Import API";
             bool isUpdated = false;
@@ -857,7 +858,7 @@ namespace KofCWSCWebsite.Controllers
 
             return isUpdated;
         }
-        private bool FillA2(ref TblMasMember myMember, CvnImpDelegate myDelegate)
+        private bool FillA2(ref TblMasMember myMember, CvnImpDelegateIMP myDelegate)
         {
             string UpdatedBy = "Delegate Import API";
             bool isUpdated = false;
@@ -1031,7 +1032,7 @@ namespace KofCWSCWebsite.Controllers
             }
 
         }
-        private bool HasDupCouncils(List<CvnImpDelegate> model)
+        private bool HasDupCouncils(List<CvnImpDelegateIMP> model)
         {
             if (model == null) { return true; }
             foreach (var myDel in model)
