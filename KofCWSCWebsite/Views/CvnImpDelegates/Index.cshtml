@@ -188,30 +188,41 @@
             string myValid = "";
             string myValidTitle = "";
 
-            if (item.Validation.Contains("VC=FALSE"))
+            if (item.Validation.Contains("VCMISSING"))
             {
                 myValid = "style=background-color:red;color:white";
                 myValidTitle += "Council does not exist; ";
             }
-            if (item.Validation.Contains("D1=FALSE"))
+            if (item.Validation.Contains("VMD1MISSING"))
             {
                 myValid = "style=background-color:yellow";
                 myValidTitle += "Delegate 1 Member does not exist; ";
             }
-            if (item.Validation.Contains("D2=FALSE"))
+            if (item.Validation.Contains("VMD2MISSING"))
             {
                 myValid = "style=background-color:yellow";
                 myValidTitle += "Delegate 2 Member does not exist; ";
             }
-            if (item.Validation.Contains("A1=FALSE"))
+            if (item.Validation.Contains("VMA1MISSING"))
             {
                 myValid = "style=background-color:yellow";
                 myValidTitle += "Alternate 1 Member does not exist; ";
             }
-            if (item.Validation.Contains("A2=FALSE"))
+            if (item.Validation.Contains("VMA2MISSING"))
             {
                 myValid = "style=background-color:yellow";
                 myValidTitle += "Alternate 2 Member does not exist; ";
+            }
+            //string[] myD1 = { "D1I" };
+            //if (item.Validation.Any(sub => item.Validation.Contains(sub)))
+            //{
+            //    myValid = "style=background-color:yellow";
+            //    myValidTitle += "Delegate #1 has updated Member Information; ";
+            //}
+            if (myCMI.Contains("D1I"))
+            {
+                myValid = "style=background-color:orange";
+                myValidTitle += "Delegate #1 has updated Member Information; ";
             }
             string myTitle = "";
 

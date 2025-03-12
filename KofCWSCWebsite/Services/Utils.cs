@@ -291,13 +291,25 @@ namespace KofCWSCWebsite.Services
 
         public static string CompareMemberInfo(CvnImpDelegate cvnImpDelegate)
         {
+            // This method will look at specific properties and return a code that will
+            // be used by the calling process to determine what, if any, properties are different
             string retval = "";
             // D1
-            if (cvnImpDelegate.D1MemberID.ToString().IsNullOrEmpty()) { return "EMPTY"; }
-            if (!(cvnImpDelegate.D1MemberID.ToString().IsNullOrEmpty() && cvnImpDelegate.ED1MemberID.ToString().IsNullOrEmpty() ) && cvnImpDelegate.D1MemberID != cvnImpDelegate.ED1MemberID) { retval += "D1IID;"; }
-            if (!(cvnImpDelegate.D1FirstName.IsNullOrEmpty() && cvnImpDelegate.ED1FirstName.IsNullOrEmpty()) && cvnImpDelegate.D1FirstName != cvnImpDelegate.ED1FirstName) { retval += "D1IFN;"; }
-            if (!(cvnImpDelegate.D1MiddleName.IsNullOrEmpty() && cvnImpDelegate.ED1MiddleName.IsNullOrEmpty()) && cvnImpDelegate.D1MiddleName != cvnImpDelegate.ED1MiddleName) { retval += "D1IMN;"; }
-            if (!(cvnImpDelegate.D1LastName.IsNullOrEmpty() && cvnImpDelegate.ED1LastName.IsNullOrEmpty()) && cvnImpDelegate.D1LastName != cvnImpDelegate.ED1LastName) { retval += "D1ILN;"; }
+            if (cvnImpDelegate.Validation.ToUpper().Contains("MISSING")) { return cvnImpDelegate.Validation; }
+
+            if (cvnImpDelegate.D1FirstName.IsNullOrEmpty()) { cvnImpDelegate.D1FirstName = ""; }
+            if (cvnImpDelegate.ED1FirstName.IsNullOrEmpty()) { cvnImpDelegate.ED1FirstName = ""; }
+            if (cvnImpDelegate.D1FirstName != cvnImpDelegate.ED1FirstName) { retval += "D1IFN;"; }
+
+            if (cvnImpDelegate.D1MiddleName.IsNullOrEmpty()) { cvnImpDelegate.D1MiddleName = ""; }
+            if (cvnImpDelegate.ED1MiddleName.IsNullOrEmpty()) { cvnImpDelegate.ED1MiddleName = ""; }
+            if (cvnImpDelegate.D1MiddleName != cvnImpDelegate.ED1MiddleName) { retval += "D1IMN;"; }
+
+            if (cvnImpDelegate.D1LastName.IsNullOrEmpty()) { cvnImpDelegate.D1LastName = ""; }
+            if (cvnImpDelegate.ED1LastName.IsNullOrEmpty()) { cvnImpDelegate.ED1LastName = ""; }
+            if (cvnImpDelegate.D1LastName != cvnImpDelegate.ED1LastName) { retval += "D1ILN;"; }
+
+
             if (!(cvnImpDelegate.D1Suffix.IsNullOrEmpty() && cvnImpDelegate.ED1Suffix.IsNullOrEmpty()) && cvnImpDelegate.D1Suffix != cvnImpDelegate.ED1Suffix) { retval += "D1ISX;"; }
             if (!(cvnImpDelegate.D1Address1.IsNullOrEmpty() && cvnImpDelegate.ED1Address1.IsNullOrEmpty()) && cvnImpDelegate.D1Address1 != cvnImpDelegate.ED1Address1) { retval += "D1IAD;"; }
             if (!(cvnImpDelegate.D1City.IsNullOrEmpty() && cvnImpDelegate.ED1City.IsNullOrEmpty()) && cvnImpDelegate.D1City != cvnImpDelegate.ED1City) { retval += "D1ICT;"; }

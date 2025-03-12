@@ -25,27 +25,38 @@
     string myMemA1Title = "";
     string myMemA2Title = "";
     string myValidate2 = ViewBag.Validate2;
+
+    string myMemD1IFN = myValidate2.Contains("D1IFN") ? "color:red" : "";
+    string myMemD1IMN = myValidate2.Contains("D1IMN") ? "color:red" : "";
+    string myMemD1ILN = myValidate2.Contains("D1ILN") ? "color:red" : "";
+    string myMemD1ISX = myValidate2.Contains("D1ISX") ? "color:red" : "";
+    string myMemD1IAD = myValidate2.Contains("D1IAD") ? "color:red" : "";
+    string myMemD1ICT = myValidate2.Contains("D1ICT") ? "color:red" : "";
+    string myMemD1IST = myValidate2.Contains("D1IST") ? "color:red" : "";
+    string myMemD1IZP = myValidate2.Contains("D1IZP") ? "color:red" : "";
     string myMemD1IPH = myValidate2.Contains("D1IPH") ? "color:red" : "";
-    if (myValidate.Contains("VMD1"))
+    string myMemD1IEM = myValidate2.Contains("D1IEM") ? "color:red" : "";
+    if (myValidate.Contains("VMD1MISSING"))
     {
         myMemVD1 = "style=color:red";
         myMemD2Title = "Delegate #1 is missing from our data";
     }
-    if (myValidate.Contains("VMD2"))
+    if (myValidate.Contains("VMD2MISSING"))
     {
         myMemVD2 = "style=color:red";
         myMemD2Title = "Delegate #2 is missing from our data";
     }
-    if (myValidate.Contains("VMA1"))
+    if (myValidate.Contains("VMA1MISSING"))
     {
         myMemVA1 = "style=color:red";
         myMemA1Title = "Alternate #1 is missing from our data";
     }
-    if (myValidate.Contains("VMA2"))
+    if (myValidate.Contains("VMA2MISSING"))
     {
         myMemVA2 = "style=color:red";
         myMemA2Title = "Alternate #2 is missing from our data";
     }
+    if (myValidate.Contains("VCMISSING")) { <h4 style="color:red">Council is missing.  Please check the data and add it using the Manage Councils Menu.</h4>}
 }
 <hr />
 <div class="row">
@@ -128,12 +139,12 @@
                     <td colspan="2">
                         <div class="form-group">
                             <label asp-for="D1Email" class="control-label" style="font-weight:bold"></label>
-                            <input asp-for="D1Email" class="form-control" />
+                            <input asp-for="D1Email" class="form-control" style="@myMemD1IEM"  />
                             <span asp-validation-for="D1Email" class="text-danger"></span>
                         </div>
                         <div class="form-group ExistingData">
                             <label asp-for="ED1Email" class="control-label" style="font-weight:bold"></label>
-                            <input asp-for="ED1Email" class="form-control ExistingData" />
+                            <input asp-for="ED1Email" class="form-control ExistingData"  style="@myMemD1IEM"  />
                             <span asp-validation-for="ED1Email" class="text-danger"></span>
                         </div>
                     </td>
@@ -143,48 +154,48 @@
                     <td>
                         <div class="form-group">
                             <label asp-for="D1FirstName" class="control-label" style="font-weight:bold"></label>
-                            <input asp-for="D1FirstName" class="form-control" />
+                            <input asp-for="D1FirstName" class="form-control" style="@myMemD1IFN"  />
                             <span asp-validation-for="D1FirstName" class="text-danger"></span>
                         </div>
                         <div class="form-group ExistingData">
                             <label asp-for="ED1FirstName" class="control-label" style="font-weight:bold"></label>
-                            <input asp-for="ED1FirstName" class="form-control ExistingData" />
+                            <input asp-for="ED1FirstName" class="form-control ExistingData" style="@myMemD1IFN"  />
                             <span asp-validation-for="ED1FirstName" class="text-danger"></span>
                         </div>
                     </td>
                     <td>
                         <div class="form-group">
                             <label asp-for="D1MiddleName" class="control-label" style="font-weight:bold"></label>
-                            <input asp-for="D1MiddleName" class="form-control" style="width:auto" />
+                            <input asp-for="D1MiddleName" class="form-control" style="width:auto;@myMemD1IMN"/>
                             <span asp-validation-for="D1MiddleName" class="text-danger"></span>
                         </div>
                         <div class="form-group ExistingData">
                             <label asp-for="ED1MiddleName" class="control-label" style="font-weight:bold"></label>
-                            <input asp-for="ED1MiddleName" class="form-control ExistingData" style="width:auto" />
+                            <input asp-for="ED1MiddleName" class="form-control ExistingData" style="width:auto;@myMemD1IMN"/>
                             <span asp-validation-for="ED1MiddleName" class="text-danger"></span>
                         </div>
                     </td>
                     <td>
                         <div class="form-group">
                             <label asp-for="D1LastName" class="control-label" style="font-weight:bold"></label>
-                            <input asp-for="D1LastName" class="form-control" style="width:auto" />
+                            <input asp-for="D1LastName" class="form-control" style="width:auto;@myMemD1ILN"/>
                             <span asp-validation-for="D1LastName" class="text-danger"></span>
                         </div>
                         <div class="form-group ExistingData">
                             <label asp-for="ED1LastName" class="control-label" style="font-weight:bold"></label>
-                            <input asp-for="ED1LastName" class="form-control ExistingData" style="width:auto" />
+                            <input asp-for="ED1LastName" class="form-control ExistingData" style="width:auto;@myMemD1ILN"/>
                             <span asp-validation-for="ED1LastName" class="text-danger"></span>
                         </div>
                     </td>
                     <td>
                         <div class="form-group">
                             <label asp-for="D1Suffix" class="control-label" style="font-weight:bold"></label>
-                            <input asp-for="D1Suffix" class="form-control" />
+                            <input asp-for="D1Suffix" class="form-control"  style="@myMemD1ISX" />
                             <span asp-validation-for="D1Suffix" class="text-danger"></span>
                         </div>
                         <div class="form-group ExistingData">
                             <label asp-for="ED1Suffix" class="control-label" style="font-weight:bold"></label>
-                            <input asp-for="ED1Suffix" class="form-control ExistingData" />
+                            <input asp-for="ED1Suffix" class="form-control ExistingData"  style="@myMemD1ISX"  />
                             <span asp-validation-for="ED1Suffix" class="text-danger"></span>
                         </div>
 
@@ -195,48 +206,48 @@
                     <td>
                         <div class="form-group">
                             <label asp-for="D1Address1" class="control-label" style="font-weight:bold"></label>
-                            <input asp-for="D1Address1" class="form-control" style="width:auto" />
+                            <input asp-for="D1Address1" class="form-control" style="width:auto;@myMemD1IAD"/>
                             <span asp-validation-for="D1Address1" class="text-danger"></span>
                         </div>
                         <div class="form-group ExistingData">
                             <label asp-for="ED1Address1" class="control-label" style="font-weight:bold"></label>
-                            <input asp-for="ED1Address1" class="form-control ExistingData"  style="width:auto" />
+                            <input asp-for="ED1Address1" class="form-control ExistingData" style="width:auto;@myMemD1IAD" />
                             <span asp-validation-for="ED1Address1" class="text-danger"></span>
                         </div>
                     </td>
                     <td>
                         <div class="form-group">
                             <label asp-for="D1City" class="control-label" style="font-weight:bold"></label>
-                            <input asp-for="D1City" class="form-control" />
+                            <input asp-for="D1City" class="form-control" style="@myMemD1ICT"  />
                             <span asp-validation-for="D1City" class="text-danger"></span>
                         </div>
                         <div class="form-group ExistingData">
                             <label asp-for="ED1City" class="control-label" style="font-weight:bold"></label>
-                            <input asp-for="ED1City" class="form-control ExistingData" />
+                            <input asp-for="ED1City" class="form-control ExistingData" style="@myMemD1ICT"  />
                             <span asp-validation-for="ED1City" class="text-danger"></span>
                         </div>
                     </td>
                     <td>
                         <div class="form-group">
                             <label asp-for="D1State" class="control-label" style="font-weight:bold"></label>
-                            <input asp-for="D1State" class="form-control" />
+                            <input asp-for="D1State" class="form-control" style="@myMemD1IST"  />
                             <span asp-validation-for="D1State" class="text-danger"></span>
                         </div>
                         <div class="form-group ExistingData">
                             <label asp-for="ED1State" class="control-label" style="font-weight:bold"></label>
-                            <input asp-for="ED1State" class="form-control ExistingData" />
+                            <input asp-for="ED1State" class="form-control ExistingData" style="@myMemD1IST"  />
                             <span asp-validation-for="ED1State" class="text-danger"></span>
                         </div>
                     </td>
                     <td>
                         <div class="form-group">
                             <label asp-for="D1ZipCode" class="control-label" style="font-weight:bold"></label>
-                            <input asp-for="D1ZipCode" class="form-control" style="width:auto" />
+                            <input asp-for="D1ZipCode" class="form-control" style="width:auto;@myMemD1IZP"/>
                             <span asp-validation-for="D1ZipCode" class="text-danger"></span>
                         </div>
                         <div class="form-group ExistingData">
                             <label asp-for="ED1ZipCode" class="control-label" style="font-weight:bold"></label>
-                            <input asp-for="ED1ZipCode" class="form-control ExistingData" style="width:auto" />
+                            <input asp-for="ED1ZipCode" class="form-control ExistingData" style="width:auto;@myMemD1IZP"/>
                             <span asp-validation-for="ED1ZipCode" class="text-danger"></span>
                         </div>
                     </td>
