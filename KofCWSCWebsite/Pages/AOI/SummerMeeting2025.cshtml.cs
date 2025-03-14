@@ -3,7 +3,7 @@ using Microsoft.AspNetCore.Mvc.RazorPages;
 
 namespace KofCWSCWebsite.Pages.AOI
 {
-    public class SummerMeeting : PageModel
+    public class SummerMeetingModel : PageModel
     {
         public void OnGet()
         {
