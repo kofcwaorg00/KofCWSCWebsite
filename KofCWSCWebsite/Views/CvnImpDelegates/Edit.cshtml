@@ -92,12 +92,13 @@
         myMemVA2 = "style=color:red";
         myMemA2Title = "Alternate #2 is missing from our data";
     }
-    if (myValidate.Contains("VCMISSING")) { <h4 style="color:red">Council is missing.  Please check the data and add it using the Manage Councils Menu.</h4>}
+    if (myValidate.Contains("VCMISSING"))
+    { <h4 style="color:red">Council is missing.  Please check the data and add it using the Manage Councils Menu.</h4>}
 }
 <hr />
 <div class="row">
     <div class="col-md-4">
-        <form asp-action="CreateFromDelImp" asp-controller="TblMasMembers" asp-route-id="@Model.Id">
+        <form asp-action="AddOrUpdateFromDelImp" asp-controller="TblMasMembers" asp-route-id="@Model.Id">
             <input asp-for="RecType" type="hidden" class="form-control" value="U" />
             <div asp-validation-summary="ModelOnly" class="text-danger"></div>
             <table class="table">
@@ -138,15 +139,17 @@
                     <td></td>
                     <td></td>
                     <td>
-                        @if (myValidate.Contains("VMD1"))
+                        @if (!myValidate.Contains("VCMISSING"))
                         {
-                            <input type="submit" name="action" value="Add D1 New Member" class="btn btn-primary" />
+                            @if (myValidate.Contains("VMD1MISSING"))
+                            {
+                                <input type="submit" name="action" value="Add D1 New Member" class="btn btn-primary" />
+                            }
+                            @if (myValidate2.Contains("D1I"))
+                            {
+                                <input type="submit" name="action" value="Update D1 Existing Member" class="btn btn-primary" />
+                            }
                         }
-                        @if (myValidate2.Contains("D1I"))
-                        {
-                            <input type="submit" name="action" value="Update D1 Existing Member" class="btn btn-primary" />
-                        }
-
                     </td>
                 </tr>
                 <tr style="border-left:solid;border-right:solid">
@@ -297,15 +300,17 @@
                     <td></td>
                     <td></td>
                     <td>
-                        @if (myValidate.Contains("VMD2"))
+                        @if (!myValidate.Contains("VCMISSING"))
                         {
-                            <input type="submit" name="action" value="Add D2 New Member" class="btn btn-primary" />
+                            @if (myValidate.Contains("VMD2MISSING"))
+                            {
+                                <input type="submit" name="action" value="Add D2 New Member" class="btn btn-primary" />
+                            }
+                            @if (myValidate2.Contains("D2I"))
+                            {
+                                <input type="submit" name="action" value="Update D2 Existing Member" class="btn btn-primary" />
+                            }
                         }
-                        @if (myValidate2.Contains("D2I"))
-                        {
-                            <input type="submit" name="action" value="Update D2 Existing Member" class="btn btn-primary" />
-                        }
-
                     </td>
                 </tr>
                 <tr style="border-left:solid;border-right:solid">
@@ -456,15 +461,17 @@
                     <td></td>
                     <td></td>
                     <td>
-                        @if (myValidate.Contains("VMA1"))
+                        @if (!myValidate.Contains("VCMISSING"))
                         {
-                            <input type="submit" name="action" value="Add A1 New Member" class="btn btn-primary" />
+                            @if (myValidate.Contains("VMA1MISSING"))
+                            {
+                                <input type="submit" name="action" value="Add A1 New Member" class="btn btn-primary" />
+                            }
+                            @if (myValidate2.Contains("A1I"))
+                            {
+                                <input type="submit" name="action" value="Update A1 Existing Member" class="btn btn-primary" />
+                            }
                         }
-                        @if (myValidate2.Contains("A1I"))
-                        {
-                            <input type="submit" name="action" value="Update A1 Existing Member" class="btn btn-primary" />
-                        }
-
                     </td>
                 </tr>
                 <tr style="border-left:solid;border-right:solid">
@@ -615,15 +622,17 @@
                     <td></td>
                     <td></td>
                     <td>
-                        @if (myValidate.Contains("VMA2"))
+                        @if (!myValidate.Contains("VCMISSING"))
                         {
-                            <input type="submit" name="action" value="Add A1 New Member" class="btn btn-primary" />
+                            @if (myValidate.Contains("VMA2MISSING"))
+                            {
+                                <input type="submit" name="action" value="Add A2 New Member" class="btn btn-primary" />
+                            }
+                            @if (myValidate2.Contains("A2I"))
+                            {
+                                <input type="submit" name="action" value="Update A2 Existing Member" class="btn btn-primary" />
+                            }
                         }
-                        @if (myValidate2.Contains("A2I"))
-                        {
-                            <input type="submit" name="action" value="Update A1 Existing Member" class="btn btn-primary" />
-                        }
-
                     </td>
                 </tr>
                 <tr style="border-left:solid;border-right:solid">
@@ -769,10 +778,13 @@
                 @*End Alternate #1 Box*@
                 @***************************************************************************************@
             </table>
-            <div class="form-group">
-                <input type="submit" name="action" value="Save Delegate Changes" class="btn btn-primary" />
-            </div>
-        </form>
+            @if (!myValidate.Contains("VCMISSING"))
+            {
+                <div class="form-group">
+                    <input type="submit" name="action" value="Save Delegate Changes" class="btn btn-primary" />
+                </div>
+            }
+            </form>
     </div>
 </div>
 

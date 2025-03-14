@@ -9,11 +9,20 @@
 <h6>@ViewBag.Message</h6>
 
 <div style="float:left">
-    <form asp-controller="CvnImpDelegates" asp-action="Create" method="get">
-        <button type="submit" class="btn btn-sm btn-success">
-            Create A New Council
-        </button>
-    </form>
+    <div style="float:left">
+        <form asp-controller="CvnImpDelegates" asp-action="Create" method="get" title="This will create a new Council's Delegates">
+            <button type="submit" class="btn btn-sm btn-success">
+                Create A Manual Council Import Record
+            </button>
+        </form>
+    </div>
+    <div style="float:right" title="This will create the acutal delegate records based on this list of members.">
+        <form asp-controller="CvnImpDelegates" asp-action="CreateDelegates" method="get">
+            <button type="submit" class="btn btn-sm btn-danger">
+                Add Delegate Records
+            </button>
+        </form>
+    </div>
 </div>
 <div title="At least 1 member is missing." style="background-color:yellow;float:right;padding-left:5px;padding-right:5px">
     MISSING MEMBER
@@ -30,7 +39,7 @@
 <table class="table">
     <thead>
         <tr>
-            <th></th>
+            <th style="width:auto" title="Legend">Leg</th>
             <th title="Record Type (M)anual, (I)mported, (U)pdated" style="text-align:center">
                 RT
             </th>
@@ -132,14 +141,14 @@
             }
 
             <tr>
-                <td style="text-align:center" title="@myValidTitle">
-                    <div style="float:left;@myUMValid">&nbsp;&nbsp;&nbsp;</div>
-                    <div style="float:right;@myMCValid">&nbsp;&nbsp;&nbsp;</div>
-                    <div style="float:right;@myMMValid">&nbsp;&nbsp;&nbsp;</div>
+                <td style="text-align:center;width:65px" title="@myValidTitle">
+                    <div style="width:15px;float:left;@myUMValid">&nbsp;&nbsp;&nbsp;</div>
+                    <div style="width:15px;float: right; @myMCValid">&nbsp;&nbsp;&nbsp;</div>
+                    <div style="width:15px;float: right; @myMMValid">&nbsp;&nbsp;&nbsp;</div>
                 </td>
                 <td style="text-align:center" title="@myTitle">
                     @*@myCMI;
-                    @item.Validation;*@
+                        @item.Validation;*@
                     @Html.DisplayFor(modelItem => item.RecType)
                 </td>
                 <td title="@myValidTitle">
