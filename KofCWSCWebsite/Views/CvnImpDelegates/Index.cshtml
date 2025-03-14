@@ -15,18 +15,22 @@
         </button>
     </form>
 </div>
-<div style="background-color:yellow;float:right;padding-left:5px;padding-right:5px">
+<div title="At least 1 member is missing." style="background-color:yellow;float:right;padding-left:5px;padding-right:5px">
     MISSING MEMBER
 </div>
-<div style="background-color: orange; float: right; padding-left: 5px; padding-right: 5px">
+<div title="At least 1 member has updated information." style="background-color: orange; float: right; padding-left: 5px; padding-right: 5px">
     UPDATED MEMBER INFORMATION
 </div>
-<div style="background-color: red; float: right; padding-left: 5px; padding-right: 5px">
+<div title="Should not happend. Data validated on input to form." style="background-color: red; float: right; padding-left: 5px; padding-right: 5px">
     MISSING COUNCIL
+</div>
+<div style="float: right; padding-left: 5px; padding-right: 5px">
+    Hover over the colors in the left column to see a message.
 </div>
 <table class="table">
     <thead>
         <tr>
+            <th></th>
             <th title="Record Type (M)anual, (I)mported, (U)pdated" style="text-align:center">
                 RT
             </th>
@@ -50,38 +54,55 @@
         @foreach (var item in Model)
         {
             string myCMI = Utils.CompareMemberInfo(item);
-            string myValid = "";
+            string myMMValid = "";
+            string myMCValid = "";
+            string myUMValid = "";
             string myValidTitle = "";
 
             if (item.Validation.Contains("VCMISSING"))
             {
-                myValid = "style=background-color:red;color:white";
+                myMCValid = "background-color:red;color:white";
                 myValidTitle += "Council does not exist; ";
             }
             if (item.Validation.Contains("VMD1MISSING"))
             {
-                myValid = "style=background-color:yellow";
+                myMMValid = "background-color:yellow";
                 myValidTitle += "Delegate 1 Member does not exist; ";
             }
             if (item.Validation.Contains("VMD2MISSING"))
             {
-                myValid = "style=background-color:yellow";
+                myMMValid = "background-color:yellow";
                 myValidTitle += "Delegate 2 Member does not exist; ";
             }
             if (item.Validation.Contains("VMA1MISSING"))
             {
-                myValid = "style=background-color:yellow";
+                myMMValid = "background-color:yellow";
                 myValidTitle += "Alternate 1 Member does not exist; ";
             }
             if (item.Validation.Contains("VMA2MISSING"))
             {
-                myValid = "style=background-color:yellow";
+                myMMValid = "background-color:yellow";
                 myValidTitle += "Alternate 2 Member does not exist; ";
             }
             if (myCMI.Contains("D1I"))
             {
-                myValid = "style=background-color:orange";
+                myUMValid = "background-color:orange";
                 myValidTitle += "Delegate #1 has updated Member Information; ";
+            }
+            if (myCMI.Contains("D2I"))
+            {
+                myUMValid = "background-color:orange";
+                myValidTitle += "Delegate #2 has updated Member Information; ";
+            }
+            if (myCMI.Contains("A1I"))
+            {
+                myUMValid = "background-color:orange";
+                myValidTitle += "Alternate #1 has updated Member Information; ";
+            }
+            if (myCMI.Contains("A2I"))
+            {
+                myUMValid = "background-color:orange";
+                myValidTitle += "Alternate #2 has updated Member Information; ";
             }
             string myTitle = "";
 
@@ -111,19 +132,26 @@
             }
 
             <tr>
+                <td style="text-align:center" title="@myValidTitle">
+                    <div style="float:left;@myUMValid">&nbsp;&nbsp;&nbsp;</div>
+                    <div style="float:right;@myMCValid">&nbsp;&nbsp;&nbsp;</div>
+                    <div style="float:right;@myMMValid">&nbsp;&nbsp;&nbsp;</div>
+                </td>
                 <td style="text-align:center" title="@myTitle">
+                    @*@myCMI;
+                    @item.Validation;*@
                     @Html.DisplayFor(modelItem => item.RecType)
                 </td>
-                <td @myValid title="@myValidTitle">
+                <td title="@myValidTitle">
                     @Html.DisplayFor(modelItem => item.SubmissionDate)
                 </td>
-                <td @myValid title="@myValidTitle">
+                <td title="@myValidTitle">
                     @Html.DisplayFor(modelItem => item.FormSubmitterSEmail)
                 </td>
-                <td @myValid title="@myValidTitle">
+                <td title="@myValidTitle">
                     @Html.DisplayFor(modelItem => item.CouncilName)
                 </td>
-                <td @myValid title="@myValidTitle">
+                <td title="@myValidTitle">
                     @Html.DisplayFor(modelItem => item.CouncilNumber)
                 </td>
                 <td style="padding-right:0px">

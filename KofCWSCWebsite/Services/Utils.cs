@@ -295,7 +295,7 @@ namespace KofCWSCWebsite.Services
             // be used by the calling process to determine what, if any, properties are different
             string retval = "";
             // D1
-            if (cvnImpDelegate.Validation.ToUpper().Contains("MISSING")) { return cvnImpDelegate.Validation; }
+            //if (cvnImpDelegate.Validation.ToUpper().Contains("MISSING")) { return cvnImpDelegate.Validation; }
 
             if (cvnImpDelegate.D1FirstName.IsNullOrEmpty()) { cvnImpDelegate.D1FirstName = ""; }
             if (cvnImpDelegate.ED1FirstName.IsNullOrEmpty()) { cvnImpDelegate.ED1FirstName = ""; }
