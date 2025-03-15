@@ -376,5 +376,567 @@ namespace KofCWSCWebsite.Services
             }
             return retval;
         }
+
+        public static string GetStateAbbr(string stateName)
+        {
+            if (stateName.Length == 2) { return stateName; }
+            var states = new Dictionary<string, string>(StringComparer.OrdinalIgnoreCase)
+            {
+                { "Alabama", "AL" },
+                { "Alaska", "AK" },
+                { "Arizona", "AZ" },
+                { "Arkansas", "AR" },
+                { "California", "CA" },
+                { "Colorado", "CO" },
+                { "Connecticut", "CT" },
+                { "Delaware", "DE" },
+                { "Florida", "FL" },
+                { "Georgia", "GA" },
+                { "Hawaii", "HI" },
+                { "Idaho", "ID" },
+                { "Illinois", "IL" },
+                { "Indiana", "IN" },
+                { "Iowa", "IA" },
+                { "Kansas", "KS" },
+                { "Kentucky", "KY" },
+                { "Louisiana", "LA" },
+                { "Maine", "ME" },
+                { "Maryland", "MD" },
+                { "Massachusetts", "MA" },
+                { "Michigan", "MI" },
+                { "Minnesota", "MN" },
+                { "Mississippi", "MS" },
+                { "Missouri", "MO" },
+                { "Montana", "MT" },
+                { "Nebraska", "NE" },
+                { "Nevada", "NV" },
+                { "New Hampshire", "NH" },
+                { "New Jersey", "NJ" },
+                { "New Mexico", "NM" },
+                { "New York", "NY" },
+                { "North Carolina", "NC" },
+                { "North Dakota", "ND" },
+                { "Ohio", "OH" },
+                { "Oklahoma", "OK" },
+                { "Oregon", "OR" },
+                { "Pennsylvania", "PA" },
+                { "Rhode Island", "RI" },
+                { "South Carolina", "SC" },
+                { "South Dakota", "SD" },
+                { "Tennessee", "TN" },
+                { "Texas", "TX" },
+                { "Utah", "UT" },
+                { "Vermont", "VT" },
+                { "Virginia", "VA" },
+                { "Washington", "WA" },
+                { "West Virginia", "WV" },
+                { "Wisconsin", "WI" },
+                { "Wyoming", "WY" }
+            };
+
+            if (states.TryGetValue(stateName, out string abbreviation))
+            {
+                return abbreviation;
+            }
+            else
+            {
+                throw new ArgumentException($"State name '{stateName}' is not recognized.");
+            }
+        }
+
+        private static bool ShouldUpdate(string? inItem, string? exItem, TblMasMember member, string what, bool isNew)
+        {
+            // if it is a new member do the update
+            if (isNew) { return true; }
+            // if both items are empty or null do nothing
+            if (inItem.IsNullOrEmpty() && exItem.IsNullOrEmpty()) { return false; }
+            // if one is empty but the other is not do the update
+            if (inItem.IsNullOrEmpty() && !exItem.IsNullOrEmpty()) { return true; }
+            // if one is empty but the other is not do the update
+            if (!inItem.IsNullOrEmpty() && exItem.IsNullOrEmpty()) { return true; }
+            // if we get here both have a value and we need to check and do the right thing
+            if (exItem.ToUpper() != inItem.ToUpper())
+            {
+                return true;
+            }
+            else
+            {
+                return false;
+            }
+        }
+        public static bool FillD1(ref TblMasMember myMember, CvnImpDelegate myDelegate)
+        {
+            string UpdatedBy = "Delegate Import API";
+            bool isUpdated = false;
+            bool isNew = false;
+
+            if (myMember == null)
+            {
+                myMember = new TblMasMember();
+                isNew = true;
+            }
+
+            // if myMember is null that means that we are adding a new one so we need to
+            // spin up a new model object and skip memberid assignmane
+            // if we have an exitsting incomning member recored it's MemberID will already
+            // be set so don't mess with it
+            // myMember.MemberId = ??
+
+            myMember.KofCid = (int)myDelegate.D1MemberID;
+            // ok for each member property that we can update, let's figure out if the data
+            // has changed.  If so, then update it else leave it alone
+            //-------------------------------------------------------------------------------------
+            // the only time we update the property is if it changed or is null
+            // changed allows us to only update property data that has actually changes
+            // based on the existing value.  If the property is null then we are adding and
+            // want the assignment too  != Property should work in both cases, NULL if 
+            // adding and not equal if we are updating
+            //-------------------------------------------------------------------------------------
+            // COUNCIL
+            if (myMember.Council != (int)myDelegate.CouncilNumber)
+            {
+                myMember.Council = (int)myDelegate.CouncilNumber;
+                myMember.CouncilUpdated = DateTime.Now;
+                myMember.CouncilUpdatedBy = UpdatedBy;
+                isUpdated = true;
+            }
+            // FIRSTNAME
+            if (ShouldUpdate(myDelegate.D1FirstName, myMember.FirstName, myMember, "FirstName",isNew))
+            {
+                myMember.FirstName = myDelegate.D1FirstName;
+                myMember.FirstNameUpdated = DateTime.Now;
+                myMember.FirstNameUpdatedBy = UpdatedBy;
+                isUpdated = true;
+            }
+            // LASTNAME
+            if (ShouldUpdate(myDelegate.D1LastName, myMember.LastName, myMember, "LastName", isNew))
+            {
+                myMember.LastName = myDelegate.D1LastName;
+                myMember.LastNameUpdated = DateTime.Now;
+                myMember.LastNameUpdatedBy = UpdatedBy;
+                isUpdated = true;
+            }
+            // MI
+            if (ShouldUpdate(myDelegate.D1MiddleName, myMember.Mi, myMember, "MiddleName", isNew))
+            {
+                myMember.Mi = myDelegate.D1MiddleName;
+                myMember.Miupdated = DateTime.Now;
+                myMember.MiupdatedBy = UpdatedBy;
+                isUpdated = true;
+            }
+            // SUFFIX
+            if (ShouldUpdate(myDelegate.D1Suffix, myMember.Suffix, myMember, "Suffix", isNew))
+            {
+                myMember.Suffix = myDelegate.D1Suffix;
+                myMember.SuffixUpdated = DateTime.Now;
+                myMember.SuffixUpdatedBy = UpdatedBy;
+                isUpdated = true;
+            }
+            // ADDRESS
+            if (ShouldUpdate(myDelegate.D1Address1, myMember.Address, myMember, "Address", isNew))
+            {
+                myMember.Address = myDelegate.D1Address1;
+                myMember.AddressUpdated = DateTime.Now;
+                myMember.AddressUpdatedBy = UpdatedBy;
+                isUpdated = true;
+            }
+            // CITY
+            if (ShouldUpdate(myDelegate.D1City, myMember.City, myMember, "City", isNew))
+            {
+                myMember.City = myDelegate.D1City;
+                myMember.CityUpdated = DateTime.Now;
+                myMember.CityUpdatedBy = UpdatedBy;
+                isUpdated = true;
+            }
+            // STATE
+            if (ShouldUpdate(GetStateAbbr(myDelegate.D1State), myMember.State, myMember, "State", isNew))
+            {
+                myMember.State = GetStateAbbr(myDelegate.D1State);
+                myMember.StateUpdated = DateTime.Now;
+                myMember.StateUpdatedBy = UpdatedBy;
+                isUpdated = true;
+            }
+            // POSTALCODE
+            if (ShouldUpdate(myDelegate.D1ZipCode, myMember.PostalCode, myMember, "PostalCode", isNew))
+            {
+                myMember.PostalCode = myDelegate.D1ZipCode;
+                myMember.PostalCodeUpdated = DateTime.Now;
+                myMember.PostalCodeUpdatedBy = UpdatedBy;
+                isUpdated = true;
+            }
+            // PHONE
+            if (ShouldUpdate(myDelegate.D1Phone, myMember.Phone, myMember, "Phone", isNew))
+            {
+                myMember.Phone = myDelegate.D1Phone;
+                myMember.PhoneUpdated = DateTime.Now;
+                myMember.PhoneUpdatedBy = UpdatedBy;
+                isUpdated = true;
+            }
+            // EMAIL
+            if (ShouldUpdate(myDelegate.D1Email, myMember.Email, myMember, "Email", isNew))
+            {
+                myMember.Email = myDelegate.D1Email;
+                myMember.EmailUpdated = DateTime.Now;
+                myMember.EmailUpdatedBy = UpdatedBy;
+                isUpdated = true;
+            }
+
+            return isUpdated;
+        }
+        public static bool FillD2(ref TblMasMember myMember, CvnImpDelegate myDelegate)
+        {
+            string UpdatedBy = "Delegate Import API";
+            bool isUpdated = false;
+            bool isNew = false;
+            if (myMember == null)
+            {
+                myMember = new TblMasMember();
+                isNew = true;
+            }
+
+            // if myMember is null that means that we are adding a new one so we need to
+            // spin up a new model object and skip memberid assignmane
+            // if we have an exitsting incomning member recored it's MemberID will already
+            // be set so don't mess with it
+            // myMember.MemberId = ??
+
+            myMember.KofCid = (int)myDelegate.D2MemberID;
+            // ok for each member property that we can update, let's figure out if the data
+            // has changed.  If so, then update it else leave it alone
+            //-------------------------------------------------------------------------------------
+            // the only time we update the property is if it changed or is null
+            // changed allows us to only update property data that has actually changes
+            // based on the existing value.  If the property is null then we are adding and
+            // want the assignment too  != Property should work in both cases, NULL if 
+            // adding and not equal if we are updating
+            //-------------------------------------------------------------------------------------
+            // COUNCIL
+            if (myMember.Council != (int)myDelegate.CouncilNumber)
+            {
+                myMember.Council = (int)myDelegate.CouncilNumber;
+                myMember.CouncilUpdated = DateTime.Now;
+                myMember.CouncilUpdatedBy = UpdatedBy;
+                isUpdated = true;
+            }
+            // FIRSTNAME
+            if (ShouldUpdate(myDelegate.D2FirstName, myMember.FirstName, myMember, "FirstName", isNew))
+            {
+                myMember.FirstName = myDelegate.D2FirstName;
+                myMember.FirstNameUpdated = DateTime.Now;
+                myMember.FirstNameUpdatedBy = UpdatedBy;
+                isUpdated = true;
+            }
+            // LASTNAME
+            if (ShouldUpdate(myDelegate.D2LastName, myMember.LastName, myMember, "LastName", isNew))
+            {
+                myMember.LastName = myDelegate.D2LastName;
+                myMember.LastNameUpdated = DateTime.Now;
+                myMember.LastNameUpdatedBy = UpdatedBy;
+                isUpdated = true;
+            }
+            // MI
+            if (ShouldUpdate(myDelegate.D2MiddleName, myMember.Mi, myMember, "MiddleName", isNew))
+            {
+                myMember.Mi = myDelegate.D2MiddleName;
+                myMember.Miupdated = DateTime.Now;
+                myMember.MiupdatedBy = UpdatedBy;
+                isUpdated = true;
+            }
+            // SUFFIX
+            if (ShouldUpdate(myDelegate.D2Suffix, myMember.Suffix, myMember, "Suffix", isNew))
+            {
+                myMember.Suffix = myDelegate.D2Suffix;
+                myMember.SuffixUpdated = DateTime.Now;
+                myMember.SuffixUpdatedBy = UpdatedBy;
+                isUpdated = true;
+            }
+            // ADDRESS
+            if (ShouldUpdate(myDelegate.D2Address1, myMember.Address, myMember, "Address", isNew))
+            {
+                myMember.Address = myDelegate.D2Address1;
+                myMember.AddressUpdated = DateTime.Now;
+                myMember.AddressUpdatedBy = UpdatedBy;
+                isUpdated = true;
+            }
+            // CITY
+            if (ShouldUpdate(myDelegate.D2City, myMember.City, myMember, "City", isNew))
+            {
+                myMember.City = myDelegate.D2City;
+                myMember.CityUpdated = DateTime.Now;
+                myMember.CityUpdatedBy = UpdatedBy;
+                isUpdated = true;
+            }
+            // STATE
+            if (ShouldUpdate(GetStateAbbr(myDelegate.D2State), myMember.State, myMember, "State", isNew))
+            {
+                myMember.State = GetStateAbbr(myDelegate.D2State);
+                myMember.StateUpdated = DateTime.Now;
+                myMember.StateUpdatedBy = UpdatedBy;
+                isUpdated = true;
+            }
+            // POSTALCODE
+            if (ShouldUpdate(myDelegate.D2ZipCode, myMember.PostalCode, myMember, "PostalCode", isNew))
+            {
+                myMember.PostalCode = myDelegate.D2ZipCode;
+                myMember.PostalCodeUpdated = DateTime.Now;
+                myMember.PostalCodeUpdatedBy = UpdatedBy;
+                isUpdated = true;
+            }
+            // PHONE
+            if (ShouldUpdate(myDelegate.D2Phone, myMember.Phone, myMember, "Phone", isNew))
+            {
+                myMember.Phone = myDelegate.D2Phone;
+                myMember.PhoneUpdated = DateTime.Now;
+                myMember.PhoneUpdatedBy = UpdatedBy;
+                isUpdated = true;
+            }
+            // EMAIL
+            if (ShouldUpdate(myDelegate.D2Email, myMember.Email, myMember, "Email", isNew))
+            {
+                myMember.Email = myDelegate.D2Email;
+                myMember.EmailUpdated = DateTime.Now;
+                myMember.EmailUpdatedBy = UpdatedBy;
+                isUpdated = true;
+            }
+
+            return isUpdated;
+        }
+        public static bool FillA1(ref TblMasMember myMember, CvnImpDelegate myDelegate)
+        {
+            string UpdatedBy = "Delegate Import API";
+            bool isUpdated = false;
+            bool isNew = false;
+            if (myMember == null)
+            {
+                myMember = new TblMasMember();
+                isNew = true;
+            }
+
+            // if myMember is null that means that we are adding a new one so we need to
+            // spin up a new model object and skip memberid assignmane
+            // if we have an exitsting incomning member recored it's MemberID will already
+            // be set so don't mess with it
+            // myMember.MemberId = ??
+
+            myMember.KofCid = (int)myDelegate.A1MemberID;
+            // ok for each member property that we can update, let's figure out if the data
+            // has changed.  If so, then update it else leave it alone
+            //-------------------------------------------------------------------------------------
+            // the only time we update the property is if it changed or is null
+            // changed allows us to only update property data that has actually changes
+            // based on the existing value.  If the property is null then we are adding and
+            // want the assignment too  != Property should work in both cases, NULL if 
+            // adding and not equal if we are updating
+            //-------------------------------------------------------------------------------------
+            // COUNCIL
+            if (myMember.Council != (int)myDelegate.CouncilNumber)
+            {
+                myMember.Council = (int)myDelegate.CouncilNumber;
+                myMember.CouncilUpdated = DateTime.Now;
+                myMember.CouncilUpdatedBy = UpdatedBy;
+                isUpdated = true;
+            }
+            // FIRSTNAME
+            if (ShouldUpdate(myDelegate.A1FirstName, myMember.FirstName, myMember, "FirstName", isNew))
+            {
+                myMember.FirstName = myDelegate.A1FirstName;
+                myMember.FirstNameUpdated = DateTime.Now;
+                myMember.FirstNameUpdatedBy = UpdatedBy;
+                isUpdated = true;
+            }
+            // LASTNAME
+            if (ShouldUpdate(myDelegate.A1LastName, myMember.LastName, myMember, "LastName", isNew))
+            {
+                myMember.LastName = myDelegate.A1LastName;
+                myMember.LastNameUpdated = DateTime.Now;
+                myMember.LastNameUpdatedBy = UpdatedBy;
+                isUpdated = true;
+            }
+            // MI
+            if (ShouldUpdate(myDelegate.A1MiddleName, myMember.Mi, myMember, "MiddleName", isNew))
+            {
+                myMember.Mi = myDelegate.A1MiddleName;
+                myMember.Miupdated = DateTime.Now;
+                myMember.MiupdatedBy = UpdatedBy;
+                isUpdated = true;
+            }
+            // SUFFIX
+            if (ShouldUpdate(myDelegate.A1Suffix, myMember.Suffix, myMember, "Suffix", isNew))
+            {
+                myMember.Suffix = myDelegate.A1Suffix;
+                myMember.SuffixUpdated = DateTime.Now;
+                myMember.SuffixUpdatedBy = UpdatedBy;
+                isUpdated = true;
+            }
+            // ADDRESS
+            if (ShouldUpdate(myDelegate.A1Address1, myMember.Address, myMember, "Address", isNew))
+            {
+                myMember.Address = myDelegate.A1Address1;
+                myMember.AddressUpdated = DateTime.Now;
+                myMember.AddressUpdatedBy = UpdatedBy;
+                isUpdated = true;
+            }
+            // CITY
+            if (ShouldUpdate(myDelegate.A1City, myMember.City, myMember, "City", isNew))
+            {
+                myMember.City = myDelegate.A1City;
+                myMember.CityUpdated = DateTime.Now;
+                myMember.CityUpdatedBy = UpdatedBy;
+                isUpdated = true;
+            }
+            // STATE
+            if (ShouldUpdate(GetStateAbbr(myDelegate.A1State), myMember.State, myMember, "State", isNew))
+            {
+                myMember.State = GetStateAbbr(myDelegate.A1State);
+                myMember.StateUpdated = DateTime.Now;
+                myMember.StateUpdatedBy = UpdatedBy;
+                isUpdated = true;
+            }
+            // POSTALCODE
+            if (ShouldUpdate(myDelegate.A1ZipCode, myMember.PostalCode, myMember, "PostalCode", isNew))
+            {
+                myMember.PostalCode = myDelegate.A1ZipCode;
+                myMember.PostalCodeUpdated = DateTime.Now;
+                myMember.PostalCodeUpdatedBy = UpdatedBy;
+                isUpdated = true;
+            }
+            // PHONE
+            if (ShouldUpdate(myDelegate.A1Phone, myMember.Phone, myMember, "Phone", isNew))
+            {
+                myMember.Phone = myDelegate.A1Phone;
+                myMember.PhoneUpdated = DateTime.Now;
+                myMember.PhoneUpdatedBy = UpdatedBy;
+                isUpdated = true;
+            }
+            // EMAIL
+            if (ShouldUpdate(myDelegate.A1Email, myMember.Email, myMember, "Email", isNew))
+            {
+                myMember.Email = myDelegate.A1Email;
+                myMember.EmailUpdated = DateTime.Now;
+                myMember.EmailUpdatedBy = UpdatedBy;
+                isUpdated = true;
+            }
+
+            return isUpdated;
+        }
+        public static bool FillA2(ref TblMasMember myMember, CvnImpDelegate myDelegate)
+        {
+            string UpdatedBy = "Delegate Import API";
+            bool isUpdated = false;
+            bool isNew = false;
+            if (myMember == null)
+            {
+                myMember = new TblMasMember();
+                isNew = true;
+            }
+
+            // if myMember is null that means that we are adding a new one so we need to
+            // spin up a new model object and skip memberid assignmane
+            // if we have an exitsting incomning member recored it's MemberID will already
+            // be set so don't mess with it
+            // myMember.MemberId = ??
+
+            myMember.KofCid = (int)myDelegate.A2MemberID;
+            // ok for each member property that we can update, let's figure out if the data
+            // has changed.  If so, then update it else leave it alone
+            //-------------------------------------------------------------------------------------
+            // the only time we update the property is if it changed or is null
+            // changed allows us to only update property data that has actually changes
+            // based on the existing value.  If the property is null then we are adding and
+            // want the assignment too  != Property should work in both cases, NULL if 
+            // adding and not equal if we are updating
+            //-------------------------------------------------------------------------------------
+            // COUNCIL
+            if (myMember.Council != (int)myDelegate.CouncilNumber)
+            {
+                myMember.Council = (int)myDelegate.CouncilNumber;
+                myMember.CouncilUpdated = DateTime.Now;
+                myMember.CouncilUpdatedBy = UpdatedBy;
+                isUpdated = true;
+            }
+            // FIRSTNAME
+            if (ShouldUpdate(myDelegate.A2FirstName, myMember.FirstName, myMember, "FirstName", isNew))
+            {
+                myMember.FirstName = myDelegate.A2FirstName;
+                myMember.FirstNameUpdated = DateTime.Now;
+                myMember.FirstNameUpdatedBy = UpdatedBy;
+                isUpdated = true;
+            }
+            // LASTNAME
+            if (ShouldUpdate(myDelegate.A2LastName, myMember.LastName, myMember, "LastName", isNew))
+            {
+                myMember.LastName = myDelegate.A2LastName;
+                myMember.LastNameUpdated = DateTime.Now;
+                myMember.LastNameUpdatedBy = UpdatedBy;
+                isUpdated = true;
+            }
+            // MI
+            if (ShouldUpdate(myDelegate.A2MiddleName, myMember.Mi, myMember, "MiddleName", isNew))
+            {
+                myMember.Mi = myDelegate.A2MiddleName;
+                myMember.Miupdated = DateTime.Now;
+                myMember.MiupdatedBy = UpdatedBy;
+                isUpdated = true;
+            }
+            // SUFFIX
+            if (ShouldUpdate(myDelegate.A2Suffix, myMember.Suffix, myMember, "Suffix", isNew))
+            {
+                myMember.Suffix = myDelegate.A2Suffix;
+                myMember.SuffixUpdated = DateTime.Now;
+                myMember.SuffixUpdatedBy = UpdatedBy;
+                isUpdated = true;
+            }
+            // ADDRESS
+            if (ShouldUpdate(myDelegate.A2Address1, myMember.Address, myMember, "Address", isNew))
+            {
+                myMember.Address = myDelegate.A2Address1;
+                myMember.AddressUpdated = DateTime.Now;
+                myMember.AddressUpdatedBy = UpdatedBy;
+                isUpdated = true;
+            }
+            // CITY
+            if (ShouldUpdate(myDelegate.A2City, myMember.City, myMember, "City", isNew))
+            {
+                myMember.City = myDelegate.A2City;
+                myMember.CityUpdated = DateTime.Now;
+                myMember.CityUpdatedBy = UpdatedBy;
+                isUpdated = true;
+            }
+            // STATE
+            if (ShouldUpdate(GetStateAbbr(myDelegate.A2State), myMember.State, myMember, "State", isNew))
+            {
+                myMember.State = GetStateAbbr(myDelegate.A2State);
+                myMember.StateUpdated = DateTime.Now;
+                myMember.StateUpdatedBy = UpdatedBy;
+                isUpdated = true;
+            }
+            // POSTALCODE
+            if (ShouldUpdate(myDelegate.A2ZipCode, myMember.PostalCode, myMember, "PostalCode", isNew))
+            {
+                myMember.PostalCode = myDelegate.A2ZipCode;
+                myMember.PostalCodeUpdated = DateTime.Now;
+                myMember.PostalCodeUpdatedBy = UpdatedBy;
+                isUpdated = true;
+            }
+            // PHONE
+            if (ShouldUpdate(myDelegate.A2Phone, myMember.Phone, myMember, "Phone", isNew))
+            {
+                myMember.Phone = myDelegate.A2Phone;
+                myMember.PhoneUpdated = DateTime.Now;
+                myMember.PhoneUpdatedBy = UpdatedBy;
+                isUpdated = true;
+            }
+            // EMAIL
+            if (ShouldUpdate(myDelegate.A2Email, myMember.Email, myMember, "Email", isNew))
+            {
+                myMember.Email = myDelegate.A2Email;
+                myMember.EmailUpdated = DateTime.Now;
+                myMember.EmailUpdatedBy = UpdatedBy;
+                isUpdated = true;
+            }
+
+            return isUpdated;
+        }
+
     }
 }

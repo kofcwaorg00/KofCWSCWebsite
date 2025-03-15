@@ -11,6 +11,7 @@ using Serilog;
 using Newtonsoft.Json;
 using Microsoft.EntityFrameworkCore.Metadata.Internal;
 using com.sun.xml.@internal.bind.v2.model.core;
+using ikvm.runtime;
 
 namespace KofCWSCWebsite.Controllers
 {
@@ -18,14 +19,37 @@ namespace KofCWSCWebsite.Controllers
     {
         //private readonly ApplicationDbContext _context;
         private DataSetService _dataSetService;
+        private ApiHelper _apiHelper;
         //*********************************************************************************
         // 8/25/2024 Tim Philomeno
         // NOTE: the API equivelent is just MemberOffices
         //*********************************************************************************
-        public TblCorrMemberOfficesController(DataSetService dataSetService)
+        public TblCorrMemberOfficesController(DataSetService dataSetService, ApiHelper apiHelper)
         {
             _dataSetService = dataSetService;
+            _apiHelper = apiHelper; 
         }
+
+
+        public async Task<ActionResult<IEnumerable<TblCorrMemberOfficeVM>>> CFMDMACD()
+        {
+            //CheckForMissingDelegateMembersAndCreateDelegates
+            var myDelegates = await _apiHelper.GetAsync<IEnumerable<TblCorrMemberOfficeVM>>("CheckForMissingDelegateMembersAndCreateDelegates");
+            if (myDelegates.Count() == 0)
+            {
+                TempData["Message"] = "Delegate Records have been Added";
+                return RedirectToAction("Index", "CvnImpDelegates");
+            }
+            else
+            {
+                ViewBag.Message = "The Member Records for these Imported Delegates are missing." + Environment.NewLine + "Please add them and then run the process again.";
+                return View("Views/TblCorrMemberOffices/MissingDelegates.cshtml", myDelegates);
+            }
+            
+
+        }
+
+
 
         // GET: TblCorrMemberOffices
         public async Task<ActionResult<IEnumerable<TblCorrMemberOfficeVM>>> Index(int id)

@@ -17,11 +17,14 @@
         </form>
     </div>
     <div style="float:right" title="This will create the acutal delegate records based on this list of members.">
-        <form asp-controller="CvnImpDelegates" asp-action="CreateDelegates" method="get">
+        <form asp-controller="TblCorrMemberOffices" asp-action="CFMDMACD" method="get">
             <button type="submit" class="btn btn-sm btn-danger">
                 Add Delegate Records
             </button>
         </form>
+    </div>
+    <div>
+        <h6>@TempData["Message"]</h6>
     </div>
 </div>
 <div title="At least 1 member is missing." style="background-color:yellow;float:right;padding-left:5px;padding-right:5px">

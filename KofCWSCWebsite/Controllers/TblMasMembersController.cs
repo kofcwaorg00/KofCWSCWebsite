@@ -135,6 +135,61 @@ namespace KofCWSCWebsite.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> AddOrUpdateFromDelImp(CvnImpDelegate cvnImpDelegate,string action,int Id)
         {
+            string[] myactionin = action.Split(" ");
+            string myaction = myactionin[0];
+            string mydel = myactionin[1];
+            TblMasMember tblMasMember = null;
+            if (myaction == "Add")
+            {
+                switch(mydel){
+                    case "D1":
+                        Utils.FillD1(ref tblMasMember, cvnImpDelegate);
+                        await _apiHelper.PostAsync<TblMasMember, TblMasMember>($"Member", tblMasMember);
+                        break;
+                    case "D2":
+                        Utils.FillD2(ref tblMasMember, cvnImpDelegate);
+                        await _apiHelper.PostAsync<TblMasMember, TblMasMember>($"Member", tblMasMember);
+                        break;
+                    case "A1":
+                        Utils.FillA1(ref tblMasMember, cvnImpDelegate);
+                        await _apiHelper.PostAsync<TblMasMember, TblMasMember>($"Member", tblMasMember);
+                        break;
+                    case "A2":
+                        Utils.FillA2(ref tblMasMember, cvnImpDelegate);
+                        await _apiHelper.PostAsync<TblMasMember, TblMasMember>($"Member", tblMasMember);
+                        break;
+                }
+            }
+            else if (myaction == "Update")
+            {
+                switch (mydel)
+                {
+                    case "D1":
+                        tblMasMember = await _apiHelper.GetAsync<TblMasMember>($"Member/KofCID/{cvnImpDelegate.D1MemberID}");
+                        Utils.FillD1( ref tblMasMember, cvnImpDelegate);
+                        await _apiHelper.PutAsync<TblMasMember, TblMasMember>($"Member/{tblMasMember.MemberId}", tblMasMember);
+                        break;
+                    case "D2":
+                        tblMasMember = await _apiHelper.GetAsync<TblMasMember>($"Member/KofCID/{cvnImpDelegate.D2MemberID}");
+                        Utils.FillD2(ref tblMasMember, cvnImpDelegate);
+                        await _apiHelper.PutAsync<TblMasMember, TblMasMember>($"Member/{tblMasMember.MemberId}", tblMasMember);
+                        break;
+                    case "A1":
+                        tblMasMember = await _apiHelper.GetAsync<TblMasMember>($"Member/KofCID/{cvnImpDelegate.A1MemberID}");
+                        Utils.FillA1(ref tblMasMember, cvnImpDelegate);
+                        await _apiHelper.PutAsync<TblMasMember, TblMasMember>($"Member/{tblMasMember.MemberId}", tblMasMember);
+                        break;
+                    case "A2":
+                        tblMasMember = await _apiHelper.GetAsync<TblMasMember>($"Member/KofCID/{cvnImpDelegate.A2MemberID}");
+                        Utils.FillA2(ref tblMasMember, cvnImpDelegate);
+                        await _apiHelper.PutAsync<TblMasMember, TblMasMember>($"Member/{tblMasMember.MemberId}", tblMasMember);
+                        break;
+                }
+            }
+            else
+            {
+                return BadRequest("No action defined");
+            }
 
             return RedirectToAction("Index", "CvnImpDelegates");
         }
@@ -220,5 +275,100 @@ namespace KofCWSCWebsite.Controllers
                 return NoContent();
             }
         }
+        //private void CopyMemberFromImpModel(CvnImpDelegate cvnImpDelegate,ref TblMasMember tblMasMember, string del,int memberid = 0)
+        //{
+        //    string myUpd = "Updated by Delegate Import";
+        //    DateTime myDate = DateTime.Now;
+        //    if (del == "D1")
+        //    {
+        //        if (memberid != 0) { tblMasMember.MemberId = memberid; }
+        //        tblMasMember.KofCid = (int)cvnImpDelegate.D1MemberID;
+
+        //        tblMasMember.FirstName = cvnImpDelegate.D1FirstName;
+        //        tblMasMember.FirstNameUpdated = myDate;
+        //        tblMasMember.FirstNameUpdatedBy = myUpd;
+                
+        //        tblMasMember.Mi = cvnImpDelegate.D1MiddleName;
+        //        tblMasMember.Miupdated = myDate;
+        //        tblMasMember.MiupdatedBy = myUpd;
+                
+        //        tblMasMember.LastName = cvnImpDelegate.D1LastName;
+        //        tblMasMember.LastNameUpdated = myDate;
+        //        tblMasMember.LastNameUpdatedBy = myUpd;
+
+        //        tblMasMember.Suffix = cvnImpDelegate.D1Suffix;
+        //        tblMasMember.SuffixUpdated = myDate;
+        //        tblMasMember.SuffixUpdatedBy = myUpd;
+
+        //        tblMasMember.Address = cvnImpDelegate.D1Address1;
+        //        tblMasMember.AddressUpdated = myDate;
+        //        tblMasMember.AddressUpdatedBy = myUpd;
+
+        //        tblMasMember.City = cvnImpDelegate.D1City;
+        //        tblMasMember.CityUpdated = myDate;
+        //        tblMasMember.CityUpdatedBy = myUpd;
+
+        //        tblMasMember.State = cvnImpDelegate.D1State;
+        //        tblMasMember.StateUpdated = myDate;
+        //        tblMasMember.StateUpdatedBy = myUpd;
+
+        //        tblMasMember.PostalCode = cvnImpDelegate.D1ZipCode;
+        //        tblMasMember.PostalCodeUpdated = myDate;
+        //        tblMasMember.PostalCodeUpdatedBy = myUpd;
+
+        //        tblMasMember.Phone = cvnImpDelegate.D1Phone;
+        //        tblMasMember.PhoneUpdated = myDate;
+        //        tblMasMember.PhoneUpdatedBy = myUpd;
+
+        //        tblMasMember.Email = cvnImpDelegate.D1Email;
+        //        tblMasMember.EmailUpdated = myDate;
+        //        tblMasMember.EmailUpdatedBy = myUpd;
+        //    }
+        //    if (del == "D2")
+        //    {
+        //        if (memberid != 0) { tblMasMember.MemberId = memberid; }
+        //        tblMasMember.KofCid = (int)cvnImpDelegate.D2MemberID;
+        //        tblMasMember.FirstName = cvnImpDelegate.D2FirstName;
+        //        tblMasMember.Mi = cvnImpDelegate.D2MiddleName;
+        //        tblMasMember.LastName = cvnImpDelegate.D2LastName;
+        //        tblMasMember.Suffix = cvnImpDelegate.D2Suffix;
+        //        tblMasMember.Address = cvnImpDelegate.D2Address1;
+        //        tblMasMember.City = cvnImpDelegate.D2City;
+        //        tblMasMember.State = cvnImpDelegate.D2State;
+        //        tblMasMember.PostalCode = cvnImpDelegate.D2ZipCode;
+        //        tblMasMember.Phone = cvnImpDelegate.D2Phone;
+        //        tblMasMember.Email = cvnImpDelegate.D2Email;
+        //    }
+        //    if (del == "A1")
+        //    {
+        //        if (memberid != 0) { tblMasMember.MemberId = memberid; }
+        //        tblMasMember.KofCid = (int)cvnImpDelegate.A1MemberID;
+        //        tblMasMember.FirstName = cvnImpDelegate.A1FirstName;
+        //        tblMasMember.Mi = cvnImpDelegate.A1MiddleName;
+        //        tblMasMember.LastName = cvnImpDelegate.A1LastName;
+        //        tblMasMember.Suffix = cvnImpDelegate.A1Suffix;
+        //        tblMasMember.Address = cvnImpDelegate.A1Address1;
+        //        tblMasMember.City = cvnImpDelegate.A1City;
+        //        tblMasMember.State = cvnImpDelegate.A1State;
+        //        tblMasMember.PostalCode = cvnImpDelegate.A1ZipCode;
+        //        tblMasMember.Phone = cvnImpDelegate.A1Phone;
+        //        tblMasMember.Email = cvnImpDelegate.A1Email;
+        //    }
+        //    if (del == "A2")
+        //    {
+        //        if (memberid != 0) { tblMasMember.MemberId = memberid; }
+        //        tblMasMember.KofCid = (int)cvnImpDelegate.A2MemberID;
+        //        tblMasMember.FirstName = cvnImpDelegate.A2FirstName;
+        //        tblMasMember.Mi = cvnImpDelegate.A2MiddleName;
+        //        tblMasMember.LastName = cvnImpDelegate.A2LastName;
+        //        tblMasMember.Suffix = cvnImpDelegate.A2Suffix;
+        //        tblMasMember.Address = cvnImpDelegate.A2Address1;
+        //        tblMasMember.City = cvnImpDelegate.A2City;
+        //        tblMasMember.State = cvnImpDelegate.A2State;
+        //        tblMasMember.PostalCode = cvnImpDelegate.A2ZipCode;
+        //        tblMasMember.Phone = cvnImpDelegate.A2Phone;
+        //        tblMasMember.Email = cvnImpDelegate.A2Email;
+        //    }
+        //}
     }
 }
