@@ -8,6 +8,15 @@
         background-color: lightgray;
         color: black;
     }
+
+    .ImportedData {
+        background-color: #C6EFCE;
+        color: green;
+    }
+    .BtnRed {
+        background-color: #C6EFCE;
+        color: red;
+    }
 </style>
 <h1>Edit Convention Delegate Import</h1>
 
@@ -71,11 +80,30 @@
     string myMemA2IPH = myValidate2.Contains("A2IPH") ? "color:red" : "";
     string myMemA2IEM = myValidate2.Contains("A2IEM") ? "color:red" : "";
 
-
+    if (myValidate2.Contains("D1I"))
+    {
+        myMemVD1 = "style=color:red";
+        myMemD1Title = "Delegate #1 has updated data";
+    }
+    if (myValidate2.Contains("D2I"))
+    {
+        myMemVD2 = "style=color:red";
+        myMemD2Title = "Delegate #2 has updated data";
+    }
+    if (myValidate2.Contains("A1I"))
+    {
+        myMemVA1 = "style=color:red";
+        myMemA1Title = "Alternte #1 has updated data";
+    }
+    if (myValidate2.Contains("A2I"))
+    {
+        myMemVA2 = "style=color:red";
+        myMemA2Title = "Alternate #2 has updated data";
+    }
     if (myValidate.Contains("VMD1MISSING"))
     {
         myMemVD1 = "style=color:red";
-        myMemD2Title = "Delegate #1 is missing from our data";
+        myMemD1Title = "Delegate #1 is missing from our data";
     }
     if (myValidate.Contains("VMD2MISSING"))
     {
@@ -143,20 +171,20 @@
                         {
                             @if (myValidate.Contains("VMD1MISSING"))
                             {
-                                <input type="submit" name="action" value="Add D1 New Member" class="btn btn-primary" />
+                                <input type="submit" name="action" value="Add D1 New Member" class="btn BtnRed" />
                             }
                             @if (myValidate2.Contains("D1I"))
                             {
-                                <input type="submit" name="action" value="Update D1 Existing Member" class="btn btn-primary" />
+                                <input type="submit" name="action" value="Update D1 Existing Member" class="btn BtnRed" />
                             }
                         }
                     </td>
                 </tr>
                 <tr style="border-left:solid;border-right:solid">
                     <td>
-                        <div class="form-group">
+                        <div class="form-group ImportedData">
                             <label asp-for="D1MemberID" class="control-label" style="font-weight:bold"></label>
-                            <input asp-for="D1MemberID" class="form-control" />
+                            <input asp-for="D1MemberID" class="form-control ImportedData" />
                             <span asp-validation-for="D1MemberID" class="text-danger"></span>
                         </div>
                         <div class="form-group ExistingData">
@@ -166,9 +194,9 @@
                         </div>
                     </td>
                     <td>
-                        <div class="form-group">
+                        <div class="form-group ImportedData">
                             <label asp-for="D1Phone" class="control-label" style="font-weight:bold"></label>
-                            <input asp-for="D1Phone" class="form-control" style="@myMemD1IPH" />
+                            <input asp-for="D1Phone" class="form-control ImportedData" style="@myMemD1IPH" />
                             <span asp-validation-for="D1Phone" class="text-danger"></span>
                         </div>
                         <div class="form-group ExistingData">
@@ -178,9 +206,9 @@
                         </div>
                     </td>
                     <td colspan="2">
-                        <div class="form-group">
+                        <div class="form-group ImportedData">
                             <label asp-for="D1Email" class="control-label" style="font-weight:bold"></label>
-                            <input asp-for="D1Email" class="form-control" style="@myMemD1IEM" />
+                            <input asp-for="D1Email" class="form-control ImportedData" style="@myMemD1IEM" />
                             <span asp-validation-for="D1Email" class="text-danger"></span>
                         </div>
                         <div class="form-group ExistingData">
@@ -193,9 +221,9 @@
                 <tr style="border-left:solid;border-right:solid">
 
                     <td>
-                        <div class="form-group">
+                        <div class="form-group ImportedData">
                             <label asp-for="D1FirstName" class="control-label" style="font-weight:bold"></label>
-                            <input asp-for="D1FirstName" class="form-control" style="@myMemD1IFN" />
+                            <input asp-for="D1FirstName" class="form-control ImportedData" style="@myMemD1IFN" />
                             <span asp-validation-for="D1FirstName" class="text-danger"></span>
                         </div>
                         <div class="form-group ExistingData">
@@ -205,9 +233,9 @@
                         </div>
                     </td>
                     <td>
-                        <div class="form-group">
+                        <div class="form-group ImportedData">
                             <label asp-for="D1MiddleName" class="control-label" style="font-weight:bold"></label>
-                            <input asp-for="D1MiddleName" class="form-control" style="width:auto;@myMemD1IMN" />
+                            <input asp-for="D1MiddleName" class="form-control ImportedData" style="width:auto;@myMemD1IMN" />
                             <span asp-validation-for="D1MiddleName" class="text-danger"></span>
                         </div>
                         <div class="form-group ExistingData">
@@ -217,9 +245,9 @@
                         </div>
                     </td>
                     <td>
-                        <div class="form-group">
+                        <div class="form-group ImportedData">
                             <label asp-for="D1LastName" class="control-label" style="font-weight:bold"></label>
-                            <input asp-for="D1LastName" class="form-control" style="width:auto;@myMemD1ILN" />
+                            <input asp-for="D1LastName" class="form-control ImportedData" style="width:auto;@myMemD1ILN" />
                             <span asp-validation-for="D1LastName" class="text-danger"></span>
                         </div>
                         <div class="form-group ExistingData">
@@ -229,9 +257,9 @@
                         </div>
                     </td>
                     <td>
-                        <div class="form-group">
+                        <div class="form-group ImportedData">
                             <label asp-for="D1Suffix" class="control-label" style="font-weight:bold"></label>
-                            <input asp-for="D1Suffix" class="form-control" style="@myMemD1ISX" />
+                            <input asp-for="D1Suffix" class="form-control ImportedData" style="@myMemD1ISX" />
                             <span asp-validation-for="D1Suffix" class="text-danger"></span>
                         </div>
                         <div class="form-group ExistingData">
@@ -244,9 +272,9 @@
                 </tr>
                 <tr style="border-left: solid; border-right: solid; border-bottom: solid">
                     <td>
-                        <div class="form-group">
+                        <div class="form-group ImportedData">
                             <label asp-for="D1Address1" class="control-label" style="font-weight:bold"></label>
-                            <input asp-for="D1Address1" class="form-control" style="width:auto;@myMemD1IAD" />
+                            <input asp-for="D1Address1" class="form-control ImportedData" style="width:auto;@myMemD1IAD" />
                             <span asp-validation-for="D1Address1" class="text-danger"></span>
                         </div>
                         <div class="form-group ExistingData">
@@ -256,9 +284,9 @@
                         </div>
                     </td>
                     <td>
-                        <div class="form-group">
+                        <div class="form-group ImportedData">
                             <label asp-for="D1City" class="control-label" style="font-weight:bold"></label>
-                            <input asp-for="D1City" class="form-control" style="@myMemD1ICT" />
+                            <input asp-for="D1City" class="form-control ImportedData" style="@myMemD1ICT" />
                             <span asp-validation-for="D1City" class="text-danger"></span>
                         </div>
                         <div class="form-group ExistingData">
@@ -268,9 +296,9 @@
                         </div>
                     </td>
                     <td>
-                        <div class="form-group">
+                        <div class="form-group ImportedData">
                             <label asp-for="D1State" class="control-label" style="font-weight:bold"></label>
-                            <input asp-for="D1State" class="form-control" style="@myMemD1IST" />
+                            <input asp-for="D1State" class="form-control ImportedData" style="@myMemD1IST" />
                             <span asp-validation-for="D1State" class="text-danger"></span>
                         </div>
                         <div class="form-group ExistingData">
@@ -280,9 +308,9 @@
                         </div>
                     </td>
                     <td>
-                        <div class="form-group">
+                        <div class="form-group ImportedData">
                             <label asp-for="D1ZipCode" class="control-label" style="font-weight:bold"></label>
-                            <input asp-for="D1ZipCode" class="form-control" style="width:auto;@myMemD1IZP" />
+                            <input asp-for="D1ZipCode" class="form-control ImportedData" style="width:auto;@myMemD1IZP" />
                             <span asp-validation-for="D1ZipCode" class="text-danger"></span>
                         </div>
                         <div class="form-group ExistingData">
@@ -304,20 +332,20 @@
                         {
                             @if (myValidate.Contains("VMD2MISSING"))
                             {
-                                <input type="submit" name="action" value="Add D2 New Member" class="btn btn-primary" />
+                                <input type="submit" name="action" value="Add D2 New Member" class="btn BtnRed" />
                             }
                             @if (myValidate2.Contains("D2I"))
                             {
-                                <input type="submit" name="action" value="Update D2 Existing Member" class="btn btn-primary" />
+                                <input type="submit" name="action" value="Update D2 Existing Member" class="btn BtnRed" />
                             }
                         }
                     </td>
                 </tr>
                 <tr style="border-left:solid;border-right:solid">
                     <td>
-                        <div class="form-group">
+                        <div class="form-group ImportedData">
                             <label asp-for="D2MemberID" class="control-label" style="font-weight:bold"></label>
-                            <input asp-for="D2MemberID" class="form-control" />
+                            <input asp-for="D2MemberID" class="form-control ImportedData" />
                             <span asp-validation-for="D2MemberID" class="text-danger"></span>
                         </div>
                         <div class="form-group ExistingData">
@@ -327,9 +355,9 @@
                         </div>
                     </td>
                     <td>
-                        <div class="form-group">
+                        <div class="form-group ImportedData">
                             <label asp-for="D2Phone" class="control-label" style="font-weight:bold"></label>
-                            <input asp-for="D2Phone" class="form-control" style="@myMemD2IPH" />
+                            <input asp-for="D2Phone" class="form-control ImportedData" style="@myMemD2IPH" />
                             <span asp-validation-for="D2Phone" class="text-danger"></span>
                         </div>
                         <div class="form-group ExistingData">
@@ -339,9 +367,9 @@
                         </div>
                     </td>
                     <td colspan="2">
-                        <div class="form-group">
+                        <div class="form-group ImportedData">
                             <label asp-for="D2Email" class="control-label" style="font-weight:bold"></label>
-                            <input asp-for="D2Email" class="form-control" style="@myMemD2IEM" />
+                            <input asp-for="D2Email" class="form-control ImportedData" style="@myMemD2IEM" />
                             <span asp-validation-for="D2Email" class="text-danger"></span>
                         </div>
                         <div class="form-group ExistingData">
@@ -354,9 +382,9 @@
                 <tr style="border-left:solid;border-right:solid">
 
                     <td>
-                        <div class="form-group">
+                        <div class="form-group ImportedData">
                             <label asp-for="D2FirstName" class="control-label" style="font-weight:bold"></label>
-                            <input asp-for="D2FirstName" class="form-control" style="@myMemD2IFN" />
+                            <input asp-for="D2FirstName" class="form-control ImportedData" style="@myMemD2IFN" />
                             <span asp-validation-for="D2FirstName" class="text-danger"></span>
                         </div>
                         <div class="form-group ExistingData">
@@ -366,9 +394,9 @@
                         </div>
                     </td>
                     <td>
-                        <div class="form-group">
+                        <div class="form-group ImportedData">
                             <label asp-for="D2MiddleName" class="control-label" style="font-weight:bold"></label>
-                            <input asp-for="D2MiddleName" class="form-control" style="width:auto;@myMemD2IMN" />
+                            <input asp-for="D2MiddleName" class="form-control ImportedData" style="width:auto;@myMemD2IMN" />
                             <span asp-validation-for="D2MiddleName" class="text-danger"></span>
                         </div>
                         <div class="form-group ExistingData">
@@ -378,9 +406,9 @@
                         </div>
                     </td>
                     <td>
-                        <div class="form-group">
+                        <div class="form-group ImportedData">
                             <label asp-for="D2LastName" class="control-label" style="font-weight:bold"></label>
-                            <input asp-for="D2LastName" class="form-control" style="width:auto;@myMemD2ILN" />
+                            <input asp-for="D2LastName" class="form-control ImportedData" style="width:auto;@myMemD2ILN" />
                             <span asp-validation-for="D2LastName" class="text-danger"></span>
                         </div>
                         <div class="form-group ExistingData">
@@ -390,9 +418,9 @@
                         </div>
                     </td>
                     <td>
-                        <div class="form-group">
+                        <div class="form-group ImportedData">
                             <label asp-for="D2Suffix" class="control-label" style="font-weight:bold"></label>
-                            <input asp-for="D2Suffix" class="form-control" style="@myMemD2ISX" />
+                            <input asp-for="D2Suffix" class="form-control ImportedData" style="@myMemD2ISX" />
                             <span asp-validation-for="D2Suffix" class="text-danger"></span>
                         </div>
                         <div class="form-group ExistingData">
@@ -405,9 +433,9 @@
                 </tr>
                 <tr style="border-left: solid; border-right: solid; border-bottom: solid">
                     <td>
-                        <div class="form-group">
+                        <div class="form-group ImportedData">
                             <label asp-for="D2Address1" class="control-label" style="font-weight:bold"></label>
-                            <input asp-for="D2Address1" class="form-control" style="width:auto;@myMemD2IAD" />
+                            <input asp-for="D2Address1" class="form-control ImportedData" style="width:auto;@myMemD2IAD" />
                             <span asp-validation-for="D2Address1" class="text-danger"></span>
                         </div>
                         <div class="form-group ExistingData">
@@ -417,9 +445,9 @@
                         </div>
                     </td>
                     <td>
-                        <div class="form-group">
+                        <div class="form-group ImportedData">
                             <label asp-for="D2City" class="control-label" style="font-weight:bold"></label>
-                            <input asp-for="D2City" class="form-control" style="@myMemD2ICT" />
+                            <input asp-for="D2City" class="form-control ImportedData" style="@myMemD2ICT" />
                             <span asp-validation-for="D2City" class="text-danger"></span>
                         </div>
                         <div class="form-group ExistingData">
@@ -429,9 +457,9 @@
                         </div>
                     </td>
                     <td>
-                        <div class="form-group">
+                        <div class="form-group ImportedData">
                             <label asp-for="D2State" class="control-label" style="font-weight:bold"></label>
-                            <input asp-for="D2State" class="form-control" style="@myMemD2IST" />
+                            <input asp-for="D2State" class="form-control ImportedData" style="@myMemD2IST" />
                             <span asp-validation-for="D2State" class="text-danger"></span>
                         </div>
                         <div class="form-group ExistingData">
@@ -441,9 +469,9 @@
                         </div>
                     </td>
                     <td>
-                        <div class="form-group">
+                        <div class="form-group ImportedData">
                             <label asp-for="D2ZipCode" class="control-label" style="font-weight:bold"></label>
-                            <input asp-for="D2ZipCode" class="form-control" style="width:auto;@myMemD2IZP" />
+                            <input asp-for="D2ZipCode" class="form-control ImportedData" style="width:auto;@myMemD2IZP" />
                             <span asp-validation-for="D2ZipCode" class="text-danger"></span>
                         </div>
                         <div class="form-group ExistingData">
@@ -465,20 +493,20 @@
                         {
                             @if (myValidate.Contains("VMA1MISSING"))
                             {
-                                <input type="submit" name="action" value="Add A1 New Member" class="btn btn-primary" />
+                                <input type="submit" name="action" value="Add A1 New Member" class="btn BtnRed" />
                             }
                             @if (myValidate2.Contains("A1I"))
                             {
-                                <input type="submit" name="action" value="Update A1 Existing Member" class="btn btn-primary" />
+                                <input type="submit" name="action" value="Update A1 Existing Member" class="btn BtnRed" />
                             }
                         }
                     </td>
                 </tr>
                 <tr style="border-left:solid;border-right:solid">
                     <td>
-                        <div class="form-group">
+                        <div class="form-group ImportedData">
                             <label asp-for="A1MemberID" class="control-label" style="font-weight:bold"></label>
-                            <input asp-for="A1MemberID" class="form-control" />
+                            <input asp-for="A1MemberID" class="form-control ImportedData" />
                             <span asp-validation-for="A1MemberID" class="text-danger"></span>
                         </div>
                         <div class="form-group ExistingData">
@@ -488,9 +516,9 @@
                         </div>
                     </td>
                     <td>
-                        <div class="form-group">
+                        <div class="form-group ImportedData">
                             <label asp-for="A1Phone" class="control-label" style="font-weight:bold"></label>
-                            <input asp-for="A1Phone" class="form-control" style="@myMemA1IPH" />
+                            <input asp-for="A1Phone" class="form-control ImportedData" style="@myMemA1IPH" />
                             <span asp-validation-for="A1Phone" class="text-danger"></span>
                         </div>
                         <div class="form-group ExistingData">
@@ -500,9 +528,9 @@
                         </div>
                     </td>
                     <td colspan="2">
-                        <div class="form-group">
+                        <div class="form-group ImportedData">
                             <label asp-for="A1Email" class="control-label" style="font-weight:bold"></label>
-                            <input asp-for="A1Email" class="form-control" style="@myMemA1IEM" />
+                            <input asp-for="A1Email" class="form-control ImportedData" style="@myMemA1IEM" />
                             <span asp-validation-for="A1Email" class="text-danger"></span>
                         </div>
                         <div class="form-group ExistingData">
@@ -515,9 +543,9 @@
                 <tr style="border-left:solid;border-right:solid">
 
                     <td>
-                        <div class="form-group">
+                        <div class="form-group ImportedData">
                             <label asp-for="A1FirstName" class="control-label" style="font-weight:bold"></label>
-                            <input asp-for="A1FirstName" class="form-control" style="@myMemA1IFN" />
+                            <input asp-for="A1FirstName" class="form-control ImportedData" style="@myMemA1IFN" />
                             <span asp-validation-for="A1FirstName" class="text-danger"></span>
                         </div>
                         <div class="form-group ExistingData">
@@ -527,9 +555,9 @@
                         </div>
                     </td>
                     <td>
-                        <div class="form-group">
+                        <div class="form-group ImportedData">
                             <label asp-for="A1MiddleName" class="control-label" style="font-weight:bold"></label>
-                            <input asp-for="A1MiddleName" class="form-control" style="width:auto;@myMemA1IMN" />
+                            <input asp-for="A1MiddleName" class="form-control ImportedData" style="width:auto;@myMemA1IMN" />
                             <span asp-validation-for="A1MiddleName" class="text-danger"></span>
                         </div>
                         <div class="form-group ExistingData">
@@ -539,9 +567,9 @@
                         </div>
                     </td>
                     <td>
-                        <div class="form-group">
+                        <div class="form-group ImportedData">
                             <label asp-for="A1LastName" class="control-label" style="font-weight:bold"></label>
-                            <input asp-for="A1LastName" class="form-control" style="width:auto;@myMemA1ILN" />
+                            <input asp-for="A1LastName" class="form-control ImportedData" style="width:auto;@myMemA1ILN" />
                             <span asp-validation-for="A1LastName" class="text-danger"></span>
                         </div>
                         <div class="form-group ExistingData">
@@ -551,9 +579,9 @@
                         </div>
                     </td>
                     <td>
-                        <div class="form-group">
+                        <div class="form-group ImportedData">
                             <label asp-for="A1Suffix" class="control-label" style="font-weight:bold"></label>
-                            <input asp-for="A1Suffix" class="form-control" style="@myMemA1ISX" />
+                            <input asp-for="A1Suffix" class="form-control ImportedData" style="@myMemA1ISX" />
                             <span asp-validation-for="A1Suffix" class="text-danger"></span>
                         </div>
                         <div class="form-group ExistingData">
@@ -566,9 +594,9 @@
                 </tr>
                 <tr style="border-left: solid; border-right: solid; border-bottom: solid">
                     <td>
-                        <div class="form-group">
+                        <div class="form-group ImportedData">
                             <label asp-for="A1Address1" class="control-label" style="font-weight:bold"></label>
-                            <input asp-for="A1Address1" class="form-control" style="width:auto;@myMemA1IAD" />
+                            <input asp-for="A1Address1" class="form-control ImportedData" style="width:auto;@myMemA1IAD" />
                             <span asp-validation-for="A1Address1" class="text-danger"></span>
                         </div>
                         <div class="form-group ExistingData">
@@ -578,9 +606,9 @@
                         </div>
                     </td>
                     <td>
-                        <div class="form-group">
+                        <div class="form-group ImportedData">
                             <label asp-for="A1City" class="control-label" style="font-weight:bold"></label>
-                            <input asp-for="A1City" class="form-control" style="@myMemA1ICT" />
+                            <input asp-for="A1City" class="form-control ImportedData" style="@myMemA1ICT" />
                             <span asp-validation-for="A1City" class="text-danger"></span>
                         </div>
                         <div class="form-group ExistingData">
@@ -590,9 +618,9 @@
                         </div>
                     </td>
                     <td>
-                        <div class="form-group">
+                        <div class="form-group ImportedData">
                             <label asp-for="A1State" class="control-label" style="font-weight:bold"></label>
-                            <input asp-for="A1State" class="form-control" style="@myMemA1IST" />
+                            <input asp-for="A1State" class="form-control ImportedData" style="@myMemA1IST" />
                             <span asp-validation-for="A1State" class="text-danger"></span>
                         </div>
                         <div class="form-group ExistingData">
@@ -602,9 +630,9 @@
                         </div>
                     </td>
                     <td>
-                        <div class="form-group">
+                        <div class="form-group ImportedData">
                             <label asp-for="A1ZipCode" class="control-label" style="font-weight:bold"></label>
-                            <input asp-for="A1ZipCode" class="form-control" style="width:auto;@myMemA1IZP" />
+                            <input asp-for="A1ZipCode" class="form-control ImportedData" style="width:auto;@myMemA1IZP" />
                             <span asp-validation-for="A1ZipCode" class="text-danger"></span>
                         </div>
                         <div class="form-group ExistingData">
@@ -626,20 +654,20 @@
                         {
                             @if (myValidate.Contains("VMA2MISSING"))
                             {
-                                <input type="submit" name="action" value="Add A2 New Member" class="btn btn-primary" />
+                                <input type="submit" name="action" value="Add A2 New Member" class="btn BtnRed" />
                             }
                             @if (myValidate2.Contains("A2I"))
                             {
-                                <input type="submit" name="action" value="Update A2 Existing Member" class="btn btn-primary" />
+                                <input type="submit" name="action" value="Update A2 Existing Member" class="btn BtnRed" />
                             }
                         }
                     </td>
                 </tr>
                 <tr style="border-left:solid;border-right:solid">
                     <td>
-                        <div class="form-group">
+                        <div class="form-group ImportedData">
                             <label asp-for="A2MemberID" class="control-label" style="font-weight:bold"></label>
-                            <input asp-for="A2MemberID" class="form-control" />
+                            <input asp-for="A2MemberID" class="form-control ImportedData" />
                             <span asp-validation-for="A2MemberID" class="text-danger"></span>
                         </div>
                         <div class="form-group ExistingData">
@@ -649,9 +677,9 @@
                         </div>
                     </td>
                     <td>
-                        <div class="form-group">
+                        <div class="form-group ImportedData">
                             <label asp-for="A2Phone" class="control-label" style="font-weight:bold"></label>
-                            <input asp-for="A2Phone" class="form-control" style="@myMemA2IPH" />
+                            <input asp-for="A2Phone" class="form-control ImportedData" style="@myMemA2IPH" />
                             <span asp-validation-for="A2Phone" class="text-danger"></span>
                         </div>
                         <div class="form-group ExistingData">
@@ -661,9 +689,9 @@
                         </div>
                     </td>
                     <td colspan="2">
-                        <div class="form-group">
+                        <div class="form-group ImportedData">
                             <label asp-for="A2Email" class="control-label" style="font-weight:bold"></label>
-                            <input asp-for="A2Email" class="form-control" style="@myMemA2IEM" />
+                            <input asp-for="A2Email" class="form-control ImportedData" style="@myMemA2IEM" />
                             <span asp-validation-for="A2Email" class="text-danger"></span>
                         </div>
                         <div class="form-group ExistingData">
@@ -676,9 +704,9 @@
                 <tr style="border-left:solid;border-right:solid">
 
                     <td>
-                        <div class="form-group">
+                        <div class="form-group ImportedData">
                             <label asp-for="A2FirstName" class="control-label" style="font-weight:bold"></label>
-                            <input asp-for="A2FirstName" class="form-control" style="@myMemA2IFN" />
+                            <input asp-for="A2FirstName" class="form-control ImportedData" style="@myMemA2IFN" />
                             <span asp-validation-for="A2FirstName" class="text-danger"></span>
                         </div>
                         <div class="form-group ExistingData">
@@ -688,9 +716,9 @@
                         </div>
                     </td>
                     <td>
-                        <div class="form-group">
+                        <div class="form-group ImportedData">
                             <label asp-for="A2MiddleName" class="control-label" style="font-weight:bold"></label>
-                            <input asp-for="A2MiddleName" class="form-control" style="width:auto;@myMemA2IMN" />
+                            <input asp-for="A2MiddleName" class="form-control ImportedData" style="width:auto;@myMemA2IMN" />
                             <span asp-validation-for="A2MiddleName" class="text-danger"></span>
                         </div>
                         <div class="form-group ExistingData">
@@ -700,9 +728,9 @@
                         </div>
                     </td>
                     <td>
-                        <div class="form-group">
+                        <div class="form-group ImportedData">
                             <label asp-for="A2LastName" class="control-label" style="font-weight:bold"></label>
-                            <input asp-for="A2LastName" class="form-control" style="width:auto;@myMemA2ILN" />
+                            <input asp-for="A2LastName" class="form-control ImportedData" style="width:auto;@myMemA2ILN" />
                             <span asp-validation-for="A2LastName" class="text-danger"></span>
                         </div>
                         <div class="form-group ExistingData">
@@ -712,9 +740,9 @@
                         </div>
                     </td>
                     <td>
-                        <div class="form-group">
+                        <div class="form-group ImportedData">
                             <label asp-for="A2Suffix" class="control-label" style="font-weight:bold"></label>
-                            <input asp-for="A2Suffix" class="form-control" style="@myMemA2ISX" />
+                            <input asp-for="A2Suffix" class="form-control ImportedData" style="@myMemA2ISX" />
                             <span asp-validation-for="A2Suffix" class="text-danger"></span>
                         </div>
                         <div class="form-group ExistingData">
@@ -727,9 +755,9 @@
                 </tr>
                 <tr style="border-left: solid; border-right: solid; border-bottom: solid">
                     <td>
-                        <div class="form-group">
+                        <div class="form-group ImportedData">
                             <label asp-for="A2Address1" class="control-label" style="font-weight:bold"></label>
-                            <input asp-for="A2Address1" class="form-control" style="width:auto;@myMemA2IAD" />
+                            <input asp-for="A2Address1" class="form-control ImportedData" style="width:auto;@myMemA2IAD" />
                             <span asp-validation-for="A2Address1" class="text-danger"></span>
                         </div>
                         <div class="form-group ExistingData">
@@ -739,9 +767,9 @@
                         </div>
                     </td>
                     <td>
-                        <div class="form-group">
+                        <div class="form-group ImportedData">
                             <label asp-for="A2City" class="control-label" style="font-weight:bold"></label>
-                            <input asp-for="A2City" class="form-control" style="@myMemA2ICT" />
+                            <input asp-for="A2City" class="form-control ImportedData" style="@myMemA2ICT" />
                             <span asp-validation-for="A2City" class="text-danger"></span>
                         </div>
                         <div class="form-group ExistingData">
@@ -751,9 +779,9 @@
                         </div>
                     </td>
                     <td>
-                        <div class="form-group">
+                        <div class="form-group ImportedData">
                             <label asp-for="A2State" class="control-label" style="font-weight:bold"></label>
-                            <input asp-for="A2State" class="form-control" style="@myMemA2IST" />
+                            <input asp-for="A2State" class="form-control ImportedData" style="@myMemA2IST" />
                             <span asp-validation-for="A2State" class="text-danger"></span>
                         </div>
                         <div class="form-group ExistingData">
@@ -763,9 +791,9 @@
                         </div>
                     </td>
                     <td>
-                        <div class="form-group">
+                        <div class="form-group ImportedData">
                             <label asp-for="A2ZipCode" class="control-label" style="font-weight:bold"></label>
-                            <input asp-for="A2ZipCode" class="form-control" style="width:auto;@myMemA2IZP" />
+                            <input asp-for="A2ZipCode" class="form-control ImportedData" style="width:auto;@myMemA2IZP" />
                             <span asp-validation-for="A2ZipCode" class="text-danger"></span>
                         </div>
                         <div class="form-group ExistingData">
@@ -778,13 +806,14 @@
                 @*End Alternate #1 Box*@
                 @***************************************************************************************@
             </table>
-            @if (!myValidate.Contains("VCMISSING"))
+            @*we are not saving delegate changes here.  only on the create view*@
+            @*@if (!myValidate.Contains("VCMISSING"))
             {
                 <div class="form-group">
                     <input type="submit" name="action" value="Save Delegate Changes" class="btn btn-primary" />
                 </div>
-            }
-            </form>
+            }*@
+        </form>
     </div>
 </div>
 
