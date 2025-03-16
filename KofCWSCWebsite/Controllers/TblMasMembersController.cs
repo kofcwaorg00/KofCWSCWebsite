@@ -167,22 +167,34 @@ namespace KofCWSCWebsite.Controllers
                     case "D1":
                         tblMasMember = await _apiHelper.GetAsync<TblMasMember>($"Member/KofCID/{cvnImpDelegate.D1MemberID}");
                         Utils.FillD1( ref tblMasMember, cvnImpDelegate);
+                        CvnImpDelegateIMP cvnImpDelegateIMPD1 = await _apiHelper.GetAsync<CvnImpDelegateIMP>($"CvnImpDelegate/{cvnImpDelegate.Id}");
+                        Utils.FillD1ImpDel(ref cvnImpDelegateIMPD1, cvnImpDelegate);
                         await _apiHelper.PutAsync<TblMasMember, TblMasMember>($"Member/{tblMasMember.MemberId}", tblMasMember);
+                        await _apiHelper.PutAsync<CvnImpDelegateIMP, CvnImpDelegateIMP>($"CvnImpDelegate/{cvnImpDelegate.Id}", cvnImpDelegateIMPD1);
                         break;
                     case "D2":
                         tblMasMember = await _apiHelper.GetAsync<TblMasMember>($"Member/KofCID/{cvnImpDelegate.D2MemberID}");
                         Utils.FillD2(ref tblMasMember, cvnImpDelegate);
+                        CvnImpDelegateIMP cvnImpDelegateIMPD2 = await _apiHelper.GetAsync<CvnImpDelegateIMP>($"CvnImpDelegate/{cvnImpDelegate.Id}");
+                        Utils.FillD2ImpDel(ref cvnImpDelegateIMPD2, cvnImpDelegate);
                         await _apiHelper.PutAsync<TblMasMember, TblMasMember>($"Member/{tblMasMember.MemberId}", tblMasMember);
+                        await _apiHelper.PutAsync<CvnImpDelegateIMP, CvnImpDelegateIMP>($"CvnImpDelegate/{cvnImpDelegate.Id}", cvnImpDelegateIMPD2);
                         break;
                     case "A1":
                         tblMasMember = await _apiHelper.GetAsync<TblMasMember>($"Member/KofCID/{cvnImpDelegate.A1MemberID}");
                         Utils.FillA1(ref tblMasMember, cvnImpDelegate);
+                        CvnImpDelegateIMP cvnImpDelegateIMPA1 = await _apiHelper.GetAsync<CvnImpDelegateIMP>($"CvnImpDelegate/{cvnImpDelegate.Id}");
+                        Utils.FillA1ImpDel(ref cvnImpDelegateIMPA1, cvnImpDelegate);
                         await _apiHelper.PutAsync<TblMasMember, TblMasMember>($"Member/{tblMasMember.MemberId}", tblMasMember);
+                        await _apiHelper.PutAsync<CvnImpDelegateIMP, CvnImpDelegateIMP>($"CvnImpDelegate/{cvnImpDelegate.Id}", cvnImpDelegateIMPA1);
                         break;
                     case "A2":
                         tblMasMember = await _apiHelper.GetAsync<TblMasMember>($"Member/KofCID/{cvnImpDelegate.A2MemberID}");
                         Utils.FillA2(ref tblMasMember, cvnImpDelegate);
+                        CvnImpDelegateIMP cvnImpDelegateIMPA2 = await _apiHelper.GetAsync<CvnImpDelegateIMP>($"CvnImpDelegate/{cvnImpDelegate.Id}");
+                        Utils.FillA2ImpDel(ref cvnImpDelegateIMPA2, cvnImpDelegate);
                         await _apiHelper.PutAsync<TblMasMember, TblMasMember>($"Member/{tblMasMember.MemberId}", tblMasMember);
+                        await _apiHelper.PutAsync<CvnImpDelegateIMP, CvnImpDelegateIMP>($"CvnImpDelegate/{cvnImpDelegate.Id}", cvnImpDelegateIMPA2);
                         break;
                 }
             }

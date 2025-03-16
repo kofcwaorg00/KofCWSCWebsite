@@ -299,7 +299,7 @@ namespace KofCWSCWebsite.Services
             //if (cvnImpDelegate.Validation.ToUpper().Contains("MISSING")) { return cvnImpDelegate.Validation; }
             if (cvnImpDelegate.ED1MemberID.ToString().IsNullOrEmpty())
             {
-                retval = ";";
+                retval = "";
             }
             else
             {
@@ -319,7 +319,7 @@ namespace KofCWSCWebsite.Services
             //if (cvnImpDelegate.Validation.ToUpper().Contains("MISSING")) { return cvnImpDelegate.Validation; }
             if (cvnImpDelegate.ED2MemberID.ToString().IsNullOrEmpty())
             {
-                retval = ";";
+                retval = "";
             }
             else
             {
@@ -339,7 +339,7 @@ namespace KofCWSCWebsite.Services
             //if (cvnImpDelegate.Validation.ToUpper().Contains("MISSING")) { return cvnImpDelegate.Validation; }
             if (cvnImpDelegate.EA1MemberID.ToString().IsNullOrEmpty())
             {
-                retval = ";";
+                retval = "";
             }
             else
             {
@@ -359,7 +359,7 @@ namespace KofCWSCWebsite.Services
             //if (cvnImpDelegate.Validation.ToUpper().Contains("MISSING")) { return cvnImpDelegate.Validation; }
             if (cvnImpDelegate.EA2MemberID.ToString().IsNullOrEmpty())
             {
-                retval = ";";
+                retval = "";
             }
             else
             {
@@ -374,7 +374,7 @@ namespace KofCWSCWebsite.Services
                 if (!(cvnImpDelegate.A2Phone.IsNullOrEmpty() && cvnImpDelegate.EA2Phone.IsNullOrEmpty()) && cvnImpDelegate.A2Phone != cvnImpDelegate.EA2Phone) { retval += "A2IPH;"; }
                 if (!(cvnImpDelegate.A2Email.IsNullOrEmpty() && cvnImpDelegate.EA2Email.IsNullOrEmpty()) && cvnImpDelegate.A2Email != cvnImpDelegate.EA2Email) { retval += "A2IEM;"; }
             }
-            return retval;
+            return retval.Length == 0 ? "NONE" : retval;
         }
 
         public static string GetStateAbbr(string stateName)
@@ -464,6 +464,102 @@ namespace KofCWSCWebsite.Services
                 return false;
             }
         }
+        public static bool FillD1ImpDel(ref CvnImpDelegateIMP myDelegateImp, CvnImpDelegate myDelegate)
+        {
+            myDelegateImp.D1MemberID = (int)myDelegate.D1MemberID;
+            // ok for each member property that we can update, let's figure out if the data
+            // has changed.  If so, then update it else leave it alone
+            //-------------------------------------------------------------------------------------
+            // the only time we update the property is if it changed or is null
+            // changed allows us to only update property data that has actually changes
+            // based on the existing value.  If the property is null then we are adding and
+            // want the assignment too  != Property should work in both cases, NULL if 
+            // adding and not equal if we are updating
+            //-------------------------------------------------------------------------------------
+            myDelegateImp.D1FirstName = myDelegate.D1FirstName;
+            myDelegateImp.D1LastName = myDelegate.D1LastName;
+            myDelegateImp.D1MiddleName = myDelegate.D1MiddleName;
+            myDelegateImp.D1Suffix = myDelegate.D1Suffix;
+            myDelegateImp.D1Address1 = myDelegate.D1Address1;
+            myDelegateImp.D1City = myDelegate.D1City;
+            myDelegateImp.D1State = myDelegate.D1State;
+            myDelegateImp.D1ZipCode = myDelegate.D1ZipCode;
+            myDelegateImp.D1Phone = myDelegate.D1Phone;
+            myDelegateImp.D1Email = myDelegate.D1Email;
+            return true;
+        }
+        public static bool FillD2ImpDel(ref CvnImpDelegateIMP myDelegateImp, CvnImpDelegate myDelegate)
+        {
+            myDelegateImp.D2MemberID = (int)myDelegate.D2MemberID;
+            // ok for each member property that we can update, let's figure out if the data
+            // has changed.  If so, then update it else leave it alone
+            //-------------------------------------------------------------------------------------
+            // the only time we update the property is if it changed or is null
+            // changed allows us to only update property data that has actually changes
+            // based on the existing value.  If the property is null then we are adding and
+            // want the assignment too  != Property should work in both cases, NULL if 
+            // adding and not equal if we are updating
+            //-------------------------------------------------------------------------------------
+            myDelegateImp.D2FirstName = myDelegate.D2FirstName;
+            myDelegateImp.D2LastName = myDelegate.D2LastName;
+            myDelegateImp.D2MiddleName = myDelegate.D2MiddleName;
+            myDelegateImp.D2Suffix = myDelegate.D2Suffix;
+            myDelegateImp.D2Address1 = myDelegate.D2Address1;
+            myDelegateImp.D2City = myDelegate.D2City;
+            myDelegateImp.D2State = myDelegate.D2State;
+            myDelegateImp.D2ZipCode = myDelegate.D2ZipCode;
+            myDelegateImp.D2Phone = myDelegate.D2Phone;
+            myDelegateImp.D2Email = myDelegate.D2Email;
+            return true;
+        }
+        public static bool FillA1ImpDel(ref CvnImpDelegateIMP myDelegateImp, CvnImpDelegate myDelegate)
+        {
+            myDelegateImp.A1MemberID = (int)myDelegate.A1MemberID;
+            // ok for each member property that we can update, let's figure out if the data
+            // has changed.  If so, then update it else leave it alone
+            //-------------------------------------------------------------------------------------
+            // the only time we update the property is if it changed or is null
+            // changed allows us to only update property data that has actually changes
+            // based on the existing value.  If the property is null then we are adding and
+            // want the assignment too  != Property should work in both cases, NULL if 
+            // adding and not equal if we are updating
+            //-------------------------------------------------------------------------------------
+            myDelegateImp.A1FirstName = myDelegate.A1FirstName;
+            myDelegateImp.A1LastName = myDelegate.A1LastName;
+            myDelegateImp.A1MiddleName = myDelegate.A1MiddleName;
+            myDelegateImp.A1Suffix = myDelegate.A1Suffix;
+            myDelegateImp.A1Address1 = myDelegate.A1Address1;
+            myDelegateImp.A1City = myDelegate.A1City;
+            myDelegateImp.A1State = myDelegate.A1State;
+            myDelegateImp.A1ZipCode = myDelegate.A1ZipCode;
+            myDelegateImp.A1Phone = myDelegate.A1Phone;
+            myDelegateImp.A1Email = myDelegate.A1Email;
+            return true;
+        }
+        public static bool FillA2ImpDel(ref CvnImpDelegateIMP myDelegateImp, CvnImpDelegate myDelegate)
+        {
+            myDelegateImp.A2MemberID = (int)myDelegate.A2MemberID;
+            // ok for each member property that we can update, let's figure out if the data
+            // has changed.  If so, then update it else leave it alone
+            //-------------------------------------------------------------------------------------
+            // the only time we update the property is if it changed or is null
+            // changed allows us to only update property data that has actually changes
+            // based on the existing value.  If the property is null then we are adding and
+            // want the assignment too  != Property should work in both cases, NULL if 
+            // adding and not equal if we are updating
+            //-------------------------------------------------------------------------------------
+            myDelegateImp.A2FirstName = myDelegate.A2FirstName;
+            myDelegateImp.A2LastName = myDelegate.A2LastName;
+            myDelegateImp.A2MiddleName = myDelegate.A2MiddleName;
+            myDelegateImp.A2Suffix = myDelegate.A2Suffix;
+            myDelegateImp.A2Address1 = myDelegate.A2Address1;
+            myDelegateImp.A2City = myDelegate.A2City;
+            myDelegateImp.A2State = myDelegate.A2State;
+            myDelegateImp.A2ZipCode = myDelegate.A2ZipCode;
+            myDelegateImp.A2Phone = myDelegate.A2Phone;
+            myDelegateImp.A2Email = myDelegate.A2Email;
+            return true;
+        }
         public static bool FillD1(ref TblMasMember myMember, CvnImpDelegate myDelegate)
         {
             string UpdatedBy = "Delegate Import API";
@@ -501,7 +597,7 @@ namespace KofCWSCWebsite.Services
                 isUpdated = true;
             }
             // FIRSTNAME
-            if (ShouldUpdate(myDelegate.D1FirstName, myMember.FirstName, myMember, "FirstName",isNew))
+            if (ShouldUpdate(myDelegate.D1FirstName, myMember.FirstName, myMember, "FirstName", isNew))
             {
                 myMember.FirstName = myDelegate.D1FirstName;
                 myMember.FirstNameUpdated = DateTime.Now;

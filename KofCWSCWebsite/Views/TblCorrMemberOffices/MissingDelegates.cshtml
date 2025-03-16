@@ -4,7 +4,8 @@
     ViewData["Title"] = "Missing Delegate Members from Import";
 }
 
-<pre><h3>@ViewBag.Message</h3></pre>
+<h3>@ViewBag.Message</h3>
+<h6>Import Message: @ViewBag.ImpMessage</h6>
 <form asp-controller="CvnImpDelegates" asp-action="Index" method="get" title="This will take you back to the Manage Imported Delegates">
     <button type="submit" class="btn btn-sm btn-success">
         Back to Imported Delegates

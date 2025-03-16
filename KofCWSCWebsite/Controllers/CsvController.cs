@@ -143,6 +143,7 @@ namespace KofCWSCWebsite.Controllers
                     try
                     {
                         var result = await _apiHelper.PostAsync<List<CvnImpDelegateIMP>, string>("/ImpDelegates", records);
+                        ViewBag.ImpMessage = result;
                     }
                     catch (Exception ex)
                     {

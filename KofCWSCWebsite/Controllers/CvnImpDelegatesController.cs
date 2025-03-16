@@ -14,19 +14,23 @@ namespace KofCWSCWebsite.Controllers
     public class CvnImpDelegatesController : Controller
     {
         private readonly ApplicationDbContext _context;
+        private readonly ApiHelper _apiHelper;
 
-        public CvnImpDelegatesController(ApplicationDbContext context)
+        public CvnImpDelegatesController(ApplicationDbContext context, ApiHelper apiHelper)
         {
             _context = context;
+            _apiHelper = apiHelper;
         }
 
         // GET: CvnImpDelegates
         public async Task<ActionResult<IEnumerable<CvnImpDelegate>>> Index()
         {
             ViewBag.Message = TempData["Message"];
-            return View(await _context.Database
-                    .SqlQuery<CvnImpDelegate>($"EXECUTE uspCVN_GetImpDelegates")
-                    .ToListAsync());
+            var results = await _apiHelper.GetAsync<IEnumerable<CvnImpDelegate>>("CvnImpDelegates");
+            return View(results.OrderBy(e => e.CouncilNumber));
+            //return View(await _context.Database
+            //        .SqlQuery<CvnImpDelegate>($"EXECUTE uspCVN_GetImpDelegates")
+            //        .ToListAsync());
             //return View(await _context.CvnImpDelegates.ToListAsync());
         }
 

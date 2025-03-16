@@ -33,10 +33,13 @@ namespace KofCWSCWebsite.Controllers
 
         public async Task<ActionResult<IEnumerable<TblCorrMemberOfficeVM>>> CFMDMACD()
         {
+            //var _fratyear = await _apiHelper.GetAsync<int>("GetFratYear/0");
+            //var results = await _apiHelper.GetAsync<int>($"/ClearDelegates/{_fratyear}");
             //CheckForMissingDelegateMembersAndCreateDelegates
             var myDelegates = await _apiHelper.GetAsync<IEnumerable<TblCorrMemberOfficeVM>>("CheckForMissingDelegateMembersAndCreateDelegates");
             if (myDelegates.Count() == 0)
             {
+                
                 TempData["Message"] = "Delegate Records have been Added";
                 return RedirectToAction("Index", "CvnImpDelegates");
             }
