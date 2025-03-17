@@ -44,8 +44,12 @@
     <tbody>
         @foreach (var item in Model)
         {
+            string myMem = item.MemberId.ToString();
+            string myBadStyle = "";
+           
+            if (myMem.Length > 7) { myBadStyle = $"style=color:red"; }
             <tr>
-                <td>
+                <td @myBadStyle title="Red Indicates KofC ID format is invalid. Must be < 8 chars with no leading Zeros.">
                     @Html.DisplayFor(modelItem => item.MemberId)
                 </td>
                 <td>

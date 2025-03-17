@@ -119,7 +119,8 @@ public partial class CvnImpDelegate
     public int Id { get; set; }
     public string? Validation {  get; set; }
     public string? RecType { get; set; }
-
+    [Display(Name = "Existing Council")]
+    public int? ED1Council { get; set; }
     [Display(Name = "Existing First Name")]
     public string? ED1FirstName { get; set; }
     [Display(Name = "Existing Middle Name")]
@@ -144,7 +145,10 @@ public partial class CvnImpDelegate
     public string? ED1Phone { get; set; }
     [Display(Name = "Existing Email")]
     public string? ED1Email { get; set; }
-    [Display(Name = "Existing First Na,e")]
+    [Display(Name = "Existing Council")]
+    public int? ED2Council { get; set; }
+
+    [Display(Name = "Existing First Name")]
     public string? ED2FirstName { get; set; }
     [Display(Name = "Existing Middle Name")]
     public string? ED2MiddleName { get; set; }
@@ -168,6 +172,9 @@ public partial class CvnImpDelegate
     public string? ED2Phone { get; set; }
     [Display(Name = "Existing Email")]
     public string? ED2Email { get; set; }
+    [Display(Name = "Existing Council")]
+    public int? EA1Council { get; set; }
+
     [Display(Name = "Existing First Name")]
     public string? EA1FirstName { get; set; }
     [Display(Name = "Existing Middle Name")]
@@ -192,6 +199,9 @@ public partial class CvnImpDelegate
     public string? EA1Phone { get; set; }
     [Display(Name = "Existing Email")]
     public string? EA1Email { get; set; }
+    [Display(Name = "Existing Council")]
+    public int? EA2Council { get; set; }
+
     [Display(Name = "Existing First Name")]
     public string? EA2FirstName { get; set; }
     [Display(Name = "Existing Middle Name")]

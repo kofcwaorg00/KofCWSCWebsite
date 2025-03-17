@@ -297,12 +297,9 @@ namespace KofCWSCWebsite.Services
             //-----------------------------------------------------------------------------------------------------------------
             // D1
             //if (cvnImpDelegate.Validation.ToUpper().Contains("MISSING")) { return cvnImpDelegate.Validation; }
-            if (cvnImpDelegate.ED1MemberID.ToString().IsNullOrEmpty())
+            if (!cvnImpDelegate.ED1MemberID.ToString().IsNullOrEmpty())
             {
-                retval = "";
-            }
-            else
-            {
+                if (cvnImpDelegate.CouncilNumber != cvnImpDelegate.ED1Council) { retval += "D1ICN;"; }
                 if (!(cvnImpDelegate.D1FirstName.IsNullOrEmpty() && cvnImpDelegate.ED1FirstName.IsNullOrEmpty()) && cvnImpDelegate.D1FirstName != cvnImpDelegate.ED1FirstName) { retval += "D1IFN;"; }
                 if (!(cvnImpDelegate.D1MiddleName.IsNullOrEmpty() && cvnImpDelegate.ED1MiddleName.IsNullOrEmpty()) && cvnImpDelegate.D1MiddleName != cvnImpDelegate.ED1MiddleName) { retval += "D1IMN;"; }
                 if (!(cvnImpDelegate.D1LastName.IsNullOrEmpty() && cvnImpDelegate.ED1LastName.IsNullOrEmpty()) && cvnImpDelegate.D1LastName != cvnImpDelegate.ED1LastName) { retval += "D1ILN;"; }
@@ -317,12 +314,9 @@ namespace KofCWSCWebsite.Services
             //-----------------------------------------------------------------------------------------------------------------
             // D2
             //if (cvnImpDelegate.Validation.ToUpper().Contains("MISSING")) { return cvnImpDelegate.Validation; }
-            if (cvnImpDelegate.ED2MemberID.ToString().IsNullOrEmpty())
+            if (!cvnImpDelegate.ED2MemberID.ToString().IsNullOrEmpty())
             {
-                retval = "";
-            }
-            else
-            {
+                if (cvnImpDelegate.CouncilNumber != cvnImpDelegate.ED2Council) { retval += "D2ICN;"; }
                 if (!(cvnImpDelegate.D2FirstName.IsNullOrEmpty() && cvnImpDelegate.ED2FirstName.IsNullOrEmpty()) && cvnImpDelegate.D2FirstName != cvnImpDelegate.ED2FirstName) { retval += "D2IFN;"; }
                 if (!(cvnImpDelegate.D2MiddleName.IsNullOrEmpty() && cvnImpDelegate.ED2MiddleName.IsNullOrEmpty()) && cvnImpDelegate.D2MiddleName != cvnImpDelegate.ED2MiddleName) { retval += "D2IMN;"; }
                 if (!(cvnImpDelegate.D2LastName.IsNullOrEmpty() && cvnImpDelegate.ED2LastName.IsNullOrEmpty()) && cvnImpDelegate.D2LastName != cvnImpDelegate.ED2LastName) { retval += "D2ILN;"; }
@@ -337,12 +331,9 @@ namespace KofCWSCWebsite.Services
             //-----------------------------------------------------------------------------------------------------------------
             // A1
             //if (cvnImpDelegate.Validation.ToUpper().Contains("MISSING")) { return cvnImpDelegate.Validation; }
-            if (cvnImpDelegate.EA1MemberID.ToString().IsNullOrEmpty())
+            if (!cvnImpDelegate.EA1MemberID.ToString().IsNullOrEmpty())
             {
-                retval = "";
-            }
-            else
-            {
+                if (cvnImpDelegate.CouncilNumber != cvnImpDelegate.EA1Council) { retval += "A1ICN;"; }
                 if (!(cvnImpDelegate.A1FirstName.IsNullOrEmpty() && cvnImpDelegate.EA1FirstName.IsNullOrEmpty()) && cvnImpDelegate.A1FirstName != cvnImpDelegate.EA1FirstName) { retval += "A1IFN;"; }
                 if (!(cvnImpDelegate.A1MiddleName.IsNullOrEmpty() && cvnImpDelegate.EA1MiddleName.IsNullOrEmpty()) && cvnImpDelegate.A1MiddleName != cvnImpDelegate.EA1MiddleName) { retval += "A1IMN;"; }
                 if (!(cvnImpDelegate.A1LastName.IsNullOrEmpty() && cvnImpDelegate.EA1LastName.IsNullOrEmpty()) && cvnImpDelegate.A1LastName != cvnImpDelegate.EA1LastName) { retval += "A1ILN;"; }
@@ -357,12 +348,9 @@ namespace KofCWSCWebsite.Services
             //-----------------------------------------------------------------------------------------------------------------
             // A2
             //if (cvnImpDelegate.Validation.ToUpper().Contains("MISSING")) { return cvnImpDelegate.Validation; }
-            if (cvnImpDelegate.EA2MemberID.ToString().IsNullOrEmpty())
+            if (!cvnImpDelegate.EA2MemberID.ToString().IsNullOrEmpty())
             {
-                retval = "";
-            }
-            else
-            {
+                if (cvnImpDelegate.CouncilNumber != cvnImpDelegate.EA2Council) { retval += "A2ICN;"; }
                 if (!(cvnImpDelegate.A2FirstName.IsNullOrEmpty() && cvnImpDelegate.EA2FirstName.IsNullOrEmpty()) && cvnImpDelegate.A2FirstName != cvnImpDelegate.EA2FirstName) { retval += "A2IFN;"; }
                 if (!(cvnImpDelegate.A2MiddleName.IsNullOrEmpty() && cvnImpDelegate.EA2MiddleName.IsNullOrEmpty()) && cvnImpDelegate.A2MiddleName != cvnImpDelegate.EA2MiddleName) { retval += "A2IMN;"; }
                 if (!(cvnImpDelegate.A2LastName.IsNullOrEmpty() && cvnImpDelegate.EA2LastName.IsNullOrEmpty()) && cvnImpDelegate.A2LastName != cvnImpDelegate.EA2LastName) { retval += "A2ILN;"; }

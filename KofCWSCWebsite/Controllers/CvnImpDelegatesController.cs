@@ -33,6 +33,15 @@ namespace KofCWSCWebsite.Controllers
             //        .ToListAsync());
             //return View(await _context.CvnImpDelegates.ToListAsync());
         }
+        public async Task<ActionResult<IEnumerable<CvnImpDelegateIMP>>> IndexIMP()
+        {
+            var results = await _apiHelper.GetAsync<IEnumerable<CvnImpDelegateIMP>>("CvnImpDelegatesIMP");
+            return View(results.OrderBy(e => e.CouncilNumber));
+            //return View(await _context.Database
+            //        .SqlQuery<CvnImpDelegate>($"EXECUTE uspCVN_GetImpDelegates")
+            //        .ToListAsync());
+            //return View(await _context.CvnImpDelegates.ToListAsync());
+        }
 
         // GET: CvnImpDelegates/Details/5
         public async Task<IActionResult> Details(int? id)
@@ -74,17 +83,40 @@ namespace KofCWSCWebsite.Controllers
             return View(cvnImpDelegate);
         }
 
+        //[HttpGet("Edit/{id}")]
+        public async Task<ActionResult<CvnImpDelegateIMP>> Edit(int? id)
+        {
+            var results = await _apiHelper.GetAsync<CvnImpDelegateIMP>($"CvnImpDelegate/{id}");
+            
+            return View("EditIMP",results);
+            
+        }
+        public async Task<ActionResult<CvnImpDelegateIMP>> EditIMP(int? id)
+        {
+            var results = await _apiHelper.GetAsync<CvnImpDelegateIMP>($"CvnImpDelegate/{id}");
+
+            return View("EditIMP", results);
+
+        }
         // GET: CvnImpDelegates/Edit/5
         [HttpGet("Edit/{id}/{validate}/{validate2}")]
         public async Task<ActionResult<CvnImpDelegate>> Edit(int? id,string? validate,string? validate2)
         {
             ViewBag.Validate = validate;
             ViewBag.Validate2 = validate2;
-            return View( _context.Database
-                   .SqlQuery<CvnImpDelegate>($"EXECUTE uspCVN_GetImpDelegatesByID {id}")
-                   .AsEnumerable()
-                   .FirstOrDefault());
-                   
+            try
+            {
+                var results = _context.Database
+                       .SqlQuery<CvnImpDelegate>($"EXECUTE uspCVN_GetImpDelegatesByID {id}")
+                       .AsEnumerable()
+                       .FirstOrDefault();
+                return View(results);
+
+            }
+            catch (Exception ex)
+            {
+                return View();
+            }
 
 
 
@@ -106,8 +138,8 @@ namespace KofCWSCWebsite.Controllers
         // To protect from overposting attacks, enable the specific properties you want to bind to.
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
-        [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("SubmissionDate,FormSubmitterSEmail,CouncilName,CouncilNumber,D1FirstName,D1MiddleName,D1LastName,D1Suffix,D1MemberID,D1Address1,D1Address2,D1City,D1State,D1ZipCode,D1Phone,D1Email,D2FirstName,D2MiddleName,D2LastName,D2Suffix,D2MemberID,D2Address1,D2Address2,D2City,D2State,D2ZipCode,D2Phone,D2Email,A1FirstName,A1MiddleName,A1LastName,A1Suffix,A1MemberID,A1Address1,A1Address2,A1City,A1State,A1ZipCode,A1Phone,A1Email,A2FirstName,A2MiddleName,A2LastName,A2Suffix,A2MemberID,A2Address1,A2Address2,A2City,A2State,A2ZipCode,A2Phone,A2Email,Id,RecType")] CvnImpDelegate cvnImpDelegate)
+        //[ValidateAntiForgeryToken]
+        public async Task<IActionResult> EditIMP(int id, [Bind("SubmissionDate,FormSubmitterSEmail,CouncilName,CouncilNumber,D1FirstName,D1MiddleName,D1LastName,D1Suffix,D1MemberID,D1Address1,D1Address2,D1City,D1State,D1ZipCode,D1Phone,D1Email,D2FirstName,D2MiddleName,D2LastName,D2Suffix,D2MemberID,D2Address1,D2Address2,D2City,D2State,D2ZipCode,D2Phone,D2Email,A1FirstName,A1MiddleName,A1LastName,A1Suffix,A1MemberID,A1Address1,A1Address2,A1City,A1State,A1ZipCode,A1Phone,A1Email,A2FirstName,A2MiddleName,A2LastName,A2Suffix,A2MemberID,A2Address1,A2Address2,A2City,A2State,A2ZipCode,A2Phone,A2Email,Id,RecType")] CvnImpDelegateIMP cvnImpDelegate)
         {
             if (id != cvnImpDelegate.Id)
             {
@@ -118,8 +150,9 @@ namespace KofCWSCWebsite.Controllers
             {
                 try
                 {
-                    _context.Update(cvnImpDelegate);
-                    await _context.SaveChangesAsync();
+                    var results = await _apiHelper.PutAsync<CvnImpDelegateIMP, CvnImpDelegateIMP>($"CvnImpDelegate/{id}", cvnImpDelegate);
+                    //_context.Update(cvnImpDelegate);
+                    //await _context.SaveChangesAsync();
                 }
                 catch (DbUpdateConcurrencyException)
                 {
@@ -132,42 +165,35 @@ namespace KofCWSCWebsite.Controllers
                         throw;
                     }
                 }
-                return RedirectToAction(nameof(Index));
+                return RedirectToAction(nameof(IndexIMP));
             }
-            return View(cvnImpDelegate);
+            return RedirectToAction("CvnImpDelegates", "Index");
         }
 
         // GET: CvnImpDelegates/Delete/5
-        public async Task<IActionResult> Delete(int? id)
+        public async Task<IActionResult> DeleteIMP(int? id)
         {
-            if (id == null)
-            {
-                return NotFound();
-            }
+            var results = await _apiHelper.GetAsync<CvnImpDelegateIMP>($"CvnImpDelegate/{id}");
 
-            var cvnImpDelegate = await _context.CvnImpDelegates
-                .FirstOrDefaultAsync(m => m.Id == id);
-            if (cvnImpDelegate == null)
-            {
-                return NotFound();
-            }
+            return View("Delete", results);
 
-            return View(cvnImpDelegate);
         }
 
         // POST: CvnImpDelegates/Delete/5
-        [HttpPost, ActionName("Delete")]
+        [HttpPost, ActionName("DeleteIMP")]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> DeleteConfirmed(int id)
         {
-            var cvnImpDelegate = await _context.CvnImpDelegates.FindAsync(id);
-            if (cvnImpDelegate != null)
-            {
-                _context.CvnImpDelegates.Remove(cvnImpDelegate);
-            }
+            await _apiHelper.DeleteAsync($"CvnImpDelegate/{id}");
+            return RedirectToAction(nameof(IndexIMP));
+            //var cvnImpDelegate = await _context.CvnImpDelegates.FindAsync(id);
+            //if (cvnImpDelegate != null)
+            //{
+            //    _context.CvnImpDelegates.Remove(cvnImpDelegate);
+            //}
 
-            await _context.SaveChangesAsync();
-            return RedirectToAction(nameof(Index));
+            //await _context.SaveChangesAsync();
+            //return RedirectToAction(nameof(Index));
         }
 
         private bool CvnImpDelegateExists(int id)
