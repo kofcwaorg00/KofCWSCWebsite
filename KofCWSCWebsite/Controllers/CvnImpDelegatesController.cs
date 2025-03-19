@@ -76,14 +76,21 @@ namespace KofCWSCWebsite.Controllers
         {
             if (ModelState.IsValid)
             {
-                var results = await _apiHelper.PostAsync<CvnImpDelegateIMP, CvnImpDelegateIMP>("CvnImpDelegate", cvnImpDelegateIMP);
-                return RedirectToAction(nameof(Index));
+                var results = await _apiHelper.PostAsync<CvnImpDelegateIMP, string>("CvnImpDelegate", cvnImpDelegateIMP);
+
+                ViewBag.ImpCreateMessage = results;
+
+                return View("~/Views/CvnImpDelegates/Failed.cshtml");
 
                 //_context.Add(cvnImpDelegateIMP);
                 //await _context.SaveChangesAsync();
                 //return RedirectToAction(nameof(Index));
             }
-            return View(cvnImpDelegateIMP);
+            else
+            {
+                return View(cvnImpDelegateIMP);
+            }
+            
         }
 
         //[HttpGet("Edit/{id}")]
@@ -168,7 +175,7 @@ namespace KofCWSCWebsite.Controllers
                         throw;
                     }
                 }
-                return RedirectToAction(nameof(IndexIMP));
+                return RedirectToAction(nameof(Index));
             }
             return RedirectToAction("CvnImpDelegates", "Index");
         }
@@ -188,7 +195,7 @@ namespace KofCWSCWebsite.Controllers
         public async Task<IActionResult> DeleteConfirmed(int id)
         {
             await _apiHelper.DeleteAsync($"CvnImpDelegate/{id}");
-            return RedirectToAction(nameof(IndexIMP));
+            return RedirectToAction(nameof(Index));
             //var cvnImpDelegate = await _context.CvnImpDelegates.FindAsync(id);
             //if (cvnImpDelegate != null)
             //{

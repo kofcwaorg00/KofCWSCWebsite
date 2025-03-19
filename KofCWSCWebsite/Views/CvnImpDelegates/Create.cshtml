@@ -11,271 +11,442 @@
 <div class="row">
     <div class="col-md-4">
         <form asp-action="Create">
-            
             <input asp-for="RecType" type="hidden" class="form-control" value="M" />
             <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+            <table class="table">
+                <tr>
+                    <td>
+                        <div class="form-group">
+                            <label asp-for="SubmissionDate" class="control-label" style="font-weight:bold"></label>
+                            <input type="date" asp-for="SubmissionDate" class="form-control" readonly />
+                            <span asp-validation-for="SubmissionDate" class="text-danger"></span>
+                        </div>
+                    </td>
+                    <td>
+                        <div class="form-group">
+                            <label asp-for="FormSubmitterSEmail" class="control-label" style="font-weight:bold"></label>
+                            <input asp-for="FormSubmitterSEmail" class="form-control" readonly style="width:auto" />
+                            <span asp-validation-for="FormSubmitterSEmail" class="text-danger"></span>
+                        </div>
+                    </td>
+                    <td>
+                        <div class="form-group">
+                            <label asp-for="CouncilNumber" class="control-label" style="font-weight:bold"></label>
+                            <input asp-for="CouncilNumber" class="form-control" />
+                            <span asp-validation-for="CouncilNumber" class="text-danger"></span>
+                        </div>
+                    </td>
+                    <td>
+                        <div class="form-group" style="float:right">
+                            <label asp-for="CouncilName" class="control-label" style="font-weight:bold"></label>
+                            <input asp-for="CouncilName" class="form-control" readonly style="width:auto" />
+                            <span asp-validation-for="CouncilName" class="text-danger"></span>
+                        </div>
+                    </td>
+                </tr>
+                @***************************************************************************************@
+                @*Begin Delegate #1 Box*@
+                <tr style="border-top:solid;border-left:solid;border-right:solid">
+                    <td><h3>Delegate #1</h3></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                </tr>
+                <tr style="border-left:solid;border-right:solid">
+                    <td>
+                        <div class="form-group ImportedData">
+                            <label asp-for="D1MemberID" class="control-label" style="font-weight:bold"></label>
+                            <input asp-for="D1MemberID" class="form-control ImportedData" />
+                            <span asp-validation-for="D1MemberID" class="text-danger"></span>
+                        </div>
+                    </td>
+                    <td>
+                        <div class="form-group ImportedData">
+                            <label asp-for="D1Phone" class="control-label" style="font-weight:bold"></label>
+                            <input asp-for="D1Phone" class="form-control ImportedData" />
+                            <span asp-validation-for="D1Phone" class="text-danger"></span>
+                        </div>
+                    </td>
+                    <td>
+                        <div class="form-group ImportedData">
+                            <label asp-for="D1Email" class="control-label" style="font-weight:bold"></label>
+                            <input asp-for="D1Email" class="form-control ImportedData" />
+                            <span asp-validation-for="D1Email" class="text-danger"></span>
+                        </div>
+                    </td>
+                    <td>
+                        <div class="form-group ImportedData">
+                            <label asp-for="CouncilNumber" class="control-label" style="font-weight:bold"></label>
+                            <input asp-for="CouncilNumber" class="form-control ImportedData" />
+                            <span asp-validation-for="CouncilNumber" class="text-danger"></span>
+                        </div>
+                    </td>
+                </tr>
+                <tr style="border-left:solid;border-right:solid">
+                    <td>
+                        <div class="form-group ImportedData">
+                            <label asp-for="D1FirstName" class="control-label" style="font-weight:bold"></label>
+                            <input asp-for="D1FirstName" class="form-control ImportedData" />
+                            <span asp-validation-for="D1FirstName" class="text-danger"></span>
+                        </div>
+                    </td>
+                    <td>
+                        <div class="form-group ImportedData">
+                            <label asp-for="D1MiddleName" class="control-label" style="font-weight:bold"></label>
+                            <input asp-for="D1MiddleName" class="form-control ImportedData" />
+                            <span asp-validation-for="D1MiddleName" class="text-danger"></span>
+                        </div>
+                    </td>
+                    <td>
+                        <div class="form-group ImportedData">
+                            <label asp-for="D1LastName" class="control-label" style="font-weight:bold"></label>
+                            <input asp-for="D1LastName" class="form-control ImportedData" />
+                            <span asp-validation-for="D1LastName" class="text-danger"></span>
+                        </div>
+                    </td>
+                    <td>
+                        <div class="form-group ImportedData">
+                            <label asp-for="D1Suffix" class="control-label" style="font-weight:bold"></label>
+                            <input asp-for="D1Suffix" class="form-control ImportedData" />
+                            <span asp-validation-for="D1Suffix" class="text-danger"></span>
+                        </div>
+                    </td>
+                </tr>
+                <tr style="border-left: solid; border-right: solid; border-bottom: solid">
+                    <td>
+                        <div class="form-group ImportedData">
+                            <label asp-for="D1Address1" class="control-label" style="font-weight:bold"></label>
+                            <input asp-for="D1Address1" class="form-control ImportedData" />
+                            <span asp-validation-for="D1Address1" class="text-danger"></span>
+                        </div>
+                    </td>
+                    <td>
+                        <div class="form-group ImportedData">
+                            <label asp-for="D1City" class="control-label" style="font-weight:bold"></label>
+                            <input asp-for="D1City" class="form-control ImportedData" />
+                            <span asp-validation-for="D1City" class="text-danger"></span>
+                        </div>
+                    </td>
+                    <td>
+                        <div class="form-group ImportedData">
+                            <label asp-for="D1State" class="control-label" style="font-weight:bold"></label>
+                            <input asp-for="D1State" class="form-control ImportedData" />
+                            <span asp-validation-for="D1State" class="text-danger"></span>
+                        </div>
+                    </td>
+                    <td>
+                        <div class="form-group ImportedData">
+                            <label asp-for="D1ZipCode" class="control-label" style="font-weight:bold"></label>
+                            <input asp-for="D1ZipCode" class="form-control ImportedData" />
+                            <span asp-validation-for="D1ZipCode" class="text-danger"></span>
+                        </div>
+                    </td>
+                </tr>
+                @*End Delegate #1 Box*@
+                @***************************************************************************************@
+                @*Begin Delegate #2 Box*@
+                <tr style="border-top:solid;border-left:solid;border-right:solid">
+                    <td><h3>Delegate #2</h3></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                </tr>
+                <tr style="border-left:solid;border-right:solid">
+                    <td>
+                        <div class="form-group ImportedData">
+                            <label asp-for="D2MemberID" class="control-label" style="font-weight:bold"></label>
+                            <input asp-for="D2MemberID" class="form-control ImportedData" />
+                            <span asp-validation-for="D2MemberID" class="text-danger"></span>
+                        </div>
+                    </td>
+                    <td>
+                        <div class="form-group ImportedData">
+                            <label asp-for="D2Phone" class="control-label" style="font-weight:bold"></label>
+                            <input asp-for="D2Phone" class="form-control ImportedData" />
+                            <span asp-validation-for="D2Phone" class="text-danger"></span>
+                        </div>
+                    </td>
+                    <td>
+                        <div class="form-group ImportedData">
+                            <label asp-for="D2Email" class="control-label" style="font-weight:bold"></label>
+                            <input asp-for="D2Email" class="form-control ImportedData" />
+                            <span asp-validation-for="D2Email" class="text-danger"></span>
+                        </div>
+                    </td>
+                    <td>
+                        <div class="form-group ImportedData">
+                            <label asp-for="CouncilNumber" class="control-label" style="font-weight:bold"></label>
+                            <input asp-for="CouncilNumber" class="form-control ImportedData" />
+                            <span asp-validation-for="CouncilNumber" class="text-danger"></span>
+                        </div>
+                    </td>
+                </tr>
+                <tr style="border-left:solid;border-right:solid">
+
+                    <td>
+                        <div class="form-group ImportedData">
+                            <label asp-for="D2FirstName" class="control-label" style="font-weight:bold"></label>
+                            <input asp-for="D2FirstName" class="form-control ImportedData" />
+                            <span asp-validation-for="D2FirstName" class="text-danger"></span>
+                        </div>
+                    </td>
+                    <td>
+                        <div class="form-group ImportedData">
+                            <label asp-for="D2MiddleName" class="control-label" style="font-weight:bold"></label>
+                            <input asp-for="D2MiddleName" class="form-control ImportedData" />
+                            <span asp-validation-for="D2MiddleName" class="text-danger"></span>
+                        </div>
+                    </td>
+                    <td>
+                        <div class="form-group ImportedData">
+                            <label asp-for="D2LastName" class="control-label" style="font-weight:bold"></label>
+                            <input asp-for="D2LastName" class="form-control ImportedData" />
+                            <span asp-validation-for="D2LastName" class="text-danger"></span>
+                        </div>
+                    </td>
+                    <td>
+                        <div class="form-group ImportedData">
+                            <label asp-for="D2Suffix" class="control-label" style="font-weight:bold"></label>
+                            <input asp-for="D2Suffix" class="form-control ImportedData" />
+                            <span asp-validation-for="D2Suffix" class="text-danger"></span>
+                        </div>
+                    </td>
+                </tr>
+                <tr style="border-left: solid; border-right: solid; border-bottom: solid">
+                    <td>
+                        <div class="form-group ImportedData">
+                            <label asp-for="D2Address1" class="control-label" style="font-weight:bold"></label>
+                            <input asp-for="D2Address1" class="form-control ImportedData" />
+                            <span asp-validation-for="D2Address1" class="text-danger"></span>
+                        </div>
+                    </td>
+                    <td>
+                        <div class="form-group ImportedData">
+                            <label asp-for="D2City" class="control-label" style="font-weight:bold"></label>
+                            <input asp-for="D2City" class="form-control ImportedData" />
+                            <span asp-validation-for="D2City" class="text-danger"></span>
+                        </div>
+                    </td>
+                    <td>
+                        <div class="form-group ImportedData">
+                            <label asp-for="D2State" class="control-label" style="font-weight:bold"></label>
+                            <input asp-for="D2State" class="form-control ImportedData" />
+                            <span asp-validation-for="D2State" class="text-danger"></span>
+                        </div>
+                    </td>
+                    <td>
+                        <div class="form-group ImportedData">
+                            <label asp-for="D2ZipCode" class="control-label" style="font-weight:bold"></label>
+                            <input asp-for="D2ZipCode" class="form-control ImportedData" />
+                            <span asp-validation-for="D2ZipCode" class="text-danger"></span>
+                        </div>
+                    </td>
+                </tr>
+                @*End Delegate #2 Box*@
+                @***************************************************************************************@
+                @*Begin Alternate #1 Box*@
+                <tr style="border-top:solid;border-left:solid;border-right:solid">
+                    <td><h3>Alternate #1</h3></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                </tr>
+                <tr style="border-left:solid;border-right:solid">
+                    <td>
+                        <div class="form-group ImportedData">
+                            <label asp-for="A1MemberID" class="control-label" style="font-weight:bold"></label>
+                            <input asp-for="A1MemberID" class="form-control ImportedData" />
+                            <span asp-validation-for="A1MemberID" class="text-danger"></span>
+                        </div>
+                    </td>
+                    <td>
+                        <div class="form-group ImportedData">
+                            <label asp-for="A1Phone" class="control-label" style="font-weight:bold"></label>
+                            <input asp-for="A1Phone" class="form-control ImportedData" />
+                            <span asp-validation-for="A1Phone" class="text-danger"></span>
+                        </div>
+                    </td>
+                    <td>
+                        <div class="form-group ImportedData">
+                            <label asp-for="A1Email" class="control-label" style="font-weight:bold"></label>
+                            <input asp-for="A1Email" class="form-control ImportedData" />
+                            <span asp-validation-for="A1Email" class="text-danger"></span>
+                        </div>
+                    </td>
+                    <td>
+                        <div class="form-group ImportedData">
+                            <label asp-for="CouncilNumber" class="control-label" style="font-weight:bold"></label>
+                            <input asp-for="CouncilNumber" class="form-control ImportedData" />
+                            <span asp-validation-for="CouncilNumber" class="text-danger"></span>
+                        </div>
+                    </td>
+                </tr>
+                <tr style="border-left:solid;border-right:solid">
+
+                    <td>
+                        <div class="form-group ImportedData">
+                            <label asp-for="A1FirstName" class="control-label" style="font-weight:bold"></label>
+                            <input asp-for="A1FirstName" class="form-control ImportedData" />
+                            <span asp-validation-for="A1FirstName" class="text-danger"></span>
+                        </div>
+                    </td>
+                    <td>
+                        <div class="form-group ImportedData">
+                            <label asp-for="A1MiddleName" class="control-label" style="font-weight:bold"></label>
+                            <input asp-for="A1MiddleName" class="form-control ImportedData" />
+                            <span asp-validation-for="A1MiddleName" class="text-danger"></span>
+                        </div>
+                    </td>
+                    <td>
+                        <div class="form-group ImportedData">
+                            <label asp-for="A1LastName" class="control-label" style="font-weight:bold"></label>
+                            <input asp-for="A1LastName" class="form-control ImportedData" />
+                            <span asp-validation-for="A1LastName" class="text-danger"></span>
+                        </div>
+                    </td>
+                    <td>
+                        <div class="form-group ImportedData">
+                            <label asp-for="A1Suffix" class="control-label" style="font-weight:bold"></label>
+                            <input asp-for="A1Suffix" class="form-control ImportedData" />
+                            <span asp-validation-for="A1Suffix" class="text-danger"></span>
+                        </div>
+                    </td>
+                </tr>
+                <tr style="border-left: solid; border-right: solid; border-bottom: solid">
+                    <td>
+                        <div class="form-group ImportedData">
+                            <label asp-for="A1Address1" class="control-label" style="font-weight:bold"></label>
+                            <input asp-for="A1Address1" class="form-control ImportedData" />
+                            <span asp-validation-for="A1Address1" class="text-danger"></span>
+                        </div>
+                    </td>
+                    <td>
+                        <div class="form-group ImportedData">
+                            <label asp-for="A1City" class="control-label" style="font-weight:bold"></label>
+                            <input asp-for="A1City" class="form-control ImportedData" />
+                            <span asp-validation-for="A1City" class="text-danger"></span>
+                        </div>
+                    </td>
+                    <td>
+                        <div class="form-group ImportedData">
+                            <label asp-for="A1State" class="control-label" style="font-weight:bold"></label>
+                            <input asp-for="A1State" class="form-control ImportedData" />
+                            <span asp-validation-for="A1State" class="text-danger"></span>
+                        </div>
+                    </td>
+                    <td>
+                        <div class="form-group ImportedData">
+                            <label asp-for="A1ZipCode" class="control-label" style="font-weight:bold"></label>
+                            <input asp-for="A1ZipCode" class="form-control ImportedData" />
+                            <span asp-validation-for="A1ZipCode" class="text-danger"></span>
+                        </div>
+                    </td>
+                </tr>
+                @*End Alternate #1 Box*@
+                @***************************************************************************************@
+                @*Begin Alternate #2 Box*@
+                <tr style="border-top:solid;border-left:solid;border-right:solid">
+                    <td><h3>Alternate #2</h3></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                </tr>
+                <tr style="border-left:solid;border-right:solid">
+                    <td>
+                        <div class="form-group ImportedData">
+                            <label asp-for="A2MemberID" class="control-label" style="font-weight:bold"></label>
+                            <input asp-for="A2MemberID" class="form-control ImportedData" />
+                            <span asp-validation-for="A2MemberID" class="text-danger"></span>
+                        </div>
+                    </td>
+                    <td>
+                        <div class="form-group ImportedData">
+                            <label asp-for="A2Phone" class="control-label" style="font-weight:bold"></label>
+                            <input asp-for="A2Phone" class="form-control ImportedData" />
+                            <span asp-validation-for="A2Phone" class="text-danger"></span>
+                        </div>
+                    </td>
+                    <td>
+                        <div class="form-group ImportedData">
+                            <label asp-for="A2Email" class="control-label" style="font-weight:bold"></label>
+                            <input asp-for="A2Email" class="form-control ImportedData" />
+                            <span asp-validation-for="A2Email" class="text-danger"></span>
+                        </div>
+                    </td>
+                    <td>
+                        <div class="form-group ImportedData">
+                            <label asp-for="CouncilNumber" class="control-label" style="font-weight:bold"></label>
+                            <input asp-for="CouncilNumber" class="form-control ImportedData" />
+                            <span asp-validation-for="CouncilNumber" class="text-danger"></span>
+                        </div>
+                    </td>
+                </tr>
+                <tr style="border-left:solid;border-right:solid">
+
+                    <td>
+                        <div class="form-group ImportedData">
+                            <label asp-for="A2FirstName" class="control-label" style="font-weight:bold"></label>
+                            <input asp-for="A2FirstName" class="form-control ImportedData" />
+                            <span asp-validation-for="A2FirstName" class="text-danger"></span>
+                        </div>
+                    </td>
+                    <td>
+                        <div class="form-group ImportedData">
+                            <label asp-for="A2MiddleName" class="control-label" style="font-weight:bold"></label>
+                            <input asp-for="A2MiddleName" class="form-control ImportedData" />
+                            <span asp-validation-for="A2MiddleName" class="text-danger"></span>
+                        </div>
+                    </td>
+                    <td>
+                        <div class="form-group ImportedData">
+                            <label asp-for="A2LastName" class="control-label" style="font-weight:bold"></label>
+                            <input asp-for="A2LastName" class="form-control ImportedData" />
+                            <span asp-validation-for="A2LastName" class="text-danger"></span>
+                        </div>
+                    </td>
+                    <td>
+                        <div class="form-group ImportedData">
+                            <label asp-for="A2Suffix" class="control-label" style="font-weight:bold"></label>
+                            <input asp-for="A2Suffix" class="form-control ImportedData" />
+                            <span asp-validation-for="A2Suffix" class="text-danger"></span>
+                        </div>
+                    </td>
+                </tr>
+                <tr style="border-left: solid; border-right: solid; border-bottom: solid">
+                    <td>
+                        <div class="form-group ImportedData">
+                            <label asp-for="A2Address1" class="control-label" style="font-weight:bold"></label>
+                            <input asp-for="A2Address1" class="form-control ImportedData" />
+                            <span asp-validation-for="A2Address1" class="text-danger"></span>
+                        </div>
+                    </td>
+                    <td>
+                        <div class="form-group ImportedData">
+                            <label asp-for="A2City" class="control-label" style="font-weight:bold"></label>
+                            <input asp-for="A2City" class="form-control ImportedData" />
+                            <span asp-validation-for="A2City" class="text-danger"></span>
+                        </div>
+                    </td>
+                    <td>
+                        <div class="form-group ImportedData">
+                            <label asp-for="A2State" class="control-label" style="font-weight:bold"></label>
+                            <input asp-for="A2State" class="form-control ImportedData" />
+                            <span asp-validation-for="A2State" class="text-danger"></span>
+                        </div>
+                    </td>
+                    <td>
+                        <div class="form-group ImportedData">
+                            <label asp-for="A2ZipCode" class="control-label" style="font-weight:bold"></label>
+                            <input asp-for="A2ZipCode" class="form-control ImportedData" />
+                            <span asp-validation-for="A2ZipCode" class="text-danger"></span>
+                        </div>
+                    </td>
+                </tr>
+                @*End Alternate #1 Box*@
+                @***************************************************************************************@
+            </table>
             <div class="form-group">
-                <label asp-for="SubmissionDate" class="control-label"></label>
-                <input type="date" asp-for="SubmissionDate" class="form-control" value="@DateTime.Now.ToString("yyyy-MM-dd")" />
-                <span asp-validation-for="SubmissionDate" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="FormSubmitterSEmail" class="control-label"></label>
-                <input asp-for="FormSubmitterSEmail" class="form-control" />
-                <span asp-validation-for="FormSubmitterSEmail" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="CouncilName" class="control-label"></label>
-                <input asp-for="CouncilName" class="form-control" />
-                <span asp-validation-for="CouncilName" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="CouncilNumber" class="control-label"></label>
-                <input asp-for="CouncilNumber" class="form-control" />
-                <span asp-validation-for="CouncilNumber" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="D1FirstName" class="control-label"></label>
-                <input asp-for="D1FirstName" class="form-control" />
-                <span asp-validation-for="D1FirstName" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="D1MiddleName" class="control-label"></label>
-                <input asp-for="D1MiddleName" class="form-control" />
-                <span asp-validation-for="D1MiddleName" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="D1LastName" class="control-label"></label>
-                <input asp-for="D1LastName" class="form-control" />
-                <span asp-validation-for="D1LastName" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="D1Suffix" class="control-label"></label>
-                <input asp-for="D1Suffix" class="form-control" />
-                <span asp-validation-for="D1Suffix" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="D1MemberID" class="control-label"></label>
-                <input asp-for="D1MemberID" class="form-control" />
-                <span asp-validation-for="D1MemberID" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="D1Address1" class="control-label"></label>
-                <input asp-for="D1Address1" class="form-control" />
-                <span asp-validation-for="D1Address1" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="D1Address2" class="control-label"></label>
-                <input asp-for="D1Address2" class="form-control" />
-                <span asp-validation-for="D1Address2" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="D1City" class="control-label"></label>
-                <input asp-for="D1City" class="form-control" />
-                <span asp-validation-for="D1City" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="D1State" class="control-label"></label>
-                <input asp-for="D1State" class="form-control" />
-                <span asp-validation-for="D1State" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="D1ZipCode" class="control-label"></label>
-                <input asp-for="D1ZipCode" class="form-control" />
-                <span asp-validation-for="D1ZipCode" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="D1Phone" class="control-label"></label>
-                <input asp-for="D1Phone" class="form-control" />
-                <span asp-validation-for="D1Phone" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="D1Email" class="control-label"></label>
-                <input asp-for="D1Email" class="form-control" />
-                <span asp-validation-for="D1Email" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="D2FirstName" class="control-label"></label>
-                <input asp-for="D2FirstName" class="form-control" />
-                <span asp-validation-for="D2FirstName" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="D2MiddleName" class="control-label"></label>
-                <input asp-for="D2MiddleName" class="form-control" />
-                <span asp-validation-for="D2MiddleName" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="D2LastName" class="control-label"></label>
-                <input asp-for="D2LastName" class="form-control" />
-                <span asp-validation-for="D2LastName" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="D2Suffix" class="control-label"></label>
-                <input asp-for="D2Suffix" class="form-control" />
-                <span asp-validation-for="D2Suffix" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="D2MemberID" class="control-label"></label>
-                <input asp-for="D2MemberID" class="form-control" />
-                <span asp-validation-for="D2MemberID" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="D2Address1" class="control-label"></label>
-                <input asp-for="D2Address1" class="form-control" />
-                <span asp-validation-for="D2Address1" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="D2Address2" class="control-label"></label>
-                <input asp-for="D2Address2" class="form-control" />
-                <span asp-validation-for="D2Address2" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="D2City" class="control-label"></label>
-                <input asp-for="D2City" class="form-control" />
-                <span asp-validation-for="D2City" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="D2State" class="control-label"></label>
-                <input asp-for="D2State" class="form-control" />
-                <span asp-validation-for="D2State" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="D2ZipCode" class="control-label"></label>
-                <input asp-for="D2ZipCode" class="form-control" />
-                <span asp-validation-for="D2ZipCode" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="D2Phone" class="control-label"></label>
-                <input asp-for="D2Phone" class="form-control" />
-                <span asp-validation-for="D2Phone" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="D2Email" class="control-label"></label>
-                <input asp-for="D2Email" class="form-control" />
-                <span asp-validation-for="D2Email" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="A1FirstName" class="control-label"></label>
-                <input asp-for="A1FirstName" class="form-control" />
-                <span asp-validation-for="A1FirstName" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="A1MiddleName" class="control-label"></label>
-                <input asp-for="A1MiddleName" class="form-control" />
-                <span asp-validation-for="A1MiddleName" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="A1LastName" class="control-label"></label>
-                <input asp-for="A1LastName" class="form-control" />
-                <span asp-validation-for="A1LastName" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="A1Suffix" class="control-label"></label>
-                <input asp-for="A1Suffix" class="form-control" />
-                <span asp-validation-for="A1Suffix" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="A1MemberID" class="control-label"></label>
-                <input asp-for="A1MemberID" class="form-control" />
-                <span asp-validation-for="A1MemberID" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="A1Address1" class="control-label"></label>
-                <input asp-for="A1Address1" class="form-control" />
-                <span asp-validation-for="A1Address1" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="A1Address2" class="control-label"></label>
-                <input asp-for="A1Address2" class="form-control" />
-                <span asp-validation-for="A1Address2" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="A1City" class="control-label"></label>
-                <input asp-for="A1City" class="form-control" />
-                <span asp-validation-for="A1City" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="A1State" class="control-label"></label>
-                <input asp-for="A1State" class="form-control" />
-                <span asp-validation-for="A1State" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="A1ZipCode" class="control-label"></label>
-                <input asp-for="A1ZipCode" class="form-control" />
-                <span asp-validation-for="A1ZipCode" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="A1Phone" class="control-label"></label>
-                <input asp-for="A1Phone" class="form-control" />
-                <span asp-validation-for="A1Phone" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="A1Email" class="control-label"></label>
-                <input asp-for="A1Email" class="form-control" />
-                <span asp-validation-for="A1Email" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="A2FirstName" class="control-label"></label>
-                <input asp-for="A2FirstName" class="form-control" />
-                <span asp-validation-for="A2FirstName" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="A2MiddleName" class="control-label"></label>
-                <input asp-for="A2MiddleName" class="form-control" />
-                <span asp-validation-for="A2MiddleName" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="A2LastName" class="control-label"></label>
-                <input asp-for="A2LastName" class="form-control" />
-                <span asp-validation-for="A2LastName" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="A2Suffix" class="control-label"></label>
-                <input asp-for="A2Suffix" class="form-control" />
-                <span asp-validation-for="A2Suffix" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="A2MemberID" class="control-label"></label>
-                <input asp-for="A2MemberID" class="form-control" />
-                <span asp-validation-for="A2MemberID" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="A2Address1" class="control-label"></label>
-                <input asp-for="A2Address1" class="form-control" />
-                <span asp-validation-for="A2Address1" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="A2Address2" class="control-label"></label>
-                <input asp-for="A2Address2" class="form-control" />
-                <span asp-validation-for="A2Address2" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="A2City" class="control-label"></label>
-                <input asp-for="A2City" class="form-control" />
-                <span asp-validation-for="A2City" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="A2State" class="control-label"></label>
-                <input asp-for="A2State" class="form-control" />
-                <span asp-validation-for="A2State" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="A2ZipCode" class="control-label"></label>
-                <input asp-for="A2ZipCode" class="form-control" />
-                <span asp-validation-for="A2ZipCode" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="A2Phone" class="control-label"></label>
-                <input asp-for="A2Phone" class="form-control" />
-                <span asp-validation-for="A2Phone" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="A2Email" class="control-label"></label>
-                <input asp-for="A2Email" class="form-control" />
-                <span asp-validation-for="A2Email" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <input type="submit" value="Create" class="btn btn-primary" />
+                <input type="submit" name="action" value="Save New Delegate(s)" class="btn btn-primary" />
             </div>
         </form>
     </div>

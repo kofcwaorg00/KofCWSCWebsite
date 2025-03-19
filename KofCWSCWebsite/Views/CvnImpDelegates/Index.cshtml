@@ -181,14 +181,14 @@
 
                 </td>
                 <td style="padding-left:0px;padding-right:0px">
-                    <form asp-action="Details" asp-route-id="@item.Id" method="get">
+                    <form asp-action="EditIMP" asp-route-id="@item.Id" method="get">
                         <button type="submit" class="btn btn-sm btn-warning">
-                            Details
+                            Edit Raw
                         </button>
                     </form>
                 </td>
                 <td style="padding-left:0px">
-                    <form asp-action="Delete" asp-route-id="@item.Id" method="get">
+                    <form asp-action="DeleteIMP" asp-route-id="@item.Id" method="get">
                         <button type="submit" class="btn btn-sm btn-danger">
                             Delete
                         </button>
