@@ -72,15 +72,18 @@ namespace KofCWSCWebsite.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("SubmissionDate,FormSubmitterSEmail,CouncilName,CouncilNumber,D1FirstName,D1MiddleName,D1LastName,D1Suffix,D1MemberID,D1Address1,D1Address2,D1City,D1State,D1ZipCode,D1Phone,D1Email,D2FirstName,D2MiddleName,D2LastName,D2Suffix,D2MemberID,D2Address1,D2Address2,D2City,D2State,D2ZipCode,D2Phone,D2Email,A1FirstName,A1MiddleName,A1LastName,A1Suffix,A1MemberID,A1Address1,A1Address2,A1City,A1State,A1ZipCode,A1Phone,A1Email,A2FirstName,A2MiddleName,A2LastName,A2Suffix,A2MemberID,A2Address1,A2Address2,A2City,A2State,A2ZipCode,A2Phone,A2Email,Id,RecType")] CvnImpDelegate cvnImpDelegate)
+        public async Task<IActionResult> Create([Bind("SubmissionDate,FormSubmitterSEmail,CouncilName,CouncilNumber,D1FirstName,D1MiddleName,D1LastName,D1Suffix,D1MemberID,D1Address1,D1Address2,D1City,D1State,D1ZipCode,D1Phone,D1Email,D2FirstName,D2MiddleName,D2LastName,D2Suffix,D2MemberID,D2Address1,D2Address2,D2City,D2State,D2ZipCode,D2Phone,D2Email,A1FirstName,A1MiddleName,A1LastName,A1Suffix,A1MemberID,A1Address1,A1Address2,A1City,A1State,A1ZipCode,A1Phone,A1Email,A2FirstName,A2MiddleName,A2LastName,A2Suffix,A2MemberID,A2Address1,A2Address2,A2City,A2State,A2ZipCode,A2Phone,A2Email,Id,RecType")] CvnImpDelegateIMP cvnImpDelegateIMP)
         {
             if (ModelState.IsValid)
             {
-                _context.Add(cvnImpDelegate);
-                await _context.SaveChangesAsync();
+                var results = await _apiHelper.PostAsync<CvnImpDelegateIMP, CvnImpDelegateIMP>("CvnImpDelegate", cvnImpDelegateIMP);
                 return RedirectToAction(nameof(Index));
+
+                //_context.Add(cvnImpDelegateIMP);
+                //await _context.SaveChangesAsync();
+                //return RedirectToAction(nameof(Index));
             }
-            return View(cvnImpDelegate);
+            return View(cvnImpDelegateIMP);
         }
 
         //[HttpGet("Edit/{id}")]

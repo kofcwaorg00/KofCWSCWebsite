@@ -13,9 +13,16 @@
         background-color: #C6EFCE;
         color: green;
     }
-    .BtnRed {
-        background-color: #C6EFCE;
-        color: red;
+
+    .BtnAdd {
+        background-color: yellow;
+        color: black;
+        font-weight:bold
+    }
+    .BtnUpd {
+        background-color: orange;
+        color: black;
+        font-weight: bold
     }
 </style>
 <h1>Edit Convention Delegate Import</h1>
@@ -36,92 +43,108 @@
 
     string myValidate2 = ViewBag.Validate2;
     // Set D1 control colors
-    string myMemD1ICN = myValidate2.Contains("D1ICN") ? "color:red;background-color:orange" : "";
-    string myMemD1IFN = myValidate2.Contains("D1IFN") ? "color:red" : "";
-    string myMemD1IMN = myValidate2.Contains("D1IMN") ? "color:red" : "";
-    string myMemD1ILN = myValidate2.Contains("D1ILN") ? "color:red" : "";
-    string myMemD1ISX = myValidate2.Contains("D1ISX") ? "color:red" : "";
-    string myMemD1IAD = myValidate2.Contains("D1IAD") ? "color:red" : "";
-    string myMemD1ICT = myValidate2.Contains("D1ICT") ? "color:red" : "";
-    string myMemD1IST = myValidate2.Contains("D1IST") ? "color:red" : "";
-    string myMemD1IZP = myValidate2.Contains("D1IZP") ? "color:red" : "";
-    string myMemD1IPH = myValidate2.Contains("D1IPH") ? "color:red" : "";
-    string myMemD1IEM = myValidate2.Contains("D1IEM") ? "color:red" : "";
+    string myMemD1IID = @Model.D1MemberID.ToString().Length > 7 ? "color:white;background-color:red" : "";
+    string myMemD1ICN = myValidate2.Contains("D1ICN") ? "color:black;background-color:red" : "";
+    string myMemD1IFN = myValidate2.Contains("D1IFN") ? "color:black;background-color:orange" : "";
+    string myMemD1IMN = myValidate2.Contains("D1IMN") ? "color:black;background-color:orange" : "";
+    string myMemD1ILN = myValidate2.Contains("D1ILN") ? "color:black;background-color:orange" : "";
+    string myMemD1ISX = myValidate2.Contains("D1ISX") ? "color:black;background-color:orange" : "";
+    string myMemD1IAD = myValidate2.Contains("D1IAD") ? "color:black;background-color:orange" : "";
+    string myMemD1ICT = myValidate2.Contains("D1ICT") ? "color:black;background-color:orange" : "";
+    string myMemD1IST = myValidate2.Contains("D1IST") ? "color:black;background-color:orange" : "";
+    string myMemD1IZP = myValidate2.Contains("D1IZP") ? "color:black;background-color:orange" : "";
+    string myMemD1IPH = myValidate2.Contains("D1IPH") ? "color:black;background-color:orange" : "";
+    string myMemD1IEM = myValidate2.Contains("D1IEM") ? "color:black;background-color:orange" : "";
     // Set D2 control colors
-    string myMemD2ICN = myValidate2.Contains("D2ICN") ? "color:red;background-color:orange" : "";
-    string myMemD2IFN = myValidate2.Contains("D2IFN") ? "color:red" : "";
-    string myMemD2IMN = myValidate2.Contains("D2IMN") ? "color:red" : "";
-    string myMemD2ILN = myValidate2.Contains("D2ILN") ? "color:red" : "";
-    string myMemD2ISX = myValidate2.Contains("D2ISX") ? "color:red" : "";
-    string myMemD2IAD = myValidate2.Contains("D2IAD") ? "color:red" : "";
-    string myMemD2ICT = myValidate2.Contains("D2ICT") ? "color:red" : "";
-    string myMemD2IST = myValidate2.Contains("D2IST") ? "color:red" : "";
-    string myMemD2IZP = myValidate2.Contains("D2IZP") ? "color:red" : "";
-    string myMemD2IPH = myValidate2.Contains("D2IPH") ? "color:red" : "";
-    string myMemD2IEM = myValidate2.Contains("D2IEM") ? "color:red" : "";
-    // Set A1 control colors
-    string myMemA1ICN = myValidate2.Contains("A1ICN") ? "color:red;background-color:orange" : "";
-    string myMemA1IFN = myValidate2.Contains("A1IFN") ? "color:red" : "";
-    string myMemA1IMN = myValidate2.Contains("A1IMN") ? "color:red" : "";
-    string myMemA1ILN = myValidate2.Contains("A1ILN") ? "color:red" : "";
-    string myMemA1ISX = myValidate2.Contains("A1ISX") ? "color:red" : "";
-    string myMemA1IAD = myValidate2.Contains("A1IAD") ? "color:red" : "";
-    string myMemA1ICT = myValidate2.Contains("A1ICT") ? "color:red" : "";
-    string myMemA1IST = myValidate2.Contains("A1IST") ? "color:red" : "";
-    string myMemA1IZP = myValidate2.Contains("A1IZP") ? "color:red" : "";
-    string myMemA1IPH = myValidate2.Contains("A1IPH") ? "color:red" : "";
-    string myMemA1IEM = myValidate2.Contains("A1IEM") ? "color:red" : "";
+    string myMemD2IID = @Model.D2MemberID.ToString().Length > 7 ? "color:white;background-color:red" : "";
+    string myMemD2ICN = myValidate2.Contains("D2ICN") ? "color:white;background-color:red" : "";
+    string myMemD2IFN = myValidate2.Contains("D2IFN") ? "color:black;background-color:orange" : "";
+    string myMemD2IMN = myValidate2.Contains("D2IMN") ? "color:black;background-color:orange" : "";
+    string myMemD2ILN = myValidate2.Contains("D2ILN") ? "color:black;background-color:orange" : "";
+    string myMemD2ISX = myValidate2.Contains("D2ISX") ? "color:black;background-color:orange" : "";
+    string myMemD2IAD = myValidate2.Contains("D2IAD") ? "color:black;background-color:orange" : "";
+    string myMemD2ICT = myValidate2.Contains("D2ICT") ? "color:black;background-color:orange" : "";
+    string myMemD2IST = myValidate2.Contains("D2IST") ? "color:black;background-color:orange" : "";
+    string myMemD2IZP = myValidate2.Contains("D2IZP") ? "color:black;background-color:orange" : "";
+    string myMemD2IPH = myValidate2.Contains("D2IPH") ? "color:black;background-color:orange" : "";
+    string myMemD2IEM = myValidate2.Contains("D2IEM") ? "color:black;background-color:orange" : "";
+    // Set A1 control colors orange if an data mismatch
+    string myMemA1IID = @Model.A1MemberID.ToString().Length > 7 ? "color:white;background-color:red" : "";
+    string myMemA1ICN = myValidate2.Contains("A1ICN") ? "color:white;background-color:red" : "";
+    string myMemA1IFN = myValidate2.Contains("A1IFN") ? "color:black;background-color:orange" : "";
+    string myMemA1IMN = myValidate2.Contains("A1IMN") ? "color:black;background-color:orange" : "";
+    string myMemA1ILN = myValidate2.Contains("A1ILN") ? "color:black;background-color:orange" : "";
+    string myMemA1ISX = myValidate2.Contains("A1ISX") ? "color:black;background-color:orange" : "";
+    string myMemA1IAD = myValidate2.Contains("A1IAD") ? "color:black;background-color:orange" : "";
+    string myMemA1ICT = myValidate2.Contains("A1ICT") ? "color:black;background-color:orange" : "";
+    string myMemA1IST = myValidate2.Contains("A1IST") ? "color:black;background-color:orange" : "";
+    string myMemA1IZP = myValidate2.Contains("A1IZP") ? "color:black;background-color:orange" : "";
+    string myMemA1IPH = myValidate2.Contains("A1IPH") ? "color:black;background-color:orange" : "";
+    string myMemA1IEM = myValidate2.Contains("A1IEM") ? "color:black;background-color:orange" : "";
     // Set A2 control colors
-    string myMemA2ICN = myValidate2.Contains("A2ICN") ? "color:red;background-color:orange" : "";
-    string myMemA2IFN = myValidate2.Contains("A2IFN") ? "color:red" : "";
-    string myMemA2IMN = myValidate2.Contains("A2IMN") ? "color:red" : "";
-    string myMemA2ILN = myValidate2.Contains("A2ILN") ? "color:red" : "";
-    string myMemA2ISX = myValidate2.Contains("A2ISX") ? "color:red" : "";
-    string myMemA2IAD = myValidate2.Contains("A2IAD") ? "color:red" : "";
-    string myMemA2ICT = myValidate2.Contains("A2ICT") ? "color:red" : "";
-    string myMemA2IST = myValidate2.Contains("A2IST") ? "color:red" : "";
-    string myMemA2IZP = myValidate2.Contains("A2IZP") ? "color:red" : "";
-    string myMemA2IPH = myValidate2.Contains("A2IPH") ? "color:red" : "";
-    string myMemA2IEM = myValidate2.Contains("A2IEM") ? "color:red" : "";
+    string myMemA2IID = @Model.A2MemberID.ToString().Length > 7 ? "color:white;background-color:red" : "";
+    string myMemA2ICN = myValidate2.Contains("A2ICN") ? "color:white;background-color:red" : "";
+    string myMemA2IFN = myValidate2.Contains("A2IFN") ? "color:black;background-color:orange" : "";
+    string myMemA2IMN = myValidate2.Contains("A2IMN") ? "color:black;background-color:orange" : "";
+    string myMemA2ILN = myValidate2.Contains("A2ILN") ? "color:black;background-color:orange" : "";
+    string myMemA2ISX = myValidate2.Contains("A2ISX") ? "color:black;background-color:orange" : "";
+    string myMemA2IAD = myValidate2.Contains("A2IAD") ? "color:black;background-color:orange" : "";
+    string myMemA2ICT = myValidate2.Contains("A2ICT") ? "color:black;background-color:orange" : "";
+    string myMemA2IST = myValidate2.Contains("A2IST") ? "color:black;background-color:orange" : "";
+    string myMemA2IZP = myValidate2.Contains("A2IZP") ? "color:black;background-color:orange" : "";
+    string myMemA2IPH = myValidate2.Contains("A2IPH") ? "color:black;background-color:orange" : "";
+    string myMemA2IEM = myValidate2.Contains("A2IEM") ? "color:black;background-color:orange" : "";
 
     if (myValidate2.Contains("D1I"))
     {
-        myMemVD1 = "style=color:red";
+        myMemVD1 = "style=color:black;background-color:orange";
         myMemD1Title = "Delegate #1 has updated data";
     }
     if (myValidate2.Contains("D2I"))
     {
-        myMemVD2 = "style=color:red";
+        myMemVD2 = "style=color:black;background-color:orange";
         myMemD2Title = "Delegate #2 has updated data";
     }
     if (myValidate2.Contains("A1I"))
     {
-        myMemVA1 = "style=color:red";
+        myMemVA1 = "style=color:black;background-color:orange";
         myMemA1Title = "Alternte #1 has updated data";
     }
     if (myValidate2.Contains("A2I"))
     {
-        myMemVA2 = "style=color:red";
+        myMemVA2 = "style=color:black;background-color:orange";
         myMemA2Title = "Alternate #2 has updated data";
     }
     if (myValidate.Contains("VMD1MISSING"))
     {
-        myMemVD1 = "style=color:red";
+        myMemVD1 = "style=color:black;background-color:yellow";
         myMemD1Title = "Delegate #1 is missing from our data";
     }
     if (myValidate.Contains("VMD2MISSING"))
     {
-        myMemVD2 = "style=color:red";
+        myMemVD2 = "style=color:black;background-color:yellow";
         myMemD2Title = "Delegate #2 is missing from our data";
     }
     if (myValidate.Contains("VMA1MISSING"))
     {
-        myMemVA1 = "style=color:red";
+        myMemVA1 = "style=color:black;background-color:yellow";
         myMemA1Title = "Alternate #1 is missing from our data";
+        myMemA1IID = "color:black;background-color:yellow";
+        myMemA1ICN = "color:black;background-color:yellow";
+        myMemA1IFN = "color:black;background-color:yellow";
+        myMemA1IMN = "color:black;background-color:yellow";
+        myMemA1ILN = "color:black;background-color:yellow";
+        myMemA1ISX = "color:black;background-color:yellow";
+        myMemA1IAD = "color:black;background-color:yellow";
+        myMemA1ICT = "color:black;background-color:yellow";
+        myMemA1IST = "color:black;background-color:yellow";
+        myMemA1IZP = "color:black;background-color:yellow";
+        myMemA1IPH = "color:black;background-color:yellow";
+        myMemA1IEM = "color:black;background-color:yellow";
     }
     if (myValidate.Contains("VMA2MISSING"))
     {
-        myMemVA2 = "style=color:red";
+        myMemVA2 = "style=color:black;background-color:yellow";
         myMemA2Title = "Alternate #2 is missing from our data";
     }
     if (myValidate.Contains("VCMISSING"))
@@ -175,11 +198,14 @@
                         {
                             @if (myValidate.Contains("VMD1MISSING"))
                             {
-                                <input type="submit" name="action" value="Add D1 New Member" class="btn BtnRed" />
+                                @if (@Model.D1MemberID.ToString().Length < 8)
+                                {
+                                    <input type="submit" name="action" value="Add D1 New Member" class="btn BtnAdd" />
+                                }
                             }
                             @if (myValidate2.Contains("D1I"))
                             {
-                                <input type="submit" name="action" value="Update D1 Existing Member" class="btn BtnRed" />
+                                <input type="submit" name="action" value="Update D1 Existing Member" class="btn BtnUpd" />
                             }
                         }
                     </td>
@@ -188,12 +214,12 @@
                     <td>
                         <div class="form-group ImportedData">
                             <label asp-for="D1MemberID" class="control-label" style="font-weight:bold"></label>
-                            <input asp-for="D1MemberID" class="form-control ImportedData" />
+                            <input asp-for="D1MemberID" class="form-control ImportedData" style="@myMemD1IID" title="RED means the KofC Member ID is too long. Check the data and try again" />
                             <span asp-validation-for="D1MemberID" class="text-danger"></span>
                         </div>
                         <div class="form-group ExistingData">
                             <label asp-for="ED1MemberID" class="control-label" style="font-weight:bold"></label>
-                            <input asp-for="ED1MemberID" class="form-control ExistingData" />
+                            <input asp-for="ED1MemberID" class="form-control ExistingData" style="@myMemD1IID" title="RED means the KofC Member ID is too long. Check the data and try again" />
                             <span asp-validation-for="ED1MemberID" class="text-danger"></span>
                         </div>
                     </td>
@@ -224,12 +250,12 @@
                     <td>
                         <div class="form-group ImportedData">
                             <label asp-for="CouncilNumber" class="control-label" style="font-weight:bold"></label>
-                            <input asp-for="CouncilNumber" class="form-control ImportedData" style="@myMemD1ICN" title="If this is ORANGE you must fix the Council before adding Delegate Records"/>
+                            <input asp-for="CouncilNumber" class="form-control ImportedData" style="@myMemD1ICN" title="If this is RED you must fix the Council before adding Delegate Records" />
                             <span asp-validation-for="CouncilNumber" class="text-danger"></span>
                         </div>
                         <div class="form-group ExistingData">
                             <label asp-for="ED1Council" class="control-label" style="font-weight:bold"></label>
-                            <input asp-for="ED1Council" class="form-control ExistingData" style="@myMemD1ICN" title="If this is ORANGE you must fix the Council before adding Delegate Records"/>
+                            <input asp-for="ED1Council" class="form-control ExistingData" style="@myMemD1ICN" title="If this is RED you must fix the Council before adding Delegate Records" />
                             <span asp-validation-for="ED1Council" class="text-danger"></span>
                         </div>
                     </td>
@@ -348,11 +374,14 @@
                         {
                             @if (myValidate.Contains("VMD2MISSING"))
                             {
-                                <input type="submit" name="action" value="Add D2 New Member" class="btn BtnRed" />
+                                @if (@Model.D2MemberID.ToString().Length < 8)
+                                {
+                                    <input type="submit" name="action" value="Add D2 New Member" class="btn BtnAdd" />
+                                }
                             }
                             @if (myValidate2.Contains("D2I"))
                             {
-                                <input type="submit" name="action" value="Update D2 Existing Member" class="btn BtnRed" />
+                                <input type="submit" name="action" value="Update D2 Existing Member" class="btn BtnUpd" />
                             }
                         }
                     </td>
@@ -361,12 +390,12 @@
                     <td>
                         <div class="form-group ImportedData">
                             <label asp-for="D2MemberID" class="control-label" style="font-weight:bold"></label>
-                            <input asp-for="D2MemberID" class="form-control ImportedData" />
+                            <input asp-for="D2MemberID" class="form-control ImportedData" style="@myMemD2IID" title="RED means the KofC Member ID is too long. Check the data and try again" />
                             <span asp-validation-for="D2MemberID" class="text-danger"></span>
                         </div>
                         <div class="form-group ExistingData">
                             <label asp-for="ED2MemberID" class="control-label" style="font-weight:bold"></label>
-                            <input asp-for="ED2MemberID" class="form-control ExistingData" />
+                            <input asp-for="ED2MemberID" class="form-control ExistingData" style="@myMemD2IID" title="RED means the KofC Member ID is too long. Check the data and try again" />
                             <span asp-validation-for="ED2MemberID" class="text-danger"></span>
                         </div>
                     </td>
@@ -397,12 +426,12 @@
                     <td>
                         <div class="form-group ImportedData">
                             <label asp-for="CouncilNumber" class="control-label" style="font-weight:bold"></label>
-                            <input asp-for="CouncilNumber" class="form-control ImportedData" style="@myMemD2ICN" title="If this is ORANGE you must fix the Council before adding Delegate Records"/>
+                            <input asp-for="CouncilNumber" class="form-control ImportedData" style="@myMemD2ICN" title="If this is RED you must fix the Council before adding Delegate Records" />
                             <span asp-validation-for="CouncilNumber" class="text-danger"></span>
                         </div>
                         <div class="form-group ExistingData">
                             <label asp-for="ED2Council" class="control-label" style="font-weight:bold"></label>
-                            <input asp-for="ED2Council" class="form-control ExistingData" style="@myMemD2ICN" title="If this is ORANGE you must fix the Council before adding Delegate Records"/>
+                            <input asp-for="ED2Council" class="form-control ExistingData" style="@myMemD2ICN" title="If this is RED you must fix the Council before adding Delegate Records" />
                             <span asp-validation-for="ED1Council" class="text-danger"></span>
                         </div>
                     </td>
@@ -521,11 +550,14 @@
                         {
                             @if (myValidate.Contains("VMA1MISSING"))
                             {
-                                <input type="submit" name="action" value="Add A1 New Member" class="btn BtnRed" />
+                                @if (@Model.A1MemberID.ToString().Length < 8)
+                                {
+                                    <input type="submit" name="action" value="Add A1 New Member" class="btn BtnAdd" />
+                                }
                             }
                             @if (myValidate2.Contains("A1I"))
                             {
-                                <input type="submit" name="action" value="Update A1 Existing Member" class="btn BtnRed" />
+                                <input type="submit" name="action" value="Update A1 Existing Member" class="btn BtnUpd" />
                             }
                         }
                     </td>
@@ -534,12 +566,12 @@
                     <td>
                         <div class="form-group ImportedData">
                             <label asp-for="A1MemberID" class="control-label" style="font-weight:bold"></label>
-                            <input asp-for="A1MemberID" class="form-control ImportedData" />
+                            <input asp-for="A1MemberID" class="form-control ImportedData" style="@myMemA1IID" title="RED means the KofC Member ID is too long. Check the data and try again" />
                             <span asp-validation-for="A1MemberID" class="text-danger"></span>
                         </div>
                         <div class="form-group ExistingData">
                             <label asp-for="EA1MemberID" class="control-label" style="font-weight:bold"></label>
-                            <input asp-for="EA1MemberID" class="form-control ExistingData" />
+                            <input asp-for="EA1MemberID" class="form-control ExistingData" style="@myMemA1IID" title="RED means the KofC Member ID is too long. Check the data and try again" />
                             <span asp-validation-for="EA1MemberID" class="text-danger"></span>
                         </div>
                     </td>
@@ -570,12 +602,12 @@
                     <td>
                         <div class="form-group ImportedData">
                             <label asp-for="CouncilNumber" class="control-label" style="font-weight:bold"></label>
-                            <input asp-for="CouncilNumber" class="form-control ImportedData" style="@myMemA1ICN" title="If this is ORANGE you must fix the Council before adding Delegate Records"/>
+                            <input asp-for="CouncilNumber" class="form-control ImportedData" style="@myMemA1ICN" title="If this is RED you must fix the Council before adding Delegate Records" />
                             <span asp-validation-for="CouncilNumber" class="text-danger"></span>
                         </div>
                         <div class="form-group ExistingData">
                             <label asp-for="EA1Council" class="control-label" style="font-weight:bold"></label>
-                            <input asp-for="EA1Council" class="form-control ExistingData" style="@myMemA1ICN" title="If this is ORANGE you must fix the Council before adding Delegate Records"/>
+                            <input asp-for="EA1Council" class="form-control ExistingData" style="@myMemA1ICN" title="If this is RED you must fix the Council before adding Delegate Records" />
                             <span asp-validation-for="EA1Council" class="text-danger"></span>
                         </div>
                     </td>
@@ -694,11 +726,15 @@
                         {
                             @if (myValidate.Contains("VMA2MISSING"))
                             {
-                                <input type="submit" name="action" value="Add A2 New Member" class="btn BtnRed" />
+                                @if (@Model.A1MemberID.ToString().Length < 8)
+                                {
+                                    <input type="submit" name="action" value="Add A2 New Member" class="btn BtnAdd" />
+                                }
+
                             }
                             @if (myValidate2.Contains("A2I"))
                             {
-                                <input type="submit" name="action" value="Update A2 Existing Member" class="btn BtnRed" />
+                                <input type="submit" name="action" value="Update A2 Existing Member" class="btn BtnUpd" />
                             }
                         }
                     </td>
@@ -707,12 +743,12 @@
                     <td>
                         <div class="form-group ImportedData">
                             <label asp-for="A2MemberID" class="control-label" style="font-weight:bold"></label>
-                            <input asp-for="A2MemberID" class="form-control ImportedData" />
+                            <input asp-for="A2MemberID" class="form-control ImportedData" style="@myMemA2IID" title="RED means the KofC Member ID is too long. Check the data and try again" />
                             <span asp-validation-for="A2MemberID" class="text-danger"></span>
                         </div>
                         <div class="form-group ExistingData">
                             <label asp-for="EA2MemberID" class="control-label" style="font-weight:bold"></label>
-                            <input asp-for="EA2MemberID" class="form-control ExistingData" />
+                            <input asp-for="EA2MemberID" class="form-control ExistingData" style="@myMemA2IID" title="RED means the KofC Member ID is too long. Check the data and try again" />
                             <span asp-validation-for="EA2MemberID" class="text-danger"></span>
                         </div>
                     </td>
@@ -743,12 +779,12 @@
                     <td>
                         <div class="form-group ImportedData">
                             <label asp-for="CouncilNumber" class="control-label" style="font-weight:bold"></label>
-                            <input asp-for="CouncilNumber" class="form-control ImportedData" style="@myMemA2ICN" title="If this is ORANGE you must fix the Council before adding Delegate Records"/>
+                            <input asp-for="CouncilNumber" class="form-control ImportedData" style="@myMemA2ICN" title="If this is RED you must fix the Council before adding Delegate Records" />
                             <span asp-validation-for="CouncilNumber" class="text-danger"></span>
                         </div>
                         <div class="form-group ExistingData">
                             <label asp-for="EA2Council" class="control-label" style="font-weight:bold"></label>
-                            <input asp-for="EA2Council" class="form-control ExistingData" style="@myMemA2ICN" title="If this is ORANGE you must fix the Council before adding Delegate Records"/>
+                            <input asp-for="EA2Council" class="form-control ExistingData" style="@myMemA2ICN" title="If this is RED you must fix the Council before adding Delegate Records" />
                             <span asp-validation-for="EA2Council" class="text-danger"></span>
                         </div>
                     </td>
@@ -860,11 +896,11 @@
             </table>
             @*we are not saving delegate changes here.  only on the create view*@
             @*@if (!myValidate.Contains("VCMISSING"))
-            {
-                <div class="form-group">
-                    <input type="submit" name="action" value="Save Delegate Changes" class="btn btn-primary" />
-                </div>
-            }*@
+                {
+                    <div class="form-group">
+                        <input type="submit" name="action" value="Save Delegate Changes" class="btn btn-primary" />
+                    </div>
+                }*@
         </form>
     </div>
 </div>

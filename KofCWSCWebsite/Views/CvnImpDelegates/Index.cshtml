@@ -31,10 +31,10 @@
     MISSING MEMBER
 </div>
 <div title="At least 1 member has updated information." style="background-color: orange; float: right; padding-left: 5px; padding-right: 5px">
-    UPDATED MEMBER INFORMATION
+    UPDATED MEMBER DATA
 </div>
-<div title="Should not happend. Data validated on input to form." style="background-color: red; float: right; padding-left: 5px; padding-right: 5px">
-    MISSING COUNCIL
+<div title="Should not happend. Data validated on input to form." style="background-color: red; color:white; float: right; padding-left: 5px; padding-right: 5px">
+    COUNCIL/MEMBER MISMATCH
 </div>
 <div style="float: right; padding-left: 5px; padding-right: 5px">
     Hover over the colors in the left column to see a message.
@@ -42,7 +42,7 @@
 <table class="table">
     <thead>
         <tr>
-            <th style="width:auto" title="Legend">Leg</th>
+            <th style="width:auto" title="Legend"><span style="font-size:small">Legend</span></th>
             <th title="Record Type (M)anual, (I)mported, (U)pdated" style="text-align:center">
                 RT
             </th>
@@ -75,6 +75,11 @@
             {
                 myMCValid = "background-color:red;color:white";
                 myValidTitle += "Council does not exist; ";
+            }
+            if (item.Validation.Contains("COUNCILMISMATCH"))
+            {
+                myMCValid = "background-color:red;color:white";
+                myValidTitle += "Council mismatch from Existing Member; ";
             }
             if (item.Validation.Contains("VMD1MISSING"))
             {
