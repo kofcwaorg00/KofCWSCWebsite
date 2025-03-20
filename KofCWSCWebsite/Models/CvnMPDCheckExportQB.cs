@@ -1,5 +1,6 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Org.BouncyCastle.Asn1.Mozilla;
+using System.ComponentModel.DataAnnotations;
 
 namespace KofCWSCWebsite.Models
 {
@@ -7,6 +8,7 @@ namespace KofCWSCWebsite.Models
     public partial class CvnMPDCheckExportQB
     {
         public string? CheckNo { get; set; }
+        [Display(Name ="Bank Account")]
         public string? BankAccount { get; set; }
         public string? Payee {  get; set; }
         public string? Address { get; set; }
@@ -16,6 +18,7 @@ namespace KofCWSCWebsite.Models
         public string? Category { get; set; }
         public string? Type { get; set; }
         public string? Description { get; set; }
+        [Display(Name = "Print Later")]
         public string? PrintLater { get; set; }
     }
 }

@@ -1,7 +1,7 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
-<Report ScriptLanguage="CSharp" ReportInfo.Created="11/12/2024 09:20:45" ReportInfo.Modified="02/11/2025 15:57:57" ReportInfo.CreatorVersion="2024.1.3.0">
+<Report ScriptLanguage="CSharp" ReportInfo.Created="11/12/2024 09:20:45" ReportInfo.Modified="03/20/2025 15:27:37" ReportInfo.CreatorVersion="2024.1.3.0">
   <Dictionary>
-    <JsonDataSourceConnection Name="GetRollCallDDs" ConnectionString="rijcmlqbJsCNDUWD8zs7Fjc+Sa5ClnDCYwA067z0stgnWcP4y/j8b4MnJb5TGrjpdYSTqwvwINtpKiIThh5CkGIr08t4YZr28lATOkNjw2jfygCbqpL7TtBGtX/6G8D420b9tAAyEQOKGrL0awnENBpjumDpYJYyXtavdKgImpMrOhGrOszc5OttiNporrqRFGnIlfvsFOXRR5qFBH9udDruL9JzPfRrtIvBO9RlUN7qyDBIdgAPqw0cRPITcHxZuRSYJ2+stWRhgEW/4I2XyLDcW3i30U7qHm/4th8AnTUowqIO+BLW79kyo00IgmfQY0ulSrFvWiyaPtyWbaaXQ2yeG8s4dPEDdyf/+uGeHY/0Oszyf0U3fnSzstXnWjxx26HwIpDGR5ylum1iFiIk80++cGM4huIDDVqbQWn0IpIpF7FZ90=">
+    <JsonDataSourceConnection Name="GetRollCallDDs" ConnectionString="rijcmlqbJsCNDUWD8zs7Fjc+Sa5ClnDCYwA067z0stgnWcP4y/j8b4MnJb5TGrjpdYSTqwvwINtpKiIThh5CkGIr08t4YZr28lATOkNjw2jfygCbqpL7TtBGtX/6G8D420b9tAAyEQOKGrL0awnENBpjumDpYJYyXtavdKgImpMrOhGrOszc5OttiNporrqRFGnIlfvsFOXRR5qFBH9udDruL9JzPfRrtIvBO9RlUN7qyDBIdgAPqw0cRPITcHxZuRSYJ2+stWRhgEW/4I2XyLDcW3i30U7qHm/4th8AnTUowqIO+BLW79kyo00IgmfQY0ulSrFvWiyaPtyWbaaXQ2yeG8s4dPEDdyf/+uGeHY/0Oszyf0U3fnSzstXnWjxx26HwIpDGR5ylum1iFiIk80++cGM4vbGzncuusiweiS1ObJT8LE=">
       <JsonTableDataSource Name="JSON1" Alias="RollCallDDs" DataType="FastReport.Utils.Json.JsonArray" Enabled="true" TableName="JSON">
         <Column Name="index" DataType="System.Int32"/>
         <Column Name="item" DataType="FastReport.JsonBase">
@@ -15,7 +15,7 @@
         <Column Name="array" DataType="FastReport.JsonBase"/>
       </JsonTableDataSource>
     </JsonDataSourceConnection>
-    <JsonDataSourceConnection Name="GetRollCallDelegates" ConnectionString="rijcmlqbJsCNDUWD8zs7Fjc+Sa5ClnDCYwA067z0stgnWcP4y9GKqDVNMAg0aKIfCqmhrls5x/qc2utrZV4Crbwg9rVHR6HfnA/N/MvHc9H3/7XS5v8/27pONBPTXEuYtN+G3A9MwWtO9d/jV+hLlAOP/kwisiqCdxL7Mwlq1VySLpJecVZB+kBnrvCxjDka8R7Xf7v9L9EoeEGYBR9tHJjZjB93pN6OB1IqGywgc+zdVkZ/DyGB8tSQpGo8QWKVlbVMIWSzy2a7zxnMgbog0GNBuDDCx9d4rGPxP49lhHERbH9a9uuz7xOaAX62aisO/ri4gRm+E++g6+JPydnYHtHRQuz3NZZlrON9sm6R64FDNWp6DGh9LbvUjWEFi3wMhvobIqp/P8Xw/r3pKolbLZ+50ouB2j6s97DEPWn9XPjQZK3peTfC2Wmr1yG4Vk7BHw902601/3l3v4ZQw7XXoRzifqVJkMExJrEeWoeR4mKYq98aXw=">
+    <JsonDataSourceConnection Name="GetRollCallDelegates" ConnectionString="rijcmlqbJsCNDUWD8zs7Fjc+Sa5ClnDCYwA067z0stgnWcP4y9GKqDVNMAg0aKIfCqmhrls5x/qc2utrZV4Crbwg9rVHR6HfnA/N/MvHc9H3/7XS5v8/27pONBPTXEuYtN+G3A9MwWtO9d/jV+hLlAOP/kwisiqCdxL7Mwlq1VySLpJecVZB+kBnrvCxjDka8R7Xf7v9L9EoeEGYBR9tHJjZjB93pN6OB1IqGywgc+zdVkZ/DyGB8tSQpGo8QWKVlbVMIWSzy2a7zxnMgbog0GNBuDDCx9d4rGPxP49lhHERbH9a9uuz7xOaAX62aisO/ri4gRm+E++g6+JPydnYHtHRQuz3NZZlrON9sm6R64FDNWp6DGh9LbvUjWEFi3wMhvobIqp/P8Xw/r3pKolbLZ+50ouB2j6s97DEPWn9XPjQZK3peTfC2Wmr1yG4Vk7BHw902601/3l3v4ZQw7XXoRzifqVJkM2lwo2skKuHwWeYRTGwJo=">
       <JsonTableDataSource Name="JSON2" Alias="RollCallDelegates" DataType="FastReport.Utils.Json.JsonArray" Enabled="true" TableName="JSON">
         <Column Name="index" DataType="System.Int32"/>
         <Column Name="item" DataType="FastReport.JsonBase">
@@ -30,7 +30,7 @@
         <Column Name="array" DataType="FastReport.JsonBase"/>
       </JsonTableDataSource>
     </JsonDataSourceConnection>
-    <JsonDataSourceConnection Name="GetRollCallDistricts" ConnectionString="rijcmlqbJsCNDUWD8zs7Fjc+Sa5ClnDCYwA067z0stgnWcP4y+rkRA2bsTPLEF5ZNUTdaTDN7uNzwmlTxbcEZDC9dgRkQ3txjahx2kG3dDhDNl9/MpPTCgtWbXNfTQCH5Nc1I6C08B/s6qs29IOz0TNxBvo5pb8ZrO09VzIsiqEfyBxeYGKgwkK+nYYISTQBDHQoxlpnIYdN3YVezv+agr5sh92R2CE8qcXU1tkOcfevUmPgu7z6D6fnTfIqVTZ2MP6MI2YknTcdXF5W/yhxvLCMrilY0pGASf25o9LHm04mFaW6gyT10soAXSS39yjLpFmlQhcbERJZuLIC3Ks0kRGjKljd8rZsixL2H/zfW6Gd7ELX4Tp9pktFyeBaIiCDcjMhyExpwUGoqzlWzhxqDdOvlhOdxzWs/VSROL67Of90zAejUs9QdUzuffZIgUyEgBkb6YC92rojVsiDEBVxzsRjCQ4fbuMqMVBcEAdPIIXZYg5J9k=">
+    <JsonDataSourceConnection Name="GetRollCallDistricts" ConnectionString="rijcmlqbJsCNDUWD8zs7Fjc+Sa5ClnDCYwA067z0stgnWcP4y+rkRA2bsTPLEF5ZNUTdaTDN7uNzwmlTxbcEZDC9dgRkQ3txjahx2kG3dDhDNl9/MpPTCgtWbXNfTQCH5Nc1I6C08B/s6qs29IOz0TNxBvo5pb8ZrO09VzIsiqEfyBxeYGKgwkK+nYYISTQBDHQoxlpnIYdN3YVezv+agr5sh92R2CE8qcXU1tkOcfevUmPgu7z6D6fnTfIqVTZ2MP6MI2YknTcdXF5W/yhxvLCMrilY0pGASf25o9LHm04mFaW6gyT10soAXSS39yjLpFmlQhcbERJZuLIC3Ks0kRGjKljd8rZsixL2H/zfW6Gd7ELX4Tp9pktFyeBaIiCDcjMhyExpwUGoqzlWzhxqDdOvlhOdxzWs/VSROL67Of90zAejUs9QdUzuffZIgUyEgBkb6YC92rojVsiDEBVxzsRjCQ4fbOrMGL+p6xecYzRLMQrY54=">
       <JsonTableDataSource Name="JSON" Alias="RollCallDistricts" DataType="FastReport.Utils.Json.JsonArray" Enabled="true" TableName="JSON">
         <Column Name="index" DataType="System.Int32"/>
         <Column Name="item" DataType="FastReport.JsonBase">
@@ -46,7 +46,7 @@
         <Column Name="DayTitle" DataType="System.Int32" PropName="Column" Calculated="true" Expression="&quot;DISTRICT No.&quot; + [RollCallDistricts.item.district]+&quot;  ROLL CALL - Day &quot;+[RollCallDistricts.item.day]"/>
       </JsonTableDataSource>
     </JsonDataSourceConnection>
-    <JsonDataSourceConnection Name="GetRollCallOthers" ConnectionString="rijcmlqbJsCNDUWD8zs7Fjc+Sa5ClnDCYwA067z0stgnWcP4y8K8a2aLwnrW4MNBpMgp0+KR+EqCkNgsEI/lieESh8mCDgjlzEGEqH3/16tCRE0h43j/D5crszA2UmE4tUCFRJZXMyK6hh12iDkeWa51RizyAEGGyMAsCsM9s+MToYic0nPo+an/mr/4rH2GYt63knlSabesnt5SfNPg8h944K3lWqancc57kNX8VJv94hBYmct+sMzoPU93IErwdz8rjxhbPQBAqHyfU9P1/chaaOlibN02WV8uxydlKXCSCAgnvNIWuMcEFavwhLVyPr+h9oIuLOWoHohfnrsRGRo0CJt+prXxbBY0L1MocUAoZwBq9R1Cxes0JI4OJke+LDsJAmYMgYaZeKC+EREOkvDYA6uqGeZOmZ3sc5qqTenDcclhrxkcB+MXXdPo41JPqozNWP9ritA1UGEBaDHUu7p1zTN5mEaUNftnIFvSzI102fu60k=">
+    <JsonDataSourceConnection Name="GetRollCallOthers" ConnectionString="rijcmlqbJsCNDUWD8zs7Fjc+Sa5ClnDCYwA067z0stgnWcP4y8K8a2aLwnrW4MNBpMgp0+KR+EqCkNgsEI/lieESh8mCDgjlzEGEqH3/16tCRE0h43j/D5crszA2UmE4tUCFRJZXMyK6hh12iDkeWa51RizyAEGGyMAsCsM9s+MToYic0nPo+an/mr/4rH2GYt63knlSabesnt5SfNPg8h944K3lWqancc57kNX8VJv94hBYmct+sMzoPU93IErwdz8rjxhbPQBAqHyfU9P1/chaaOlibN02WV8uxydlKXCSCAgnvNIWuMcEFavwhLVyPr+h9oIuLOWoHohfnrsRGRo0CJt+prXxbBY0L1MocUAoZwBq9R1Cxes0JI4OJke+LDsJAmYMgYaZeKC+EREOkvDYA6uqGeZOmZ3sc5qqTenDcclhrxkcB+MXXdPo41JPqozNWP9ritA1UGEBaDHUu7p1zTN5uj7sXLqQntSpJ2iJo9KAHU=">
       <JsonTableDataSource Name="JSON3" Alias="RollCallOthers" DataType="FastReport.Utils.Json.JsonArray" Enabled="true" TableName="JSON">
         <Column Name="index" DataType="System.Int32"/>
         <Column Name="item" DataType="FastReport.JsonBase">
@@ -62,42 +62,42 @@
       </JsonTableDataSource>
     </JsonDataSourceConnection>
   </Dictionary>
-  <ReportPage Name="Page1" Watermark.Font="Arial, 60pt">
-    <PageHeaderBand Name="PageHeader1" Width="718.2" Height="115.2">
+  <ReportPage Name="Page1" PaperWidth="210.01" RawPaperSize="9" LeftMargin="6.35" TopMargin="10.01" RightMargin="6.35" BottomMargin="10.01" Watermark.Font="Arial, 60pt" LastPageSource="15" FirstPageSource="15">
+    <PageHeaderBand Name="PageHeader1" Width="745.83" Height="115.2">
       <TextObject Name="Text1" Width="720" Height="38.4" Text="WASHINGTON STATE COUNCIL" HorzAlign="Center" Font="Arial, 22pt, style=Bold"/>
       <TextObject Name="Text28" Top="67.2" Width="720" Height="38.4" Text="[RollCallDistricts.DayTitle]" HorzAlign="Center" Font="Arial, 18pt, style=Bold"/>
       <TextObject Name="Text29" Top="38.4" Width="720" Height="28.8" Text="[RollCallDistricts.item.groupName]" HorzAlign="Center" Font="Arial, 18pt, style=Bold"/>
       <LineObject Name="Line1" Left="-9.6" Top="105.6" Width="729.6"/>
     </PageHeaderBand>
-    <GroupHeaderBand Name="GroupHeader1" Top="119.2" Width="718.2" Height="19.2" StartNewPage="true" Condition="[RollCallDistricts.item.district]">
-      <SubreportObject Name="DDs" Left="9.6" Width="355.2" Height="19.2" ReportPage="Page2"/>
-      <SubreportObject Name="Delegates" Width="230.4" Height="19.2" ReportPage="Page3"/>
-      <SubreportObject Name="Others" Width="364.8" Height="19.2" ReportPage="Page4"/>
-      <DataBand Name="Data1" Top="142.4" Width="718.2" DataSource="JSON">
+    <GroupHeaderBand Name="GroupHeader1" Top="119.2" Width="745.83" Height="19.2" StartNewPage="true" Condition="[RollCallDistricts.item.district]">
+      <SubreportObject Name="DDs" Left="9.6" Width="345.6" Height="19.2" ReportPage="Page2"/>
+      <SubreportObject Name="Delegates" Width="230.4" Height="19.2" GrowToBottom="true" ReportPage="Page3"/>
+      <SubreportObject Name="Others" Width="355.2" Height="19.2" ReportPage="Page4"/>
+      <DataBand Name="Data1" Top="142.4" Width="745.83" DataSource="JSON">
         <Sort>
           <Sort Expression="[RollCallDistricts.item.district]"/>
         </Sort>
       </DataBand>
     </GroupHeaderBand>
-    <DataBand Name="Data5" Top="146.4" Width="718.2"/>
-    <PageFooterBand Name="PageFooter1" Top="150.4" Width="718.2" Height="198.3">
-      <TextObject Name="Text15" Left="340.2" Top="18.9" Width="151.2" Height="18.9" Text="Distric Deputy Signature" Font="Arial, 8pt, style=Italic"/>
-      <TextObject Name="Text16" Left="529.2" Top="18.9" Width="151.2" Height="18.9" Text="Date" HorzAlign="Right" Font="Arial, 8pt, style=Italic"/>
-      <TextObject Name="Text17" Left="340.2" Top="47.25" Width="330.75" Height="122.85" Text="NOTE:  Please mark only TWO official delegates for each council.  Do not mark the attendance of guests or alternates present but not seated as delegates." Font="Arial, 12pt, style=Bold"/>
+    <DataBand Name="Data5" Top="146.4" Width="745.83"/>
+    <PageFooterBand Name="PageFooter1" Top="150.4" Width="745.83" Height="198.3">
+      <TextObject Name="Text15" Left="397.8" Top="18.9" Width="151.2" Height="18.9" Text="District Deputy Signature" Font="Arial, 8pt, style=Italic"/>
+      <TextObject Name="Text16" Left="586.8" Top="18.9" Width="151.2" Height="18.9" Text="Date" HorzAlign="Right" Font="Arial, 8pt, style=Italic"/>
+      <TextObject Name="Text17" Left="397.8" Top="47.25" Width="330.75" Height="122.85" Text="NOTE:  Please mark only TWO official delegates for each council.  Do not mark the attendance of guests or alternates present but not seated as delegates." Font="Arial, 12pt, style=Bold"/>
       <TextObject Name="Text13" Top="160.5" Width="340.2" Height="18.9" Text="[Chr(91)]    [Chr(93)] TOTAL THIS COLUMN" Font="Arial, 12pt, style=Bold">
         <Formats>
           <GeneralFormat/>
           <GeneralFormat/>
         </Formats>
       </TextObject>
-      <TextObject Name="Text18" Left="28.35" Top="179.4" Width="340.2" Height="18.9" Text="(VOTING DELEGATES)" Font="Arial, 12pt, style=Bold">
+      <TextObject Name="Text18" Left="28.35" Top="179.4" Width="436.2" Height="18.9" Text="(VOTING DELEGATES INCLUDING STATE OFFICERS)" Font="Arial, 12pt, style=Bold">
         <Formats>
           <GeneralFormat/>
           <GeneralFormat/>
         </Formats>
       </TextObject>
       <TextObject Name="Text24" Left="528" Top="174.75" Width="182.4" Height="19.2" Text="[Date]" HorzAlign="Right" Font="Arial, 10pt"/>
-      <LineObject Name="Line2" Left="336" Top="9.6" Width="345.6"/>
+      <LineObject Name="Line2" Left="393.6" Top="9.6" Width="345.6"/>
     </PageFooterBand>
   </ReportPage>
   <ReportPage Name="Page2" Watermark.Font="Arial, 60pt">
@@ -106,18 +106,18 @@
       <TextObject Name="Text33" Left="393.6" Width="316.8" Height="19.2" Text="[RollCallDDs.item.groupName]" HorzAlign="Right" Font="Arial, 12pt, style=Bold"/>
     </DataBand>
   </ReportPage>
-  <ReportPage Name="Page3" Watermark.Font="Arial, 60pt">
-    <GroupHeaderBand Name="GroupHeader2" Top="32.8" Width="718.2" Height="19.2" Condition="[RollCallDelegates.item.sortOrder]">
-      <TextObject Name="Text36" Width="364.8" Height="19.2" Text="[RollCallDelegates.item.council]" Font="Arial, 12pt"/>
-      <DataHeaderBand Name="DataHeader1" Width="718.2" Height="28.8">
-        <TextObject Name="Text34" Width="307.2" Height="19.2" Text="[RollCallDelegates.item.groupName]" Font="Arial, 12pt, style=Bold"/>
-      </DataHeaderBand>
-      <DataBand Name="Data3" Top="56" Width="718.2" Height="19.2" DataSource="JSON2" Filter="[RollCallDelegates.item.district]==[RollCallDistricts.item.district]">
-        <TextObject Name="Text35" Width="364.8" Height="19.2" Text="[RollCallDelegates.item.name]" Font="Arial, 12pt"/>
-        <Sort>
-          <Sort Expression="[RollCallDelegates.item.dirSortOrder]"/>
-        </Sort>
-      </DataBand>
+  <ReportPage Name="Page3" PaperWidth="101.6" LeftMargin="10.01" TopMargin="10.01" RightMargin="10.01" BottomMargin="10.01" Watermark.Font="Arial, 60pt" LastPageSource="15" FirstPageSource="15">
+    <GroupHeaderBand Name="GroupHeader2" Width="308.37" Height="19.2" RepeatOnEveryPage="true" Condition="[RollCallDelegates.item.groupName]">
+      <TextObject Name="Text34" Width="307.2" Height="19.2" Text="[RollCallDelegates.item.groupName]" Font="Arial, 11pt, style=Bold"/>
+      <GroupHeaderBand Name="GroupHeader4" Top="23.2" Width="308.37" Height="19.2" VisibleExpression="IIf([RollCallDelegates.item.groupName]==&quot;State Officer&quot;,false,true)" CanShrink="true" Condition="[RollCallDelegates.item.council]" KeepTogether="true">
+        <TextObject Name="Text36" Width="364.8" Height="19.2" Text="[RollCallDelegates.item.council]" Font="Arial, 10.25pt"/>
+        <DataBand Name="Data3" Top="46.4" Width="308.37" Height="19.2" CanShrink="true" DataSource="JSON2" Filter="[RollCallDelegates.item.district]==[RollCallDistricts.item.district]">
+          <TextObject Name="Text35" Width="364.8" Height="19.2" Text="[RollCallDelegates.item.name]" Font="Arial, 10.25pt"/>
+          <Sort>
+            <Sort Expression="[RollCallDelegates.item.dirSortOrder]"/>
+          </Sort>
+        </DataBand>
+      </GroupHeaderBand>
     </GroupHeaderBand>
   </ReportPage>
   <ReportPage Name="Page4" Watermark.Font="Arial, 60pt">
