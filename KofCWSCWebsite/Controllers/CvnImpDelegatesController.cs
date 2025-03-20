@@ -103,10 +103,15 @@ namespace KofCWSCWebsite.Controllers
         }
         public async Task<ActionResult<CvnImpDelegateIMP>> EditIMP(int? id)
         {
-            var results = await _apiHelper.GetAsync<CvnImpDelegateIMP>($"CvnImpDelegate/{id}");
+            // this is being called 2 times, 1 with and id and 1 with a null id
+            // not sure why
+            if (id is not null)
+            {
+                var results = await _apiHelper.GetAsync<CvnImpDelegateIMP>($"CvnImpDelegate/{id}");
 
-            return View("EditIMP", results);
-
+                return View("EditIMP", results);
+            }
+            return View();
         }
         // GET: CvnImpDelegates/Edit/5
         [HttpGet("Edit/{id}/{validate}/{validate2}")]
