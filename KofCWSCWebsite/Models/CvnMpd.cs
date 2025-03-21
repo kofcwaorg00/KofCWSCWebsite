@@ -79,4 +79,5 @@ public partial class CvnMpd
     public string? Memo { get; set; }
     public string? CheckAccount { get; set; }
     public string? Category { get; set; }
+    public bool HasDDDelegate { get; set; }
 }

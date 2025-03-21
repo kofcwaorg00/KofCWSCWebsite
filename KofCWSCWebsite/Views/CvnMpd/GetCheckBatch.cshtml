@@ -118,6 +118,7 @@
             <!--<th colspan="2" style="width:15%;text-align:center">-->@*@ViewBag.Group Days*@<!--</th>-->
 
             <th>
+
                 @Html.DisplayNameFor(model => model.District)
             </th>
             <th>
@@ -204,98 +205,52 @@
     <tbody>
         @foreach (var item in Model)
         {
-            <tr>
-                @*<td>
-                        @Html.DisplayFor(modelItem => item.MemberId)
-                    </td>*@
-                @*<td style="text-align:center">
-                        @if (@item.CouncilStatus == "ERROR")
-                        {
-                            <form asp-controller="Convention" asp-action="GetAttendeeDays" asp-route-council="@item.Council" asp-route-groupid="@item.GroupID" method="get">
-                                <button type="submit" class="btn btn-sm btn-danger" id="submitButton" title="Too Many Delegate Days">
-                                    Edit
-                                </button>
-                            </form>
-                        }
-                        else
-                        {
-                            <form asp-controller="Convention" asp-action="GetAttendeeDays" asp-route-council="@item.Council" asp-route-groupid="@item.GroupID" method="get">
-                                <button type="submit" class="btn btn-sm btn-success" id="submitButton" title="Status is Good">
-                                    Edit
-                                </button>
-                            </form>
-                        }
-                    </td>
-                    <td style="text-align:center">
-                        <form asp-controller="CvnMpd" asp-action="PrintJournal" method="get">
-                            <button type="submit" class="btn btn-sm btn-warning" id="submitButton">
-                                Print
-                            </button>
-                        </form>
-                    </td>*@
+            string isDD = item.HasDDDelegate ? "background-color:red;color:white" : "";
+            string isDDTitle = item.HasDDDelegate ? "This Council has a DD listed as a Delegate. Please review the Rollcall Sheets and make sure the DD was not Paid as a DD. If so clear the Council Delegate checkboxes as neccessary." : "";
 
-                <td>
+            <tr title="@isDDTitle">
+
+                <td style="@isDD">
+                    @*<span>@item.HasDDDelegate</span>*@
                     @Html.DisplayFor(modelItem => item.District)
                 </td>
-                <td>
+                <td style="@isDD">
                     @Html.DisplayFor(modelItem => item.Council)
                 </td>
-                @*<td>
-                        @Html.DisplayFor(modelItem => item.Group)
-                    </td>*@
-                @*<td>
-                        <span title="@Html.DisplayFor(modelItem => item.Office)" class="ellipsis">@Html.DisplayFor(modelItem => item.Office)</span>
-                    </td>*@
-                <td>
+                <td style="@isDD">
                     @Html.DisplayFor(modelItem => item.Payee)
                 </td>
-                @*<td style="text-align:center">
-                        @Html.DisplayFor(modelItem => item.CheckNumber)
-                    </td>
-                    <td style="text-align:center">
-                        @Html.DisplayFor(modelItem => item.CheckDate)
-                    </td>
-                *@
-                @*<td>
-                        @Html.DisplayFor(modelItem => item.Day1)
-                    </td>
-                    <td>
-                        @Html.DisplayFor(modelItem => item.Day2)
-                    </td>
-                    <td>
-                        @Html.DisplayFor(modelItem => item.Day3)
-                    </td>*@
                 @if (@ViewBag.GroupID == 3)
                 {
                     @if (item.Miles == -1)
                     {
-                        <td style="text-align:center">
+                        <td style="text-align:center;@isDD">
                             @Html.Raw(item.Day1GD1)
                         </td>
-                        <td style="text-align:center">
+                        <td style="text-align:center;@isDD">
                             @Html.Raw(item.Day2GD1)
                         </td>
-                        <td style="text-align:center">
+                        <td style="text-align:center;@isDD">
                             @Html.Raw(item.Day3GD1)
                         </td>
                     }
                     else
                     {
-                        <td>
+                        <td style="@isDD">
                             <form asp-controller="CvnMpd" asp-action="ToggleDelegateDaysMPD" asp-route-id=@item.MemberId asp-route-day="1" asp-route-groupid="@item.GroupID" method="get">
                                 <button type="submit" class="btn btn-sm">
                                     @Html.Raw(item.Day1GD1)
                                 </button>
                             </form>
                         </td>
-                        <td style="text-align:center">
+                        <td style="text-align:center;@isDD">
                             <form asp-controller="CvnMpd" asp-action="ToggleDelegateDaysMPD" asp-route-id=@item.MemberId asp-route-day="2" asp-route-groupid="@item.GroupID" method="get">
                                 <button type="submit" class="btn btn-sm">
                                     @Html.Raw(item.Day2GD1)
                                 </button>
                             </form>
                         </td>
-                        <td style="text-align:center">
+                        <td style="text-align:center;@isDD">
                             <form asp-controller="CvnMpd" asp-action="ToggleDelegateDaysMPD" asp-route-id=@item.MemberId asp-route-day="3" asp-route-groupid="@item.GroupID" method="get">
                                 <button type="submit" class="btn btn-sm">
                                     @Html.Raw(item.Day3GD1)
@@ -310,63 +265,63 @@
                 {
                     @if (item.Miles == -1)
                     {
-                        <td style="text-align:center">
+                        <td style="text-align:center;@isDD">
                             @Html.Raw(item.Day1GD1)
                         </td>
-                        <td style="text-align:center">
+                        <td style="text-align:center;@isDD">
                             @Html.Raw(item.Day1GD2)
                         </td>
-                        <td style="text-align:center">
+                        <td style="text-align:center;@isDD">
                             @Html.Raw(item.Day2GD1)
                         </td>
-                        <td style="text-align:center">
+                        <td style="text-align:center;@isDD">
                             @Html.Raw(item.Day2GD2)
                         </td>
-                        <td style="text-align:center">
+                        <td style="text-align:center;@isDD">
                             @Html.Raw(item.Day3GD1)
                         </td>
-                        <td style="text-align:center">
+                        <td style="text-align:center;@isDD">
                             @Html.Raw(item.Day3GD2)
                         </td>
                     }
                     else
                     {
-                        <td style="text-align:center">
+                        <td style="text-align:center;@isDD">
                             <form asp-controller="CvnMpd" asp-action="ToggleCouncilDays" asp-route-id=@item.Council asp-route-day="1" asp-route-del="D1" asp-route-groupid="@item.GroupID" method="get">
                                 <button type="submit" class="btn btn-sm">
                                     @Html.Raw(item.Day1GD1)
                                 </button>
                             </form>
                         </td>
-                        <td style="text-align:center">
+                        <td style="text-align:center;@isDD">
                             <form asp-controller="CvnMpd" asp-action="ToggleCouncilDays" asp-route-id=@item.Council asp-route-day="1" asp-route-del="D2" asp-route-groupid="@item.GroupID" method="get">
                                 <button type="submit" class="btn btn-sm">
                                     @Html.Raw(item.Day1GD2)
                                 </button>
                             </form>
                         </td>
-                        <td style="text-align:center">
+                        <td style="text-align:center;@isDD">
                             <form asp-controller="CvnMpd" asp-action="ToggleCouncilDays" asp-route-id=@item.Council asp-route-day="2" asp-route-del="D1" asp-route-groupid="@item.GroupID" method="get">
                                 <button type="submit" class="btn btn-sm">
                                     @Html.Raw(item.Day2GD1)
                                 </button>
                             </form>
                         </td>
-                        <td style="text-align:center">
+                        <td style="text-align:center;@isDD">
                             <form asp-controller="CvnMpd" asp-action="ToggleCouncilDays" asp-route-id=@item.Council asp-route-day="2" asp-route-del="D2" asp-route-groupid="@item.GroupID" method="get">
                                 <button type="submit" class="btn btn-sm">
                                     @Html.Raw(item.Day2GD2)
                                 </button>
                             </form>
                         </td>
-                        <td style="text-align:center">
+                        <td style="text-align:center;@isDD">
                             <form asp-controller="CvnMpd" asp-action="ToggleCouncilDays" asp-route-id=@item.Council asp-route-day="3" asp-route-del="D1" asp-route-groupid="@item.GroupID" method="get">
                                 <button type="submit" class="btn btn-sm">
                                     @Html.Raw(item.Day3GD1)
                                 </button>
                             </form>
                         </td>
-                        <td style="text-align:center">
+                        <td style="text-align:center;@isDD">
                             <form asp-controller="CvnMpd" asp-action="ToggleCouncilDays" asp-route-id=@item.Council asp-route-day="3" asp-route-del="D2" asp-route-groupid="@item.GroupID" method="get">
                                 <button type="submit" class="btn btn-sm">
                                     @Html.Raw(item.Day3GD2)
@@ -376,24 +331,24 @@
                     }
 
                 }
-                <td style="text-align:center">
-                    @if (item.Miles == -1)
-                    {
-                        <span title="Missing Mileage for Council" style="color:white;background-color:red">Error</span>
-                    }
-                    else
-                    {
-                        @Html.DisplayFor(modelItem => item.Miles)
-                    }
+            <td style="text-align:center;@isDD">
+                @if (item.Miles == -1)
+                {
+                    <span title="Missing Mileage for Council" style="color:white;background-color:red">Error</span>
+                }
+                else
+                {
+                    @Html.DisplayFor(modelItem => item.Miles)
+                }
 
-                </td>
-                <td title="@item.Memo">
+            </td>
+                <td title="@item.Memo" style="@isDD">
                     @Html.DisplayFor(modelItem => item.CheckTotal)
                 </td>
-                <td>
+                <td style="@isDD">
                     @Html.DisplayFor(modelItem => item.Location)
                 </td>
-                <td>
+                <td style="@isDD">
                     @Html.DisplayFor(modelItem => item.CouncilLocation)
                 </td>
                 @*
