@@ -165,9 +165,20 @@ namespace KofCWSCWebsite.Controllers
         // GET: CvnImpDelegates/Delete/5 Red Delete Button ***
         public async Task<IActionResult> DeleteIMP(int? id)
         {
-            var results = await _apiHelper.GetAsync<CvnImpDelegateIMP>($"CvnImpDelegate/{id}");
+            // for some reason this gets called a second time with a null id
+            if (id == null)
+            {
+                return View();
 
-            return View("Delete", results);
+            }
+            else
+            {
+                var results = await _apiHelper.GetAsync<CvnImpDelegateIMP>($"CvnImpDelegate/{id}");
+                return View("Delete", results);
+            }
+
+
+
 
         }
 
