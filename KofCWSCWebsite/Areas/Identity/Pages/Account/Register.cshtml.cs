@@ -189,59 +189,69 @@ namespace KofCWSCWebsite.Areas.Identity.Pages.Account
 
                 await _userStore.SetUserNameAsync(user, Input.Email, CancellationToken.None);
                 await _emailStore.SetEmailAsync(user, Input.Email, CancellationToken.None);
-                var result = await _userManager.CreateAsync(user, Input.Password);
-
-                if (result.Succeeded)
+                try
                 {
-                    _logger.LogInformation("User created a new account with password.");
+                    var result = await _userManager.CreateAsync(user, Input.Password);
 
-                    var userId = await _userManager.GetUserIdAsync(user);
-                    var code = await _userManager.GenerateEmailConfirmationTokenAsync(user);
-                    //****************************************************************************************
-                    // 6/22/2024 Tim Philomeno
-                    // Added this to "prinme" the roles and add me to Admin for a new database
-                    //****************************************************************************************
-                    if (user.Email == "tphilomeno@comcast.net")
+                    if (result.Succeeded)
                     {
-                        await _roleManager.CreateAsync(new IdentityRole("Member"));
-                        await _roleManager.CreateAsync(new IdentityRole("Admin"));
-                        await _roleManager.CreateAsync(new IdentityRole("StateOfficer"));
-                        await _roleManager.CreateAsync(new IdentityRole("StateChairman"));
-                        await _roleManager.CreateAsync(new IdentityRole("DataAdmin"));
-                        await _userManager.AddToRoleAsync(user, "Admin");
+                        _logger.LogInformation("User created a new account with password.");
+
+                        var userId = await _userManager.GetUserIdAsync(user);
+                        var code = await _userManager.GenerateEmailConfirmationTokenAsync(user);
+                        //****************************************************************************************
+                        // 6/22/2024 Tim Philomeno
+                        // Added this to "prinme" the roles and add me to Admin for a new database
+                        //****************************************************************************************
+                        if (user.Email == "tphilomeno@comcast.net")
+                        {
+                            await _roleManager.CreateAsync(new IdentityRole("Member"));
+                            await _roleManager.CreateAsync(new IdentityRole("Admin"));
+                            await _roleManager.CreateAsync(new IdentityRole("StateOfficer"));
+                            await _roleManager.CreateAsync(new IdentityRole("StateChairman"));
+                            await _roleManager.CreateAsync(new IdentityRole("DataAdmin"));
+                            await _userManager.AddToRoleAsync(user, "Admin");
+                        }
+                        //---------------------------------------------------------------------------------------
+                        var rcode = await _userManager.AddToRoleAsync(user, "Member");
+
+                        code = WebEncoders.Base64UrlEncode(Encoding.UTF8.GetBytes(code));
+                        var callbackUrl = Url.Page(
+                            "/Account/ConfirmEmail",
+                            pageHandler: null,
+                            values: new { area = "Identity", userId = userId, code = code, returnUrl = returnUrl },
+                            protocol: Request.Scheme);
+
+                        await _emailSender.SendEmailAsync(Input.Email, "Confirm your email",
+                        $"You have received this email to registered your account as a member of Washington State Council, Knights of Columbus. For any support questions please email support@kofc-wa.org.<br /><br />" +
+                        $"Please confirm your account by <a href='{HtmlEncoder.Default.Encode(callbackUrl)}'>clicking here</a>.<br /><br />" +
+                        $"NOTE: This confirmation email expires in 20 minutes.<br /><br /><br /><br />" +
+                        $"This email was sent to " + Input.Email + " by Washington State Council, Knights of Columbus.©1995-" + DateTime.Now.Year + " Washington State Council. All Rights Reserved");
+
+
+
+                        if (_userManager.Options.SignIn.RequireConfirmedAccount)
+                        {
+                            return RedirectToPage("RegisterConfirmation", new { email = Input.Email, returnUrl = returnUrl });
+                        }
+                        else
+                        {
+                            await _signInManager.SignInAsync(user, isPersistent: false);
+                            return LocalRedirect(returnUrl);
+                        }
                     }
-                    //---------------------------------------------------------------------------------------
-                    var rcode = await _userManager.AddToRoleAsync(user, "Member");
-
-                    code = WebEncoders.Base64UrlEncode(Encoding.UTF8.GetBytes(code));
-                    var callbackUrl = Url.Page(
-                        "/Account/ConfirmEmail",
-                        pageHandler: null,
-                        values: new { area = "Identity", userId = userId, code = code, returnUrl = returnUrl },
-                        protocol: Request.Scheme);
-
-                    await _emailSender.SendEmailAsync(Input.Email, "Confirm your email",
-                    $"You have received this email to registered your account as a member of Washington State Council, Knights of Columbus. For any support questions please email support@kofc-wa.org.<br /><br />" +
-                    $"Please confirm your account by <a href='{HtmlEncoder.Default.Encode(callbackUrl)}'>clicking here</a>.<br /><br />" +
-                    $"NOTE: This confirmation email expires in 20 minutes.<br /><br /><br /><br />" +
-                    $"This email was sent to " + Input.Email + " by Washington State Council, Knights of Columbus.©1995-" + DateTime.Now.Year + " Washington State Council. All Rights Reserved");
-
-
-
-                    if (_userManager.Options.SignIn.RequireConfirmedAccount)
+                    foreach (var error in result.Errors)
                     {
-                        return RedirectToPage("RegisterConfirmation", new { email = Input.Email, returnUrl = returnUrl });
-                    }
-                    else
-                    {
-                        await _signInManager.SignInAsync(user, isPersistent: false);
-                        return LocalRedirect(returnUrl);
+                        ModelState.AddModelError(string.Empty, error.Description);
                     }
                 }
-                foreach (var error in result.Errors)
+                catch (Exception ex)
                 {
-                    ModelState.AddModelError(string.Empty, error.Description);
+
+                    ModelState.AddModelError(string.Empty, "Only 1 registration account is allowed per Member");
+                    Log.Error(Utils.FormatLogEntry(this, ex));
                 }
+               
             }
 
             // If we got this far, something failed, redisplay form
