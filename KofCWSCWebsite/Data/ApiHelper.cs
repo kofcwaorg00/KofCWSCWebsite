@@ -65,9 +65,10 @@ namespace KofCWSCWebsite.Data
             // the API has to fire up from a cold start
             if (!response.IsSuccessStatusCode)
             {
-                Exception myex = new Exception($"Thrown from inside apiHelper because response.IsSuccessStatusCode is {response.IsSuccessStatusCode.ToString()} for endpoint {endpoint} and baseaddress {_httpClient.BaseAddress.ToString()} - Reason: {response.ReasonPhrase}+{endpoint} ");
+                Exception myex = new Exception($"Thrown from inside apiHelper because response.IsSuccessStatusCode is {response.IsSuccessStatusCode.ToString()} for endpoint {endpoint} and baseaddress {_httpClient.BaseAddress.ToString()} - Reason: {"GetAsync - " + response.ReasonPhrase}+{endpoint} ");
                 Log.Error(Utils.FormatLogEntry(this,myex));
-                throw new HttpRequestException($"GET request failed. Status Code: {response.StatusCode}, Reason: {"GetAsync " + response.ReasonPhrase}+{endpoint}");
+                throw myex;
+                //throw new HttpRequestException($"GET request failed. Status Code: {response.StatusCode}, Reason: {"GetAsync " + response.ReasonPhrase}+{endpoint}");
             }
             var json = await response.Content.ReadAsStringAsync();
             if (typeof(T).Name == "String") 
@@ -98,7 +99,7 @@ namespace KofCWSCWebsite.Data
 
             if (!response.IsSuccessStatusCode)
             {
-                throw new HttpRequestException($"POST request failed. Status Code: {response.StatusCode}, Reason: {response.ReasonPhrase}+{endpoint}");
+                throw new HttpRequestException($"POST request failed. Status Code: {response.StatusCode}, Reason: {"PostAsync - " + response.ReasonPhrase}+{endpoint}");
             }
 
             var json = await response.Content.ReadAsStringAsync();
@@ -125,7 +126,7 @@ namespace KofCWSCWebsite.Data
 
             if (!response.IsSuccessStatusCode)
             {
-                throw new HttpRequestException($"PUT request failed. Status Code: {response.StatusCode}, Reason: {response.ReasonPhrase}");
+                throw new HttpRequestException($"PUT request failed. Status Code: {response.StatusCode}, Reason: {"PutAsync - " + response.ReasonPhrase}");
             }
 
             var json = await response.Content.ReadAsStringAsync();
@@ -150,7 +151,7 @@ namespace KofCWSCWebsite.Data
 
             if (!response.IsSuccessStatusCode)
             {
-                throw new HttpRequestException($"DELETE request failed. Status Code: {response.StatusCode}, Reason: {response.ReasonPhrase}");
+                throw new HttpRequestException($"DELETE request failed. Status Code: {response.StatusCode}, Reason: {"DeleteAsync - " + response.ReasonPhrase}");
             }
         }
     }

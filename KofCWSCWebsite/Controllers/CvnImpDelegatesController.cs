@@ -7,7 +7,8 @@ using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using KofCWSCWebsite.Data;
 using KofCWSCWebsite.Models;
-using com.sun.xml.@internal.bind.v2.model.core;
+using KofCWSCWebsite.Services;
+using Serilog;
 
 namespace KofCWSCWebsite.Controllers
 {
@@ -22,52 +23,49 @@ namespace KofCWSCWebsite.Controllers
             _apiHelper = apiHelper;
         }
 
-        // GET: CvnImpDelegates
+        // GET: CvnImpDelegates - This gets the main index view for edit
         public async Task<ActionResult<IEnumerable<CvnImpDelegate>>> Index()
         {
             ViewBag.Message = TempData["Message"];
             var results = await _apiHelper.GetAsync<IEnumerable<CvnImpDelegate>>("CvnImpDelegates");
             return View(results.OrderBy(e => e.CouncilNumber));
-            //return View(await _context.Database
-            //        .SqlQuery<CvnImpDelegate>($"EXECUTE uspCVN_GetImpDelegates")
-            //        .ToListAsync());
-            //return View(await _context.CvnImpDelegates.ToListAsync());
         }
-        public async Task<ActionResult<IEnumerable<CvnImpDelegateIMP>>> IndexIMP()
-        {
-            var results = await _apiHelper.GetAsync<IEnumerable<CvnImpDelegateIMP>>("CvnImpDelegatesIMP");
-            return View(results.OrderBy(e => e.CouncilNumber));
-            //return View(await _context.Database
-            //        .SqlQuery<CvnImpDelegate>($"EXECUTE uspCVN_GetImpDelegates")
-            //        .ToListAsync());
-            //return View(await _context.CvnImpDelegates.ToListAsync());
-        }
+        // NOT USED ***
+        //public async Task<ActionResult<IEnumerable<CvnImpDelegateIMP>>> IndexIMP()
+        //{
+        //    var results = await _apiHelper.GetAsync<IEnumerable<CvnImpDelegateIMP>>("CvnImpDelegatesIMP");
+        //    return View(results.OrderBy(e => e.CouncilNumber));
+        //    //return View(await _context.Database
+        //    //        .SqlQuery<CvnImpDelegate>($"EXECUTE uspCVN_GetImpDelegates")
+        //    //        .ToListAsync());
+        //    //return View(await _context.CvnImpDelegates.ToListAsync());
+        //}
 
-        // GET: CvnImpDelegates/Details/5
-        public async Task<IActionResult> Details(int? id)
-        {
-            if (id == null)
-            {
-                return NotFound();
-            }
+        // GET: CvnImpDelegates/Details/5 - Not Used ***
+        //public async Task<IActionResult> Details(int? id)
+        //{
+        //    if (id == null)
+        //    {
+        //        return NotFound();
+        //    }
 
-            var cvnImpDelegate = await _context.CvnImpDelegates
-                .FirstOrDefaultAsync(m => m.Id == id);
-            if (cvnImpDelegate == null)
-            {
-                return NotFound();
-            }
+        //    var cvnImpDelegate = await _context.CvnImpDelegates
+        //        .FirstOrDefaultAsync(m => m.Id == id);
+        //    if (cvnImpDelegate == null)
+        //    {
+        //        return NotFound();
+        //    }
 
-            return View(cvnImpDelegate);
-        }
+        //    return View(cvnImpDelegate);
+        //}
 
-        // GET: CvnImpDelegates/Create
-        public IActionResult Create()
-        {
-            return View();
-        }
+        // GET: CvnImpDelegates/Create nont used ***
+        //public IActionResult Create()
+        //{
+        //    return View();
+        //}
 
-        // POST: CvnImpDelegates/Create
+        // POST: CvnImpDelegates/Create - This is used to create a raw record GREEN Create a Manual Council Import Record ***
         // To protect from overposting attacks, enable the specific properties you want to bind to.
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
@@ -81,10 +79,6 @@ namespace KofCWSCWebsite.Controllers
                 ViewBag.ImpCreateMessage = results;
 
                 return View("~/Views/CvnImpDelegates/Failed.cshtml");
-
-                //_context.Add(cvnImpDelegateIMP);
-                //await _context.SaveChangesAsync();
-                //return RedirectToAction(nameof(Index));
             }
             else
             {
@@ -93,14 +87,15 @@ namespace KofCWSCWebsite.Controllers
             
         }
 
-        //[HttpGet("Edit/{id}")]
-        public async Task<ActionResult<CvnImpDelegateIMP>> Edit(int? id)
-        {
-            var results = await _apiHelper.GetAsync<CvnImpDelegateIMP>($"CvnImpDelegate/{id}");
+        //[HttpGet("Edit/{id}")] - duplicate we are using EditIMP so this never gets called
+        //public async Task<ActionResult<CvnImpDelegateIMP>> Edit(int? id)
+        //{
+        //    var results = await _apiHelper.GetAsync<CvnImpDelegateIMP>($"CvnImpDelegate/{id}");
             
-            return View("EditIMP",results);
+        //    return View("EditIMP",results);
             
-        }
+        //}
+        // Orange Edit Raw button ***
         public async Task<ActionResult<CvnImpDelegateIMP>> EditIMP(int? id)
         {
             // this is being called 2 times, 1 with and id and 1 with a null id
@@ -113,7 +108,7 @@ namespace KofCWSCWebsite.Controllers
             }
             return View();
         }
-        // GET: CvnImpDelegates/Edit/5
+        // GET: CvnImpDelegates/Edit/5 used to edit imported and existing data combined Blue Edit Button ***
         [HttpGet("Edit/{id}/{validate}/{validate2}")]
         public async Task<ActionResult<CvnImpDelegate>> Edit(int? id,string? validate,string? validate2)
         {
@@ -132,24 +127,9 @@ namespace KofCWSCWebsite.Controllers
             {
                 return View();
             }
-
-
-
-
-            //if (id == null)
-            //{
-            //    return NotFound();
-            //}
-
-            //var cvnImpDelegate = await _context.CvnImpDelegates.FindAsync(id);
-            //if (cvnImpDelegate == null)
-            //{
-            //    return NotFound();
-            //}
-            //return View(cvnImpDelegate);
         }
 
-        // POST: CvnImpDelegates/Edit/5
+        // POST: CvnImpDelegates/Edit/5 - this gets called on edit raw data BLUE button Save Delegate Changes ***
         // To protect from overposting attacks, enable the specific properties you want to bind to.
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
@@ -166,54 +146,54 @@ namespace KofCWSCWebsite.Controllers
                 try
                 {
                     var results = await _apiHelper.PutAsync<CvnImpDelegateIMP, CvnImpDelegateIMP>($"CvnImpDelegate/{id}", cvnImpDelegate);
-                    //_context.Update(cvnImpDelegate);
-                    //await _context.SaveChangesAsync();
+                    // a successful PUT will return JSon("SUCCESS") and be serialized back as a CvnImpDelegateIMP model with all nulls
+                    // a failed PUT will return a NULL results
+                    if (results == null)
+                    {
+                        throw new Exception("Edit Failed");
+                    }
                 }
-                catch (DbUpdateConcurrencyException)
+                catch (Exception ex)
                 {
-                    if (!CvnImpDelegateExists(cvnImpDelegate.Id))
-                    {
-                        return NotFound();
-                    }
-                    else
-                    {
-                        throw;
-                    }
+                    Log.Error(Utils.FormatLogEntry(this, ex, "Edit Failed"));
                 }
                 return RedirectToAction(nameof(Index));
             }
             return RedirectToAction("CvnImpDelegates", "Index");
         }
 
-        // GET: CvnImpDelegates/Delete/5
+        // GET: CvnImpDelegates/Delete/5 Red Delete Button ***
         public async Task<IActionResult> DeleteIMP(int? id)
         {
-            var results = await _apiHelper.GetAsync<CvnImpDelegateIMP>($"CvnImpDelegate/{id}");
+            // for some reason this gets called a second time with a null id
+            if (id == null)
+            {
+                return View();
 
-            return View("Delete", results);
+            }
+            else
+            {
+                var results = await _apiHelper.GetAsync<CvnImpDelegateIMP>($"CvnImpDelegate/{id}");
+                return View("Delete", results);
+            }
+
+
+
 
         }
 
-        // POST: CvnImpDelegates/Delete/5
+        // POST: CvnImpDelegates/Delete/5 - after confirm from Red Delete Button ***
         [HttpPost, ActionName("DeleteIMP")]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> DeleteConfirmed(int id)
         {
             await _apiHelper.DeleteAsync($"CvnImpDelegate/{id}");
             return RedirectToAction(nameof(Index));
-            //var cvnImpDelegate = await _context.CvnImpDelegates.FindAsync(id);
-            //if (cvnImpDelegate != null)
-            //{
-            //    _context.CvnImpDelegates.Remove(cvnImpDelegate);
-            //}
-
-            //await _context.SaveChangesAsync();
-            //return RedirectToAction(nameof(Index));
         }
 
-        private bool CvnImpDelegateExists(int id)
-        {
-            return _context.CvnImpDelegates.Any(e => e.Id == id);
-        }
+        //private bool CvnImpDelegateExists(int id)
+        //{
+        //    return _context.CvnImpDelegates.Any(e => e.Id == id);
+        //}
     }
 }
