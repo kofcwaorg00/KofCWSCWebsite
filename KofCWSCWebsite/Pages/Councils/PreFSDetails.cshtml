@@ -3,13 +3,16 @@
 @{
 }
 <h2>Update Council Details for Council @Model.Council</h2>
-<h6>Please press UPDATE to continue or CANCEL to Return.</h6>
+<p>On the following screens, you will able to view and update your council's address
+    information and other details. It is important that your council reviews this at
+    least once every fraternal year.
+</p>
 
 <table class="table" style="width:25%">
     <tr>
         <td>
             <form method="get" asp-controller="TblValCouncils" asp-action="FSEdit" asp-route-id="@Model.Council">
-                <button type="submit" class="btn btn-primary">Continue</button>
+                <button type="submit" class="btn btn-primary">Update</button>
             </form>
         </td>
         <td>
@@ -20,3 +23,4 @@
     </tr>
 </table>
 
+<h6>Please press UPDATE to begin or CANCEL to Return.</h6>
