@@ -14,6 +14,8 @@ using FastReport.Export.PdfSimple;
 using FastReport;
 using System.Text;
 using Microsoft.CodeAnalysis.VisualBasic.Syntax;
+using javax.xml.crypto;
+using com.sun.xml.@internal.ws.api.model;
 
 
 namespace KofCWSCWebsite.Controllers
@@ -286,7 +288,86 @@ namespace KofCWSCWebsite.Controllers
 
             return File(buffer, "text/csv", $"CheckBatchQB{GetGroupString(GroupID)}.csv");
         }
+        public async Task<IActionResult> ExportQBZip(int GroupID)
+        {
+            var mydata = await _apiHelper.GetAsync<IEnumerable<CvnMpd>>($"GetMPDChecks/{GroupID}");
 
+            if (mydata == null || !mydata.Any())
+            {
+                return BadRequest("No data to export.");
+            }
+
+            int chunkSize = 15;
+            int fileCount = 1;
+            string myGroup = GroupID == 3?"DDs":"COUNCILS";
+            // Split data into chunks
+            var chunks = mydata.Select((x, index) => new { x, index })
+                             .GroupBy(x => x.index / chunkSize)
+                             .Select(g => g.Select(y => y.x).ToList())
+                             .ToList();
+
+            var zipPath = Path.Combine(Path.GetTempPath(), $"ExportedChecksQB{myGroup}.zip");
+            using (var zipStream = new FileStream(zipPath, FileMode.Create))
+            using (var archive = new System.IO.Compression.ZipArchive(zipStream, System.IO.Compression.ZipArchiveMode.Create, false))
+            {
+                foreach (var chunk in chunks)
+                {
+                    var csvContent = GenerateCsv(chunk);
+                    var fileName = $"Export_QBChecks{myGroup}({fileCount}).csv";
+                    fileCount++;
+
+                    var entry = archive.CreateEntry(fileName);
+                    using (var entryStream = entry.Open())
+                    using (var streamWriter = new StreamWriter(entryStream))
+                    {
+                        streamWriter.Write(csvContent);
+                    }
+                }
+            }
+
+            var zipFile = System.IO.File.OpenRead(zipPath);
+            return File(zipFile, "application/zip", $"ExportedChecksQB{GroupID}.zip");
+        }
+        private string GenerateCsv(List<CvnMpd> data)
+        {
+            // transfer the data to our export model
+            var myExp = new List<CvnMPDCheckExportQB>();
+            foreach (var item in data)
+            {
+                var myItem = new CvnMPDCheckExportQB();
+                myItem.CheckNo = item.CheckNumber.ToString();
+                myItem.BankAccount = item.CheckAccount;
+                myItem.Payee = item.Payee;
+                myItem.Address = string.Concat(item.Address, ", ", item.City, ", ", item.State, ", ", item.Zip);
+                DateOnly myDO = (DateOnly)item.CheckDate;
+                DateTime myDT = myDO.ToDateTime(TimeOnly.MinValue);
+                string myFD = myDT.ToString("MM/dd/yyyy");
+                myItem.Date = myFD; // item.CheckDate.ToString();
+                myItem.Amount = item.CheckTotal;
+                myItem.Memo = item.Memo;
+                myItem.Category = item.Category;
+                myItem.Description = "Convention MPD Import";
+                myItem.Type = "Category Details";
+                myItem.PrintLater = "true";
+                myExp.Add(myItem);
+            }
+
+
+
+            var csv = new StringBuilder();
+
+            var properties = typeof(CvnMPDCheckExportQB).GetProperties(System.Reflection.BindingFlags.Public | System.Reflection.BindingFlags.Instance);
+
+            csv.AppendLine(string.Join(",", properties.Select(p => p.Name)));
+
+            foreach (var item in myExp)
+            {
+                var values = properties.Select(p => QuoteField(p.GetValue(item)?.ToString() ?? string.Empty));
+                csv.AppendLine(string.Join(",", values));
+            }
+
+            return csv.ToString();
+        }
         public async Task<IActionResult> ArchiveCheckBatch(int GroupID)
         {
             var mydata = await _apiHelper.GetAsync<int>($"MPD/ArchiveMPD/{GroupID}");
