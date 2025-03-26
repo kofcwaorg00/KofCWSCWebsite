@@ -144,6 +144,7 @@ namespace KofCWSCWebsite.Controllers
                     {
                         var result = await _apiHelper.PostAsync<List<CvnImpDelegateIMP>, string>("/ImpDelegates", records);
                         ViewBag.ImpMessage = result;
+                        TempData["ImpMessage"] = result;
                     }
                     catch (Exception ex)
                     {
@@ -211,7 +212,7 @@ namespace KofCWSCWebsite.Controllers
                     var myDelegates = await _apiHelper.GetAsync<IEnumerable<TblCorrMemberOfficeVM>>("CheckForMissingDelegateMembersAndCreateDelegates");
                     if (myDelegates.Count() > 0)
                     {
-                        ViewBag.Message = @"We found member(s) in the import file in that are not in our database.
+                        ViewBag.Message = $@"We found {myDelegates.Count().ToString()} member(s) in the import file in that are not in our database.
                             Please make sure this/these members are added and rerun this process.
                             NOTE: the MemberID Listed is the KofC MemberID";
                         // then we need to present the issues to the user and stop here
