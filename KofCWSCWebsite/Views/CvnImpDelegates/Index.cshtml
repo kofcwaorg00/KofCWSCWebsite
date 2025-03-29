@@ -3,6 +3,7 @@
 
 @{
     ViewData["Title"] = "Index";
+    int linenumber = 0;
 }
 
 <h1>Edit Imported Delegates</h1>
@@ -43,6 +44,7 @@
 <table class="table">
     <thead>
         <tr>
+            <th style="width:auto" title="Legend"><span style="font-size:small">#</span></th>
             <th style="width:auto" title="Legend"><span style="font-size:small">Legend</span></th>
             <th title="Record Type (M)anual, (I)mported, (U)pdated" style="text-align:center">
                 RT
@@ -66,6 +68,7 @@
     <tbody>
         @foreach (var item in Model)
         {
+            linenumber += 1;
             string myCMI = Utils.CompareMemberInfo(item);
             string myMMValid = "";
             string myMCValid = "";
@@ -150,6 +153,7 @@
             }
 
             <tr>
+                <td>@linenumber</td>
                 <td style="text-align:center;width:65px" title="@myValidTitle">
                     <div style="width:15px;float:left;@myUMValid">&nbsp;&nbsp;&nbsp;</div>
                     <div style="width:15px;float: right; @myMCValid">&nbsp;&nbsp;&nbsp;</div>
