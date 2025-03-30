@@ -178,8 +178,8 @@ namespace KofCWSCWebsite.Controllers
                 }
                 ViewBag.MemberID = id;
                 ViewBag.ListOfOffices = new SelectList(offices.OrderBy(x => x.OfficeDescription).ToList(), "OfficeId", "OfficeDescription");
-                // allow the default frat year to be next year if we are in May or June
-                int myY = (DateTime.Now.Month >= 5 && DateTime.Now.Month <= 6) ? 1:0;
+                // allow the default frat year to be next year if we are in April, May or June
+                int myY = (DateTime.Now.Month >= 4 && DateTime.Now.Month <= 6) ? 1:0;
                 ViewBag.FratYear = GetFratYear(myY).Result;
             }
             return View();
