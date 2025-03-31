@@ -199,7 +199,18 @@ else
 
 app.UseHttpsRedirection();
 app.UseStaticFiles();
-
+//*******************************************************************
+// added this to prevent extra requests to get favicon
+app.Use(async (context, next) =>
+{
+    if (context.Request.Path.Value.Contains("favicon.ico"))
+    {
+        context.Response.StatusCode = 204; // No Content
+        return;
+    }
+    await next();
+});
+//*******************************************************************
 app.UseRouting();
 app.UseAuthentication();
 app.UseAuthorization();
