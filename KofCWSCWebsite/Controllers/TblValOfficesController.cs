@@ -175,7 +175,7 @@ namespace KofCWSCWebsite.Controllers
         [Authorize(Roles = "Admin")]
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("OfficeId,OfficeDescription,DirSortOrder,AltDescription,EmailAlias,UseAsFormalTitle,WebPageTagLine,SupremeUrl,GroupId")] TblValOffice tblValOffice)
+        public async Task<IActionResult> Edit(int id, [Bind("OfficeId,OfficeDescription,DirSortOrder,AltDescription,EmailAlias,UseAsFormalTitle,WebPageTagLine,SupremeUrl,GroupId,Copy2NewYear,ExchangeMailType")] TblValOffice tblValOffice)
         {
             if (id != tblValOffice.OfficeId)
             {

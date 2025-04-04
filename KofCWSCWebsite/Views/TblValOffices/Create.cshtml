@@ -48,6 +48,25 @@
                 <span asp-validation-for="GroupId" class="text-danger"></span>
             </div>
             <div class="form-group">
+                <label asp-for="Copy2NewYear" class="control-label"></label>
+                <input asp-for="Copy2NewYear" class="form-control" />
+                <span asp-validation-for="Copy2NewYear" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="ExchangeMailType" class="control-label"></label>
+                @{
+                    var options = new SelectList(new List<SelectListItem>
+                                    {
+                        new SelectListItem { Text = "Distribution List", Value = "DistributionList" },
+                        new SelectListItem { Text = "User Mailbox", Value = "UserMailbox" },
+                        new SelectListItem { Text = "Shared Mailbox", Value = "SharedMailbox" }
+
+                    }, "Value", "Text");
+                }
+                @Html.DropDownListFor(model => model.ExchangeMailType, options, "Please select an option")
+                <span asp-validation-for="ExchangeMailType" class="text-danger"></span>
+            </div>
+            <div class="form-group">
                 <input type="submit" value="Create" class="btn btn-primary" />
             </div>
         </form>
