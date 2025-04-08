@@ -132,7 +132,6 @@
   <ItemGroup>
     <Folder Include="Scripts\" />
     <Folder Include="Views\Address\" />
-    <Folder Include="Views\NewFolder\" />
     <Folder Include="wwwroot\files\uploads\" />
   </ItemGroup>
 

@@ -355,6 +355,8 @@
                                     @if (User.IsInRole("Admin") || User.IsInRole("CalAdmin"))
                                     {
                                         <li><a class="dropdown-item MyMenuLink" asp-area="" asp-controller="TblSysTrxEvents" asp-action="Index" asp-route-id="">Calendar(future)</a></li>
+                                        <li><a class="dropdown-item MyMenuLink" asp-area="" asp-controller="Csv" asp-action="UploadNecrologyS" asp-route-id="0">Import Necrology Data</a></li>
+                                        <li><a class="dropdown-item MyMenuLink" asp-area="" asp-controller="NecImpNecrologies" asp-action="Index" asp-route-id="0">Manage Necrology Data</a></li>
                                         <li><hr class="dropdown-divider"></li>
                                     }
                                     @if (User.IsInRole("Admin") || User.IsInRole("AOIAdmin"))
@@ -392,7 +394,7 @@
                                     <li><hr class="dropdown-divider"></li>
                                     <li><a class="dropdown-item MyMenuLink" asp-area="" asp-controller="CvnControls" asp-action="Edit" asp-route-id="1" title="Update the Convention Title for the New Year">3. Update Convention Control Information</a></li>
                                     <li><hr class="dropdown-divider"></li>
-                                    <li><a class="dropdown-item MyMenuLink" asp-area="" asp-controller="Csv" asp-action="UploadDelegates" asp-route-id="0" title="Import a CSV of Exported Credentials from JotForm">4a. Import Convention Delegates</a></li>
+                                    <li><a class="dropdown-item MyMenuLink" asp-area="" asp-controller="Csv" asp-action="UploadDelegatesS" asp-route-id="0" title="Import a CSV of Exported Credentials from JotForm">4a. Import Convention Delegates</a></li>
                                     @*<li><a class="dropdown-item MyMenuLink" asp-area="" asp-controller="Csv" asp-action="UploadDelegates" asp-route-id="1" title="Import a CSV of Exported Credentials from JotForm">4b. Import Convention Delegates (PROCESS)</a></li>*@
                                     <li><a class="dropdown-item MyMenuLink" asp-area="" asp-controller="CvnImpDelegates" asp-action="Index" asp-route-id="" title="View imported delegates">4b. Manage Imported Convention Delegates</a></li>
                                     @*<li><a class="dropdown-item MyMenuLink" asp-area="" asp-controller="CvnImpDelegates" asp-action="IndexIMP" asp-route-id="" title="View imported delegates">4c. Manage <span style="font-weight:bold;color:red">RAW</span> Imported Convention Delegates</a></li>*@

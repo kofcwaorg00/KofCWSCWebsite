@@ -1,7 +1,7 @@
 ﻿@model CvnImpDelegateViewModel
     <div class="overlay" id="overlay"></div>
     <div class="form-container">
-        <form asp-action="Upload" asp-controller="Csv" method="post" enctype="multipart/form-data" id="myForm">
+        <form asp-action="UploadDelegates" asp-controller="Csv" method="post" enctype="multipart/form-data" id="myForm">
             <div class="form-group">
                 <label for="CsvFile">Upload CSV</label>
                 <input type="file" name="CsvFile" id="CsvFile" class="form-control" />

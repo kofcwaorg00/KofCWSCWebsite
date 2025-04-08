@@ -1,0 +1,264 @@
+﻿@model IEnumerable<KofCWSCWebsite.Models.NecImpNecrologyVM>
+
+@{
+    ViewData["Title"] = "Index";
+    int LineNumber = 0;
+}
+<h1>Imported Necrology Listing</h1>
+<h6>Only Showing Those Entries where the Deceased Member ID is found in our data</h6>
+<h3><span style="color:red">@TempData["ImpMessage"]</span></h3>
+@*<p>
+        <a asp-action="Create">Create New</a>
+    </p>*@
+<table class="table">
+    <thead>
+        <tr>
+            <th></th>
+            @*  <th>
+            @Html.DisplayNameFor(model => model.DecStatus)
+        </th>*@
+            <th>
+                @Html.DisplayNameFor(model => model.SubDate)
+            </th>
+            @*<th>
+            @Html.DisplayNameFor(model => model.SubFname)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.SubLname)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.SubEmail)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.SubRole)
+        </th>*@
+            <th>
+                @Html.DisplayNameFor(model => model.CouncilId)
+            </th>
+            <th>
+                @*@Html.DisplayNameFor(model => model.DecPrefix)*@
+                Full Name
+            </th>
+            @*<th>
+               @Html.DisplayNameFor(model => model.DecFname)
+           </th>
+           <th>
+               @Html.DisplayNameFor(model => model.DecMname)
+           </th>
+           <th>
+               @Html.DisplayNameFor(model => model.DecLname)
+           </th>
+           <th>
+               @Html.DisplayNameFor(model => model.DecSuffix)
+           </th>
+        <th>
+                       @Html.DisplayNameFor(model => model.DecFmorKn)
+                   </th>
+                   <th>
+                       @Html.DisplayNameFor(model => model.Fmprefix)
+                   </th>
+                   <th>
+                       @Html.DisplayNameFor(model => model.Fmfname)
+                   </th>
+                   <th>
+                       @Html.DisplayNameFor(model => model.Fmmname)
+                   </th>
+                   <th>
+                       @Html.DisplayNameFor(model => model.Fmlname)
+                   </th>
+                   <th>
+                       @Html.DisplayNameFor(model => model.Fmsuffix)
+                   </th>
+                   <th>
+                       @Html.DisplayNameFor(model => model.Relationship)
+                   </th>
+                   <th>
+                       @Html.DisplayNameFor(model => model.Dod)
+                   </th>*@
+            <th>
+                @Html.DisplayNameFor(model => model.DecMemberId)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.MemberType)
+            </th>
+            @*<th>
+                @Html.DisplayNameFor(model => model.DecOfficesHeld)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.AssemblyId)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Nokprefix)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Nokfname)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Nokmname)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Noklname)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Noksuffix)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Nokrelate)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Nokaddress1)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Nokaddress2)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Nokcity)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Nokstate)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Nokzip)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Nokcountry)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Comments)
+            </th>
+        <th></th>*@
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var item in Model)
+        {
+            LineNumber += 1;
+            <tr>
+                <td>
+                    @if (item.DecStatus.ToLower().Trim() == "not")
+                    {
+                        <form asp-action="UpdateDeceased" asp-route-id="@item.DecMemberId" method="get">
+                            <button type="submit" class="btn btn-sm btn-danger">
+                                Update
+                            </button>
+                        </form>
+                    }
+
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.SubDate)
+                </td>
+                @*    <td>
+            @Html.DisplayFor(modelItem => item.SubFname)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.SubLname)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.SubEmail)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.SubRole)
+        </td>*@
+                <td>
+                    @Html.DisplayFor(modelItem => item.CouncilId)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.DecPrefix) @Html.DisplayFor(modelItem => item.DecFname) @Html.DisplayFor(modelItem => item.DecMname) @Html.DisplayFor(modelItem => item.DecLname)  @Html.DisplayFor(modelItem => item.DecSuffix)
+                </td>
+                @*<td>
+            @Html.DisplayFor(modelItem => item.DecFname)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.DecMname)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.DecLname)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.DecSuffix)
+        </td>
+        <td>
+                @Html.DisplayFor(modelItem => item.DecFmorKn)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Fmprefix)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Fmfname)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Fmmname)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Fmlname)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Fmsuffix)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Relationship)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Dod)
+            </td>*@
+                <td>
+                    @Html.DisplayFor(modelItem => item.DecMemberId)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.MemberType)
+                </td>
+                @*<td>
+            @Html.DisplayFor(modelItem => item.DecOfficesHeld)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.AssemblyId)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.Nokprefix)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.Nokfname)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.Nokmname)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.Noklname)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.Noksuffix)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.Nokrelate)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.Nokaddress1)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.Nokaddress2)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.Nokcity)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.Nokstate)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.Nokzip)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.Nokcountry)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.Comments)
+        </td>*@
+                @*<td>
+            <a asp-action="Edit" asp-route-id="@item.Id">Edit</a> |
+            <a asp-action="Details" asp-route-id="@item.Id">Details</a> |
+            <a asp-action="Delete" asp-route-id="@item.Id">Delete</a>
+        </td>*@
+            </tr>
+        }
+    </tbody>
+</table>

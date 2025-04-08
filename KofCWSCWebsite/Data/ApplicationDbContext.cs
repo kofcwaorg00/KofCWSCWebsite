@@ -666,5 +666,7 @@ public DbSet<USPSAddress> Uspsaddress { get; set; } = default!;
 
 public DbSet<KofCWSCWebsite.Models.CvnImpDelegateIMP> CvnImpDelegateIMP { get; set; } = default!;
 
+public DbSet<KofCWSCWebsite.Models.NecImpNecrology> NecImpNecrology { get; set; } = default!;
+
 }
 

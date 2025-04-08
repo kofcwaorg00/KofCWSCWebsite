@@ -51,7 +51,7 @@ namespace KofCWSCWebsite.Controllers
         // GET: Display the form to upload CSV
         [Route("UploadDelegates/{id}")]
         [Authorize(Roles = "Admin, ConventionAdmin")]
-        public IActionResult UploadDelegates(int id)
+        public IActionResult UploadDelegatesS(int id)
         {
             //************************************************************************************************
             // 12/10/2024 Tim Philomeno
@@ -69,15 +69,77 @@ namespace KofCWSCWebsite.Controllers
             //------------------------------------------------------------------------------------------------
             return View("/Views/Convention/UploadDelegates.cshtml");
         }
+        [Route("UploadNecrology/{id}")]
+        //[HttpGet]
+        [Authorize(Roles = "Admin,Necrology")]
+        public IActionResult UploadNecrologyS(int id)
+        {
+            //************************************************************************************************
+            // 12/10/2024 Tim Philomeno
+            // I am using _PostFlag to allow my menu to call this process and NOT acutall do anything, just log
+            // very strange behavior. This method get called twice to be able to get favico to the browser
+            // so i create the static global var _postFlag and set it on the first call.  Subsequent calls
+            // do not change it because once it is set to true it will not change
+            //------------------------------------------------------------------------------------------------
+            var myQ = Request.Path.Value.Split("/")[2];
+
+            if (!_postFlag)
+            {
+                _postFlag = myQ == "1" ? true : false; ;
+            }
+            //------------------------------------------------------------------------------------------------
+            return View("/Views/NecImpNecrologies/UploadNecrology.cshtml");
+        }
         static bool ConvertToBool(string input)
         {
             // Treat "0" as false, anything else as true
             return input == "0" ? false : true;
         }
+
+        // POST: Handle the CSV file upload and parse it
+        [HttpPost]
+        [Authorize(Roles = "Admin, Necrology")]
+        public async Task<IActionResult> UploadNecrology(NecImpNecrologyViewModel model)
+        {
+            var records = new List<NecImpNecrology>();
+            if (model.CsvFile != null && model.CsvFile.Length > 0)
+            {
+                using (var reader = new StreamReader(model.CsvFile.OpenReadStream(), Encoding.UTF8))
+                using (var csv = new CsvReader(reader, new CsvConfiguration(CultureInfo.InvariantCulture)
+                {
+                    HeaderValidated = null,
+                    MissingFieldFound = null,
+                    Delimiter = ",",
+                    HasHeaderRecord = true,
+                    PrepareHeaderForMatch = args => args.Header.ToLowerInvariant() // Ignore case
+
+            }))
+                {
+                    var cvnImport = csv.GetRecords<NecImpNecrology>(); // Parse CSV into CsvRecord objects
+                    records.AddRange(cvnImport);
+                }
+                try
+                {
+                    var result = await _apiHelper.PostAsync<List<NecImpNecrology>, string>("/ImpNecrology", records);
+                    ViewBag.ImpMessage = result;
+                    TempData["ImpMessage"] = result;
+                    return RedirectToAction("Index", "NecImpNecrologies");
+                }
+                catch (Exception ex)
+                {
+                    Log.Error(Utils.FormatLogEntry(this, ex));
+                    ViewBag.ImpError = "Import of CSV File Failed";
+                    return View("Views/Convention/ImpDelegatesFailed.cshtml", null);
+                }
+                //------------------------------------------------------------------------------------------------------
+            }
+            return RedirectToAction("NecImpNecrologies", "Index");
+        }
+
         // POST: Handle the CSV file upload and parse it
         [HttpPost]
         [Authorize(Roles = "Admin, ConventionAdmin")]
-        public async Task<IActionResult> Upload(CvnImpDelegateViewModel model)
+        public async Task<IActionResult> UploadDelegates(CvnImpDelegateViewModel model)
         {
             var records = new List<CvnImpDelegateIMP>();
             //*************************************************************************
@@ -1066,7 +1128,7 @@ namespace KofCWSCWebsite.Controllers
                 }
                 return false;
             }
-            return true ;
+            return true;
         }
         private string GetStateAbbr(string state)
         {
@@ -1079,7 +1141,7 @@ namespace KofCWSCWebsite.Controllers
                 return state;
             }
         }
-        
+
     }
 }
 
