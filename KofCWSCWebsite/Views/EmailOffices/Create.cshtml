@@ -59,7 +59,7 @@
                     <label asp-for="@Model.Body">Message</label>
                     <span asp-validation-for="@Model.Body" class="text-danger"></span>
                 </div>
-                <span>Attachments are limited to 1 per email and must be less than 10MB.  Only these filetypes are allowed: .jpg,.jpeg,.gif,.bmp,.png,.doc,.dot,.docx,.txt,.pdf,.xls,.xlsx,.ppt,.pptx,.zip</span>
+                <span>Attachments are limited to 1 per email and must be less than 10MB.<br />Only these filetypes are allowed: .jpg,.jpeg,.gif,.bmp,.png,.doc,.dot,.docx,.txt,.pdf,.xls,.xlsx,.ppt,.pptx,.zip <br /></span>
                 <label>Attachment:</label>
                 <input id="fileInput" type="file" asp-for="@Model.Attachment" accept=".jpg,.jpeg,.gif,.bmp,.png,.doc,.dot,.docx,.txt,.pdf,.xls,.xlsx,.ppt,.pptx,.zip" /><br>
 
