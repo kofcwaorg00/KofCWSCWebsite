@@ -23,6 +23,61 @@ namespace KofCWSCWebsite.Services
 {
     public class Utils
     {
+        public static Attachment ConvertToNetMailAttachment(IFormFile formFile)
+        {
+            if (formFile == null)
+            {
+                throw new ArgumentNullException(nameof(formFile), "FormFile cannot be null.");
+            }
+
+            // Create a memory stream to hold the file's content
+            MemoryStream memoryStream = new MemoryStream();
+            formFile.CopyTo(memoryStream);
+            memoryStream.Seek(0, SeekOrigin.Begin);
+
+            // Create and return the System.Net.Mail.Attachment
+            return new Attachment(memoryStream, formFile.FileName, formFile.ContentType);
+        }
+
+
+
+
+        private static EmailAttachment ConvertToAZEmailAttachment(IFormFile attachment)
+        {
+            if (attachment == null)
+                throw new ArgumentNullException(nameof(attachment));
+
+            // Create a MemoryStream to hold the attachment content
+            using var memoryStream = new MemoryStream();
+            attachment.OpenReadStream().CopyTo(memoryStream);
+            memoryStream.Position = 0;  // Reset the position of the stream after copying
+
+            // Create the MIME type for the attachment
+            string mimeType = attachment.ContentType;
+
+            // Convert the content stream to BinaryData
+            var binaryData = BinaryData.FromStream(memoryStream);
+
+            // Create and return the Azure EmailAttachment
+            var emailAttachment = new EmailAttachment(
+                attachment.FileName,   // The name of the file
+                mimeType,              // The MIME type (string)
+                binaryData             // The BinaryData object (attachment content)
+            );
+
+            return emailAttachment;
+        }
+
+
+
+
+
+
+
+
+
+
+
         public static string FormatLogEntry(object thisme, Exception ex, string addData = "")
         {
             //***********************************************************************************************
@@ -109,17 +164,26 @@ namespace KofCWSCWebsite.Services
             }
         }
         public static bool SendEmailAuthenticatedMG(string sTo, string sFrom, string sCC, string sBCC, string sSubject, string sBody,
-            Attachment oAttachment, IConfiguration _config)
+            IFormFile oAttachment, IConfiguration _config)
         {
             try
             {
-                sBody = sBody.Replace("\r\n", "<br />");
                 MailMessage mail = new MailMessage();
+
+                if (oAttachment != null)
+                {
+                    mail.Attachments.Add(Utils.ConvertToNetMailAttachment(oAttachment));
+                }
+
+
+
+                sBody = sBody.Replace("\r\n", "<br />");
+                //MailMessage mail = new MailMessage();
                 mail.From = new MailAddress(sFrom);
                 mail.To.Add(sTo);
                 if (sCC.Length > 0) { mail.CC.Add(sCC); }
                 if (sBCC.Length > 0) { mail.Bcc.Add(sBCC); }
-                if (oAttachment is not null) { mail.Attachments.Add(oAttachment); }
+                //if (oAttachment is not null) { mail.Attachments.Add(myAttachment); }
                 mail.IsBodyHtml = true;
                 mail.Subject = sSubject;
                 mail.Body = sBody;
@@ -147,10 +211,27 @@ namespace KofCWSCWebsite.Services
             }
         }
         public static bool SendEmailAuthenticatedAZ(string sTo, string sFrom, string sCC, string sBCC, string sSubject, string sBody,
-            Attachment oAttachment, IConfiguration _config)
+            IFormFile oAttachment, IConfiguration _config)
         {
             try
             {
+                var emailMessage = new EmailMessage(
+                    senderAddress: "DoNotReply@kofc-wa.org",
+                    content: new EmailContent(sSubject)
+                    {
+                        Html = sBody
+                    },
+                    recipients: new EmailRecipients(new List<EmailAddress> { new EmailAddress(sTo) }));
+
+                if (oAttachment != null)
+                {
+                    var emailAttachment = ConvertToAZEmailAttachment(oAttachment);
+                    emailMessage.Attachments.Add(emailAttachment);
+                }
+
+
+
+
                 sBody = sBody.Replace("\r\n", "<br />");
                 string kvURL = _config["KV:VAULTURL"];
                 var kvclient = new SecretClient(new Uri((string)kvURL), new DefaultAzureCredential());
@@ -159,13 +240,13 @@ namespace KofCWSCWebsite.Services
 
                 var emailClient = new EmailClient(connectionString);
 
-                var emailMessage = new EmailMessage(
-                    senderAddress: "DoNotReply@kofc-wa.org",
-                    content: new EmailContent(sSubject)
-                    {
-                        Html = sBody
-                    },
-                    recipients: new EmailRecipients(new List<EmailAddress> { new EmailAddress(sTo) }));
+                //var emailMessage = new EmailMessage(
+                //    senderAddress: "DoNotReply@kofc-wa.org",
+                //    content: new EmailContent(sSubject)
+                //    {
+                //        Html = sBody
+                //    },
+                //    recipients: new EmailRecipients(new List<EmailAddress> { new EmailAddress(sTo) }));
 
                 EmailSendOperation emailSendOperation = emailClient.Send(
                     WaitUntil.Completed,

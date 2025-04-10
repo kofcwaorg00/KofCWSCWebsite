@@ -30,4 +30,5 @@ public partial class EmailOffice
     public bool Dd { get; set; }
 
     public bool All { get; set; }
+    public IFormFile Attachment { get; set; }
 }

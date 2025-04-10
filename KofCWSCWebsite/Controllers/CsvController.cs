@@ -104,22 +104,23 @@ namespace KofCWSCWebsite.Controllers
             var records = new List<NecImpNecrology>();
             if (model.CsvFile != null && model.CsvFile.Length > 0)
             {
-                using (var reader = new StreamReader(model.CsvFile.OpenReadStream(), Encoding.UTF8))
-                using (var csv = new CsvReader(reader, new CsvConfiguration(CultureInfo.InvariantCulture)
-                {
-                    HeaderValidated = null,
-                    MissingFieldFound = null,
-                    Delimiter = ",",
-                    HasHeaderRecord = true,
-                    PrepareHeaderForMatch = args => args.Header.ToLowerInvariant() // Ignore case
-
-            }))
-                {
-                    var cvnImport = csv.GetRecords<NecImpNecrology>(); // Parse CSV into CsvRecord objects
-                    records.AddRange(cvnImport);
-                }
                 try
                 {
+                    using (var reader = new StreamReader(model.CsvFile.OpenReadStream(), Encoding.UTF8))
+                    using (var csv = new CsvReader(reader, new CsvConfiguration(CultureInfo.InvariantCulture)
+                    {
+                        HeaderValidated = null,
+                        MissingFieldFound = null,
+                        Delimiter = ",",
+                        HasHeaderRecord = true,
+                        PrepareHeaderForMatch = args => args.Header.ToLowerInvariant() // Ignore case
+
+                    }))
+                    {
+                        var cvnImport = csv.GetRecords<NecImpNecrology>(); // Parse CSV into CsvRecord objects
+                        records.AddRange(cvnImport);
+                    }
+
                     var result = await _apiHelper.PostAsync<List<NecImpNecrology>, string>("/ImpNecrology", records);
                     ViewBag.ImpMessage = result;
                     TempData["ImpMessage"] = result;
@@ -128,8 +129,8 @@ namespace KofCWSCWebsite.Controllers
                 catch (Exception ex)
                 {
                     Log.Error(Utils.FormatLogEntry(this, ex));
-                    ViewBag.ImpError = "Import of CSV File Failed";
-                    return View("Views/Convention/ImpDelegatesFailed.cshtml", null);
+                    ViewBag.ImpError = "Import of CSV File Failed.  File layout does not match. Run Macro and try again.";
+                    return View("Views/NecImpNecrologies/ImpNecrologyFailed.cshtml", null);
                 }
                 //------------------------------------------------------------------------------------------------------
             }

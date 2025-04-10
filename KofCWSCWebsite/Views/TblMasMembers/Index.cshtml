@@ -76,6 +76,10 @@
     <tbody>
         @foreach (var item in Model)
         {
+            bool myBDec = item.Deceased ?? false;
+            
+                string myDec = myBDec == true ? "background-color:red;color:white" : "";
+
             <tr>
                 @if (User.IsInRole("Admin") || User.IsInRole("DataAdmin"))
                 {
@@ -95,7 +99,9 @@
                     </td>
                 }
                 <td>
+                    <span style="@myDec" title="Red Indicates that the Member is Deceased." >
                     @Html.DisplayFor(modelItem => item.KofCid)
+                        </span>
                 </td>
                 <td>
                     @Html.DisplayFor(modelItem => item.FirstName)
