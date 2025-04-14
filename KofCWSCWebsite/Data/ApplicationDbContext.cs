@@ -407,6 +407,8 @@ public partial class ApplicationDbContext : DbContext
             entity.Property(e => e.Gk).HasColumnName("GK");
             entity.Property(e => e.DateSent).HasColumnName("DateSent");
             entity.Property(e => e.Subject).HasMaxLength(50);
+            entity.Property(e => e.Attachment).HasColumnName("Attachment");
+            entity.Ignore("Attachment");
         });
 
         modelBuilder.Entity<FileStorage>(

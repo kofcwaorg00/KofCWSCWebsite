@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
 
 namespace KofCWSCWebsite.Models;
 
@@ -30,5 +31,6 @@ public partial class EmailOffice
     public bool Dd { get; set; }
 
     public bool All { get; set; }
-    public IFormFile Attachment { get; set; }
+    [NotMapped]
+    public IFormFile? Attachment { get; set; }
 }
