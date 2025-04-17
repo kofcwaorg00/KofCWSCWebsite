@@ -25,21 +25,24 @@
             <th>
                 @Html.DisplayNameFor(model => model.DirSortOrder)
             </th>
-           @*  <th>
-                @Html.DisplayNameFor(model => model.AltDescription)
-            </th> *@
+            <th>
+                @Html.DisplayNameFor(model => model.GroupId)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.OfficeId)
+            </th>
             <th>
                 @Html.DisplayNameFor(model => model.EmailAlias)
             </th>
-           @*  <th>
-                @Html.DisplayNameFor(model => model.UseAsFormalTitle)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.WebPageTagLine)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.SupremeUrl)
-            </th> *@
+            @*  <th>
+            @Html.DisplayNameFor(model => model.UseAsFormalTitle)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.WebPageTagLine)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.SupremeUrl)
+        </th> *@
             <th style="width:50px"></th>
             <th style="width:60px"></th>
             <th style="width:60px"></th>
@@ -54,48 +57,51 @@
             <td>
                 @Html.DisplayFor(modelItem => item.DirSortOrder)
             </td>
-            @* <td>
-                @Html.DisplayFor(modelItem => item.AltDescription)
-            </td> *@
+            <td>
+                @Html.DisplayFor(modelItem => item.GroupId)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.OfficeId)
+            </td>
             <td>
                 @Html.DisplayFor(modelItem => item.EmailAlias)
             </td>
-           @*  <td>
-                @Html.DisplayFor(modelItem => item.UseAsFormalTitle)
+            @*  <td>
+            @Html.DisplayFor(modelItem => item.UseAsFormalTitle)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.WebPageTagLine)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.SupremeUrl)
+        </td> *@
+            <td>
+                <form asp-action="Edit" asp-route-id="@item.OfficeId" method="get">
+                    <button type="submit" class="btn btn-sm btn-primary">
+                        Edit
+                    </button>
+                </form>
             </td>
             <td>
-                @Html.DisplayFor(modelItem => item.WebPageTagLine)
+                <form asp-action="Details" asp-route-id="@item.OfficeId" method="get">
+                    <button type="submit" class="btn btn-sm btn-warning">
+                        Details
+                    </button>
+                </form>
             </td>
             <td>
-                @Html.DisplayFor(modelItem => item.SupremeUrl)
-            </td> *@
-                <td>
-                    <form asp-action="Edit" asp-route-id="@item.OfficeId" method="get">
-                        <button type="submit" class="btn btn-sm btn-primary">
-                            Edit
-                        </button>
-                    </form>
-                </td>
-                <td>
-                    <form asp-action="Details" asp-route-id="@item.OfficeId" method="get">
-                        <button type="submit" class="btn btn-sm btn-warning">
-                            Details
-                        </button>
-                    </form>
-                </td>
-                <td>
-                    <form asp-action="Delete" asp-route-id="@item.OfficeId" method="get">
-                        <button type="submit" class="btn btn-sm btn-danger">
-                            Delete
-                        </button>
-                    </form>
+                <form asp-action="Delete" asp-route-id="@item.OfficeId" method="get">
+                    <button type="submit" class="btn btn-sm btn-danger">
+                        Delete
+                    </button>
+                </form>
 
-                </td>
+            </td>
             @* <td>
-                <a asp-action="Edit" asp-route-id="@item.OfficeId">Edit</a> |
-                <a asp-action="Details" asp-route-id="@item.OfficeId">Details</a> |
-                <a asp-action="Delete" asp-route-id="@item.OfficeId">Delete</a>
-            </td> *@
+            <a asp-action="Edit" asp-route-id="@item.OfficeId">Edit</a> |
+            <a asp-action="Details" asp-route-id="@item.OfficeId">Details</a> |
+            <a asp-action="Delete" asp-route-id="@item.OfficeId">Delete</a>
+        </td> *@
         </tr>
 }
     </tbody>
