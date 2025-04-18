@@ -11,455 +11,454 @@
 
 </head>
 <body>
-    @{ 
+    @{
         var hasCMOActivity = Model.Any(m => m.Type == "CO");
     }
-    @if (hasCMOActivity)
-            {
-                <span style="color:white;background-color:red">PENDING CMO MAINTENANCE</span>
-            }
-
-
+        @if (hasCMOActivity && User.IsInRole("Admin"))
+        {
+            <span style="color:white;background-color:red">PENDING CMO MAINTENANCE</span>
+        }
 
 
     @* Announcements card section *@
-    <div class="offcanvas offcanvas-start" tabindex="-1" id="AnnouncementPanel" aria-labelledby="offcanvasExampleLabel">
-        <div class="offcanvas-header">
-            <h5 class="offcanvas-title" id="offcanvasExampleLabel">Announcements</h5>
-            <button type="button" class="btn-close text-reset" data-bs-dismiss="offcanvas" aria-label="Close"></button>
-        </div>
-        <div style="margin-left:20px">
-            @foreach (var item in Model)
-            {
-                DateTime ANDate = DateTime.Now;
-                if (item.Type == "AN")
-                {
-                    ANDate = item.PostedDate;
-                    <span style="font-size:small;color:lightgray">Last Updated @ANDate.ToShortDateString()</span>
-                    <hr />
-                    break;
-                }
-            }
-        </div>
-        <div class="offcanvas-body">
-            @* Begin Of Interest Loop *@
-            @foreach (var item in Model)
-            {
-                if (item.Type == "AN")
-                {
-
-                    <div style="width:100%;text-align:center">
-                        @*if graphicurl is null then use title else use graphicurl*@
-                        @{
-                            if (item.GraphicURL != null)
-                            {
-
-                                var myImg = "<img src='" + item.GraphicURL + "' width='250px' />";
-                                <div style="border:solid;border-color:blue">
-                                    <a href="@item.LinkURL" target="kofcwa-announcements">@Html.Raw(myImg)</a>
-                                </div>
-                            }
-                            else
-                            {
-                                <div>
-                                    <a href="@item.LinkURL" target="kofcwa-announcements">@item.Title</a>
-                                </div>
-                            }
-
-                        }
-
-                    </div>
-                    <hr />
-                }
-            }
-
-            @* End Of Interest Loop *@
-        </div>
-    </div>
-    @* Of Interest card section *@
-    <div class="offcanvas offcanvas-start" tabindex="-1" id="OfInterestPanel" aria-labelledby="offcanvasExampleLabel">
-        <div class="offcanvas-header">
-            <h5 class="offcanvas-title" id="offcanvasExampleLabel">Of Interest</h5>
-            <button type="button" class="btn-close text-reset" data-bs-dismiss="offcanvas" aria-label="Close"></button>
-        </div>
-        <div style="margin-left:20px">
-            @foreach (var item in Model)
-            {
-                DateTime OIDate = DateTime.Now;
-                if (item.Type == "OI")
-                {
-                    OIDate = item.PostedDate;
-                    <span style="font-size:small;color:lightgray">Last Updated @OIDate.ToShortDateString()</span>
-                    <hr />
-                    break;
-                }
-
-            }
-        </div>
-        <div class="offcanvas-body" style="text-align:center">
-            @* Begin Of Interest Loop *@
-            @foreach (var item in Model)
-            {
-                if (item.Type == "OI")
-                {
-                    <div style="width:100%;text-align:center">
-                        @*if graphicurl is null then use title else use graphicurl*@
-                        @{
-                            if (item.GraphicURL != null)
-                            {
-
-                                var myImg = "<img src='" + item.GraphicURL + "' width='250px' />";
-                                <div style="border:solid;border-color:blue">
-                                    <a href="@item.LinkURL" target="kofcwa-announcements">@Html.Raw(myImg)</a>
-                                </div>
-                            }
-                            else
-                            {
-                                <div>
-                                    <a href="@item.LinkURL" target="kofcwa-announcements">@item.Title</a>
-                                </div>
-                            }
-
-                        }
-
-                    </div>
-                    <hr />
-                }
-            }
-
-            @* End Of Interest Loop *@
-        </div>
-    </div>
-    @* Announcements Button *@
-    @* <div style="position:absolute; top:250px; left:-50px;transform:rotate(90deg)">
-        style="background-color:#c592a2; border-color:black"
-        style="background-color:#c5aa92; border-color:black"
-    *@
-    <div>
-        <div>
-            <div style="float:left">
-                <a title="Announcements" data-bs-toggle="offcanvas" href="#AnnouncementPanel" role="button" aria-controls="offcanvasExample">
-                    <img src="~/images/BullHornc.png" style="width:40px" />
-                </a>
-                <br />
-                <a title="Of Interest" data-bs-toggle="offcanvas" href="#OfInterestPanel" role="button" aria-controls="offcanvasExample">
-                    <img src="~/images/LightBulbc.png" style="width:40px" />
-                </a>
-                <br />
-                <a title="Facebook" href="https://www.facebook.com/KofCWA/?ref=embed_page" target="_blank">
-                    <img src="~/images/Facebook_Logo_Primary.png" style="width:40px" />
-                </a>
-                <br />
-                    <a title="Instagram" href="https://www.instagram.com/kofcwashington" target="_blank">
-                        <img src="~/images/Instagram_Glyph_Gradient.png" style="width:40px" />
-                    </a>
+        <div class="offcanvas offcanvas-start" tabindex="-1" id="AnnouncementPanel" aria-labelledby="offcanvasExampleLabel">
+            <div class="offcanvas-header">
+                <h5 class="offcanvas-title" id="offcanvasExampleLabel">Announcements</h5>
+                <button type="button" class="btn-close text-reset" data-bs-dismiss="offcanvas" aria-label="Close"></button>
             </div>
-        </div>
-    </div>
-    @* Of Interest Button *@
-    @* <div style="position:absolute; top:375px; left:-30px;transform:rotate(90deg)">
-        <div>
-        </a>
-        </div> *@
-    <div class="card-group">
-        <div class="card">
-            <a asp-area="" asp-controller="SP" asp-action="GetChairmanInfoBlock" asp-route-id="9" asp-route-nextyear="0"><img src="~/images/faithfade.png" class="card-img-top" alt="Faith"></a>
-            <div class="card-body">
-                <button style="width:100%;background-color:#7fb8b9" class="btn btn-secondary dropdown-toggle" type="button" id="dropdownMenuButton" data-bs-toggle="dropdown">
-                    Faith In Action
-                </button>
-                <ul class="dropdown-menu" style="background-color:#7fb8b9">
-                    <li>
-                        <p class="card-text"><a class="dropdown-item MyDDMenuLink" asp-area="" asp-controller="SP" asp-action="GetChairmanInfoBlock" asp-route-id="36" asp-route-nextyear="0">RSVP (Refund Support Vocations Program)</a></p>
-                    </li>
-                    <li>
-                        <p class="card-text"><a class="dropdown-item MyDDMenuLink" asp-area="" asp-controller="SP" asp-action="GetChairmanInfoBlock" asp-route-id="287" asp-route-nextyear="0">Pennies for Heaven</a></p>
-                    </li>                    <li>
-                        <p class="card-text"><a class="dropdown-item MyDDMenuLink" asp-area="" asp-controller="SP" asp-action="GetChairmanInfoBlock" asp-route-id="205" asp-route-nextyear="0">Into the Breach</a></p>
-                    </li>
-                    <li>
-                        <p class="card-text"><a class="dropdown-item MyDDMenuLink" asp-area="" asp-controller="SP" asp-action="GetChairmanInfoBlock" asp-route-id="166" asp-route-nextyear="0">Marian Icon Prayer Program</a></p>
-                    </li>
-                    <li>
-                        <p class="card-text"><a class="dropdown-item MyDDMenuLink" asp-area="" asp-controller="SP" asp-action="GetChairmanInfoBlock" asp-route-id="207" asp-route-nextyear="0">Building the Domestic Church Kiosk</a></p>
-                    </li>
-                    <li>
-                        <p class="card-text"><a class="dropdown-item MyDDMenuLink" asp-area="" asp-controller="SP" asp-action="GetChairmanInfoBlock" asp-route-id="208" asp-route-nextyear="0">Rosary Program</a></p>
-                    </li>
-                    <li>
-                        <p class="card-text"><a class="dropdown-item MyDDMenuLink" asp-area="" asp-controller="SP" asp-action="GetChairmanInfoBlock" asp-route-id="210" asp-route-nextyear="0">Spiritual Reflection</a></p>
-                    </li>
-                    <li>
-                        <p class="card-text"><a class="dropdown-item MyDDMenuLink" asp-area="" asp-controller="SP" asp-action="GetChairmanInfoBlock" asp-route-id="267" asp-route-nextyear="0">Holy Hour</a></p>
-                    </li>
-                    <li>
-                        <p class="card-text"><a class="dropdown-item MyDDMenuLink" asp-area="" asp-controller="SP" asp-action="GetChairmanInfoBlock" asp-route-id="266" asp-route-nextyear="0">Sacramental Gifts</a></p>
-                    </li>
-                </ul>
-            </div>
-        </div>
-        <div class="card">
-            <a asp-area="" asp-controller="SP" asp-action="GetChairmanInfoBlock" asp-route-id="11" asp-route-nextyear="0"><img src="~/images/CommunityFade.png" class="card-img-top" alt="Community"></a>
-            <div class="card-body">
-                <button style="width:100%;background-color:#c59692" class="btn btn-secondary dropdown-toggle" type="button" id="dropdownMenuButton" data-bs-toggle="dropdown">
-                    Community In Action
-                </button>
-                <ul class="dropdown-menu" style="background-color:#c59692">
-                    <li>
-                        <p class="card-text"><a class="dropdown-item MyDDMenuLink" asp-area="" asp-controller="SP" asp-action="GetChairmanInfoBlock" asp-route-id="231" asp-route-nextyear="0">Coats for Kids</a></p>
-                    </li>
-                    <li>
-                        <p class="card-text"><a class="dropdown-item MyDDMenuLink" asp-area="" asp-controller="SP" asp-action="GetChairmanInfoBlock" asp-route-id="172" asp-route-nextyear="0">Global Wheelchair Mission</a></p>
-                    </li>
-                    <li>
-                        <p class="card-text"><a class="dropdown-item MyDDMenuLink" asp-area="" asp-controller="SP" asp-action="GetChairmanInfoBlock" asp-route-id="221" asp-route-nextyear="0">Habitat For Humanity</a></p>
-                    </li>
-                    <li>
-                        <p class="card-text"><a class="dropdown-item MyDDMenuLink" asp-area="" asp-controller="SP" asp-action="GetChairmanInfoBlock" asp-route-id="269" asp-route-nextyear="0">Disaster Prepardness</a></p>
-                    </li>
-                    <li>
-                        <p class="card-text"><a class="dropdown-item MyDDMenuLink" asp-area="" asp-controller="SP" asp-action="GetChairmanInfoBlock" asp-route-id="235" asp-route-nextyear="0">Free Throw Championship</a></p>
-                    </li>
-                    <li>
-                        <p class="card-text"><a class="dropdown-item MyDDMenuLink" asp-area="" asp-controller="SP" asp-action="GetChairmanInfoBlock" asp-route-id="222" asp-route-nextyear="0">Catholic Citizenship Essay Contest</a></p>
-                    </li>
-                    <li>
-                        <p class="card-text"><a class="dropdown-item MyDDMenuLink" asp-area="" asp-controller="SP" asp-action="GetChairmanInfoBlock" asp-route-id="236" asp-route-nextyear="0">Soccer Challenge</a></p>
-                    </li>
-                    <li>
-                        <p class="card-text"><a class="dropdown-item MyDDMenuLink" asp-area="" asp-controller="SP" asp-action="GetChairmanInfoBlock" asp-route-id="270" asp-route-nextyear="0">Helping Hands</a></p>
-                    </li>
-                    <li>
-                        <p class="card-text"><a class="dropdown-item MyDDMenuLink" asp-area="" asp-controller="SP" asp-action="GetChairmanInfoBlock" asp-route-id="271" asp-route-nextyear="0">Catholic Community Services</a></p>
-                    </li>
-                    @*<li>
-                            <p class="card-text"><a class="dropdown-item MyDDMenuLink" asp-area="" asp-controller="SP" asp-action="GetChairmanInfoBlock" asp-route-id="257">One Parish One Prisoner</a></p>
-                        </li>*@
-                    <li>
-                        <p class="card-text"><a class="dropdown-item MyDDMenuLink" href="https://www.knightscommunityhospitalequipmentloanprogram.com/" target="_blank">KC Help</a></p>
-                    </li>
-                </ul>
-            </div>
-        </div>
-        <div class="card">
-            <a asp-area="" asp-controller="SP" asp-action="GetChairmanInfoBlock" asp-route-id="15" asp-route-nextyear="0"><img src="~/images/FamilyFade.png" class="card-img-top" alt="Family"></a>
-            <div class="card-body">
-                <button style="width:100%;background-color:#97a6ba" class="btn btn-secondary dropdown-toggle" type="button" id="dropdownMenuButton" data-bs-toggle="dropdown">
-                    Family In Action
-                </button>
-                <ul class="dropdown-menu" style="background-color:#97a6ba">
-                    <li>
-                        <p class="card-text"><a class="dropdown-item MyDDMenuLink" asp-area="" asp-controller="SP" asp-action="GetChairmanInfoBlock" asp-route-id="272" asp-route-nextyear="0">Food For Families</a></p>
-                    </li>
-                    <li>
-                        <p class="card-text"><a class="dropdown-item MyDDMenuLink" asp-area="" asp-controller="SP" asp-action="GetChairmanInfoBlock" asp-route-id="273" asp-route-nextyear="0">Family of the Month/Year</a></p>
-                    </li>
-                    <li>
-                        <p class="card-text"><a class="dropdown-item MyDDMenuLink" asp-area="" asp-controller="SP" asp-action="GetChairmanInfoBlock" asp-route-id="68" asp-route-nextyear="0">Keep Christ in Christmas</a></p>
-                    </li>
-                    <li>
-                        <p class="card-text"><a class="dropdown-item MyDDMenuLink" asp-area="" asp-controller="SP" asp-action="GetChairmanInfoBlock" asp-route-id="274" asp-route-nextyear="0">Family Fully Alive</a></p>
-                    </li>
-                    <li>
-                        <p class="card-text"><a class="dropdown-item MyDDMenuLink" asp-area="" asp-controller="SP" asp-action="GetChairmanInfoBlock" asp-route-id="275" asp-route-nextyear="0">Family Week</a></p>
-                    </li>
-                    <li>
-                        <p class="card-text"><a class="dropdown-item MyDDMenuLink" asp-area="" asp-controller="SP" asp-action="GetChairmanInfoBlock" asp-route-id="276" asp-route-nextyear="0">Consecration to the Holy Family</a></p>
-                    </li>
-                    <li>
-                        <p class="card-text"><a class="dropdown-item MyDDMenuLink" asp-area="" asp-controller="SP" asp-action="GetChairmanInfoBlock" asp-route-id="277" asp-route-nextyear="0">Family Prayer Night</a></p>
-                    </li>
-                    <li>
-                        <p class="card-text"><a class="dropdown-item MyDDMenuLink" asp-area="" asp-controller="SP" asp-action="GetChairmanInfoBlock" asp-route-id="278" asp-route-nextyear="0">Good Friday Family Promotion</a></p>
-                    </li>
-                </ul>
-            </div>
-        </div>
-        <div class="card">
-            <a asp-area="" asp-controller="SP" asp-action="GetChairmanInfoBlock" asp-route-id="37" asp-route-nextyear="0"><img src="/images/LifeFade.png" class="card-img-top" alt="Life"></a>
-            <div class="card-body">
-                <button style="width:100%;background-color:#dcceaf" class="btn btn-secondary dropdown-toggle" type="button" id="dropdownMenuButton" data-bs-toggle="dropdown">
-                    Life In Action
-                </button>
-                <ul class="dropdown-menu" style="background-color:#dcceaf">
-                    <li>
-                        <p class="card-text"><a class="dropdown-item MyDDMenuLink" asp-area="" asp-controller="SP" asp-action="GetChairmanInfoBlock" asp-route-id="279" asp-route-nextyear="0">Marches for Life</a></p>
-                    </li>
-                    <li>
-                        <p class="card-text"><a class="dropdown-item MyDDMenuLink" asp-area="" asp-controller="SP" asp-action="GetChairmanInfoBlock" asp-route-id="140" asp-route-nextyear="0">Special Olympics</a></p>
-                    </li>
-                    <li>
-                        <p class="card-text"><a class="dropdown-item MyDDMenuLink" href="https://columbuscharities.org/tootsieroll" target="cc-tab">Tootsie Roll Program</a></p>
-                    </li>
-                    <li>
-                        <p class="card-text"><a class="dropdown-item MyDDMenuLink" asp-area="" asp-controller="SP" asp-action="GetChairmanInfoBlock" asp-route-id="280" asp-route-nextyear="0">Ultrasound Initiative</a></p>
-                    </li>
-                    <li>
-                        <p class="card-text"><a class="dropdown-item MyDDMenuLink" asp-area="" asp-controller="SP" asp-action="GetChairmanInfoBlock" asp-route-id="281" asp-route-nextyear="0">Christian Refugee Relief</a></p>
-                    </li>
-                    <li>
-                        <p class="card-text"><a class="dropdown-item MyDDMenuLink" asp-area="" asp-controller="SP" asp-action="GetChairmanInfoBlock" asp-route-id="220" asp-route-nextyear="0">Silver Rose</a></p>
-                    </li>
-                    <li>
-                        <p class="card-text"><a class="dropdown-item MyDDMenuLink" asp-area="" asp-controller="SP" asp-action="GetChairmanInfoBlock" asp-route-id="282" asp-route-nextyear="0">Mass for People with Special Needs</a></p>
-                    </li>
-                    <li>
-                        <p class="card-text"><a class="dropdown-item MyDDMenuLink" asp-area="" asp-controller="SP" asp-action="GetChairmanInfoBlock" asp-route-id="283" asp-route-nextyear="0">Pregnancy Center Support</a></p>
-                    </li>
-                    <li>
-                        <p class="card-text"><a class="dropdown-item MyDDMenuLink" asp-area="" asp-controller="SP" asp-action="GetChairmanInfoBlock" asp-route-id="284" asp-route-nextyear="0">Novena for Life</a></p>
-                    </li>
-                    <li>
-                        <p class="card-text"><a class="dropdown-item MyDDMenuLink" asp-area="" asp-controller="SP" asp-action="GetChairmanInfoBlock" asp-route-id="285" asp-route-nextyear="0">ASAP (Aid and Support After Pregnancy)</a></p>
-                    </li>
-                    <li>
-                        <p class="card-text"><a class="dropdown-item MyDDMenuLink" href="https://columbuscharities.org/lamb-1882" target="cc-tab">L.A.M.B. 1882</a></p>
-                    </li>
-                </ul>
-            </div>
-        </div>
-    </div>
-
-
-    <div id="carouselKofC" class="carousel carousel-dark slide" data-bs-ride="carousel">
-        @*100000*@
-        <div class="carousel-indicators">
-            <button type="button" data-bs-target="#carouselExampleDark" data-bs-slide-to="0" class="active" aria-current="true" aria-label="Slide 1"></button>
-            <button type="button" data-bs-target="#carouselExampleDark" data-bs-slide-to="1" aria-label="Slide 2"></button>
-            <button type="button" data-bs-target="#carouselExampleDark" data-bs-slide-to="2" aria-label="Slide 3"></button>
-            <button type="button" data-bs-target="#carouselExampleDark" data-bs-slide-to="3" aria-label="Slide 4"></button>
-            <button type="button" data-bs-target="#carouselExampleDark" data-bs-slide-to="4" aria-label="Slide 5"></button>
-            <button type="button" data-bs-target="#carouselExampleDark" data-bs-slide-to="5" aria-label="Slide 6"></button>
-            <button type="button" data-bs-target="#carouselExampleDark" data-bs-slide-to="6" aria-label="Slide 0"></button>
-        </div>
-        <div class="carousel-inner" style="width:1150px;">
-            <div style="padding-left:120px">
+            <div style="margin-left:20px">
                 @foreach (var item in Model)
                 {
-                    if (item.Type == "SO")
+                    DateTime ANDate = DateTime.Now;
+                    if (item.Type == "AN")
                     {
-                        <div class="@Html.Raw(item.Class)" data-bs-interval="10000" style="height:350px">
-                            <div>
-                                <h5>@Html.DisplayFor(modelItem => item.FullName)</h5>
-                            </div>
-                            @{
-                                var myURL = new HtmlString(item.OID.ToString());
-                                var readMore = "  <a href='/TblWebSelfPublishes/Display/" + myURL + "'>read more</a>...";
-                                var readMoreP = "  <a href='/TblWebSelfPublishes/Display/" + myURL + "'>";
-                            }
-                            <img class="d-block img-fluid img-thumbnail" alt="First slide" style="width:200px;float:left; padding:5px" src="@Html.Raw(item.Photo)" />
-                            <div>
-
-                                @* <h5>@Html.DisplayFor(modelItem => item.OfficeDescription)</h5> *@
-                                <div>
-                                    @{
-                                        var myDataH = new HtmlString(item.Data);
-
-                                        string myDataS = myDataH.ToString();
-                                        string myDataR;
-                                        int foundPipe = myDataS.IndexOf('|');
-                                        if (foundPipe < 0)
-                                        {
-                                            myDataR = myDataS.Substring(0, 100) + "...";
-                                        }
-                                        else
-                                        {
-                                            myDataR = myDataS.Substring(0, foundPipe) + "...";
-                                        }
-                                    }
-
-                                    @Html.Raw(readMore)
-                                    @Html.Raw(myDataR)
-                                    <div style="text-align:center">
-                                        @Html.Raw(readMore)
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
+                        ANDate = item.PostedDate;
+                        <span style="font-size:small;color:lightgray">Last Updated @ANDate.ToShortDateString()</span>
+                        <hr />
+                        break;
                     }
                 }
             </div>
-        </div>
-        <button class="carousel-control-prev" type="button" data-bs-target="#carouselKofC" data-bs-slide="prev">
-            <span class="carousel-control-prev-icon" aria-hidden="true"></span>
-            <span class="visually-hidden">Previous</span>
-        </button>
-        <button class="carousel-control-next" type="button" data-bs-target="#carouselKofC" data-bs-slide="next">
-            <span class="carousel-control-next-icon" aria-hidden="true"></span>
-            <span class="visually-hidden">Next</span>
-        </button>
-    </div>
+            <div class="offcanvas-body">
+                @* Begin Of Interest Loop *@
+                @foreach (var item in Model)
+                {
+                    if (item.Type == "AN")
+                    {
 
-    <div id="Promovideo" class="ratio ratio-16x9">
-        <video controls autoplay muted loop>
-            <source src="/videos/asap-pass-the-hat-promotion.mp4" type="video/mp4"/>
-            Your web browser does not support the video tag. Please upgrade to see the ASAP "Pass the Hat" video.
-        </video>
-        <!--iframe src="https://www.youtube.com/embed/13kp6dhYFIg?si=hFj0cqceP9aZep9y" title="ASAP \" Pass the Hat\" Promotion" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen --><!-- iframe -->
-    </div>
+                        <div style="width:100%;text-align:center">
+                            @*if graphicurl is null then use title else use graphicurl*@
+                            @{
+                                if (item.GraphicURL != null)
+                                {
 
-    @* <div class="container-calendar">
-        <div class="left">
-        <div class="calendar">
-        <div class="month">
-        <i class="fas fa-angle-left prev"></i>
-        <div class="date">december 2015</div>
-        <i class="fas fa-angle-right next"></i>
+                                    var myImg = "<img src='" + item.GraphicURL + "' width='250px' />";
+                                    <div style="border:solid;border-color:blue">
+                                        <a href="@item.LinkURL" target="kofcwa-announcements">@Html.Raw(myImg)</a>
+                                    </div>
+                                }
+                                else
+                                {
+                                    <div>
+                                        <a href="@item.LinkURL" target="kofcwa-announcements">@item.Title</a>
+                                    </div>
+                                }
+
+                            }
+
+                        </div>
+                        <hr />
+                    }
+                }
+
+                @* End Of Interest Loop *@
+            </div>
         </div>
-        <div class="weekdays">
-        <div>Sun</div>
-        <div>Mon</div>
-        <div>Tue</div>
-        <div>Wed</div>
-        <div>Thu</div>
-        <div>Fri</div>
-        <div>Sat</div>
+        @* Of Interest card section *@
+        <div class="offcanvas offcanvas-start" tabindex="-1" id="OfInterestPanel" aria-labelledby="offcanvasExampleLabel">
+            <div class="offcanvas-header">
+                <h5 class="offcanvas-title" id="offcanvasExampleLabel">Of Interest</h5>
+                <button type="button" class="btn-close text-reset" data-bs-dismiss="offcanvas" aria-label="Close"></button>
+            </div>
+            <div style="margin-left:20px">
+                @foreach (var item in Model)
+                {
+                    DateTime OIDate = DateTime.Now;
+                    if (item.Type == "OI")
+                    {
+                        OIDate = item.PostedDate;
+                        <span style="font-size:small;color:lightgray">Last Updated @OIDate.ToShortDateString()</span>
+                        <hr />
+                        break;
+                    }
+
+                }
+            </div>
+            <div class="offcanvas-body" style="text-align:center">
+                @* Begin Of Interest Loop *@
+                @foreach (var item in Model)
+                {
+                    if (item.Type == "OI")
+                    {
+                        <div style="width:100%;text-align:center">
+                            @*if graphicurl is null then use title else use graphicurl*@
+                            @{
+                                if (item.GraphicURL != null)
+                                {
+
+                                    var myImg = "<img src='" + item.GraphicURL + "' width='250px' />";
+                                    <div style="border:solid;border-color:blue">
+                                        <a href="@item.LinkURL" target="kofcwa-announcements">@Html.Raw(myImg)</a>
+                                    </div>
+                                }
+                                else
+                                {
+                                    <div>
+                                        <a href="@item.LinkURL" target="kofcwa-announcements">@item.Title</a>
+                                    </div>
+                                }
+
+                            }
+
+                        </div>
+                        <hr />
+                    }
+                }
+
+                @* End Of Interest Loop *@
+            </div>
         </div>
-        <div class="days"></div>
-        <div class="goto-today">
-        <div class="goto">
-        <input type="text" placeholder="mm/yyyy" class="date-input" />
-        <button class="goto-btn">Go</button>
+        @* Announcements Button *@
+        @* <div style="position:absolute; top:250px; left:-50px;transform:rotate(90deg)">
+            style="background-color:#c592a2; border-color:black"
+            style="background-color:#c5aa92; border-color:black"
+        *@
+        <div>
+            <div>
+                <div style="float:left">
+                    <a title="Announcements" data-bs-toggle="offcanvas" href="#AnnouncementPanel" role="button" aria-controls="offcanvasExample">
+                        <img src="~/images/BullHornc.png" style="width:40px" />
+                    </a>
+                    <br />
+                    <a title="Of Interest" data-bs-toggle="offcanvas" href="#OfInterestPanel" role="button" aria-controls="offcanvasExample">
+                        <img src="~/images/LightBulbc.png" style="width:40px" />
+                    </a>
+                    <br />
+                    <a title="Facebook" href="https://www.facebook.com/KofCWA/?ref=embed_page" target="_blank">
+                        <img src="~/images/Facebook_Logo_Primary.png" style="width:40px" />
+                    </a>
+                    <br />
+                    <a title="Instagram" href="https://www.instagram.com/kofcwashington" target="_blank">
+                        <img src="~/images/Instagram_Glyph_Gradient.png" style="width:40px" />
+                    </a>
+                </div>
+            </div>
         </div>
-        <button class="today-btn">Today</button>
+        @* Of Interest Button *@
+        @* <div style="position:absolute; top:375px; left:-30px;transform:rotate(90deg)">
+            <div>
+            </a>
+            </div> *@
+        <div class="card-group">
+            <div class="card">
+                <a asp-area="" asp-controller="SP" asp-action="GetChairmanInfoBlock" asp-route-id="9" asp-route-nextyear="0"><img src="~/images/faithfade.png" class="card-img-top" alt="Faith"></a>
+                <div class="card-body">
+                    <button style="width:100%;background-color:#7fb8b9" class="btn btn-secondary dropdown-toggle" type="button" id="dropdownMenuButton" data-bs-toggle="dropdown">
+                        Faith In Action
+                    </button>
+                    <ul class="dropdown-menu" style="background-color:#7fb8b9">
+                        <li>
+                            <p class="card-text"><a class="dropdown-item MyDDMenuLink" asp-area="" asp-controller="SP" asp-action="GetChairmanInfoBlock" asp-route-id="36" asp-route-nextyear="0">RSVP (Refund Support Vocations Program)</a></p>
+                        </li>
+                        <li>
+                            <p class="card-text"><a class="dropdown-item MyDDMenuLink" asp-area="" asp-controller="SP" asp-action="GetChairmanInfoBlock" asp-route-id="287" asp-route-nextyear="0">Pennies for Heaven</a></p>
+                        </li>
+                        <li>
+                            <p class="card-text"><a class="dropdown-item MyDDMenuLink" asp-area="" asp-controller="SP" asp-action="GetChairmanInfoBlock" asp-route-id="205" asp-route-nextyear="0">Into the Breach</a></p>
+                        </li>
+                        <li>
+                            <p class="card-text"><a class="dropdown-item MyDDMenuLink" asp-area="" asp-controller="SP" asp-action="GetChairmanInfoBlock" asp-route-id="166" asp-route-nextyear="0">Marian Icon Prayer Program</a></p>
+                        </li>
+                        <li>
+                            <p class="card-text"><a class="dropdown-item MyDDMenuLink" asp-area="" asp-controller="SP" asp-action="GetChairmanInfoBlock" asp-route-id="207" asp-route-nextyear="0">Building the Domestic Church Kiosk</a></p>
+                        </li>
+                        <li>
+                            <p class="card-text"><a class="dropdown-item MyDDMenuLink" asp-area="" asp-controller="SP" asp-action="GetChairmanInfoBlock" asp-route-id="208" asp-route-nextyear="0">Rosary Program</a></p>
+                        </li>
+                        <li>
+                            <p class="card-text"><a class="dropdown-item MyDDMenuLink" asp-area="" asp-controller="SP" asp-action="GetChairmanInfoBlock" asp-route-id="210" asp-route-nextyear="0">Spiritual Reflection</a></p>
+                        </li>
+                        <li>
+                            <p class="card-text"><a class="dropdown-item MyDDMenuLink" asp-area="" asp-controller="SP" asp-action="GetChairmanInfoBlock" asp-route-id="267" asp-route-nextyear="0">Holy Hour</a></p>
+                        </li>
+                        <li>
+                            <p class="card-text"><a class="dropdown-item MyDDMenuLink" asp-area="" asp-controller="SP" asp-action="GetChairmanInfoBlock" asp-route-id="266" asp-route-nextyear="0">Sacramental Gifts</a></p>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+            <div class="card">
+                <a asp-area="" asp-controller="SP" asp-action="GetChairmanInfoBlock" asp-route-id="11" asp-route-nextyear="0"><img src="~/images/CommunityFade.png" class="card-img-top" alt="Community"></a>
+                <div class="card-body">
+                    <button style="width:100%;background-color:#c59692" class="btn btn-secondary dropdown-toggle" type="button" id="dropdownMenuButton" data-bs-toggle="dropdown">
+                        Community In Action
+                    </button>
+                    <ul class="dropdown-menu" style="background-color:#c59692">
+                        <li>
+                            <p class="card-text"><a class="dropdown-item MyDDMenuLink" asp-area="" asp-controller="SP" asp-action="GetChairmanInfoBlock" asp-route-id="231" asp-route-nextyear="0">Coats for Kids</a></p>
+                        </li>
+                        <li>
+                            <p class="card-text"><a class="dropdown-item MyDDMenuLink" asp-area="" asp-controller="SP" asp-action="GetChairmanInfoBlock" asp-route-id="172" asp-route-nextyear="0">Global Wheelchair Mission</a></p>
+                        </li>
+                        <li>
+                            <p class="card-text"><a class="dropdown-item MyDDMenuLink" asp-area="" asp-controller="SP" asp-action="GetChairmanInfoBlock" asp-route-id="221" asp-route-nextyear="0">Habitat For Humanity</a></p>
+                        </li>
+                        <li>
+                            <p class="card-text"><a class="dropdown-item MyDDMenuLink" asp-area="" asp-controller="SP" asp-action="GetChairmanInfoBlock" asp-route-id="269" asp-route-nextyear="0">Disaster Prepardness</a></p>
+                        </li>
+                        <li>
+                            <p class="card-text"><a class="dropdown-item MyDDMenuLink" asp-area="" asp-controller="SP" asp-action="GetChairmanInfoBlock" asp-route-id="235" asp-route-nextyear="0">Free Throw Championship</a></p>
+                        </li>
+                        <li>
+                            <p class="card-text"><a class="dropdown-item MyDDMenuLink" asp-area="" asp-controller="SP" asp-action="GetChairmanInfoBlock" asp-route-id="222" asp-route-nextyear="0">Catholic Citizenship Essay Contest</a></p>
+                        </li>
+                        <li>
+                            <p class="card-text"><a class="dropdown-item MyDDMenuLink" asp-area="" asp-controller="SP" asp-action="GetChairmanInfoBlock" asp-route-id="236" asp-route-nextyear="0">Soccer Challenge</a></p>
+                        </li>
+                        <li>
+                            <p class="card-text"><a class="dropdown-item MyDDMenuLink" asp-area="" asp-controller="SP" asp-action="GetChairmanInfoBlock" asp-route-id="270" asp-route-nextyear="0">Helping Hands</a></p>
+                        </li>
+                        <li>
+                            <p class="card-text"><a class="dropdown-item MyDDMenuLink" asp-area="" asp-controller="SP" asp-action="GetChairmanInfoBlock" asp-route-id="271" asp-route-nextyear="0">Catholic Community Services</a></p>
+                        </li>
+                        @*<li>
+                                <p class="card-text"><a class="dropdown-item MyDDMenuLink" asp-area="" asp-controller="SP" asp-action="GetChairmanInfoBlock" asp-route-id="257">One Parish One Prisoner</a></p>
+                            </li>*@
+                        <li>
+                            <p class="card-text"><a class="dropdown-item MyDDMenuLink" href="https://www.knightscommunityhospitalequipmentloanprogram.com/" target="_blank">KC Help</a></p>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+            <div class="card">
+                <a asp-area="" asp-controller="SP" asp-action="GetChairmanInfoBlock" asp-route-id="15" asp-route-nextyear="0"><img src="~/images/FamilyFade.png" class="card-img-top" alt="Family"></a>
+                <div class="card-body">
+                    <button style="width:100%;background-color:#97a6ba" class="btn btn-secondary dropdown-toggle" type="button" id="dropdownMenuButton" data-bs-toggle="dropdown">
+                        Family In Action
+                    </button>
+                    <ul class="dropdown-menu" style="background-color:#97a6ba">
+                        <li>
+                            <p class="card-text"><a class="dropdown-item MyDDMenuLink" asp-area="" asp-controller="SP" asp-action="GetChairmanInfoBlock" asp-route-id="272" asp-route-nextyear="0">Food For Families</a></p>
+                        </li>
+                        <li>
+                            <p class="card-text"><a class="dropdown-item MyDDMenuLink" asp-area="" asp-controller="SP" asp-action="GetChairmanInfoBlock" asp-route-id="273" asp-route-nextyear="0">Family of the Month/Year</a></p>
+                        </li>
+                        <li>
+                            <p class="card-text"><a class="dropdown-item MyDDMenuLink" asp-area="" asp-controller="SP" asp-action="GetChairmanInfoBlock" asp-route-id="68" asp-route-nextyear="0">Keep Christ in Christmas</a></p>
+                        </li>
+                        <li>
+                            <p class="card-text"><a class="dropdown-item MyDDMenuLink" asp-area="" asp-controller="SP" asp-action="GetChairmanInfoBlock" asp-route-id="274" asp-route-nextyear="0">Family Fully Alive</a></p>
+                        </li>
+                        <li>
+                            <p class="card-text"><a class="dropdown-item MyDDMenuLink" asp-area="" asp-controller="SP" asp-action="GetChairmanInfoBlock" asp-route-id="275" asp-route-nextyear="0">Family Week</a></p>
+                        </li>
+                        <li>
+                            <p class="card-text"><a class="dropdown-item MyDDMenuLink" asp-area="" asp-controller="SP" asp-action="GetChairmanInfoBlock" asp-route-id="276" asp-route-nextyear="0">Consecration to the Holy Family</a></p>
+                        </li>
+                        <li>
+                            <p class="card-text"><a class="dropdown-item MyDDMenuLink" asp-area="" asp-controller="SP" asp-action="GetChairmanInfoBlock" asp-route-id="277" asp-route-nextyear="0">Family Prayer Night</a></p>
+                        </li>
+                        <li>
+                            <p class="card-text"><a class="dropdown-item MyDDMenuLink" asp-area="" asp-controller="SP" asp-action="GetChairmanInfoBlock" asp-route-id="278" asp-route-nextyear="0">Good Friday Family Promotion</a></p>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+            <div class="card">
+                <a asp-area="" asp-controller="SP" asp-action="GetChairmanInfoBlock" asp-route-id="37" asp-route-nextyear="0"><img src="/images/LifeFade.png" class="card-img-top" alt="Life"></a>
+                <div class="card-body">
+                    <button style="width:100%;background-color:#dcceaf" class="btn btn-secondary dropdown-toggle" type="button" id="dropdownMenuButton" data-bs-toggle="dropdown">
+                        Life In Action
+                    </button>
+                    <ul class="dropdown-menu" style="background-color:#dcceaf">
+                        <li>
+                            <p class="card-text"><a class="dropdown-item MyDDMenuLink" asp-area="" asp-controller="SP" asp-action="GetChairmanInfoBlock" asp-route-id="279" asp-route-nextyear="0">Marches for Life</a></p>
+                        </li>
+                        <li>
+                            <p class="card-text"><a class="dropdown-item MyDDMenuLink" asp-area="" asp-controller="SP" asp-action="GetChairmanInfoBlock" asp-route-id="140" asp-route-nextyear="0">Special Olympics</a></p>
+                        </li>
+                        <li>
+                            <p class="card-text"><a class="dropdown-item MyDDMenuLink" href="https://columbuscharities.org/tootsieroll" target="cc-tab">Tootsie Roll Program</a></p>
+                        </li>
+                        <li>
+                            <p class="card-text"><a class="dropdown-item MyDDMenuLink" asp-area="" asp-controller="SP" asp-action="GetChairmanInfoBlock" asp-route-id="280" asp-route-nextyear="0">Ultrasound Initiative</a></p>
+                        </li>
+                        <li>
+                            <p class="card-text"><a class="dropdown-item MyDDMenuLink" asp-area="" asp-controller="SP" asp-action="GetChairmanInfoBlock" asp-route-id="281" asp-route-nextyear="0">Christian Refugee Relief</a></p>
+                        </li>
+                        <li>
+                            <p class="card-text"><a class="dropdown-item MyDDMenuLink" asp-area="" asp-controller="SP" asp-action="GetChairmanInfoBlock" asp-route-id="220" asp-route-nextyear="0">Silver Rose</a></p>
+                        </li>
+                        <li>
+                            <p class="card-text"><a class="dropdown-item MyDDMenuLink" asp-area="" asp-controller="SP" asp-action="GetChairmanInfoBlock" asp-route-id="282" asp-route-nextyear="0">Mass for People with Special Needs</a></p>
+                        </li>
+                        <li>
+                            <p class="card-text"><a class="dropdown-item MyDDMenuLink" asp-area="" asp-controller="SP" asp-action="GetChairmanInfoBlock" asp-route-id="283" asp-route-nextyear="0">Pregnancy Center Support</a></p>
+                        </li>
+                        <li>
+                            <p class="card-text"><a class="dropdown-item MyDDMenuLink" asp-area="" asp-controller="SP" asp-action="GetChairmanInfoBlock" asp-route-id="284" asp-route-nextyear="0">Novena for Life</a></p>
+                        </li>
+                        <li>
+                            <p class="card-text"><a class="dropdown-item MyDDMenuLink" asp-area="" asp-controller="SP" asp-action="GetChairmanInfoBlock" asp-route-id="285" asp-route-nextyear="0">ASAP (Aid and Support After Pregnancy)</a></p>
+                        </li>
+                        <li>
+                            <p class="card-text"><a class="dropdown-item MyDDMenuLink" href="https://columbuscharities.org/lamb-1882" target="cc-tab">L.A.M.B. 1882</a></p>
+                        </li>
+                    </ul>
+                </div>
+            </div>
         </div>
+
+
+        <div id="carouselKofC" class="carousel carousel-dark slide" data-bs-ride="carousel">
+            @*100000*@
+            <div class="carousel-indicators">
+                <button type="button" data-bs-target="#carouselExampleDark" data-bs-slide-to="0" class="active" aria-current="true" aria-label="Slide 1"></button>
+                <button type="button" data-bs-target="#carouselExampleDark" data-bs-slide-to="1" aria-label="Slide 2"></button>
+                <button type="button" data-bs-target="#carouselExampleDark" data-bs-slide-to="2" aria-label="Slide 3"></button>
+                <button type="button" data-bs-target="#carouselExampleDark" data-bs-slide-to="3" aria-label="Slide 4"></button>
+                <button type="button" data-bs-target="#carouselExampleDark" data-bs-slide-to="4" aria-label="Slide 5"></button>
+                <button type="button" data-bs-target="#carouselExampleDark" data-bs-slide-to="5" aria-label="Slide 6"></button>
+                <button type="button" data-bs-target="#carouselExampleDark" data-bs-slide-to="6" aria-label="Slide 0"></button>
+            </div>
+            <div class="carousel-inner" style="width:1150px;">
+                <div style="padding-left:120px">
+                    @foreach (var item in Model)
+                    {
+                        if (item.Type == "SO")
+                        {
+                            <div class="@Html.Raw(item.Class)" data-bs-interval="10000" style="height:350px">
+                                <div>
+                                    <h5>@Html.DisplayFor(modelItem => item.FullName)</h5>
+                                </div>
+                                @{
+                                    var myURL = new HtmlString(item.OID.ToString());
+                                    var readMore = "  <a href='/TblWebSelfPublishes/Display/" + myURL + "'>read more</a>...";
+                                    var readMoreP = "  <a href='/TblWebSelfPublishes/Display/" + myURL + "'>";
+                                }
+                                <img class="d-block img-fluid img-thumbnail" alt="First slide" style="width:200px;float:left; padding:5px" src="@Html.Raw(item.Photo)" />
+                                <div>
+
+                                    @* <h5>@Html.DisplayFor(modelItem => item.OfficeDescription)</h5> *@
+                                    <div>
+                                        @{
+                                            var myDataH = new HtmlString(item.Data);
+
+                                            string myDataS = myDataH.ToString();
+                                            string myDataR;
+                                            int foundPipe = myDataS.IndexOf('|');
+                                            if (foundPipe < 0)
+                                            {
+                                                myDataR = myDataS.Substring(0, 100) + "...";
+                                            }
+                                            else
+                                            {
+                                                myDataR = myDataS.Substring(0, foundPipe) + "...";
+                                            }
+                                        }
+
+                                        @Html.Raw(readMore)
+                                        @Html.Raw(myDataR)
+                                        <div style="text-align:center">
+                                            @Html.Raw(readMore)
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        }
+                    }
+                </div>
+            </div>
+            <button class="carousel-control-prev" type="button" data-bs-target="#carouselKofC" data-bs-slide="prev">
+                <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+                <span class="visually-hidden">Previous</span>
+            </button>
+            <button class="carousel-control-next" type="button" data-bs-target="#carouselKofC" data-bs-slide="next">
+                <span class="carousel-control-next-icon" aria-hidden="true"></span>
+                <span class="visually-hidden">Next</span>
+            </button>
         </div>
+
+        <div id="Promovideo" class="ratio ratio-16x9">
+            <video controls autoplay muted loop>
+                <source src="/videos/asap-pass-the-hat-promotion.mp4" type="video/mp4" />
+                Your web browser does not support the video tag. Please upgrade to see the ASAP "Pass the Hat" video.
+            </video>
+            <!--iframe src="https://www.youtube.com/embed/13kp6dhYFIg?si=hFj0cqceP9aZep9y" title="ASAP \" Pass the Hat\" Promotion" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen --><!-- iframe -->
         </div>
-        <div class="right">
-        <div class="today-date">
-        <div class="event-day">wed</div>
-        <div class="event-date">12th december 2022</div>
-        </div>
-        <div class="events"></div>
-        <div class="add-event-wrapper">
-        <div class="add-event-header">
-        <div class="title">Add Event</div>
-        <i class="fas fa-times close"></i>
-        </div>
-        <div class="add-event-body">
-        <div class="add-event-input">
-        <input type="text" placeholder="Event Name" class="event-name" />
-        </div>
-        <div class="add-event-input">
-        <input type="text"
-        placeholder="Event Time From"
-        class="event-time-from" />
-        </div>
-        <div class="add-event-input">
-        <input type="text"
-        placeholder="Event Time To"
-        class="event-time-to" />
-        </div>
-        </div>
-        <div class="add-event-footer">
-        <button class="add-event-btn">Add Event</button>
-        </div>
-        </div>
-        </div>
-        <button class="add-event">
-        <i class="fas fa-plus"></i>
-        </button>
-        <script src="~/js/script.js"></script>
-        </div> *@
-</body>
+
+        @* <div class="container-calendar">
+            <div class="left">
+            <div class="calendar">
+            <div class="month">
+            <i class="fas fa-angle-left prev"></i>
+            <div class="date">december 2015</div>
+            <i class="fas fa-angle-right next"></i>
+            </div>
+            <div class="weekdays">
+            <div>Sun</div>
+            <div>Mon</div>
+            <div>Tue</div>
+            <div>Wed</div>
+            <div>Thu</div>
+            <div>Fri</div>
+            <div>Sat</div>
+            </div>
+            <div class="days"></div>
+            <div class="goto-today">
+            <div class="goto">
+            <input type="text" placeholder="mm/yyyy" class="date-input" />
+            <button class="goto-btn">Go</button>
+            </div>
+            <button class="today-btn">Today</button>
+            </div>
+            </div>
+            </div>
+            <div class="right">
+            <div class="today-date">
+            <div class="event-day">wed</div>
+            <div class="event-date">12th december 2022</div>
+            </div>
+            <div class="events"></div>
+            <div class="add-event-wrapper">
+            <div class="add-event-header">
+            <div class="title">Add Event</div>
+            <i class="fas fa-times close"></i>
+            </div>
+            <div class="add-event-body">
+            <div class="add-event-input">
+            <input type="text" placeholder="Event Name" class="event-name" />
+            </div>
+            <div class="add-event-input">
+            <input type="text"
+            placeholder="Event Time From"
+            class="event-time-from" />
+            </div>
+            <div class="add-event-input">
+            <input type="text"
+            placeholder="Event Time To"
+            class="event-time-to" />
+            </div>
+            </div>
+            <div class="add-event-footer">
+            <button class="add-event-btn">Add Event</button>
+            </div>
+            </div>
+            </div>
+            <button class="add-event">
+            <i class="fas fa-plus"></i>
+            </button>
+            <script src="~/js/script.js"></script>
+            </div> *@
+    </body>
 </html>
