@@ -11,8 +11,13 @@
 
 </head>
 <body>
-
-
+    @{ 
+        var hasCMOActivity = Model.Any(m => m.Type == "CO");
+    }
+    @if (hasCMOActivity)
+            {
+                <span style="color:white;background-color:red">PENDING CMO MAINTENANCE</span>
+            }
 
 
 
