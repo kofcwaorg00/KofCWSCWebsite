@@ -83,6 +83,7 @@ public partial class ApplicationDbContext : DbContext
     public virtual DbSet<CvnLocation> TblCvnMasLocations { get; set; }
     public virtual DbSet<CvnMpd> TblCvnTrxMpds { get; set; }
     public virtual DbSet<MemberSuspension> TblSysMasMemberSuspensions { get; set; }
+    public virtual DbSet<LogCorrMemberOffice> TblLogCorrMemberOffices { get; set; }
     protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
 
     {
@@ -658,6 +659,18 @@ public partial class ApplicationDbContext : DbContext
 
             entity.Property(e => e.KofCid).HasColumnName("KofCId");
         });
+        modelBuilder.Entity<LogCorrMemberOffice>(entity =>
+        {
+            entity.ToTable("tblLOG_CorrMemberOffice");
+
+            entity.Property(e => e.Id).HasColumnName("ID");
+            entity.Property(e => e.ChangeDate).HasColumnType("datetime");
+            entity.Property(e => e.ChangeType).HasMaxLength(10);
+            entity.Property(e => e.MemberId).HasColumnName("MemberID");
+            entity.Property(e => e.OfficeId).HasColumnName("OfficeID");
+        });
+
+
 
         OnModelCreatingPartial(modelBuilder);
     }

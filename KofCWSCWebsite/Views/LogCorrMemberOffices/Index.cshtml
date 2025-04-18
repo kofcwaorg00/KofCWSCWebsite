@@ -1,0 +1,104 @@
+﻿@model IEnumerable<LogCorrMemberOfficeVM>
+
+@{
+    ViewData["Title"] = "Index";
+}
+
+<h1>CMO Pending Changes</h1>
+
+@if (!(Model != null && Model.Any()))
+{
+    <p>No records found</p>
+}
+else
+{
+    <table class="table">
+        <thead>
+            <tr>
+                <th></th>
+                <th>
+                    @Html.DisplayNameFor(model => model.ChangeType)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.ChangeDate)
+                </th>
+                @*<th>
+                    @Html.DisplayNameFor(model => model.MemberId)
+                </th>*@
+                <th>
+                    @Html.DisplayNameFor(model => model.OfficeId)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.OfficeDescription)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.FirstName)
+                </th>
+
+                <th>
+                    @Html.DisplayNameFor(model => model.LastName)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.KofCID)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.Year)
+                </th>
+                @*<th>
+                    @Html.DisplayNameFor(model => model.Processed)
+                </th>*@
+                @*<th></th>*@
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var item in Model)
+            {
+                <tr>
+                    <td>
+                        <form asp-controller="LogCorrMemberOffices" asp-action="UpdateProcessFlag" asp-route-id="@item.Id" method="get">
+                            <button type="submit" class="btn btn-sm btn-primary" title="Toggle Process.">
+                                Process
+                            </button>
+                        </form>
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.ChangeType)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.ChangeDate)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.MemberId)
+                    </td>
+                    @*<td>
+                        @Html.DisplayFor(modelItem => item.OfficeId)
+                    </td>*@
+                    <td>
+                        @Html.DisplayFor(modelItem => item.OfficeDescription)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.FirstName)
+                    </td>
+
+                    <td>
+                        @Html.DisplayFor(modelItem => item.LastName)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.KofCID)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Year)
+                    </td>
+                    @*<td>
+                        @Html.DisplayFor(modelItem => item.Processed)
+                    </td>*@
+                    @*<td>
+            <a asp-action="Edit" asp-route-id="@item.Id">Edit</a> |
+            <a asp-action="Details" asp-route-id="@item.Id">Details</a> |
+            <a asp-action="Delete" asp-route-id="@item.Id">Delete</a>
+        </td>*@
+                </tr>
+            }
+        </tbody>
+    </table>
+}
