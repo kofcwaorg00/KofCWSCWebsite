@@ -17,12 +17,55 @@ using System.Diagnostics;
 using System.Text.RegularExpressions;
 using Microsoft.IdentityModel.Tokens;
 using KofCWSCWebsite.Models;
+using Microsoft.AspNetCore.Mvc;
+using System.Security.Claims;
+using KofCWSCWebsite.Areas.Identity.Data;
 
 
 namespace KofCWSCWebsite.Services
 {
     public class Utils
     {
+        public async static Task<T?> GetUserProp<T>(ClaimsPrincipal cpuser, Microsoft.AspNetCore.Identity.UserManager<KofCUser> _userManager,string property)
+        {
+            // Step 1: Retrieve the user ID from the ClaimsPrincipal
+            var userId = cpuser.FindFirstValue(ClaimTypes.NameIdentifier);
+            if (userId == null)
+            {
+                return default; // Return null if no user ID is found
+            }
+
+            // Step 2: Use UserManager to fetch the user by ID
+            var user = await _userManager.FindByIdAsync(userId);
+            if (user == null)
+            {
+                return default; // Return null if user is not found
+            }
+
+            // Step 3: Use reflection to get the property value
+            var propertyInfo = typeof(KofCUser).GetProperty(property);
+            if (propertyInfo == null)
+            {
+                return default; // Return null if the property does not exist
+            }
+
+            var value = propertyInfo.GetValue(user);
+
+            // Step 4: Ensure the value can be cast to the desired type
+            if (value is T typedValue)
+            {
+                return typedValue;
+            }
+
+            return default; // Return null if casting fails
+        }
+
+        //public async static Task<T?> GetUserProp<T>(ClaimsPrincipal cpuser, Microsoft.AspNetCore.Identity.UserManager<KofCUser> _userManager,string property)
+        //{
+        //    var userId = cpuser.Identity.Name;
+        //    var user = await _userManager.FindByIdAsync(userId);
+        //    return user.KofCMemberID;
+        //}
         public static Attachment ConvertToNetMailAttachment(IFormFile formFile)
         {
             if (formFile == null)

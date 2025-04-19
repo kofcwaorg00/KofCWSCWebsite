@@ -20,4 +20,7 @@ public partial class TblCorrMemberOffice
     public int? Council { get; set; }
     public int? District { get; set; }
     public int? Assembly { get; set; }
+    public DateTime? Updated { get; set; }
+    public int? UpdatedBy { get; set; }
+
 }

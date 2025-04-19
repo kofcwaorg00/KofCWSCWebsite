@@ -7,11 +7,14 @@ using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using KofCWSCWebsite.Models;
 using KofCWSCWebsite.Data;
+using KofCWSCWebsite.Services;
 using Serilog;
 using Newtonsoft.Json;
 using Microsoft.EntityFrameworkCore.Metadata.Internal;
 using com.sun.xml.@internal.bind.v2.model.core;
 using ikvm.runtime;
+using KofCWSCWebsite.Areas.Identity.Data;
+using Microsoft.AspNetCore.Identity;
 
 namespace KofCWSCWebsite.Controllers
 {
@@ -20,14 +23,18 @@ namespace KofCWSCWebsite.Controllers
         //private readonly ApplicationDbContext _context;
         private DataSetService _dataSetService;
         private ApiHelper _apiHelper;
+        private readonly UserManager<KofCUser> _userManager;
+
+
         //*********************************************************************************
         // 8/25/2024 Tim Philomeno
         // NOTE: the API equivelent is just MemberOffices
         //*********************************************************************************
-        public TblCorrMemberOfficesController(DataSetService dataSetService, ApiHelper apiHelper)
+        public TblCorrMemberOfficesController(DataSetService dataSetService, ApiHelper apiHelper,UserManager<KofCUser> userManager)
         {
             _dataSetService = dataSetService;
             _apiHelper = apiHelper; 
+            _userManager = userManager;
         }
 
 
@@ -197,13 +204,11 @@ namespace KofCWSCWebsite.Controllers
         {
             if (ModelState.IsValid)
             {
-                Uri myURI = new(_dataSetService.GetAPIBaseAddress() + "/MemberOffice");
-                using (var client = new HttpClient())
-                {
-                    client.BaseAddress = myURI;
-                    var response = await client.PostAsJsonAsync(myURI, tblCorrMemberOffice);
-                }
-                
+                tblCorrMemberOffice.Updated = DateTime.Now;
+                var userId = User.Identity.Name;
+                var user = await _userManager.FindByIdAsync(userId);
+                tblCorrMemberOffice.UpdatedBy = await Utils.GetUserProp<int>(User, _userManager, "KofCMemberID");
+                var results = await _apiHelper.PostAsync<TblCorrMemberOffice, TblCorrMemberOffice>("MemberOffice",tblCorrMemberOffice);
             }
             return RedirectToAction(nameof(Index), new { id = tblCorrMemberOffice.MemberId });
             //return View(tblCorrMemberOffice);
