@@ -13,12 +13,10 @@ namespace KofCWSCWebsite.Controllers
 {
     public class LogCorrMemberOfficesController : Controller
     {
-        //private readonly ApplicationDbContext _context;
         private readonly ApiHelper _apiHelper;
 
         public LogCorrMemberOfficesController(ApplicationDbContext context,ApiHelper apiHelper)
         {
-            //_context = context;
             _apiHelper = apiHelper;
         }
 
