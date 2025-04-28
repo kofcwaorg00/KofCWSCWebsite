@@ -1,7 +1,7 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
-<Report ScriptLanguage="CSharp" ReportInfo.Created="11/12/2024 09:20:45" ReportInfo.Modified="03/20/2025 15:27:37" ReportInfo.CreatorVersion="2024.1.3.0">
+<Report ScriptLanguage="CSharp" ReportInfo.Created="11/12/2024 09:20:45" ReportInfo.Modified="04/28/2025 06:11:23" ReportInfo.CreatorVersion="2024.1.3.0">
   <Dictionary>
-    <JsonDataSourceConnection Name="GetRollCallDDs" ConnectionString="rijcmlqbJsCNDUWD8zs7Fjc+Sa5ClnDCYwA067z0stgnWcP4y/j8b4MnJb5TGrjpdYSTqwvwINtpKiIThh5CkGIr08t4YZr28lATOkNjw2jfygCbqpL7TtBGtX/6G8D420b9tAAyEQOKGrL0awnENBpjumDpYJYyXtavdKgImpMrOhGrOszc5OttiNporrqRFGnIlfvsFOXRR5qFBH9udDruL9JzPfRrtIvBO9RlUN7qyDBIdgAPqw0cRPITcHxZuRSYJ2+stWRhgEW/4I2XyLDcW3i30U7qHm/4th8AnTUowqIO+BLW79kyo00IgmfQY0ulSrFvWiyaPtyWbaaXQ2yeG8s4dPEDdyf/+uGeHY/0Oszyf0U3fnSzstXnWjxx26HwIpDGR5ylum1iFiIk80++cGM4vbGzncuusiweiS1ObJT8LE=">
+    <JsonDataSourceConnection Name="GetRollCallDDs" ConnectionString="rijcmlqbJsCNDUWD8zs7Fjc+Sa5ClnDCYwA067z0stgnWcP4y/j8b4MnJb5TGrjpdYSTqwvwINtpKiIThh5CkGIr08t4YZr28lATOkNjw2jfygCbqpL7TtBGtX/6G8D420b9tAAyEQOKGrL0awnENBpjumDpYJYyXtavdKgImpMrOhGrOszc5OttiNporrqRFGnIlfvsFOXRR5qFBH9udDruL9JzPfRrtIvBO9RlUN7qyDBIdgAPqw0cRPITcHxZuRSYJ2+stWRhgEW/4I2XyLDcW3i30U7qHm/4th8AnTUowqIO+BLW79kyo00IgmfQY0ulSrFvWiyaPtyWbaaXQ2yeG8s4dPEDdyf/+uGeHY/0Oszyf0U3fnSzstXnWjxx26HwIpDGR5ylum1iFiIk80++cGM4vPxc8NH6/Kw/+cF2oWWFV8=">
       <JsonTableDataSource Name="JSON1" Alias="RollCallDDs" DataType="FastReport.Utils.Json.JsonArray" Enabled="true" TableName="JSON">
         <Column Name="index" DataType="System.Int32"/>
         <Column Name="item" DataType="FastReport.JsonBase">
@@ -15,7 +15,7 @@
         <Column Name="array" DataType="FastReport.JsonBase"/>
       </JsonTableDataSource>
     </JsonDataSourceConnection>
-    <JsonDataSourceConnection Name="GetRollCallDelegates" ConnectionString="rijcmlqbJsCNDUWD8zs7Fjc+Sa5ClnDCYwA067z0stgnWcP4y9GKqDVNMAg0aKIfCqmhrls5x/qc2utrZV4Crbwg9rVHR6HfnA/N/MvHc9H3/7XS5v8/27pONBPTXEuYtN+G3A9MwWtO9d/jV+hLlAOP/kwisiqCdxL7Mwlq1VySLpJecVZB+kBnrvCxjDka8R7Xf7v9L9EoeEGYBR9tHJjZjB93pN6OB1IqGywgc+zdVkZ/DyGB8tSQpGo8QWKVlbVMIWSzy2a7zxnMgbog0GNBuDDCx9d4rGPxP49lhHERbH9a9uuz7xOaAX62aisO/ri4gRm+E++g6+JPydnYHtHRQuz3NZZlrON9sm6R64FDNWp6DGh9LbvUjWEFi3wMhvobIqp/P8Xw/r3pKolbLZ+50ouB2j6s97DEPWn9XPjQZK3peTfC2Wmr1yG4Vk7BHw902601/3l3v4ZQw7XXoRzifqVJkM2lwo2skKuHwWeYRTGwJo=">
+    <JsonDataSourceConnection Name="GetRollCallDelegates" ConnectionString="rijcmlqbJsCNDUWD8zs7Fjc+Sa5ClnDCYwA067z0stgnWcP4y9GKqDVNMAg0aKIfCqmhrls5x/qc2utrZV4Crbwg9rVHR6HfnA/N/MvHc9H3/7XS5v8/27pONBPTXEuYtN+G3A9MwWtO9d/jV+hLlAOP/kwisiqCdxL7Mwlq1VySLpJecVZB+kBnrvCxjDka8R7Xf7v9L9EoeEGYBR9tHJjZjB93pN6OB1IqGywgc+zdVkZ/DyGB8tSQpGo8QWKVlbVMIWSzy2a7zxnMgbog0GNBuDDCx9d4rGPxP49lhHERbH9a9uuz7xOaAX62aisO/ri4gRm+E++g6+JPydnYHtHRQuz3NZZlrON9sm6R64FDNWp6DGh9LbvUjWEFi3wMhvobIqp/P8Xw/r3pKolbLZ+50ouB2j6s97DEPWn9XPjQZK3peTfC2Wmr1yG4Vk7BHw902601/3l3v4ZQw7XXoRzifqVJjlrMpiRgQj9THexbp4ONNY=">
       <JsonTableDataSource Name="JSON2" Alias="RollCallDelegates" DataType="FastReport.Utils.Json.JsonArray" Enabled="true" TableName="JSON">
         <Column Name="index" DataType="System.Int32"/>
         <Column Name="item" DataType="FastReport.JsonBase">
@@ -30,7 +30,7 @@
         <Column Name="array" DataType="FastReport.JsonBase"/>
       </JsonTableDataSource>
     </JsonDataSourceConnection>
-    <JsonDataSourceConnection Name="GetRollCallDistricts" ConnectionString="rijcmlqbJsCNDUWD8zs7Fjc+Sa5ClnDCYwA067z0stgnWcP4y+rkRA2bsTPLEF5ZNUTdaTDN7uNzwmlTxbcEZDC9dgRkQ3txjahx2kG3dDhDNl9/MpPTCgtWbXNfTQCH5Nc1I6C08B/s6qs29IOz0TNxBvo5pb8ZrO09VzIsiqEfyBxeYGKgwkK+nYYISTQBDHQoxlpnIYdN3YVezv+agr5sh92R2CE8qcXU1tkOcfevUmPgu7z6D6fnTfIqVTZ2MP6MI2YknTcdXF5W/yhxvLCMrilY0pGASf25o9LHm04mFaW6gyT10soAXSS39yjLpFmlQhcbERJZuLIC3Ks0kRGjKljd8rZsixL2H/zfW6Gd7ELX4Tp9pktFyeBaIiCDcjMhyExpwUGoqzlWzhxqDdOvlhOdxzWs/VSROL67Of90zAejUs9QdUzuffZIgUyEgBkb6YC92rojVsiDEBVxzsRjCQ4fbOrMGL+p6xecYzRLMQrY54=">
+    <JsonDataSourceConnection Name="GetRollCallDistricts" ConnectionString="rijcmlqbJsCNDUWD8zs7Fjc+Sa5ClnDCYwA067z0stgnWcP4y+rkRA2bsTPLEF5ZNUTdaTDN7uNzwmlTxbcEZDC9dgRkQ3txjahx2kG3dDhDNl9/MpPTCgtWbXNfTQCH5Nc1I6C08B/s6qs29IOz0TNxBvo5pb8ZrO09VzIsiqEfyBxeYGKgwkK+nYYISTQBDHQoxlpnIYdN3YVezv+agr5sh92R2CE8qcXU1tkOcfevUmPgu7z6D6fnTfIqVTZ2MP6MI2YknTcdXF5W/yhxvLCMrilY0pGASf25o9LHm04mFaW6gyT10soAXSS39yjLpFmlQhcbERJZuLIC3Ks0kRGjKljd8rZsixL2H/zfW6Gd7ELX4Tp9pktFyeBaIiCDcjMhyExpwUGoqzlWzhxqDdOvlhOdxzWs/VSROL67Of90zAejUs9QdUzuffZIgUyEgBkb6YC92rojVsiDEBVxzsRjCQ4fV/yde44pLmf5M60jyvtmOs=">
       <JsonTableDataSource Name="JSON" Alias="RollCallDistricts" DataType="FastReport.Utils.Json.JsonArray" Enabled="true" TableName="JSON">
         <Column Name="index" DataType="System.Int32"/>
         <Column Name="item" DataType="FastReport.JsonBase">
@@ -46,7 +46,7 @@
         <Column Name="DayTitle" DataType="System.Int32" PropName="Column" Calculated="true" Expression="&quot;DISTRICT No.&quot; + [RollCallDistricts.item.district]+&quot;  ROLL CALL - Day &quot;+[RollCallDistricts.item.day]"/>
       </JsonTableDataSource>
     </JsonDataSourceConnection>
-    <JsonDataSourceConnection Name="GetRollCallOthers" ConnectionString="rijcmlqbJsCNDUWD8zs7Fjc+Sa5ClnDCYwA067z0stgnWcP4y8K8a2aLwnrW4MNBpMgp0+KR+EqCkNgsEI/lieESh8mCDgjlzEGEqH3/16tCRE0h43j/D5crszA2UmE4tUCFRJZXMyK6hh12iDkeWa51RizyAEGGyMAsCsM9s+MToYic0nPo+an/mr/4rH2GYt63knlSabesnt5SfNPg8h944K3lWqancc57kNX8VJv94hBYmct+sMzoPU93IErwdz8rjxhbPQBAqHyfU9P1/chaaOlibN02WV8uxydlKXCSCAgnvNIWuMcEFavwhLVyPr+h9oIuLOWoHohfnrsRGRo0CJt+prXxbBY0L1MocUAoZwBq9R1Cxes0JI4OJke+LDsJAmYMgYaZeKC+EREOkvDYA6uqGeZOmZ3sc5qqTenDcclhrxkcB+MXXdPo41JPqozNWP9ritA1UGEBaDHUu7p1zTN5uj7sXLqQntSpJ2iJo9KAHU=">
+    <JsonDataSourceConnection Name="GetRollCallOthers" ConnectionString="rijcmlqbJsCNDUWD8zs7Fjc+Sa5ClnDCYwA067z0stgnWcP4y8K8a2aLwnrW4MNBpMgp0+KR+EqCkNgsEI/lieESh8mCDgjlzEGEqH3/16tCRE0h43j/D5crszA2UmE4tUCFRJZXMyK6hh12iDkeWa51RizyAEGGyMAsCsM9s+MToYic0nPo+an/mr/4rH2GYt63knlSabesnt5SfNPg8h944K3lWqancc57kNX8VJv94hBYmct+sMzoPU93IErwdz8rjxhbPQBAqHyfU9P1/chaaOlibN02WV8uxydlKXCSCAgnvNIWuMcEFavwhLVyPr+h9oIuLOWoHohfnrsRGRo0CJt+prXxbBY0L1MocUAoZwBq9R1Cxes0JI4OJke+LDsJAmYMgYaZeKC+EREOkvDYA6uqGeZOmZ3sc5qqTenDcclhrxkcB+MXXdPo41JPqozNWP9ritA1UGEBaDHUu7p1zTN5n4p6y0iQNtl5VHdqNM+r2Y=">
       <JsonTableDataSource Name="JSON3" Alias="RollCallOthers" DataType="FastReport.Utils.Json.JsonArray" Enabled="true" TableName="JSON">
         <Column Name="index" DataType="System.Int32"/>
         <Column Name="item" DataType="FastReport.JsonBase">
@@ -109,7 +109,7 @@
   <ReportPage Name="Page3" PaperWidth="101.6" LeftMargin="10.01" TopMargin="10.01" RightMargin="10.01" BottomMargin="10.01" Watermark.Font="Arial, 60pt" LastPageSource="15" FirstPageSource="15">
     <GroupHeaderBand Name="GroupHeader2" Width="308.37" Height="19.2" RepeatOnEveryPage="true" Condition="[RollCallDelegates.item.groupName]">
       <TextObject Name="Text34" Width="307.2" Height="19.2" Text="[RollCallDelegates.item.groupName]" Font="Arial, 11pt, style=Bold"/>
-      <GroupHeaderBand Name="GroupHeader4" Top="23.2" Width="308.37" Height="19.2" VisibleExpression="IIf([RollCallDelegates.item.groupName]==&quot;State Officer&quot;,false,true)" CanShrink="true" Condition="[RollCallDelegates.item.council]" KeepTogether="true">
+      <GroupHeaderBand Name="GroupHeader4" Top="23.2" Width="308.37" Height="19.2" VisibleExpression="IIf([RollCallDelegates.item.groupName]==&quot;STATE OFFICER&quot;,false,true)" CanShrink="true" Condition="[RollCallDelegates.item.council]" KeepTogether="true">
         <TextObject Name="Text36" Width="364.8" Height="19.2" Text="[RollCallDelegates.item.council]" Font="Arial, 10.25pt"/>
         <DataBand Name="Data3" Top="46.4" Width="308.37" Height="19.2" CanShrink="true" DataSource="JSON2" Filter="[RollCallDelegates.item.district]==[RollCallDistricts.item.district]">
           <TextObject Name="Text35" Width="364.8" Height="19.2" Text="[RollCallDelegates.item.name]" Font="Arial, 10.25pt"/>
