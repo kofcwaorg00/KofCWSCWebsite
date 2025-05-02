@@ -60,10 +60,10 @@ namespace KofCWSCWebsite.Controllers
         //}
 
         // GET: CvnImpDelegates/Create nont used ***
-        //public IActionResult Create()
-        //{
-        //    return View();
-        //}
+        public IActionResult Create()
+        {
+            return View();
+        }
 
         // POST: CvnImpDelegates/Create - This is used to create a raw record GREEN Create a Manual Council Import Record ***
         // To protect from overposting attacks, enable the specific properties you want to bind to.
@@ -75,10 +75,18 @@ namespace KofCWSCWebsite.Controllers
             if (ModelState.IsValid)
             {
                 var results = await _apiHelper.PostAsync<CvnImpDelegateIMP, string>("CvnImpDelegate", cvnImpDelegateIMP);
+                if (results != "Success")
+                {
+                    ViewBag.ImpCreateMessage = results;
+                    return View("~/Views/CvnImpDelegates/Failed.cshtml");
+                }
+                else
+                {
+                    return RedirectToAction("Index");
+                }
+                
 
-                ViewBag.ImpCreateMessage = results;
-
-                return View("~/Views/CvnImpDelegates/Failed.cshtml");
+                
             }
             else
             {

@@ -103,6 +103,11 @@ namespace KofCWSCWebsite.Data
             }
 
             var json = await response.Content.ReadAsStringAsync();
+            if (typeof(TResponse).Name == "String")
+            {
+                json = JsonSerializer.Serialize(json);
+
+            }
             if (string.IsNullOrWhiteSpace(json)) { return default; };
             try
             {
