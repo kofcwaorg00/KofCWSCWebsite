@@ -1,4 +1,5 @@
 ﻿using com.sun.xml.@internal.bind.v2.model.core;
+using javax.swing.text;
 using KofCWSCWebsite.Data;
 using KofCWSCWebsite.Models;
 using Microsoft.AspNetCore.Authorization;
@@ -94,33 +95,38 @@ namespace KofCWSCWebsite.Controllers
         }
 
         // GET: GetSOS
-        [Route("GetSOSView")]
-        public IActionResult GetSOSView()
+        [Route("GetSOSView/{NextYear}")]
+        public async Task<IActionResult> GetSOSView(int NextYear = 0)
         {
             ViewData["HostName"] = _dataSetService.GetMyHost();
-            Uri myURI = new Uri(_dataSetService.GetAPIBaseAddress() + "/GetSOSView");
+            var sosview = await _apiHelper.GetAsync<IList<SPGetSOSView>>($"GetSOSView/{NextYear}");
+            ViewData["myHost"] = HttpContext.Request.Host.Value;
+            return View("Views/StateFamily/GetSOSView.cshtml", sosview);
 
-            using (var client = new HttpClient())
-            {
-                //client.BaseAddress = new Uri(myURI);
-                var responseTask = client.GetAsync(myURI);
-                responseTask.Wait();
-                var result = responseTask.Result;
-                IEnumerable<SPGetSOSView> sosview;
-                if (result.IsSuccessStatusCode)
-                {
-                    var readTask = result.Content.ReadAsAsync<IList<SPGetSOSView>>();
-                    readTask.Wait();
-                    sosview = readTask.Result;
-                }
-                else
-                {
-                    sosview = Enumerable.Empty<SPGetSOSView>();
-                    ModelState.AddModelError(string.Empty, "Server Error.  Please contact administrator.");
-                }
-                ViewData["myHost"] = HttpContext.Request.Host.Value;
-                return View("Views/StateFamily/GetSOSView.cshtml", sosview);
-            }
+
+            //Uri myURI = new Uri(_dataSetService.GetAPIBaseAddress() + "/GetSOSView");
+
+            //using (var client = new HttpClient())
+            //{
+            //    //client.BaseAddress = new Uri(myURI);
+            //    var responseTask = client.GetAsync(myURI);
+            //    responseTask.Wait();
+            //    var result = responseTask.Result;
+            //    IEnumerable<SPGetSOSView> sosview;
+            //    if (result.IsSuccessStatusCode)
+            //    {
+            //        var readTask = result.Content.ReadAsAsync<IList<SPGetSOSView>>();
+            //        readTask.Wait();
+            //        sosview = readTask.Result;
+            //    }
+            //    else
+            //    {
+            //        sosview = Enumerable.Empty<SPGetSOSView>();
+            //        ModelState.AddModelError(string.Empty, "Server Error.  Please contact administrator.");
+            //    }
+            //    ViewData["myHost"] = HttpContext.Request.Host.Value;
+            //    return View("Views/StateFamily/GetSOSView.cshtml", sosview);
+            //}
         }
 
         // GET: Bulletins - OBSOLETE
