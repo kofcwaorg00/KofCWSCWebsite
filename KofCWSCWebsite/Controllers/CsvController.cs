@@ -623,11 +623,11 @@ namespace KofCWSCWebsite.Controllers
                 isUpdated = true;
             }
             // MI
-            if (ShouldUpdate(myDelegate.D1MiddleName, myMember.Mi, myMember, "MiddleName"))
+            if (ShouldUpdate(myDelegate.D1MiddleName, myMember.MI, myMember, "MiddleName"))
             {
-                myMember.Mi = myDelegate.D1MiddleName;
-                myMember.Miupdated = DateTime.Now;
-                myMember.MiupdatedBy = UpdatedBy;
+                myMember.MI = myDelegate.D1MiddleName;
+                myMember.MIUpdated = DateTime.Now;
+                myMember.MIUpdatedBy = UpdatedBy;
                 isUpdated = true;
             }
             // SUFFIX
@@ -740,11 +740,11 @@ namespace KofCWSCWebsite.Controllers
                 isUpdated = true;
             }
             // MI
-            if (ShouldUpdate(myDelegate.D2MiddleName, myMember.Mi, myMember, "MiddleName"))
+            if (ShouldUpdate(myDelegate.D2MiddleName, myMember.MI, myMember, "MiddleName"))
             {
-                myMember.Mi = myDelegate.D2MiddleName;
-                myMember.Miupdated = DateTime.Now;
-                myMember.MiupdatedBy = UpdatedBy;
+                myMember.MI = myDelegate.D2MiddleName;
+                myMember.MIUpdated = DateTime.Now;
+                myMember.MIUpdatedBy = UpdatedBy;
                 isUpdated = true;
             }
             // SUFFIX
@@ -857,11 +857,11 @@ namespace KofCWSCWebsite.Controllers
                 isUpdated = true;
             }
             // MI
-            if (ShouldUpdate(myDelegate.A1MiddleName, myMember.Mi, myMember, "MiddleName"))
+            if (ShouldUpdate(myDelegate.A1MiddleName, myMember.MI, myMember, "MiddleName"))
             {
-                myMember.Mi = myDelegate.A1MiddleName;
-                myMember.Miupdated = DateTime.Now;
-                myMember.MiupdatedBy = UpdatedBy;
+                myMember.MI = myDelegate.A1MiddleName;
+                myMember.MIUpdated = DateTime.Now;
+                myMember.MIUpdatedBy = UpdatedBy;
                 isUpdated = true;
             }
             // SUFFIX
@@ -974,11 +974,11 @@ namespace KofCWSCWebsite.Controllers
                 isUpdated = true;
             }
             // MI
-            if (ShouldUpdate(myDelegate.A2MiddleName, myMember.Mi, myMember, "MiddleName"))
+            if (ShouldUpdate(myDelegate.A2MiddleName, myMember.MI, myMember, "MiddleName"))
             {
-                myMember.Mi = myDelegate.A2MiddleName;
-                myMember.Miupdated = DateTime.Now;
-                myMember.MiupdatedBy = UpdatedBy;
+                myMember.MI = myDelegate.A2MiddleName;
+                myMember.MIUpdated = DateTime.Now;
+                myMember.MIUpdatedBy = UpdatedBy;
                 isUpdated = true;
             }
             // SUFFIX

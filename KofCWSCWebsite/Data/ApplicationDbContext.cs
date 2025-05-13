@@ -295,7 +295,7 @@ public partial class ApplicationDbContext : DbContext
             entity.Property(e => e.Email).HasMaxLength(50);
             entity.Property(e => e.KofCid).HasColumnName("KofCID");
             entity.Property(e => e.LastName).HasMaxLength(50);
-            entity.Property(e => e.Mi)
+            entity.Property(e => e.MI)
                 .HasMaxLength(50)
                 .HasColumnName("MI");
             entity.Property(e => e.Phone).HasMaxLength(30);
