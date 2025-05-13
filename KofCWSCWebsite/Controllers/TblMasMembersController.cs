@@ -1,20 +1,12 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-using Microsoft.AspNetCore.Mvc;
-using Microsoft.AspNetCore.Mvc.Rendering;
-using Microsoft.EntityFrameworkCore;
+﻿using Microsoft.AspNetCore.Mvc;
 using KofCWSCWebsite.Data;
 using KofCWSCWebsite.Models;
-using System.Net.Http;
 using Microsoft.IdentityModel.Tokens;
-using System.Collections;
-using Newtonsoft.Json;
 using Serilog;
 using Microsoft.AspNetCore.Authorization;
 using KofCWSCWebsite.Services;
-using sun.rmi.server;
+using KofCWSCWebsite.Areas.Identity.Data;
+using Microsoft.AspNetCore.Identity;
 
 namespace KofCWSCWebsite.Controllers
 {
@@ -22,12 +14,14 @@ namespace KofCWSCWebsite.Controllers
     {
         private DataSetService _dataSetService;
         private readonly ApiHelper _apiHelper;
+        private readonly UserManager<KofCUser> _userManager;
 
-        public TblMasMembersController(DataSetService dataSetService, ApiHelper apiHelper)
+        public TblMasMembersController(DataSetService dataSetService, ApiHelper apiHelper,UserManager<KofCUser> userManager)
         {
             Log.Information("Creating MembersController");
             _dataSetService = dataSetService;
             _apiHelper = apiHelper;
+            _userManager = userManager;
         }
 
         [Authorize(Roles = "Admin,StateOfficer,DataAdmin,StateMembership")]
@@ -235,10 +229,18 @@ namespace KofCWSCWebsite.Controllers
             }
             // for return
             string lastname = tblMasMember.LastName;
+            
             if (ModelState.IsValid)
             {
                 // validate phone number
                 tblMasMember.Phone = Utils.FormatPhoneNumber(tblMasMember.Phone);
+                tblMasMember.LastUpdated = DateTime.Now;
+
+                tblMasMember.LastUpdated = DateTime.Now;
+                var userId = User.Identity.Name;
+                var user = await _userManager.FindByIdAsync(userId);
+                tblMasMember.LastUpdatedBy = await Utils.GetUserProp<int>(User, _userManager, "KofCMemberID");
+
                 // update the record
                 var results = await _apiHelper.PutAsync<TblMasMember, TblMasMember>($"/Member/{id}", tblMasMember);
 

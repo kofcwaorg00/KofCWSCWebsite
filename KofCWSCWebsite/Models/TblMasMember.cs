@@ -167,4 +167,5 @@ public partial class TblMasMember
     public bool? HidePersonalInfo { get; set; }
 
     public string? WhyDoNotEmail { get; set; }
+    public int? LastUpdatedBy { get; set; }
 }
