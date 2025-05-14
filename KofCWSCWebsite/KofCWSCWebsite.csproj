@@ -75,6 +75,9 @@
     <None Include="Pages\Shared\_ValidationScriptsPartial.cshtml" />
     <None Include="Pages\_ViewImports.cshtml" />
     <None Include="Pages\_ViewStart.cshtml" />
+    <None Include="Properties\PublishProfiles\KofCWSCWebsite - Web Deploy PROD.pubxml-Destiny2.user" />
+    <None Include="Properties\PublishProfiles\KofCWSCWebsite - Web Deploy PROD.pubxml.user" />
+    <None Include="Properties\PublishProfiles\KofCWSCWebsiteTest - Web Deploy.pubxml.user" />
     <None Include="Views\TblCorrMemberOffices\Create.cshtml" />
     <None Include="Views\TblCorrMemberOffices\Delete.cshtml" />
     <None Include="Views\TblCorrMemberOffices\Details.cshtml" />

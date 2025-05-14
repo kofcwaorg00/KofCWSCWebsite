@@ -1,18 +1,10 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
-using Microsoft.EntityFrameworkCore;
 using KofCWSCWebsite.Models;
 using KofCWSCWebsite.Data;
 using KofCWSCWebsite.Services;
 using Serilog;
 using Newtonsoft.Json;
-using Microsoft.EntityFrameworkCore.Metadata.Internal;
-using com.sun.xml.@internal.bind.v2.model.core;
-using ikvm.runtime;
 using KofCWSCWebsite.Areas.Identity.Data;
 using Microsoft.AspNetCore.Identity;
 

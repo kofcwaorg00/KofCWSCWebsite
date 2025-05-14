@@ -65,9 +65,23 @@ namespace KofCWSCWebsite.Data
             // the API has to fire up from a cold start
             if (!response.IsSuccessStatusCode)
             {
-                Exception myex = new Exception($"Thrown from inside apiHelper because response.IsSuccessStatusCode is {response.IsSuccessStatusCode.ToString()} for endpoint {endpoint} and baseaddress {_httpClient.BaseAddress.ToString()} - Reason: {"GetAsync - " + response.ReasonPhrase}+{endpoint} ");
-                Log.Error(Utils.FormatLogEntry(this,myex));
-                throw myex;
+                // 5/12/2025 Tim Philomeno
+                // I came accross using Problem() to return structured error information from the API
+                // This logic should allow the existing error processing to work and support this new
+                // Problem() processing
+                var problem = await response.Content.ReadFromJsonAsync<ProblemDetails>();
+                if (problem == null)
+                {
+                    Exception myex = new Exception($"Thrown from inside apiHelper because response.IsSuccessStatusCode is {response.IsSuccessStatusCode.ToString()} for endpoint {endpoint} and baseaddress {_httpClient.BaseAddress.ToString()} - Reason: {"GetAsync - " + response.ReasonPhrase}+{endpoint} ");
+                    Log.Error(Utils.FormatLogEntry(this, myex));
+                    throw myex;
+                }
+                else
+                {
+                    Exception myex = new Exception($"Thrown from inside apiHelper,Message = {problem.Title}, {problem.Detail}");
+                    Log.Error(Utils.FormatLogEntry(this, myex));
+                    throw myex;
+                }
                 //throw new HttpRequestException($"GET request failed. Status Code: {response.StatusCode}, Reason: {"GetAsync " + response.ReasonPhrase}+{endpoint}");
             }
             var json = await response.Content.ReadAsStringAsync();
@@ -159,6 +173,7 @@ namespace KofCWSCWebsite.Data
                 throw new HttpRequestException($"DELETE request failed. Status Code: {response.StatusCode}, Reason: {"DeleteAsync - " + response.ReasonPhrase}");
             }
         }
+
     }
 
 

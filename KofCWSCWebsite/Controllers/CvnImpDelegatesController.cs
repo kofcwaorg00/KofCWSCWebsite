@@ -14,12 +14,10 @@ namespace KofCWSCWebsite.Controllers
 {
     public class CvnImpDelegatesController : Controller
     {
-        private readonly ApplicationDbContext _context;
         private readonly ApiHelper _apiHelper;
 
-        public CvnImpDelegatesController(ApplicationDbContext context, ApiHelper apiHelper)
+        public CvnImpDelegatesController( ApiHelper apiHelper)
         {
-            _context = context;
             _apiHelper = apiHelper;
         }
 
@@ -30,36 +28,7 @@ namespace KofCWSCWebsite.Controllers
             var results = await _apiHelper.GetAsync<IEnumerable<CvnImpDelegate>>("CvnImpDelegates");
             return View(results.OrderBy(e => e.CouncilNumber));
         }
-        // NOT USED ***
-        //public async Task<ActionResult<IEnumerable<CvnImpDelegateIMP>>> IndexIMP()
-        //{
-        //    var results = await _apiHelper.GetAsync<IEnumerable<CvnImpDelegateIMP>>("CvnImpDelegatesIMP");
-        //    return View(results.OrderBy(e => e.CouncilNumber));
-        //    //return View(await _context.Database
-        //    //        .SqlQuery<CvnImpDelegate>($"EXECUTE uspCVN_GetImpDelegates")
-        //    //        .ToListAsync());
-        //    //return View(await _context.CvnImpDelegates.ToListAsync());
-        //}
-
-        // GET: CvnImpDelegates/Details/5 - Not Used ***
-        //public async Task<IActionResult> Details(int? id)
-        //{
-        //    if (id == null)
-        //    {
-        //        return NotFound();
-        //    }
-
-        //    var cvnImpDelegate = await _context.CvnImpDelegates
-        //        .FirstOrDefaultAsync(m => m.Id == id);
-        //    if (cvnImpDelegate == null)
-        //    {
-        //        return NotFound();
-        //    }
-
-        //    return View(cvnImpDelegate);
-        //}
-
-        // GET: CvnImpDelegates/Create nont used ***
+        // Creates a new raw CvnImpDelegates record for use when delegates are added last minute at the convention
         public IActionResult Create()
         {
             return View();
@@ -84,25 +53,14 @@ namespace KofCWSCWebsite.Controllers
                 {
                     return RedirectToAction("Index");
                 }
-                
-
-                
             }
             else
             {
                 return View(cvnImpDelegateIMP);
             }
-            
         }
 
-        //[HttpGet("Edit/{id}")] - duplicate we are using EditIMP so this never gets called
-        //public async Task<ActionResult<CvnImpDelegateIMP>> Edit(int? id)
-        //{
-        //    var results = await _apiHelper.GetAsync<CvnImpDelegateIMP>($"CvnImpDelegate/{id}");
-            
-        //    return View("EditIMP",results);
-            
-        //}
+        
         // Orange Edit Raw button ***
         public async Task<ActionResult<CvnImpDelegateIMP>> EditIMP(int? id)
         {
@@ -122,12 +80,10 @@ namespace KofCWSCWebsite.Controllers
         {
             ViewBag.Validate = validate;
             ViewBag.Validate2 = validate2;
+            
             try
             {
-                var results = _context.Database
-                       .SqlQuery<CvnImpDelegate>($"EXECUTE uspCVN_GetImpDelegatesByID {id}")
-                       .AsEnumerable()
-                       .FirstOrDefault();
+                var results = await _apiHelper.GetAsync<CvnImpDelegate>($"CvnImpDelegateIMP/{id}");
                 return View(results);
 
             }
@@ -184,10 +140,6 @@ namespace KofCWSCWebsite.Controllers
                 var results = await _apiHelper.GetAsync<CvnImpDelegateIMP>($"CvnImpDelegate/{id}");
                 return View("Delete", results);
             }
-
-
-
-
         }
 
         // POST: CvnImpDelegates/Delete/5 - after confirm from Red Delete Button ***
@@ -199,9 +151,5 @@ namespace KofCWSCWebsite.Controllers
             return RedirectToAction(nameof(Index));
         }
 
-        //private bool CvnImpDelegateExists(int id)
-        //{
-        //    return _context.CvnImpDelegates.Any(e => e.Id == id);
-        //}
     }
 }
