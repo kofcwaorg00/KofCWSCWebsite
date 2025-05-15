@@ -133,6 +133,7 @@
   </ItemGroup>
 
   <ItemGroup>
+    <Folder Include="Database\Sprocs\" />
     <Folder Include="Scripts\" />
     <Folder Include="Views\Address\" />
     <Folder Include="wwwroot\files\uploads\" />
