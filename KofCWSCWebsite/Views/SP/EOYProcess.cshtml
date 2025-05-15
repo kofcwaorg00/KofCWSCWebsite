@@ -1,0 +1,12 @@
+﻿<h1>EOY Process Succeeded</h1>
+@{
+    var myrows = ViewBag.EOYMess;
+    if (myrows == "-1")
+    {
+        <span>The EOY Process has already been run for the next Fraternal Year</span>
+    }
+    else
+    {
+        <p>The EOY Process was successful.  The number of rows processed was @ViewBag.EOYMess</p>
+        }
+    }

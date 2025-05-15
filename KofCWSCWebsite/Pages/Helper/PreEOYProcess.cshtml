@@ -1,0 +1,21 @@
+﻿@page
+@model KofCWSCWebsite.Pages.Helper.PreEOYProcessModel
+@{
+}
+<h1>Run End Of Year Processing</h1>
+<h6>This process will copy all offices marked as such to the new fraternal year.  This cannot be undone.</h6>
+
+<table class="table" style="width:25%">
+    <tr>
+        <td>
+            <form method="get" asp-controller="SP" asp-action="EOYProcess">
+                <button type="submit" class="btn btn-primary">Continue</button>
+            </form>
+        </td>
+        <td>
+            <form method="get" asp-controller="Home" asp-action="Index" asp-route-id="">
+                <button type="submit" class="btn btn-success">Cancel</button>
+            </form>
+        </td>
+    </tr>
+</table>

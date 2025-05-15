@@ -319,6 +319,12 @@ namespace KofCWSCWebsite.Controllers
                 return View("Views/StateFamily/FourthDegreeOfficers.cshtml", fourthdeg);
             }
         }
+        public async Task<IActionResult> EOYProcess()
+        {
+            var rows = await _apiHelper.GetAsync<string>("EOYProcess");
+            ViewBag.EOYMess = $"{rows}";
+            return View();
+        }
         [Route("GetNextTempID")]
         public IActionResult GetNextTempID()
         {
