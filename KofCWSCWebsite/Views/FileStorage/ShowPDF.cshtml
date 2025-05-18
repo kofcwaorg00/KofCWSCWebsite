@@ -74,7 +74,7 @@
     @{
         var myId = Model.Id;
         <span id="myData" style="display:none">@myId</span>
-        <span>@Model.FileName</span>
+        <div style="float:left">@Model.FileName</div><div style="float:right;font-size:large">NOTE: to get a searchable PDF use the Download button <img src="~/images/DownLoad.png" /> then CTRL-F in the new browser window.</div>
     }
     <div class="pdfviewer">
         <div class="pdfjs-toolbar">
