@@ -1,0 +1,41 @@
+﻿@model List<string>
+
+@{
+    ViewData["Title"] = "Index";
+}
+
+<h1>Roles for @ViewBag.UserName</h1>
+
+<p>
+    <a asp-action="Create" asp-route-userguid=@ViewBag.USERGUID>
+        <button type="submit" class="btn btn-sm btn-success">
+            Add A Role
+        </button>
+    </a>
+</p>
+
+<table class="table">
+    <thead>
+        <tr>
+            <th>Roles</th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var role in Model)
+        {
+            <tr>
+                <td>@role</td>
+                <td>
+                    @Html.ActionLink("Delete", "Delete", new { id = ViewBag.USERGUID, role = role }, new { @class = "btn btn-danger" })
+                    @*@Html.ActionLink("Delete", "Delete", new { @class = "btn btn-primary" })
+                    <form asp-controller="AspNetUserRoles" asp-action="Delete" asp-route-id="@ViewBag.USERGUID" asp-route-role="@role" method="get">
+                        <button type="submit" class="btn btn-sm btn-danger">
+                            Delete
+                        </button>
+                    </form>*@
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>

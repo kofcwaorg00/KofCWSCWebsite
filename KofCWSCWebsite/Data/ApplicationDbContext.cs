@@ -84,6 +84,7 @@ public partial class ApplicationDbContext : DbContext
     public virtual DbSet<CvnMpd> TblCvnTrxMpds { get; set; }
     public virtual DbSet<MemberSuspension> TblSysMasMemberSuspensions { get; set; }
     public virtual DbSet<LogCorrMemberOffice> TblLogCorrMemberOffices { get; set; }
+    public virtual DbSet<AspNetUserRole> AspNetUserRoles { get; set; }
     protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
 
     {
@@ -670,7 +671,12 @@ public partial class ApplicationDbContext : DbContext
             entity.Property(e => e.OfficeId).HasColumnName("OfficeID");
         });
 
+        modelBuilder.Entity<AspNetUserRole>(entity =>
+        {
+            entity.HasKey(e => new { e.UserId, e.RoleId });
 
+            entity.HasIndex(e => e.RoleId, "IX_AspNetUserRoles_RoleId");
+        });
 
         OnModelCreatingPartial(modelBuilder);
     }
