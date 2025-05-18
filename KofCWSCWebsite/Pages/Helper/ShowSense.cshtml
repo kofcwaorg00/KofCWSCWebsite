@@ -37,10 +37,11 @@
                         // 4 = Lookup Members
                         // 5 = WSC Bylaws
                         var myQS = Request.Query["id"];
+                        var myDocID= Request.Query["docid"];
                         switch (myQS)
                         {
                             case "1":
-                                @Html.ActionLink("I agree", "Details", "FileStorage", new { id = 14 }, new { @class = "btn btn-primary", @id = "myGo" });
+                                @Html.ActionLink("I agree", "Details", "FileStorage", new { id = myDocID }, new { @class = "btn btn-primary", @id = "myGo" });
                                 break;
                             case "2":
                                 @Html.ActionLink("I agree", "GetEmailAlias", "SP", null, new { @class = "btn btn-primary", @id = "myGo" });
