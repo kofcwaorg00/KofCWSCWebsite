@@ -35,15 +35,20 @@ namespace KofCWSCWebsite.Controllers
         // GET: AspNetUserRoles
         public async Task<ActionResult> Index(int id)
         {
+            var myroles = new List<string>();
             var userid = await userManager.Users.Where(u => u.KofCMemberID == id).FirstOrDefaultAsync();
             if (userid == null)
             {
-                return View();
+                return View(myroles);
             }
-            var myroles = await userManager.GetRolesAsync(userid);
+            myroles = (List<string>)await userManager.GetRolesAsync(userid);
             ViewBag.UserID = userid;
             ViewBag.USERGUID = userid.Id;
             ViewBag.UserName = string.Concat(userid.FirstName, " ", userid.LastName);
+            if (myroles is null)
+            {
+               myroles = new List<string>();
+            }
             return View(myroles);
         }
 
