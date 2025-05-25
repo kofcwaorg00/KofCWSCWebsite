@@ -24,5 +24,7 @@ public class KofCUser : IdentityUser
     [Required]
     [DisplayName("KofC Member Number")]
     public int KofCMemberID { get; set; }
+
+    public string? ProfilePictureUrl { get; set; }
 }
 

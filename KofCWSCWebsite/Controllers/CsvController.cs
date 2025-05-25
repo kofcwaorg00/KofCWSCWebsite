@@ -134,7 +134,7 @@ namespace KofCWSCWebsite.Controllers
                 }
                 //------------------------------------------------------------------------------------------------------
             }
-            return RedirectToAction("NecImpNecrologies", "Index");
+            return RedirectToAction("Index", "NecImpNecrologies");
         }
 
         // POST: Handle the CSV file upload and parse it
