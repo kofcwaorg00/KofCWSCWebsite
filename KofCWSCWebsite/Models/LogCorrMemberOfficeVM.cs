@@ -20,8 +20,8 @@ public partial class LogCorrMemberOfficeVM
 
     public bool Processed { get; set; }
 
-    public string MemberName { get; set; }
-    public int KofCID { get; set; }
+    public string? MemberName { get; set; }
+    public int? KofCID { get; set; }
     public string UpdatedBy { get; set; }
     public DateTime Updated { get; set; }
 }

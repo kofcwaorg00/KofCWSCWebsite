@@ -8,6 +8,7 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using System.Drawing;
+using KofCWSCWebsite.Data;
 
 namespace KofCWSCWebsite.Areas.Identity.Pages.Account.Manage
 {
@@ -200,7 +201,9 @@ namespace KofCWSCWebsite.Areas.Identity.Pages.Account.Manage
                 memoryStream.Position = 0;
 
                 // Upload to Azure Blob Storage (adjust for your Azure config)
-                var blobServiceClient = new Azure.Storage.Blobs.BlobServiceClient(_configuration["AzureBlobStorage:ConnectionString"]);
+                KeyVaultHelper kvh = new KeyVaultHelper(_configuration);
+                var blobServiceClient = new Azure.Storage.Blobs.BlobServiceClient(kvh.GetSecret("AZBSPCS"));
+                
                 var containerClient = blobServiceClient.GetBlobContainerClient(_configuration["AzureBlobStorage:ContainerName"]);
                 await containerClient.CreateIfNotExistsAsync();
                 await containerClient.SetAccessPolicyAsync(Azure.Storage.Blobs.Models.PublicAccessType.Blob);

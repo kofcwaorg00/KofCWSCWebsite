@@ -16,12 +16,17 @@ using Microsoft.AspNetCore.Http.Features;
 using System.Net;
 
 var builder = WebApplication.CreateBuilder(args);
+
+KeyVaultHelper kvh = new KeyVaultHelper(builder.Configuration);
+string azureConnectionString = kvh.GetSecret("AZEmailConnString");
+
 // Setup to use KeyVault
-var kvURLAZ = builder.Configuration.GetSection("KV").GetValue(typeof(string), "VAULTURL");
-var kvclient = new SecretClient(new Uri((string)kvURLAZ), new DefaultAzureCredential());
-// Get the AZEmailString
-var vConnString = kvclient.GetSecret("AZEmailConnString").Value;
-string azureConnectionString = vConnString.Value;
+// KeyVaultHelper is now handleing this
+//var kvURLAZ = builder.Configuration.GetSection("KV").GetValue(typeof(string), "VAULTURL");
+//var kvclient = new SecretClient(new Uri((string)kvURLAZ), new DefaultAzureCredential());
+//////////// Get the AZEmailString
+//////////var vConnString = kvclient.GetSecret("AZEmailConnString").Value;
+//////////string azureConnectionString = vConnString.Value;
 
 // Read the Azure connection string from configuration
 //string azureConnectionString = builder.Configuration["Azure:CommunicationService:ConnectionString"];
@@ -47,7 +52,7 @@ Log.Information("ENV = " + Environment.GetEnvironmentVariable("ASPNETCORE_ENVIRO
 //******************************************************************************************************************************
 try
 {
-    KeyVaultSecret cnString = null;
+    string connectionString = string.Empty;
     //**************************************************************************************************
     // Secrets for sql server db connect strings
     // DBCONN = KofCWSC sql server KofCWSCWeb
@@ -60,19 +65,19 @@ try
     switch (myEnv)
     {
         case "production":
-            cnString = kvclient.GetSecret("AZPROD").Value;
+            connectionString = kvh.GetSecret("AZPROD");
             break;
         case "development":
-            cnString = kvclient.GetSecret("DBCONNLOC").Value;
+            connectionString = kvh.GetSecret("DBCONNLOC");
             break;
         case "test":
-            cnString = kvclient.GetSecret("AZDEV").Value;
+            connectionString = kvh.GetSecret("AZDEV");
             break;
         default:
-            cnString = kvclient.GetSecret("AZPROD").Value;
+            connectionString = kvh.GetSecret("AZPROD");
             break;
     }
-    string connectionString = cnString.Value;
+    //string connectionString = cnString.Value;
 
     //------------------------------------------------------------------------------------------------------------------------------
     // make sure we have a value from KeyVault. if not throw an exception
