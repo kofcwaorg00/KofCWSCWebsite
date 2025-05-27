@@ -8,6 +8,7 @@ using Microsoft.EntityFrameworkCore;
 using KofCWSCWebsite.Data;
 using KofCWSCWebsite.Models;
 using KofCWSCWebsite.Pages.Forms;
+using Microsoft.AspNetCore.Authorization;
 
 namespace KofCWSCWebsite.Controllers
 {
@@ -21,6 +22,7 @@ namespace KofCWSCWebsite.Controllers
         }
 
         // GET: LogCorrMemberOffices
+        [Authorize(Roles = "Admin")]
         public async Task<IActionResult> Index()
         {
             var results = await _apiHelper.GetAsync<List<LogCorrMemberOfficeVM>>("LogCorrMemberOffices");
@@ -28,6 +30,7 @@ namespace KofCWSCWebsite.Controllers
             return View(results);
         }
 
+        [Authorize(Roles = "Admin")]
         public async Task<IActionResult> UpdateProcessFlag(int id)
         {
             var results = await _apiHelper.GetAsync<int>($"ProcLogCorrMemberOffices/{id}");
