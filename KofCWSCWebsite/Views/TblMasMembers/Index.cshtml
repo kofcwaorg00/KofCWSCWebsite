@@ -1,4 +1,4 @@
-﻿@model IEnumerable<KofCWSCWebsite.Models.TblMasMember>
+﻿@model IEnumerable<KofCWSCWebsite.Models.TblMasMemberVM>
 
 @{
     ViewData["Title"] = "Manage Members";
@@ -69,6 +69,7 @@
             @if (User.IsInRole("Admin") || User.IsInRole("DataAdmin"))
             {
                 <th style="width:40px"></th>
+                <th style="width:60px"></th>
                 <th style="width:60px"></th>
                 <th style="width:40px"></th>
             }
@@ -165,13 +166,25 @@
                         </form>
                     </td>
                     <td>
-                        <form asp-controller="TblMasMembers" asp-action="Delete" asp-route-id="@item.MemberId" method="get">
+                        <form asp-controller="TblMasMembers" asp-action="Delete" asp-route-id="@item.KofCid" method="get">
                             <button type="submit" class="btn btn-sm btn-danger">
-                                Delete
+                               Delete
                             </button>
                         </form>
 
                     </td>
+                    <td>
+                        <form asp-controller="Users" asp-action="EditPhoto" asp-route-id="@item.KofCid" method="get">
+                            <button type="submit"> 
+                                <img src="@(string.IsNullOrEmpty(item.ProfilePictureURL) ? "/images/missing.png" : item.ProfilePictureURL)"
+                                     alt="Profile Picture"
+                                     class="card-img-top"
+                                     style="width: 21px; height:25px; object-fit: cover; float:right;background-color:white" />
+                            </button>
+                        </form>
+
+                    </td>
+
                 }
             </tr>
         }

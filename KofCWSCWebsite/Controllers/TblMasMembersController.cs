@@ -63,15 +63,15 @@ namespace KofCWSCWebsite.Controllers
             {
                 myEndpoint = $"Members/LastName/{lastname}";
             }
-            IEnumerable<TblMasMember> members;
+            IEnumerable<TblMasMemberVM> members;
 
-            members = await _apiHelper.GetAsync<IEnumerable<TblMasMember>>(myEndpoint);
+            members = await _apiHelper.GetAsync<IEnumerable<TblMasMemberVM>>(myEndpoint);
 
             //ViewData["NoMembers"] = "Found " + members.Count() + " Members";
 
             if (members is null)
             {
-                members = Enumerable.Empty<TblMasMember>();
+                members = Enumerable.Empty<TblMasMemberVM>();
                 ModelState.AddModelError(string.Empty, "Server Error.  Please contact administrator.");
             }
             else

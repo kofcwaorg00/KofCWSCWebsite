@@ -17,10 +17,13 @@
             @foreach (var item in Model)
             {
 
-                if (item.SortBy <= 3)
+                if (item.SortBy <= 3 )
                 {
                     <td style="text-align:center">
-                        <img src="@Html.DisplayFor(modelItem => item.Photo)" width="200" /><br />
+                        @if (item.SortBy == 1 || item.SortBy == 3) { 
+                        <img src="@(string.IsNullOrEmpty(item.Photo) ? "/images/missing.png" : item.Photo)" />
+                        }
+                        <br />
                         @Html.Raw(Utils.GetMemberNameLink(item.FullName, item.MemberID, User.Identity.IsAuthenticated, Context.Request.Host.Value, "GetSOSView"))<br />
                         <a href="@Html.DisplayFor(modelItem => item.ContactUs)">@Html.DisplayFor(modelItem => item.OfficeDescription)</a>
                     </td>
@@ -35,7 +38,8 @@
                 if (item.SortBy > 3 && item.SortBy <= 6)
                 {
                     <td style="text-align:center">
-                        <img src="@Html.DisplayFor(modelItem => item.Photo)" width="200" /><br />
+                        <img src="@(string.IsNullOrEmpty(item.Photo) ? "/images/missing.png" : item.Photo)" />
+                        <br />
                         @Html.Raw(Utils.GetMemberNameLink(item.FullName, item.MemberID, User.Identity.IsAuthenticated, Context.Request.Host.Value, "GetSOSView"))<br />
                         <a href="@Html.DisplayFor(modelItem => item.ContactUs)">@Html.DisplayFor(modelItem => item.OfficeDescription)</a>
                     </td>
@@ -50,7 +54,8 @@
                 if (item.SortBy > 6 && item.SortBy <= 9)
                 {
                     <td style="text-align:center">
-                        <img src="@Html.DisplayFor(modelItem => item.Photo)" width="200" /><br />
+                        <img src="@(string.IsNullOrEmpty(item.Photo) ? "/images/missing.png" : item.Photo)" />
+                        <br />
                         @Html.Raw(Utils.GetMemberNameLink(item.FullName, item.MemberID, User.Identity.IsAuthenticated, Context.Request.Host.Value, "GetSOSView"))<br />
                         <a href="@Html.DisplayFor(modelItem => item.ContactUs)">@Html.DisplayFor(modelItem => item.OfficeDescription)</a>
                     </td>

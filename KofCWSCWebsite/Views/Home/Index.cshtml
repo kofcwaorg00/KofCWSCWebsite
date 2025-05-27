@@ -350,7 +350,11 @@
                                     var readMore = "  <a href='/TblWebSelfPublishes/Display/" + myURL + "'>read more</a>...";
                                     var readMoreP = "  <a href='/TblWebSelfPublishes/Display/" + myURL + "'>";
                                 }
-                                <img class="d-block img-fluid img-thumbnail" alt="First slide" style="width:200px;float:left; padding:5px" src="@Html.Raw(item.Photo)" />
+                                @*<img class="d-block img-fluid img-thumbnail" alt="First slide" style="width:200px;float:left; padding:5px" src="@Html.Raw(item.Photo)" />*@
+                                <img src="@(string.IsNullOrEmpty(item.Photo) ? "/images/missing.png" : item.Photo)"
+                                     alt="Profile Picture"
+                                     class="card-img-top"
+                                     style="width: 200px; object-fit: cover; float:left; padding:5px" />
                                 <div>
 
                                     @* <h5>@Html.DisplayFor(modelItem => item.OfficeDescription)</h5> *@

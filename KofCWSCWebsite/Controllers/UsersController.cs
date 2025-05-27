@@ -19,12 +19,14 @@ namespace KofCWSCWebsite.Controllers
         private DataSetService _dataSetService;
         private readonly ApiHelper _apiHelper;
         private UserManager<KofCUser> _userManager;
+        private readonly IConfiguration _configuration;
 
-        public UsersController(DataSetService dataSetService, ApiHelper apiHelper,UserManager<KofCUser> userManager)
+        public UsersController(DataSetService dataSetService, ApiHelper apiHelper,UserManager<KofCUser> userManager,IConfiguration configuration)
         {
             _dataSetService = dataSetService;
             _apiHelper = apiHelper;
             _userManager = userManager;
+            _configuration = configuration;
         }
 
         public async Task<IActionResult> UserRoles(string userId)
@@ -37,6 +39,119 @@ namespace KofCWSCWebsite.Controllers
 
             var roles = await _userManager.GetRolesAsync(user);
             return View(roles); // Pass roles to the view
+        }
+
+        [Route("EditPhoto/{id}")]
+        public async Task<IActionResult> EditPhoto(int id)
+        {
+            var user = await _userManager.Users
+                .Where(u => u.KofCMemberID == id)
+                .FirstOrDefaultAsync();
+            TempData["HasUser"] = user == null? ViewBag.HasUser = false:ViewBag.HasUser = true;
+            TempData["PicUser"] = id;
+            
+            return View(user);
+        }
+
+        [Route("UploadProfilePicture/{id}")]
+        public async Task<IActionResult> UploadProfilePicture(IFormFile file,int id)
+        {
+            var user = await _userManager.Users
+                .Where(u => u.KofCMemberID == id)
+                .FirstOrDefaultAsync();
+
+            if (file != null && file.Length > 0)
+            {
+                // Check size (max 2MB)
+                if (file.Length > 2 * 1024 * 1024)
+                {
+                    ModelState.AddModelError("Input.ProfilePicture", "File too large. Max 2MB.");
+                    TempData["HasUser"] = true;
+                    return View("EditPhoto",user);
+                }
+
+                // Check content type
+                var allowedTypes = new[] { "image/jpeg", "image/png" };
+                if (!allowedTypes.Contains(file.ContentType.ToLower()))
+                {
+                    ModelState.AddModelError("Input.ProfilePicture", "Only JPG and PNG files are allowed.");
+                    TempData["HasUser"] = true;
+                    return View("EditPhoto", user);
+                }
+
+                // Check extension
+                var ext = Path.GetExtension(file.FileName).ToLowerInvariant();
+                if (ext is not ".jpg" and not ".jpeg" and not ".png")
+                {
+                    ModelState.AddModelError("Input.ProfilePicture", "Invalid file extension.");
+                    TempData["HasUser"] = true;
+                    return View("EditPhoto", user);
+                }
+
+                using var memoryStream = new MemoryStream();
+                await file.CopyToAsync(memoryStream);
+                memoryStream.Position = 0;
+
+                try
+                {
+                    using var image = System.Drawing.Image.FromStream(memoryStream);
+
+                    int width = image.Width;
+                    int height = image.Height;
+                    float dpiX = image.HorizontalResolution;
+                    float dpiY = image.VerticalResolution;
+
+                    if (width < 200 || height < 200)
+                    {
+                        ModelState.AddModelError("Input.ProfilePicture", "Image must be at least 200x200 pixels.");
+                        TempData["HasUser"] = true;
+                        return View("EditPhoto", user);
+                    }
+
+                    if (dpiX < 72 || dpiY < 72)
+                    {
+                        ModelState.AddModelError("Input.ProfilePicture", "Image resolution must be at least 72 DPI.");
+                        TempData["HasUser"] = true;
+                        return View("EditPhoto", user);
+                    }
+                }
+                catch (Exception)
+                {
+                    ModelState.AddModelError("Input.ProfilePicture", "Invalid image file.");
+                    TempData["HasUser"] = true;
+                    return View("EditPhoto", user);
+                }
+
+                // Reset memory stream for upload
+                memoryStream.Position = 0;
+
+                // Upload to Azure Blob Storage (adjust for your Azure config)
+                var blobServiceClient = new Azure.Storage.Blobs.BlobServiceClient(_configuration["AzureBlobStorage:ConnectionString"]);
+                var containerClient = blobServiceClient.GetBlobContainerClient(_configuration["AzureBlobStorage:ContainerName"]);
+                await containerClient.CreateIfNotExistsAsync();
+                await containerClient.SetAccessPolicyAsync(Azure.Storage.Blobs.Models.PublicAccessType.Blob);
+
+                var uniqueFileName = $"{Guid.NewGuid()}{ext}";
+                var blobClient = containerClient.GetBlobClient(uniqueFileName);
+                await blobClient.UploadAsync(memoryStream, overwrite: true);
+
+                // Optionally delete old image
+                if (!string.IsNullOrEmpty(user.ProfilePictureUrl))
+                {
+                    try
+                    {
+                        var oldBlobName = Path.GetFileName(new Uri(user.ProfilePictureUrl).LocalPath);
+                        var oldBlobClient = containerClient.GetBlobClient(oldBlobName);
+                        await oldBlobClient.DeleteIfExistsAsync();
+                    }
+                    catch { /* ignore */ }
+                }
+
+                // Update user record
+                user.ProfilePictureUrl = blobClient.Uri.ToString();
+                await _userManager.UpdateAsync(user);
+            }
+            return RedirectToAction("Index", "TblMasMembers", new { lastname = user.LastName});
         }
 
 
