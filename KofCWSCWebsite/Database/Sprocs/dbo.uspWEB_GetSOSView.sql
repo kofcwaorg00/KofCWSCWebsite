@@ -32,7 +32,8 @@ SELECT   '' AS Heading,
          2 AS SortBy
 UNION ALL
 SELECT   'State Officers ' + CAST (dbo.funSYS_GetBegFratYearN(@NextYear) AS VARCHAR) + ' - ' + CAST (dbo.funSYS_GetBegFratYearN(@NextYear) + 1 AS VARCHAR) AS Heading,
-         '/images/SOs/' + CAST (dbo.funSYS_GetBegFratYearN(@NextYear) AS VARCHAR) + '/' + Replace(vo.OfficeDescription, ' ', '') + '.png' AS Photo,
+         --'/images/SOs/' + CAST (dbo.funSYS_GetBegFratYearN(@NextYear) AS VARCHAR) + '/' + Replace(vo.OfficeDescription, ' ', '') + '.png' AS Photo,
+         au.ProfilePIctureUrl as Photo,
          vo.EmailAlias + '@kofc-wa.org' AS Email,
          isnull(dbo.funSYS_BuildName(mm.MemberID, 0, ''), '') AS FullName,
          vo.OfficeDescription,
@@ -48,5 +49,6 @@ FROM     tbl_ValOffices AS vo
          LEFT OUTER JOIN
          tbl_MasMembers AS mm
          ON cmo.MemberID = mm.MemberID
+         LEFT OUTER JOIN AspNetUsers au on mm.KofCID=au.KofCMemberID
 WHERE    vo.OfficeID = 41
 ORDER BY SortBy;
