@@ -1,8 +1,8 @@
-﻿ALTER PROCEDURE [dbo].[uspWEB_GetDDs] 
+﻿alter PROCEDURE [dbo].[uspWEB_GetDDs] 
 @NextYear BIT=0
 AS
 
---exec [uspWEB_GetDDs] 0
+--exec [uspWEB_GetDDs]
 IF EXISTS (SELECT *
            --FROM   tbl_MasMembers AS MM
            --       INNER JOIN
@@ -19,12 +19,15 @@ IF EXISTS (SELECT *
            WHERE  dd.Year = dbo.funSYS_GetBegFratYearN(@NextYear))
     BEGIN
         SELECT   dd.District AS DistrictI,
-                 CASE dd.district WHEN 0 then '' else CAST (dd.District AS VARCHAR) END AS District,
+                 CAST (dd.District AS VARCHAR) AS District,
                  dd.FullName + ISNULL('(' + CONVERT (VARCHAR, dd.Council) + ')','') AS FullName,
-                 CASE dd.district WHEN 0 THEN 'District Deputy Director all Districts' ELSE dbo.fun_GetDistrictCouncilList(dd.District) END AS AssignedCouncils,
+                 dbo.fun_GetDistrictCouncilList(dd.District) AS AssignedCouncils,
                  CASE dd.FullName WHEN 'Vacant' THEN '' ELSE '<a href=https://kofc-wa.org/ContactUs?messageRecipient=District%20Deputies:%20District%20' + CAST (dd.District AS VARCHAR) + ' target=_blank>Email</a>' END AS Email,
                  isnull(dd.MemberID,0) AS MemberID,
-                 'Washington State District Deputies ' + CAST (dbo.funSYS_GetBegFratYearN(@NextYear) AS VARCHAR) + ' - ' + CAST (dbo.funSYS_GetBegFratYearN(@NextYear) + 1 AS VARCHAR) AS Heading
+                 'Washington State District Deputies ' + CAST (dbo.funSYS_GetBegFratYearN(@NextYear) AS VARCHAR) + ' - ' + CAST (dbo.funSYS_GetBegFratYearN(@NextYear) + 1 AS VARCHAR) AS Heading,
+				 au.ProfilePictureUrl as Photo,
+				 ISNULL(dd.KofCID,0) as KofCID
+
         --FROM     tbl_MasMembers AS MM
         --         INNER JOIN
         --         tbl_ValCouncils AS VC
@@ -37,6 +40,7 @@ IF EXISTS (SELECT *
         --         ON dd.memberid = mm.MemberID
         --            AND OfficeID = 13
         FROM vewSYS_DDs dd
+		LEFT OUTER JOIN AspNetUsers au on au.KofCMemberID=dd.kofcid
         WHERE    dd.Year = dbo.funSYS_GetBegFratYearN(@NextYear)
         ORDER BY DistrictI;
     END
@@ -48,5 +52,7 @@ ELSE
                '' AS AssignedCouncils,
                '' AS Email,
                0 AS MemberID,
-               'Washington State District Deputies ' + CAST (dbo.funSYS_GetBegFratYearN(@NextYear) AS VARCHAR) + ' - ' + CAST (dbo.funSYS_GetBegFratYearN(@NextYear) + 1 AS VARCHAR) AS Heading;
+               'Washington State District Deputies ' + CAST (dbo.funSYS_GetBegFratYearN(@NextYear) AS VARCHAR) + ' - ' + CAST (dbo.funSYS_GetBegFratYearN(@NextYear) + 1 AS VARCHAR) AS Heading,
+			   NULL as Photo,
+			   0 as KofCID
     END

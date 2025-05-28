@@ -22,5 +22,7 @@ namespace KofCWSCWebsite.Models
 
         public string Heading { get; set; }
         public int MemberID { get; set; }
+        public string? Photo { get; set; }
+        public int? KofCID { get; set; }
     }
 }

@@ -16,6 +16,7 @@
             <th class="MyColHdr" style="text-align:center">
                 @Html.DisplayNameFor(model => model.DistrictI)
             </th>
+            <th class="MyColHdr"></th>
             <th class="MyColHdr">
                 @Html.DisplayNameFor(model => model.FullName)
             </th>
@@ -35,7 +36,15 @@
                     @Html.DisplayFor(modelItem => item.DistrictI)
                 </td>
                 <td>
-                    @Html.Raw(Utils.GetMemberNameLink(item.FullName,item.MemberID, User.Identity.IsAuthenticated, Context.Request.Host.Value, "GetDDs"))
+                    <a asp-controller="Users" asp-action="EditPhoto" asp-route-id="@item.KofCID">
+                        <img src="@(string.IsNullOrEmpty(item.Photo) ? "/images/missing.png" : item.Photo)"
+                             alt="Profile Picture"
+                             class="card-img-top"
+                             style="width: 21px; height:25px; object-fit: cover; background-color:white" />
+                    </a>
+                </td>
+                <td>
+                    @Html.Raw(Utils.GetMemberNameLink(item.FullName, item.MemberID, User.Identity.IsAuthenticated, Context.Request.Host.Value, "GetDDs"))
                     @*@Html.Raw(item.FullName)*@
                 </td>
                 <td>
