@@ -26,7 +26,10 @@
             <td style="width:30%">
                 <div>
                     <div style="float:right;padding:5px">
-                        <img src=@Html.DisplayFor(modelItem => item.Photo) style="width:100px" />
+                        <img src="@(string.IsNullOrEmpty(Model.FirstOrDefault().Photo) ? "/images/missing.png" : Model.FirstOrDefault().Photo)"
+                             alt="Profile Picture"
+                             class="card-img-top"
+                             style="width: 100px; object-fit: cover; background-color:white" />
                     </div>
                     <div>
                         @Html.DisplayFor(modelItem => item.FullName)
