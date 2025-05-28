@@ -49,6 +49,7 @@ namespace KofCWSCWebsite.Controllers
                 .FirstOrDefaultAsync();
             TempData["HasUser"] = user == null? ViewBag.HasUser = false:ViewBag.HasUser = true;
             TempData["PicUser"] = id;
+            ViewData["Referer"] = Request.Headers["Referer"].ToString();
             
             return View(user);
         }

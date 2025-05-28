@@ -14,6 +14,7 @@
             <th class="MyColHdr" style="width:40%">
                 @Html.DisplayNameFor(model => model.Chairmanship)
             </th>
+            <th class="MyColHdr"></th>
             <th class="MyColHdr" style="width:20%">
                 @Html.DisplayNameFor(model => model.FullName)
             </th>
@@ -33,7 +34,15 @@
                     @Html.DisplayFor(modelItem => item.Chairmanship)
                 </td>
                 <td>
-                    @Html.Raw(Utils.GetMemberNameLink(item.FullName, item.MemberID, User.Identity.IsAuthenticated,Context.Request.Host.Value, "GetChairmen"))
+                    <a asp-controller="Users" asp-action="EditPhoto" asp-route-id="@item.KofCID">
+                    <img src="@(string.IsNullOrEmpty(item.Photo) ? "/images/missing.png" : item.Photo)"
+                         alt="Profile Picture"
+                         class="card-img-top"
+                         style="width: 21px; height:25px; object-fit: cover; background-color:white" />
+                        </a>
+                </td>
+                <td>
+                    @Html.Raw(Utils.GetMemberNameLink(item.FullName, item.MemberID, User.Identity.IsAuthenticated, Context.Request.Host.Value, "GetChairmen"))
                     @*@Utils.GetMemberNameLink(item.FullName,item.MemberID,User.Identity.IsAuthenticated)*@
                     @*@Html.DisplayFor(modelItem => item.FullName)*@
                 </td>

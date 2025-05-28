@@ -1,32 +1,45 @@
 ﻿@model KofCWSCWebsite.Areas.Identity.Data.KofCUser
 
 
-@{ 
+@{
     bool myHasUser;
     bool.TryParse(TempData["HasUser"]?.ToString(), out myHasUser);
 }
 @if (myHasUser)
 {
-    <h1>Edit Member Photo for @Model.FirstName @Model.LastName</h1>
+    if (User.IsInRole("Admin"))
+    {
+        <h1>Edit Member Photo for @Model.FirstName @Model.LastName</h1>
+        <div style="font-size:small">
+            Profile Picture Specifications:<br />
+            File must be less than 2MB<br />
+            Only JPG, JPEG and PNG files are allowed<br />
+            Picture must be at least 200x200 pixels<br />
+            Picture resolution must be at least 72 DPI
+        </div>
+        <br />
+
+    }
+    else
+    {
+        <h1>Member Photo for @Model.FirstName @Model.LastName</h1>
+    }
 
 
-    <div style="font-size:small">
-        Profile Picture Specifications:<br />
-        File must be less than 2MB<br />
-        Only JPG, JPEG and PNG files are allowed<br />
-        Picture must be at least 200x200 pixels<br />
-        Picture resolution must be at least 72 DPI
-    </div><br />
+
 
     <img src="@(string.IsNullOrEmpty(Model.ProfilePictureUrl) ? "/images/missing.png" : Model.ProfilePictureUrl)"
          alt="Profile Picture"
          class="card-img-top"
          style="width: 200px; object-fit: cover; background-color:white" />
-    <form asp-action="UploadProfilePicture" method="post" enctype="multipart/form-data" asp-route-id="@Model.KofCMemberID">
-        <div asp-validation-summary="All" class="text-danger"></div>
-        <input type="file" name="file" accept="image/*" />
-        <button type="submit">Upload</button>
-    </form>
+    if (User.IsInRole("Admin"))
+    {
+        <form asp-action="UploadProfilePicture" method="post" enctype="multipart/form-data" asp-route-id="@Model.KofCMemberID">
+            <div asp-validation-summary="All" class="text-danger"></div>
+            <input type="file" name="file" accept="image/*" />
+            <button type="submit">Upload</button>
+        </form>
+    }
 }
 else
 {
@@ -34,4 +47,5 @@ else
     <br />
     <h3>Uploading a Picture is not Allowed.</h3>
 }
-<a asp-action="Index" asp-controller="TblMasMembers">Back to Members</a>
+
+<a href="@ViewData["Referer"]">Go Back</a>
