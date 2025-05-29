@@ -25,7 +25,8 @@ IF EXISTS (SELECT *
                  CASE dd.FullName WHEN 'Vacant' THEN '' ELSE '<a href=https://kofc-wa.org/ContactUs?messageRecipient=District%20Deputies:%20District%20' + CAST (dd.District AS VARCHAR) + ' target=_blank>Email</a>' END AS Email,
                  isnull(dd.MemberID,0) AS MemberID,
                  'Washington State District Deputies ' + CAST (dbo.funSYS_GetBegFratYearN(@NextYear) AS VARCHAR) + ' - ' + CAST (dbo.funSYS_GetBegFratYearN(@NextYear) + 1 AS VARCHAR) AS Heading,
-				 au.ProfilePictureUrl as Photo,
+				 dbo.[funSYS_GetPhotoURL](dd.KofCID) as Photo,
+                 --au.ProfilePictureUrl as Photo,
 				 ISNULL(dd.KofCID,0) as KofCID
 
         --FROM     tbl_MasMembers AS MM

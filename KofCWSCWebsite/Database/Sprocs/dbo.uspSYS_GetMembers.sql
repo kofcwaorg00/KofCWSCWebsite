@@ -1,8 +1,8 @@
-﻿create PROCEDURE [dbo].uspSYS_GetMembers
+﻿alter PROCEDURE [dbo].uspSYS_GetMembers
 @LastName nvarchar(50),
 @KofCID int
 AS
--- exec uspSYS_GetMembers 'st hiliare',0
+-- exec uspSYS_GetMembers 'philomeno',0
 IF (@KofCID = 0 )
 BEGIN
 	SELECT [MemberID]
@@ -87,9 +87,10 @@ BEGIN
       ,mm.[HidePersonalInfo]
       ,mm.[WhyDoNotEmail]
       ,mm.[LastUpdatedBy]
-	  ,au.ProfilePictureUrl
+      ,[dbo].[funSYS_GetPhotoURL](mm.KofCID) as ProfilePictureUrl
+	  --,au.ProfilePictureUrl
   FROM [dbo].[tbl_MasMembers] mm
-  LEFT OUTER JOIN AspNetUsers au on mm.KofCID=au.KofCMemberID
+  --LEFT OUTER JOIN AspNetUsers au on mm.KofCID=au.KofCMemberID
   WHERE mm.LastName like '%'+@LastName+'%'
   END
   ELSE

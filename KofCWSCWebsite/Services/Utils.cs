@@ -20,12 +20,44 @@ using KofCWSCWebsite.Models;
 using Microsoft.AspNetCore.Mvc;
 using System.Security.Claims;
 using KofCWSCWebsite.Areas.Identity.Data;
+using System.Reflection;
+using Microsoft.Extensions.Hosting.Internal;
 
 
 namespace KofCWSCWebsite.Services
 {
     public class Utils
     {
+        public static string ProcessPicURL(string url)
+        {
+            // url will contain
+            //  NULL - found profile but pic url is not there send back missing.png
+            //  default - no profile found so defaultprofilepic is returned
+            //  not null send back the url
+
+            // if it is null return a default missing png
+            if (url == null) {
+                return "/images/missing.png";
+            }
+            // if it is the default, test for it's exsistance and return the path
+            if (url.Contains("default"))
+            {
+                // parse the imagename from the url
+                // check to see if it exists
+                string webRootPath = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot", "images","defaultprofilepics");
+                string imagePath = Path.Combine(webRootPath, Path.GetFileName(url));
+
+                if (File.Exists(imagePath))
+                {
+                    return url;
+                }
+                else
+                {
+                    return "/images/missingA.png";
+                }
+            }
+            return url;
+        }
         public async static Task<T?> GetUserProp<T>(ClaimsPrincipal cpuser, Microsoft.AspNetCore.Identity.UserManager<KofCUser> _userManager,string property)
         {
             // Step 1: Retrieve the user ID from the ClaimsPrincipal
@@ -110,16 +142,6 @@ namespace KofCWSCWebsite.Services
 
             return emailAttachment;
         }
-
-
-
-
-
-
-
-
-
-
 
         public static string FormatLogEntry(object thisme, Exception ex, string addData = "")
         {
