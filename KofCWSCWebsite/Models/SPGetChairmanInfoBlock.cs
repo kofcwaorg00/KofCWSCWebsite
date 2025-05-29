@@ -20,5 +20,6 @@ namespace KofCWSCWebsite.Models
         public string? SupremeURL { get; set; }
         public int MemberID { get; set; }
         public string Heading { get; set; }
+        public int? KofCID { get; set; }
     }
 }

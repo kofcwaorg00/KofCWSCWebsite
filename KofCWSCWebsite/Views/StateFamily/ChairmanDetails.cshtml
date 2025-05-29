@@ -26,7 +26,9 @@
             <td style="width:30%">
                 <div>
                     <div style="float:right;padding:5px">
-                        @Html.Raw(@Utils.GetPicImage(Model.FirstOrDefault().Photo, 100, 0, $"{Model.FirstOrDefault().FullName}"))
+                        <a asp-controller="Users" asp-action="EditPhoto" asp-route-id="@Model.FirstOrDefault().KofCID">
+                            @Html.Raw(@Utils.GetPicImage(Model.FirstOrDefault().Photo, 100, 0, $"{Model.FirstOrDefault().FullName}"))
+                            </a>
                     </div>
                     <div>
                         @Html.DisplayFor(modelItem => item.FullName)

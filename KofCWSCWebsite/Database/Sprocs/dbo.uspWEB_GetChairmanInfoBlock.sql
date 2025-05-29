@@ -42,7 +42,8 @@ BEGIN
                    mm.MemberID,
                    (SELECT OfficeDescription
                     FROM   tbl_ValOffices
-                    WHERE  OfficeID = @OfficeID) + ' ' + CAST (dbo.funSYS_GetBegFratYearN(@NextYear) AS VARCHAR) + '-' + CAST ((dbo.funSYS_GetBegFratYearN(@NextYear) + 1) AS VARCHAR) AS Heading
+                    WHERE  OfficeID = @OfficeID) + ' ' + CAST (dbo.funSYS_GetBegFratYearN(@NextYear) AS VARCHAR) + '-' + CAST ((dbo.funSYS_GetBegFratYearN(@NextYear) + 1) AS VARCHAR) AS Heading,
+                    mm.KofCID
             FROM   tbl_MasMembers AS mm
                    LEFT OUTER JOIN tblWEB_SelfPublish AS sp ON sp.OID = @OfficeID
                    LEFT OUTER JOIN AspNetUsers au on au.KofCMemberID=mm.KofCID
@@ -79,6 +80,7 @@ BEGIN
                     FROM   tbl_ValOffices
                     WHERE  OfficeID = @OfficeID) AS SupremeURL,
                    0 AS MemberId,
-                   'No Chairman Assigned' + ' ' + CAST (dbo.funSYS_GetBegFratYearN(@NextYear) AS VARCHAR) + '-' + CAST ((dbo.funSYS_GetBegFratYearN(@NextYear) + 1) AS VARCHAR) AS Heading;
+                   'No Chairman Assigned' + ' ' + CAST (dbo.funSYS_GetBegFratYearN(@NextYear) AS VARCHAR) + '-' + CAST ((dbo.funSYS_GetBegFratYearN(@NextYear) + 1) AS VARCHAR) AS Heading,
+                   0 as KofCID
         END
 END
