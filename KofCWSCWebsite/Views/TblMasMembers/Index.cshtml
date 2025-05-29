@@ -177,27 +177,28 @@
                     <td>
                         <form asp-controller="Users" asp-action="EditPhoto" asp-route-id="@item.KofCid" method="get">
                             <button type="submit">
-                                @{
-                                    string mytitle = string.Empty;
-                                    string myPicURL = Utils.ProcessPicURL(item.ProfilePictureURL);
-                                    if (myPicURL.Contains("A"))
-                                    {
-                                        mytitle = "Picture does not exist. Upload to Profile or Local wwwroot";
-                                    }
-                                    else if (myPicURL.Contains("missing"))
-                                    {
-                                        mytitle = "Picture is not in Member's Profile";
-                                    }
-                                    else
-                                    {
-                                        mytitle = $"{item.FirstName} {item.LastName}";
-                                    }
-                                }
-                                    <img src="@myPicURL"
-                                         alt="Profile Picture"
-                                         class="card-img-top"
-                                         title="@mytitle"
-                                         style="width: 21px; height:25px; object-fit: cover; background-color:white" />
+                                @Html.Raw(@Utils.GetPicImage(item.ProfilePictureURL, 21, 25, $"{item.FirstName} {item.LastName}"))
+                                @*@{
+            string mytitle = string.Empty;
+            string myPicURL = Utils.ProcessPicURL(item.ProfilePictureURL);
+            if (myPicURL.Contains("A"))
+            {
+                mytitle = "Picture does not exist. Upload to Profile or Local wwwroot";
+            }
+            else if (myPicURL.Contains("missing"))
+            {
+                mytitle = "Picture is not in Member's Profile";
+            }
+            else
+            {
+                mytitle = $"{item.FirstName} {item.LastName}";
+            }
+        }
+            <img src="@myPicURL"
+                 alt="Profile Picture"
+                 class="card-img-top"
+                 title="@mytitle"
+                 style="width: 21px; height:25px; object-fit: cover; background-color:white" />*@
 
                             </button>
                         </form>

@@ -28,6 +28,28 @@ namespace KofCWSCWebsite.Services
 {
     public class Utils
     {
+        public static string GetPicImage(string url,int w,int h,string mname)
+        {
+            string mytitle = string.Empty;
+            string myPicURL = ProcessPicURL(url);
+            if (myPicURL.Contains("A"))
+            {
+                mytitle = "Profile does not exist. Create a Profile or upload to Local wwwroot";
+            }
+            else if (myPicURL.Contains("missing"))
+            {
+                mytitle = "Picture is not in Members Profile";
+            }
+            else
+            {
+                mytitle = mname;
+            }
+            string myH = h == 0 ? string.Empty : $"height:{h}px";
+            string myImage = $"<img src='{myPicURL}' alt='Profile Picture' class='card-img-top' " +
+                $"title='{mytitle}' style='width:{w}px; {myH}' object-fit: 'cover';background-color:'white' />";
+
+            return myImage ;
+        }
         public static string ProcessPicURL(string url)
         {
             // url will contain

@@ -35,11 +35,12 @@
                 </td>
                 <td>
                     <a asp-controller="Users" asp-action="EditPhoto" asp-route-id="@item.KofCID">
-                    <img src="@(string.IsNullOrEmpty(item.Photo) ? "/images/missing.png" : item.Photo)"
-                         alt="Profile Picture"
-                         class="card-img-top"
-                         style="width: 21px; height:25px; object-fit: cover; background-color:white" />
-                        </a>
+                        @Html.Raw(@Utils.GetPicImage(item.Photo, 21, 25, item.FullName))
+                        @*<img src="@(string.IsNullOrEmpty(item.Photo) ? "/images/missing.png" : item.Photo)"
+                             alt="Profile Picture"
+                             class="card-img-top"
+                             style="width: 21px; height:25px; object-fit: cover; background-color:white" />*@
+                    </a>
                 </td>
                 <td>
                     @Html.Raw(Utils.GetMemberNameLink(item.FullName, item.MemberID, User.Identity.IsAuthenticated, Context.Request.Host.Value, "GetChairmen"))
