@@ -1,4 +1,5 @@
-﻿@model IEnumerable<KofCWSCWebsite.Models.SPGetChairmanInfoBlock>
+﻿@using KofCWSCWebsite.Services;
+@model IEnumerable<KofCWSCWebsite.Models.SPGetChairmanInfoBlock>
 @*
     For more information on enabling MVC for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
 *@
@@ -21,8 +22,12 @@
                 {
                     if (item.Title == "Supreme Master")
                     {
-                        <div style="padding:5px">
-                            <img src="@Html.Raw(item.Photo)" style="float:left;padding:5px; width:100px" />
+                        <div style="padding:5px;float:left">
+                            <a asp-controller="Users" asp-action="EditPhoto" asp-route-id="@item.KofCID">
+                                <div style="float:left;padding:5px">
+                                    @Html.Raw(@Utils.GetPicImage(item.Photo, 100, 0, item.FullName))
+                                </div>
+                            </a>
                             <span>@Html.DisplayFor(modelItem => item.Title)</span>
                             <br />
                             <span>@Html.DisplayFor(modelItem => item.FullName)</span>
@@ -31,15 +36,18 @@
                             {
                                 <span>@Html.DisplayFor(modelItem => item.Phone)</span>
                             }
-                            <br />
                             <span>@Html.Raw(item.Email)</span>
                         </div>
                         continue;
                     }
                     if (item.Title.IndexOf("Western") > -1)
                     {
-                        <div style="padding:5px">
-                            <img src="@Html.Raw(item.Photo)" style="float:left;padding:5px; width:100px" />
+                        <div style="padding:5px;float:left">
+                            <a asp-controller="Users" asp-action="EditPhoto" asp-route-id="@item.KofCID">
+                                <div style="float:left;padding:5px">
+                                    @Html.Raw(@Utils.GetPicImage(item.Photo, 100, 0, item.FullName))
+                                </div>
+                            </a>
                             <span>@Html.DisplayFor(modelItem => item.Title)</span>
                             <br />
                             <span>@Html.DisplayFor(modelItem => item.FullName)</span>
@@ -63,8 +71,10 @@
                 {
                     if (item.Title == "Vice Supreme Master")
                     {
-                        <div style="padding:5px">
-                            <img src="@Html.Raw(item.Photo)" style="float:left;padding:5px; width:100px" />
+                        <div style="padding:5px;float:left">
+                            <div style="float:left;padding:5px">
+                                @Html.Raw(@Utils.GetPicImage(item.Photo, 100, 0, item.FullName))
+                            </div>
                             <span>@Html.DisplayFor(modelItem => item.Title)</span>
                             <br />
                             <span>@Html.DisplayFor(modelItem => item.FullName)</span>
@@ -80,8 +90,12 @@
                     }
                     if (item.Title.IndexOf("Eastern") > -1)
                     {
-                        <div style="padding:5px">
-                            <img src="@Html.Raw(item.Photo)" style="float:left;padding:5px; width:100px" />
+                        <div style="padding:5px;float:left">
+                            <a asp-controller="Users" asp-action="EditPhoto" asp-route-id="@item.KofCID">
+                                <div style="float:left;padding:5px">
+                                    @Html.Raw(@Utils.GetPicImage(item.Photo, 100, 0, item.FullName))
+                                </div>
+                            </a>
                             <span>@Html.DisplayFor(modelItem => item.Title)</span>
                             <br />
                             <span>@Html.DisplayFor(modelItem => item.FullName)</span>

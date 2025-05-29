@@ -1,4 +1,4 @@
-﻿create FUNCTION [dbo].[funSYS_GetPhotoURL](@KofCID int = 0)
+﻿alter FUNCTION [dbo].[funSYS_GetPhotoURL](@KofCID int = 0)
 RETURNS nvarchar(500)
 	
 AS
@@ -11,12 +11,12 @@ BEGIN
 	IF NO then return a default URL based on wwwroot/images/defaultprofilepics/<memberid>
 	IF YES then return the Picture URL from the profile
 */
--- select [dbo].[funSYS_GetPhotoURL](4870062)
+-- select [dbo].[funSYS_GetPhotoURL](4594382)
 -- select * from aspnetusers where kofcmemberid=4870062
 	DECLARE @RetVal nvarchar(500)
 	IF EXISTS (SELECT * FROM AspNetUsers WHERE KofCMemberID = @KofCID)
 	BEGIN
-		SELECT @RetVal=ProfilePictureUrl FROM AspNetUsers WHERE KofCMemberID = @KofCID
+		SELECT @RetVal=ISNULL(ProfilePictureUrl,'/images/defaultprofilepics/'+cast(@KofCID as nvarchar(10))+'.png') FROM AspNetUsers WHERE KofCMemberID = @KofCID
 	END
 	ELSE
 	BEGIN
