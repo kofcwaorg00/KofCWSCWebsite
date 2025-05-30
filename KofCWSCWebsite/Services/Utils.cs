@@ -30,7 +30,7 @@ namespace KofCWSCWebsite.Services
 {
     public class Utils
     {
-        public static string GetPicImage(string url,int w,int h,string mname,int KofCID)
+        public static string GetPicImage(string url,int w,int h,string mname,int KofCID,ClaimsPrincipal user)
         {
             // url = missingA and myPicURL = defaultprofilepics "profile missing but we hvae a default in wwwroot"
             // url = null and myPicURL=missing.png
@@ -48,17 +48,17 @@ namespace KofCWSCWebsite.Services
             }
             if (myUrl.Contains("missingA") && myPicURL.Contains("defaultprofilepics"))
             {
-                myBorder = "border:solid;border-color:red";
-                mytitle = $"{mname} - Profile is missing but we have a default picture in wwwroot";
+                myBorder = user.IsInRole("Admin") ? "border:solid;border-color:red" : string.Empty;
+                mytitle = user.IsInRole("Admin") ? $"{mname} - Profile is missing but we have a default picture in wwwroot" : mname;
             }
             if (myUrl.IsNullOrEmpty() && myPicURL.Contains("missing.png"))
             {
-                mytitle = $"{mname} - Member has a profile but no Picture is present. No picture found in wwwroot";
+                mytitle = user.IsInRole("Admin") ? $"{mname} - Member has a profile but no Picture is present. No picture found in wwwroot" : mname;
             }
             if (myUrl.Contains("missingA") && myPicURL.Contains("missingA"))
             {
-                myBorder = "border:solid;border-color:red";
-                mytitle = $"{mname} - Profile is missing. No picture found in wwwroot";
+                myBorder = user.IsInRole("Admin") ? "border:solid;border-color:red" : string.Empty;
+                mytitle = user.IsInRole("Admin") ? $"{mname} - Profile is missing. No picture found in wwwroot" : mname;
             }
             if (myUrl.Contains("blob"))
             {
