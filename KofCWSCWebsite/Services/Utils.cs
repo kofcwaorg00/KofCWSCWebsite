@@ -22,56 +22,99 @@ using System.Security.Claims;
 using KofCWSCWebsite.Areas.Identity.Data;
 using System.Reflection;
 using Microsoft.Extensions.Hosting.Internal;
+using Microsoft.AspNetCore.Mvc.Rendering;
+using com.sun.imageio.plugins.common;
 
 
 namespace KofCWSCWebsite.Services
 {
     public class Utils
     {
-        public static string GetPicImage(string url,int w,int h,string mname)
+        public static string GetPicImage(string url,int w,int h,string mname,int KofCID)
         {
+            // url = missingA and myPicURL = defaultprofilepics "profile missing but we hvae a default in wwwroot"
+            // url = null and myPicURL=missing.png
+            // url = missingA and myPIcURL = missingA
+            // url = null and myPicURL = defaultprofilepics "has profile but is missing pictureurl and we hve default in wwwroot"
+            // url = blob and myPicURL = blob "has profile picture
+            string myUrl = url.IsNullOrEmpty() ? string.Empty : url;
             string mytitle = string.Empty;
-            string myPicURL = ProcessPicURL(url);
-            if (myPicURL.Contains("A"))
+            string myPicURL = ProcessPicURL(url,KofCID);
+            string myBorder = string.Empty;
+            
+            if (myUrl.IsNullOrEmpty() && myPicURL.Contains("defaultprofilepics"))
             {
-                mytitle = "Profile does not exist. Create a Profile or upload to Local wwwroot";
+                mytitle = $"{mname} - Member has a profile but no Picture is present. Using default picture in wwwroot";
             }
-            else if (myPicURL.Contains("missing"))
+            if (myUrl.Contains("missingA") && myPicURL.Contains("defaultprofilepics"))
             {
-                mytitle = "Picture is not in Members Profile";
+                myBorder = "border:solid;border-color:red";
+                mytitle = $"{mname} - Profile is missing but we have a default picture in wwwroot";
             }
-            else
+            if (myUrl.IsNullOrEmpty() && myPicURL.Contains("missing.png"))
+            {
+                mytitle = $"{mname} - Member has a profile but no Picture is present. No picture found in wwwroot";
+            }
+            if (myUrl.Contains("missingA") && myPicURL.Contains("missingA"))
+            {
+                myBorder = "border:solid;border-color:red";
+                mytitle = $"{mname} - Profile is missing. No picture found in wwwroot";
+            }
+            if (myUrl.Contains("blob"))
             {
                 mytitle = mname;
             }
-            string myH = h == 0 ? string.Empty : $"height:{h}px";
-            string myImage = $"<img src='{myPicURL}' alt='Profile Picture' class='card-img-top' " +
-                $"title='{mytitle}' style='width:{w}px; {myH}' object-fit: 'cover';background-color:'white' />";
+                       
+            string myH = h == 0 ? string.Empty : $"height:{h}px;";
+            //string myImage = $"<img src='{myPicURL}' alt='Profile Picture' class='card-img-top' " +
+            //    $"title='{mytitle}' style='width:{w}px; {myH}' object-fit: 'cover';background-color:'white' {myBorder} />";
+            //string myImage = $"<img src='{myPicURL}' alt='Profile Picture' class='card-img-top' " +
+            //    $"title='{mytitle}' style='width:{w}px; {myH}' object-fit: 'cover';background-color:'white' {myBorder} />";
 
-            return myImage ;
+            var imgTag = new TagBuilder("img");
+            imgTag.Attributes.Add("src", myPicURL);
+            imgTag.Attributes.Add("alt", "Profile Picture");
+            imgTag.Attributes.Add("style", $"width:{w}px; {myH} object-fit: cover; background-color: white;{myBorder}");
+            imgTag.Attributes.Add("title", mytitle);
+
+            using var writer = new StringWriter();
+            imgTag.WriteTo(writer, System.Text.Encodings.Web.HtmlEncoder.Default);
+            return writer.ToString();
+
         }
-        public static string ProcessPicURL(string url)
+        public static string ProcessPicURL(string url,int KofCID)
         {
             // url will contain
             //  NULL - found profile but pic url is not there send back missing.png
             //  default - no profile found so defaultprofilepic is returned
             //  not null send back the url
 
-            // if it is null return a default missing png
+            // if it is null return a default missing png or default nnnnnn.png
             if (url == null) {
-                return "/images/missing.png";
+
+                string webRootPath = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot", "images", "defaultprofilepics");
+                string imagePath = Path.Combine(webRootPath, Path.GetFileName($"/{KofCID}.png"));
+
+                if (File.Exists(imagePath))
+                {
+                    return $"/images/defaultprofilepics/{KofCID}.png";
+                }
+                else
+                {
+                    return "/images/missing.png";
+                }
             }
             // if it is the default, test for it's exsistance and return the path
-            if (url.Contains("default"))
+            if (url.Contains("missingA"))
             {
                 // parse the imagename from the url
                 // check to see if it exists
                 string webRootPath = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot", "images","defaultprofilepics");
-                string imagePath = Path.Combine(webRootPath, Path.GetFileName(url));
+                string imagePath = Path.Combine(webRootPath, Path.GetFileName($"/{KofCID}.png"));
 
                 if (File.Exists(imagePath))
                 {
-                    return url;
+                    return $"/images/defaultprofilepics/{KofCID}.png";
                 }
                 else
                 {

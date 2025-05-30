@@ -16,11 +16,12 @@ BEGIN
 	DECLARE @RetVal nvarchar(500)
 	IF EXISTS (SELECT * FROM AspNetUsers WHERE KofCMemberID = @KofCID)
 	BEGIN
-		SELECT @RetVal=ISNULL(ProfilePictureUrl,'/images/defaultprofilepics/'+cast(@KofCID as nvarchar(10))+'.png') FROM AspNetUsers WHERE KofCMemberID = @KofCID
+		--SELECT @RetVal=ISNULL(ProfilePictureUrl,'/images/defaultprofilepics/'+cast(@KofCID as nvarchar(10))+'.png') FROM AspNetUsers WHERE KofCMemberID = @KofCID
+		SELECT @RetVal=ProfilePictureUrl FROM AspNetUsers WHERE KofCMemberID = @KofCID
 	END
 	ELSE
 	BEGIN
-		SELECT @RetVal='/images/defaultprofilepics/'+cast(@KofCID as nvarchar(10))+'.png'
+		SELECT @RetVal='/images/missingA.png'
 	END
 
 	RETURN @RetVal

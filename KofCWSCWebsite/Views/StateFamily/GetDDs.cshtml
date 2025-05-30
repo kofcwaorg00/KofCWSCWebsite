@@ -38,7 +38,7 @@
                 <td>
                     @{
                         string mytitle = string.Empty;
-                        string myPicURL = Utils.ProcessPicURL(item.Photo);
+                        string myPicURL = Utils.ProcessPicURL(item.Photo,item.KofCID);
                         if (myPicURL.Contains("A"))
                         {
                             mytitle = "Profile does not exist. Create a Profile or upload to Local wwwroot";
@@ -53,7 +53,7 @@
                         }
                     }
                     <a asp-controller="Users" asp-action="EditPhoto" asp-route-id="@item.KofCID">
-                        @Html.Raw(@Utils.GetPicImage(item.Photo,21,25,item.FullName))
+                        @Html.Raw(@Utils.GetPicImage(item.Photo,21,25,item.FullName,item.KofCID))
                     </a>
                 </td>
                 <td>

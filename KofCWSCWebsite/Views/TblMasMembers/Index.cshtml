@@ -177,7 +177,7 @@
                     <td>
                         <form asp-controller="Users" asp-action="EditPhoto" asp-route-id="@item.KofCid" method="get">
                             <button type="submit">
-                                @Html.Raw(@Utils.GetPicImage(item.ProfilePictureURL, 21, 25, $"{item.FirstName} {item.LastName}"))
+                                @Html.Raw(@Utils.GetPicImage(item.ProfilePictureURL, 21, 25, $"{item.FirstName} {item.LastName}",item.KofCid))
                                 @*@{
             string mytitle = string.Empty;
             string myPicURL = Utils.ProcessPicURL(item.ProfilePictureURL);
