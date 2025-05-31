@@ -3,11 +3,17 @@
 
 @{
     bool myHasUser;
+    string myCapName = string.Empty;
     bool.TryParse(TempData["HasUser"]?.ToString(), out myHasUser);
-
-    string myCapFName = @System.Globalization.CultureInfo.CurrentCulture.TextInfo.ToTitleCase(Model.FirstName);
-    string myCapLname = @System.Globalization.CultureInfo.CurrentCulture.TextInfo.ToTitleCase(Model.LastName);
-    string myCapName = $"{myCapFName} {myCapLname}";
+    if (myHasUser) {
+        string myCapFName = @System.Globalization.CultureInfo.CurrentCulture.TextInfo.ToTitleCase(Model.FirstName);
+        string myCapLname = @System.Globalization.CultureInfo.CurrentCulture.TextInfo.ToTitleCase(Model.LastName);
+        myCapName = $"{myCapFName} {myCapLname}";
+    }
+    else
+    {
+        myCapName = TempData["PicUser"].ToString();
+    }
 }
 
 @if (myHasUser)
