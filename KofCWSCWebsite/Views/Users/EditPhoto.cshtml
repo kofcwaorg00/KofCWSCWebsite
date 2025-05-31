@@ -4,12 +4,17 @@
 @{
     bool myHasUser;
     bool.TryParse(TempData["HasUser"]?.ToString(), out myHasUser);
+
+    string myCapFName = @System.Globalization.CultureInfo.CurrentCulture.TextInfo.ToTitleCase(Model.FirstName);
+    string myCapLname = @System.Globalization.CultureInfo.CurrentCulture.TextInfo.ToTitleCase(Model.LastName);
+    string myCapName = $"{myCapFName} {myCapLname}";
 }
+
 @if (myHasUser)
 {
     if (User.IsInRole("Admin"))
     {
-        <h1>Edit Member Photo for @Model.FirstName @Model.LastName</h1>
+        <h1>Edit Member Photo for  @myCapName</h1>
         <div style="font-size:small">
             Profile Picture Specifications:<br />
             File must be less than 2MB<br />
@@ -22,7 +27,7 @@
     }
     else
     {
-        <h1>Member Photo for @Model.FirstName @Model.LastName</h1>
+        <h1>Member Photo for @myCapName</h1>
     }
 
 

@@ -57,6 +57,8 @@ namespace KofCWSCWebsite.Controllers
         [Route("UploadProfilePicture/{id}")]
         public async Task<IActionResult> UploadProfilePicture(IFormFile file,int id)
         {
+            ViewData["Referer"] = Request.Headers["Referer"].ToString();
+
             var user = await _userManager.Users
                 .Where(u => u.KofCMemberID == id)
                 .FirstOrDefaultAsync();
@@ -102,9 +104,9 @@ namespace KofCWSCWebsite.Controllers
                     float dpiX = image.HorizontalResolution;
                     float dpiY = image.VerticalResolution;
 
-                    if (width < 200 || height < 200)
+                    if (width > 200 || height > 200)
                     {
-                        ModelState.AddModelError("Input.ProfilePicture", "Image must be at least 200x200 pixels.");
+                        ModelState.AddModelError("Input.ProfilePicture", "Image must be not be larger than 200x200 pixels.");
                         TempData["HasUser"] = true;
                         return View("EditPhoto", user);
                     }
