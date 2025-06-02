@@ -178,7 +178,12 @@ namespace KofCWSCWebsite.Areas.Identity.Pages.Account
             }
             //----------------------------------------------------------------------------------------
             returnUrl ??= Url.Content("~/");
-            ExternalLogins = (await _signInManager.GetExternalAuthenticationSchemesAsync()).ToList();
+            //----------------------------------------------------------------------------------------
+            // 6/2/2025 Tim Philomeno
+            // I don't believe that this is necessary here.
+            //ExternalLogins = (await _signInManager.GetExternalAuthenticationSchemesAsync()).ToList();
+            //----------------------------------------------------------------------------------------
+
             if (ModelState.IsValid)
             {
                 var user = CreateUser();
