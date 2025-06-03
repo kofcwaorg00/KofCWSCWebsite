@@ -12,6 +12,11 @@
             <h2>Create a new account.</h2>
             <hr />
             <div asp-validation-summary="ModelOnly" class="text-danger" role="alert"></div>
+            <div style="display:none">
+                <input asp-for="Input.MemberVerified" class="form-control" autocomplete="off" aria-required="true" placeholder="Tom" />
+                <label asp-for="Input.MemberVerified">MemberVerified</label>
+                <span asp-validation-for="Input.MemberVerified" class="text-danger"></span>
+            </div>
             <div class="form-floating mb-3">
                 <input asp-for="Input.FirstName" class="form-control" autocomplete="off" aria-required="true" placeholder="Tom" />
                 <label asp-for="Input.FirstName">First Name</label>
@@ -42,6 +47,36 @@
                 <label asp-for="Input.ConfirmPassword">Confirm Password</label>
                 <span asp-validation-for="Input.ConfirmPassword" class="text-danger"></span>
             </div>
+            <br />
+            <br />
+            <div style="display:block">
+                <span style="font-weight:bold">Additional Member Information</span>
+                <div class="form-floating mb-3">
+                    <input asp-for="Input.Address" class="form-control" autocomplete="Address" aria-required="true" placeholder="password" />
+                    <label asp-for="Input.Address">Address</label>
+                    <span asp-validation-for="Input.Address" class="text-danger"></span>
+                </div>
+                <div class="form-floating mb-3">
+                    <input asp-for="Input.City" class="form-control" autocomplete="City" aria-required="true" placeholder="password" />
+                    <label asp-for="Input.City">City</label>
+                    <span asp-validation-for="Input.City" class="text-danger"></span>
+                </div>
+                <div class="form-floating mb-3">
+                    <input asp-for="Input.State" class="form-control" autocomplete="State" aria-required="true" placeholder="password" />
+                    <label asp-for="Input.State">State</label>
+                    <span asp-validation-for="Input.State" class="text-danger"></span>
+                </div>
+                <div class="form-floating mb-3">
+                    <input asp-for="Input.PostalCode" class="form-control" autocomplete="PostalCode" aria-required="true" placeholder="password" />
+                    <label asp-for="Input.PostalCode">Postal Code</label>
+                    <span asp-validation-for="Input.PostalCode" class="text-danger"></span>
+                </div>
+                <div class="form-floating mb-3">
+                    <input asp-for="Input.Wife" class="form-control" autocomplete="Wife" aria-required="true" placeholder="password" />
+                    <label asp-for="Input.Wife">Wife's Name</label>
+                    <span asp-validation-for="Input.Wife" class="text-danger"></span>
+                </div>
+            </div>
             <button id="registerSubmit" type="submit" class="w-100 btn btn-lg btn-primary">Register</button>
         </form>
     </div>
@@ -50,14 +85,14 @@
         <br />
         <h3 style="text-align:center">Welcome to the Knights of Columbus<br />Washington State Council</h3>
         <p>
-            Registration on this site is reserved for members of the Washington State Knights of Columbus Council. 
+            Registration on this site is reserved for members of the Washington State Knights of Columbus Council.
             You must have a valid Knights of Columbus membership and your membership number must be in our database.
-            You will have to list your membership number to register.  If we do not have a record of your membership, i.e. 
+            You will have to list your membership number to register.  If we do not have a record of your membership, i.e.
             you are a new member, please email webmaster@kofc-wa.org with your name, phone number, email address, member number
             and council number.  The webmaster will record this information and then you will be able register on this site.
         </p>
         <h3>Password Complexity Rules</h3>
-        <br />
+        
         <h5>All passwords must meet the following MINIMUM criteria.</h5>
         <span style="font-weight:bold">Minimum Length:</span> Passwords must be at least 8 characters long.
         <br />
@@ -74,8 +109,21 @@
         </span> At least one uppercase character (‘A’-‘Z’).
         <br />
         <span style="font-weight:bold">Require Non-Alphanumeric:</span> At least one non-alphanumeric character (e.g., symbols like '!', '&commat;', '#').
-
+        <div style="display:block">
+            <br />
+            <span style="font-weight:bold"><== Additional Member Information</span>
+            <p>
+                All Members who wish to register must already exist in our database.  Your information is not and so we will need to collect additional information for you to be added.
+                <br />
+                <br />
+                To do this, please fill in the Additional Member Information to the left.
+                <br />
+                <br />
+                Once sumbitted your request will be reviewed and a verification email will be sent to the email listed.
+            </p>
+        </div>
     </div>
+
 
     @* <div class="col-md-6 col-md-offset-2">
             <section>

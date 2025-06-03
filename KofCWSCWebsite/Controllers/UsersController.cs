@@ -8,6 +8,7 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
 using Serilog;
 using Microsoft.AspNetCore.Identity;
+using System.Text.Json;
 
 
 namespace KofCWSCWebsite.Controllers
@@ -236,17 +237,25 @@ namespace KofCWSCWebsite.Controllers
                     var responseTask = client.GetAsync(myURI);
                     responseTask.Wait();
 
+                    // "Invalid KofC Member ID Format"
+                    // "Member is Suspended! "
+                    // True if it is found
+                    // Fals if it is not found
                     var result = responseTask.Result;
                     var myAns = result.Content.ReadAsStringAsync().Result;
 
-                    if (myAns == "false" || myAns.ToLower().Contains("invalid"))
+                    if (myAns.ToLower().Contains("invalid"))
+                    {
+                        return Json($"Member Number {KofCMemberID} format is invalid." );
+                    }
+                    if (myAns == "false")
                     {
                         return Json($"Member Number {KofCMemberID} is not found in our database. Please email webmaster@kofc-wa.org with your member number, full name, email address and council.");
                     }
                     else if(myAns.ToLower().Contains("sus"))
                     {
                         // the SUS indicates that the member is suspended
-                        return Json($"Member is Invalid.");
+                        return Json($"Member is Invalid (sus).");
                     }
                     else
                     {

@@ -128,6 +128,13 @@ namespace KofCWSCWebsite.Areas.Identity.Pages.Account
             [Display(Name = "Confirm password")]
             [Compare("Password", ErrorMessage = "The password and confirmation password do not match.")]
             public string ConfirmPassword { get; set; }
+            public string Address { get; set; }
+            public string City { get; set; }
+            public string State { get; set; }
+            public string PostalCode { get; set; }
+            public string Wife { get; set; }
+            public int Council { get; set; }
+            public bool MemberVerfied { get; set; }
 
         }
 
@@ -191,6 +198,13 @@ namespace KofCWSCWebsite.Areas.Identity.Pages.Account
                 user.FirstName = Input.FirstName;
                 user.LastName = Input.LastName;
                 user.KofCMemberID = Input.KofCMemberID;
+                user.Address = Input.Address;
+                user.City = Input.City;
+                user.State= Input.State;
+                user.PostalCode = Input.PostalCode;
+                user.Wife = Input.Wife;
+                user.Council = Input.Council;
+                user.MemberVerfied = Input.MemberVerfied;
 
                 await _userStore.SetUserNameAsync(user, Input.Email, CancellationToken.None);
                 await _emailStore.SetEmailAsync(user, Input.Email, CancellationToken.None);
@@ -253,7 +267,7 @@ namespace KofCWSCWebsite.Areas.Identity.Pages.Account
                 catch (Exception ex)
                 {
 
-                    ModelState.AddModelError(string.Empty, "Only 1 registration account is allowed per Member");
+                    ModelState.AddModelError(string.Empty, "KofC Member ID is already in use. Only 1 registration account is allowed per KofC Member ID");
                     Log.Error(Utils.FormatLogEntry(this, ex));
                 }
                

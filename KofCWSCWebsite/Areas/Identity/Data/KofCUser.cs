@@ -26,5 +26,12 @@ public class KofCUser : IdentityUser
     public int KofCMemberID { get; set; }
 
     public string? ProfilePictureUrl { get; set; }
+    public string? Address { get; set; }
+    public string? City { get; set; }
+    public string? State { get; set; }
+    public string? PostalCode { get; set; }
+    public string? Wife { get; set; }
+    public int? Council { get; set; }
+    public bool MemberVerfied { get; set; }
 }
 
