@@ -11,7 +11,7 @@ SELECT   'State Officers ' + CAST (dbo.funSYS_GetBegFratYearN(@NextYear) AS VARC
          vo.EmailAlias + '@kofc-wa.org' AS Email,
          isnull(dbo.funSYS_BuildName(mm.MemberID, 0, ''), '') AS FullName,
          vo.OfficeDescription,
-         'ContactUs?messageRecipient=State%20Officers: ' + vo.OfficeDescription AS ContactUs,
+         '/ContactUs?messageRecipient=State%20Officers: ' + vo.OfficeDescription AS ContactUs,
          isnull(mm.MemberID, 0) AS MemberID,
          'TblMasMembers/Details/' AS DirInfo,
          CASE vo.OfficeID WHEN 46 THEN 1 WHEN 47 THEN 3 WHEN 49 THEN 4 WHEN 50 THEN 5 WHEN 45 THEN 6 WHEN 51 THEN 7 WHEN 30 THEN 8 ELSE 0 END AS SortBy
@@ -37,7 +37,7 @@ SELECT   'State Officers ' + CAST (dbo.funSYS_GetBegFratYearN(@NextYear) AS VARC
          vo.EmailAlias + '@kofc-wa.org' AS Email,
          isnull(dbo.funSYS_BuildName(mm.MemberID, 0, ''), '') AS FullName,
          vo.OfficeDescription,
-         '?messageRecipient=State%20Officers:' + vo.OfficeDescription AS ContactUs,
+         '/ContactUs?messageRecipient=Supreme%20Council: ' + vo.OfficeDescription AS ContactUs,
          isnull(mm.MemberID, 0) AS MemberID,
          'TblMasMembers/Details/' AS DirInfo,
          9 AS SortBy
