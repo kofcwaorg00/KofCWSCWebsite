@@ -2,9 +2,13 @@
 @model RegisterModel
 @{
     ViewData["Title"] = "Register";
+    //ViewBag.KofCIDErr will contain KofCVerifyErrors
+    var isKOFCE = ViewBag.KofCIDErr ?? string.Empty;
+
 }
 
 <h1>@ViewData["Title"]</h1>
+@isKOFCE
 
 <div class="row">
     <div class="col-md-4">
@@ -27,10 +31,14 @@
                 <label asp-for="Input.LastName">Last Name</label>
                 <span asp-validation-for="Input.LastName" class="text-danger"></span>
             </div>
+            <div id="loadingSpinner" style="display: none">
+                <img style="width:50px" src="/images/blue loading animate.png" alt="Loading..." />
+            </div>
             <div class="form-floating mb-3">
-                <input asp-for="Input.KofCMemberID" class="form-control" autocomplete="KofCMemberID" aria-required="true" placeholder="1234567" />
+                <input id="KofCID" asp-for="Input.KofCMemberID" class="form-control" autocomplete="KofCMemberID" aria-required="true" placeholder="1234567" />
                 <label asp-for="Input.KofCMemberID">KofC Member ID</label>
-                <span asp-validation-for="Input.KofCMemberID" d class="text-danger"></span>
+                @*<span id="KofCIDError" asp-validation-for="Input.KofCMemberID" d class="text-danger"></span>*@
+                <span id="KofCIDError" class="text-danger"></span>
             </div>
             <div class="form-floating mb-3">
                 <input asp-for="Input.Email" class="form-control" autocomplete="username" aria-required="true" placeholder="name@example.com" />
@@ -92,7 +100,7 @@
             and council number.  The webmaster will record this information and then you will be able register on this site.
         </p>
         <h3>Password Complexity Rules</h3>
-        
+
         <h5>All passwords must meet the following MINIMUM criteria.</h5>
         <span style="font-weight:bold">Minimum Length:</span> Passwords must be at least 8 characters long.
         <br />
@@ -123,8 +131,33 @@
             </p>
         </div>
     </div>
+    
 
+    <script>
+    $(document).ready(function () {
+        $("#KofCID").on("blur", function () {
+            $("#KofCIDError").text("");
+            $("#loadingSpinner").show(); // Show spinner when request starts
+                //alert('running blur')
+            $.get("/Users/VerifyKofCID", { KofCID: $(this).val() }, function (response) {
+                $("#loadingSpinner").hide(); // Hide spinner when request completes
+                    if (response.success) {
+                        //alert("Success");
+                        alert(response.message);
+                        //$("#KofCIDMessage").text(response.message); // Show error message
+                        //$("#submitButton").prop("disabled", true);  // Disable submit button
+                    } else {
+                        //alert("no Success");
+                        alert(response.message);
+                        $("#KofCIDError").text(response.message); // response.message;
+                        //$("#KofCIDMessage").text(""); // Clear error
+                        //$("#submitButton").prop("disabled", false); // Enable submit button
+                    }
+                });
+            });
+        });</script>
 
+    @*<button id="submitButton">Submit</button>*@
     @* <div class="col-md-6 col-md-offset-2">
             <section>
                 <h3>Use another service to register.</h3>

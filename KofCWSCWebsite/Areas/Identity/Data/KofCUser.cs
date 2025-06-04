@@ -32,6 +32,6 @@ public class KofCUser : IdentityUser
     public string? PostalCode { get; set; }
     public string? Wife { get; set; }
     public int? Council { get; set; }
-    public bool MemberVerfied { get; set; }
+    public bool? MemberVerified { get; set; }
 }
 

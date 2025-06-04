@@ -9,6 +9,7 @@ using Microsoft.IdentityModel.Tokens;
 using Serilog;
 using Microsoft.AspNetCore.Identity;
 using System.Text.Json;
+using com.sun.org.apache.bcel.@internal.generic;
 
 
 namespace KofCWSCWebsite.Controllers
@@ -22,7 +23,7 @@ namespace KofCWSCWebsite.Controllers
         private UserManager<KofCUser> _userManager;
         private readonly IConfiguration _configuration;
 
-        public UsersController(DataSetService dataSetService, ApiHelper apiHelper,UserManager<KofCUser> userManager,IConfiguration configuration)
+        public UsersController(DataSetService dataSetService, ApiHelper apiHelper, UserManager<KofCUser> userManager, IConfiguration configuration)
         {
             _dataSetService = dataSetService;
             _apiHelper = apiHelper;
@@ -48,15 +49,15 @@ namespace KofCWSCWebsite.Controllers
             var user = await _userManager.Users
                 .Where(u => u.KofCMemberID == id)
                 .FirstOrDefaultAsync();
-            TempData["HasUser"] = user == null? ViewBag.HasUser = false:ViewBag.HasUser = true;
+            TempData["HasUser"] = user == null ? ViewBag.HasUser = false : ViewBag.HasUser = true;
             TempData["PicUser"] = id;
             ViewData["Referer"] = Request.Headers["Referer"].ToString();
-            
+
             return View(user);
         }
 
         [Route("UploadProfilePicture/{id}")]
-        public async Task<IActionResult> UploadProfilePicture(IFormFile file,int id)
+        public async Task<IActionResult> UploadProfilePicture(IFormFile file, int id)
         {
             ViewData["Referer"] = Request.Headers["Referer"].ToString();
 
@@ -71,7 +72,7 @@ namespace KofCWSCWebsite.Controllers
                 {
                     ModelState.AddModelError("Input.ProfilePicture", "File too large. Max 2MB.");
                     TempData["HasUser"] = true;
-                    return View("EditPhoto",user);
+                    return View("EditPhoto", user);
                 }
 
                 // Check content type
@@ -156,7 +157,7 @@ namespace KofCWSCWebsite.Controllers
                 user.ProfilePictureUrl = blobClient.Uri.ToString();
                 await _userManager.UpdateAsync(user);
             }
-            return RedirectToAction("Index", "TblMasMembers", new { lastname = user.LastName});
+            return RedirectToAction("Index", "TblMasMembers", new { lastname = user.LastName });
         }
 
 
@@ -243,24 +244,48 @@ namespace KofCWSCWebsite.Controllers
                     // Fals if it is not found
                     var result = responseTask.Result;
                     var myAns = result.Content.ReadAsStringAsync().Result;
+                    int myResult = int.Parse(myAns);
+                    switch (myResult)
+                    {
+                        case -1:
+                            ViewBag.KofCIDErr = $"Member Number {KofCMemberID} format is invalid.";
+                            return Json(new { success = false, message = $"Member Number {KofCMemberID} format is invalid." });
+                        case 1:
+                            ViewBag.KofCIDErr = $"Member Number {KofCMemberID} is not found in our database. To continue registration, fill in the Additional Information and Save";
+                            return Json(new { success = true,message = $"Member Number {KofCMemberID} is not found in our database. To continue registration, fill in the Additional Information and Save" });
+                        case 2:
+                            //2 = is in our data but no profile - ALLOWREG
+                            return Json(true);
+                        case 3:
+                            ViewBag.KofCIDErr = $"Invalid Login";
+                            return Json(new { success = false, message = $"Invalid Login" });
+                        case 4:
+                            return Json(true);
+                        default:
+                            return Json(new { success = false, message = $"untrapped error" });
+                    }
 
-                    if (myAns.ToLower().Contains("invalid"))
-                    {
-                        return Json($"Member Number {KofCMemberID} format is invalid." );
-                    }
-                    if (myAns == "false")
-                    {
-                        return Json($"Member Number {KofCMemberID} is not found in our database. Please email webmaster@kofc-wa.org with your member number, full name, email address and council.");
-                    }
-                    else if(myAns.ToLower().Contains("sus"))
-                    {
-                        // the SUS indicates that the member is suspended
-                        return Json($"Member is Invalid (sus).");
-                    }
-                    else
-                    {
-                        return Json(true);
-                    }
+
+                    //if (myAns.ToLower().Contains("invalid"))
+                    //{
+                    //    ViewBag.KofCIDErr = $"Member Number {KofCMemberID} format is invalid.";
+                    //    return Json(new { success = false, message = $"Member Number {KofCMemberID} format is invalid." } );
+                    //}
+                    //if (myAns == "false")
+                    //{
+                    //    ViewBag.KofCIDErr = $"Member Number {KofCMemberID} is not found in our database.";
+                    //    return Json(new { success = false,message = $"Member Number {KofCMemberID} is not found in our database. Please email webmaster@kofc-wa.org with your member number, full name, email address and council." });
+                    //}
+                    //else if(myAns.ToLower().Contains("sus"))
+                    //{
+                    //    // the SUS indicates that the member is suspended
+                    //    ViewBag.KofCIDErr = $"Member is Suspended";
+                    //    return Json($"Member is Invalid.");
+                    //}
+                    //else
+                    //{
+                    //    return Json(true);
+                    //}
                 }
             }
 

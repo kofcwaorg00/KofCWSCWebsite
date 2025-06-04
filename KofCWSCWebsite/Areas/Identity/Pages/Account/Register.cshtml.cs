@@ -94,7 +94,7 @@ namespace KofCWSCWebsite.Areas.Identity.Pages.Account
             [Display(Name = "Last name")]
             public string LastName { get; set; }
 
-            [Remote(action: "VerifyKofCID", controller: "Users")]
+            //[Remote(action: "VerifyKofCID", controller: "Users")]
             [Required]
             //[StringLength(50, ErrorMessage = "The {0} must be at least {2} and at max {1} characters long.", MinimumLength = 1)]
             [Display(Name = "KofC Member Number")]
@@ -134,7 +134,7 @@ namespace KofCWSCWebsite.Areas.Identity.Pages.Account
             public string PostalCode { get; set; }
             public string Wife { get; set; }
             public int Council { get; set; }
-            public bool MemberVerfied { get; set; }
+            public bool MemberVerified { get; set; }
 
         }
 
@@ -204,7 +204,7 @@ namespace KofCWSCWebsite.Areas.Identity.Pages.Account
                 user.PostalCode = Input.PostalCode;
                 user.Wife = Input.Wife;
                 user.Council = Input.Council;
-                user.MemberVerfied = Input.MemberVerfied;
+                user.MemberVerified = Input.MemberVerified;
 
                 await _userStore.SetUserNameAsync(user, Input.Email, CancellationToken.None);
                 await _emailStore.SetEmailAsync(user, Input.Email, CancellationToken.None);
