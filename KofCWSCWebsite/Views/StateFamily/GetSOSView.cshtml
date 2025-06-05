@@ -16,7 +16,7 @@
         <tr>
             @foreach (var item in Model)
             {
-                string myPicURL = Utils.GetPicImage(item.Photo, 200, 0, "", item.KofCID, User);
+                string myPicURL = Utils.GetPicImage(item.Photo, 200, 0, item.FullName, item.KofCID, User);
 
                 if (item.SortBy <= 3 )
                 {
@@ -38,7 +38,7 @@
         <tr>
             @foreach (var item in Model)
             {
-                string myPicURL = Utils.GetPicImage(item.Photo, 200, 0, "", item.KofCID, User);
+                string myPicURL = Utils.GetPicImage(item.Photo, 200, 0, item.FullName, item.KofCID, User);
                 if (item.SortBy > 3 && item.SortBy <= 6)
                 {
                     <td style="text-align:center">
@@ -55,7 +55,7 @@
         <tr>
             @foreach (var item in Model)
             {
-                string myPicURL = Utils.GetPicImage(item.Photo,200,0,"", item.KofCID,User);
+                string myPicURL = Utils.GetPicImage(item.Photo, 200, 0, item.FullName, item.KofCID, User);
                 if (item.SortBy > 6 && item.SortBy <= 9)
                 {
                     <td style="text-align:center">
