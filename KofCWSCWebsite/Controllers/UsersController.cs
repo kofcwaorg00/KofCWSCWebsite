@@ -10,6 +10,9 @@ using Serilog;
 using Microsoft.AspNetCore.Identity;
 using System.Text.Json;
 using com.sun.org.apache.bcel.@internal.generic;
+using com.sun.tools.corba.se.idl.constExpr;
+using org.omg.CORBA.DynAnyPackage;
+using sun.security.provider;
 
 
 namespace KofCWSCWebsite.Controllers
@@ -238,29 +241,27 @@ namespace KofCWSCWebsite.Controllers
                     var responseTask = client.GetAsync(myURI);
                     responseTask.Wait();
 
-                    // "Invalid KofC Member ID Format"
-                    // "Member is Suspended! "
-                    // True if it is found
-                    // Fals if it is not found
+                    // -1 = Member Number is invalid
+                    // 1 = Member NOT in our db go register with addl info - REGWADDLINFO
+                    // 2 = is in our data but no profile - ALLOWREG
+                    // 3 = Member is Suspended - SUS
+                    // 4 = already a member and profile -REG
                     var result = responseTask.Result;
                     var myAns = result.Content.ReadAsStringAsync().Result;
                     int myResult = int.Parse(myAns);
                     switch (myResult)
                     {
                         case -1:
-                            ViewBag.KofCIDErr = $"Member Number {KofCMemberID} format is invalid.";
-                            return Json(new { success = false, message = $"Member Number {KofCMemberID} format is invalid." });
+                            return Json(new { success = false, message = $"-1 Member Number {KofCMemberID} format is invalid." });
                         case 1:
-                            ViewBag.KofCIDErr = $"Member Number {KofCMemberID} is not found in our database. To continue registration, fill in the Additional Information and Save";
-                            return Json(new { success = true,message = $"Member Number {KofCMemberID} is not found in our database. To continue registration, fill in the Additional Information and Save" });
+                            return Json(new { success = true,message = $"1 Member Number {KofCMemberID} is not found in our database. To continue registration, fill in the Additional Information and Save" });
                         case 2:
                             //2 = is in our data but no profile - ALLOWREG
-                            return Json(true);
+                            return Json(new { success = true, message = $"2" });
                         case 3:
-                            ViewBag.KofCIDErr = $"Invalid Login";
-                            return Json(new { success = false, message = $"Invalid Login" });
+                            return Json(new { success = false, message = $"3 Invalid Login" });
                         case 4:
-                            return Json(true);
+                            return Json(new { success = true, message = $"4 {KofCMemberID} is already registered." });
                         default:
                             return Json(new { success = false, message = $"untrapped error" });
                     }

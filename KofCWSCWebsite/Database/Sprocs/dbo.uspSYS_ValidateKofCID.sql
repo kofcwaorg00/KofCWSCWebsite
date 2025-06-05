@@ -26,7 +26,7 @@ AS
 --	 4 = already a member and profile - REG
 /* 
  declare @RetVal int
- exec uspSYS_ValidateKofCID 3970136 ,@RetVal output
+ exec uspSYS_ValidateKofCID 5555555 ,@RetVal output
  Select @RetVal
  */
  -- 3513961

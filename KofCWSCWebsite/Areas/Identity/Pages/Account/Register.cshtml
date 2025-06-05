@@ -56,8 +56,9 @@
                 <span asp-validation-for="Input.ConfirmPassword" class="text-danger"></span>
             </div>
             <br />
+            <span id="screenInfo" class="text-into"></span>
             <br />
-            <div style="display:block">
+            <div id="showAddl" style="display:none;border:solid;border-color:red">
                 <span style="font-weight:bold">Additional Member Information</span>
                 <div class="form-floating mb-3">
                     <input asp-for="Input.Address" class="form-control" autocomplete="Address" aria-required="true" placeholder="password" />
@@ -85,6 +86,7 @@
                     <span asp-validation-for="Input.Wife" class="text-danger"></span>
                 </div>
             </div>
+            <br />
             <button id="registerSubmit" type="submit" class="w-100 btn btn-lg btn-primary">Register</button>
         </form>
     </div>
@@ -117,7 +119,7 @@
         </span> At least one uppercase character (‘A’-‘Z’).
         <br />
         <span style="font-weight:bold">Require Non-Alphanumeric:</span> At least one non-alphanumeric character (e.g., symbols like '!', '&commat;', '#').
-        <div style="display:block">
+        <div id="showAddlt" style="display:none">
             <br />
             <span style="font-weight:bold"><== Additional Member Information</span>
             <p>
@@ -131,28 +133,82 @@
             </p>
         </div>
     </div>
-    
+
 
     <script>
-    $(document).ready(function () {
-        $("#KofCID").on("blur", function () {
-            $("#KofCIDError").text("");
-            $("#loadingSpinner").show(); // Show spinner when request starts
+        $(document).ready(function () {
+            $("#KofCID").on("blur", function () {
+                $("#KofCIDError").text("");
+                $("#loadingSpinner").show(); // Show spinner when request starts
                 //alert('running blur')
-            $.get("/Users/VerifyKofCID", { KofCID: $(this).val() }, function (response) {
-                $("#loadingSpinner").hide(); // Hide spinner when request completes
-                    if (response.success) {
-                        //alert("Success");
-                        alert(response.message);
-                        //$("#KofCIDMessage").text(response.message); // Show error message
-                        //$("#submitButton").prop("disabled", true);  // Disable submit button
-                    } else {
-                        //alert("no Success");
-                        alert(response.message);
-                        $("#KofCIDError").text(response.message); // response.message;
-                        //$("#KofCIDMessage").text(""); // Clear error
-                        //$("#submitButton").prop("disabled", false); // Enable submit button
+                $.get("/Users/VerifyKofCID", { KofCID: $(this).val() }, function (response) {
+                    $("#loadingSpinner").hide(); // Hide spinner when request completes
+                    const myresponse = response.message;
+                    const mymessage = myresponse.replace(/^-?\d+\s*/, '');
+                    const numberMatch = response.message.match(/^-?\d+/);
+                    //alert(numberMatch);
+                    const enumber = numberMatch ? parseInt(numberMatch[0], 10) : null;
+                    //alert(enumber);
+                    switch (enumber) {
+                        case -1:
+                            //alert("in -1");
+                            $("#showAddlt").hide();
+                            $("#showAddl").hide();
+                            $("#KofCIDError").text(mymessage);
+                            break;
+                        case 1:
+                            //alert("in 1");
+                            $("#showAddlt").show();
+                            $("#showAddl").show();
+                            $("#screenInfo").text(mymessage);
+                            break;
+                        case 2:
+                            $("#showAddlt").hide();
+                            $("#showAddl").hide();
+                            break;
+                        case 3:
+                            $("#showAddlt").hide();
+                            $("#showAddl").hide();
+                            $("#KofCIDError").text(mymessage);
+                            break;
+                        case 4:
+                            $("#showAddlt").hide();
+                            $("#showAddl").hide();
+                            $("#screenInfo").text(mymessage);
+                            break;
+                        default:
+                            $("#showAddlt").hide();
+                            $("#showAddl").hide();
+                            break;
                     }
+                    //////////////if (response.success) {
+                    //////////////    if (enumber == 1) { 
+                    //////////////        $("#showAddlt").show();
+                    //////////////        $("#showAddl").show();
+                    //////////////    } else {
+                    //////////////        $("#showAddlt").hide();
+                    //////////////        $("#showAddl").hide();
+                    //////////////    }
+                    //////////////    if (enumber == 1) {
+                    //////////////        $("#showAddlt").show();
+                    //////////////        $("#showAddl").show();
+                    //////////////    } else {
+                    //////////////        $("#showAddlt").hide();
+                    //////////////        $("#showAddl").hide();
+                    //////////////    }
+                    //////////////    //alert("Success");
+                    //////////////    //alert("in success mymessage is " + mymessage);
+                    //////////////    //alert("in success my enumber is " + enumber);
+                    //////////////    //$("#KofCIDMessage").text(response.message); // Show error message
+                    //////////////    //$("#submitButton").prop("disabled", true);  // Disable submit button
+                    //////////////} else {
+                    //////////////    //alert("no Success");
+                    //////////////    alert(mymessage);
+                    //////////////    alert(enumber);
+                    //////////////    $("#KofCIDError").text(mymessage); // response.message;
+                    //////////////    //$("#KofCIDMessage").text(""); // Clear error
+                    //////////////    //$("#submitButton").prop("disabled", false); // Enable submit button
+                    //////////////}
                 });
             });
         });</script>
