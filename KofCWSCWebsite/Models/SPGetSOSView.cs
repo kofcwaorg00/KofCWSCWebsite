@@ -16,5 +16,6 @@ namespace KofCWSCWebsite.Models
         public int MemberID { get; set; }
         [Key]
         public int SortBy { get; set; }
+        public int KofCID { get; set; }
     }
 }

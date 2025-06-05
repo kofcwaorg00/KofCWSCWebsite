@@ -57,6 +57,7 @@ namespace KofCWSCWebsite.Services
             }
             if (myUrl.Contains("missingA") && myPicURL.Contains("missingA"))
             {
+                // add the red to report to ADMIN that the profile is missing
                 myBorder = user.IsInRole("Admin") ? "border:solid;border-color:red" : string.Empty;
                 mytitle = user.IsInRole("Admin") ? $"{mname} - Profile is missing. No picture found in wwwroot" : mname;
             }
