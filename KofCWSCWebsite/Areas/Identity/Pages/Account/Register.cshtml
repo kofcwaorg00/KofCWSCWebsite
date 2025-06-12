@@ -40,10 +40,11 @@
                 <label asp-for="Input.LastName">Last Name</label>
                 <span asp-validation-for="Input.LastName" class="text-danger"></span>
             </div>
-            <div id="loadingSpinner" style="display: none; float:left">
-                <img style="width:25px" src="/images/blue loading animate.png" alt="Loading..." />
-            </div>
+            
             <div class="form-floating mb-3">
+                <div id="loadingSpinner" style="display: none; float:left;margin-right: 10px">
+                    <img style="width:75px" src="/images/blue loading animate.png" alt="Please wait..." />
+                </div>
                 <input id="KofCID" asp-for="Input.KofCMemberID" class="form-control" autocomplete="KofCMemberID" aria-required="true" placeholder="1234567" />
                 <label asp-for="Input.KofCMemberID">KofC Member ID</label>
                 <span id="KofCIDError" asp-validation-for="Input.KofCMemberID" d class="text-danger"></span>
@@ -193,9 +194,13 @@
 
             $("#KofCIDError").text("");
             $("#loadingSpinner").show(); // Show spinner when request starts
+            // disable sumbit button
+            $("#registerSubmit").prop("disabled", true);
             //alert($(this).val());
             $.get("/Users/VerifyKofCID", { KofCID: $(this).val() }, function (response) {
                 $("#loadingSpinner").hide(); // Hide spinner when request completes
+                // enable submit button
+                $("#registerSubmit").prop("disabled", false);
                 const myresponse = response.message;
                 const mymessage = myresponse.replace(/^-?\d+\s*/, '');
                 const numberMatch = response.message.match(/^-?\d+/);

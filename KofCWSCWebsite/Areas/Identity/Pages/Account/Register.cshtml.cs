@@ -29,6 +29,9 @@ using Microsoft.Extensions.Primitives;
 using KofCWSCWebsite.Models;
 //using System.Web.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
+using Azure.Storage.Blobs.Models;
+using Azure.Storage.Blobs;
+using System.IO;
 
 
 namespace KofCWSCWebsite.Areas.Identity.Pages.Account
@@ -43,6 +46,7 @@ namespace KofCWSCWebsite.Areas.Identity.Pages.Account
         private readonly ISenderEmail _emailSender;
         private readonly RoleManager<IdentityRole> _roleManager;
         private readonly DataSetService _dataSetService;
+        private readonly IConfiguration _configuration;
         public List<Microsoft.AspNetCore.Mvc.Rendering.SelectListItem> Councils { get; set; }
         public ApiHelper _apiHelper { get; set; }
         public RegisterModel(
@@ -53,7 +57,8 @@ namespace KofCWSCWebsite.Areas.Identity.Pages.Account
             ISenderEmail emailSender,
             RoleManager<IdentityRole> roleManager,
             DataSetService dataSetService,
-            ApiHelper apiHelper)
+            ApiHelper apiHelper,
+            IConfiguration configuration)
         {
             _userManager = userManager;
             _userStore = userStore;
@@ -64,6 +69,7 @@ namespace KofCWSCWebsite.Areas.Identity.Pages.Account
             _roleManager = roleManager;
             _dataSetService = dataSetService;
             _apiHelper = apiHelper;
+            _configuration = configuration;
         }
 
         /// <summary>
@@ -143,6 +149,10 @@ namespace KofCWSCWebsite.Areas.Identity.Pages.Account
             [BindProperty]
             public int Council { get; set; }
             public bool MemberVerified { get; set; }
+
+            [BindProperty]
+            public IFormFile MembershipCardFile { get; set; }
+            public string MembershipCardURL { get; set; }
 
         }
 
@@ -249,7 +259,37 @@ namespace KofCWSCWebsite.Areas.Identity.Pages.Account
             // I don't believe that this is necessary here.
             //ExternalLogins = (await _signInManager.GetExternalAuthenticationSchemesAsync()).ToList();
             //----------------------------------------------------------------------------------------
+            // Next we need to upload the membership card and register the url
+            //----------------------------------------------------------------------------------------
+            // BEGIN UPLOAD membership card
+            // Get connection details from configuration
+            // Upload to Azure Blob Storage (adjust for your Azure config)
 
+            if (MembershipCardFile) == null || Input.MembershipCardURL.Length == 0)
+            {
+                ModelState.AddModelError(string.Empty, "Please select a file.");
+                return Page();
+            }
+
+            using (var stream = Input.MembershipCardURL,OpenReadStream())
+            {
+                await blobClient.UploadAsync(stream, new BlobHttpHeaders { ContentType = Input.MembershipCardURL.ContentType });
+            }
+
+
+            KeyVaultHelper kvh = new KeyVaultHelper(_configuration);
+            var blobServiceClient = new Azure.Storage.Blobs.BlobServiceClient(kvh.GetSecret("AZBSPCS"));
+            var containerClient = blobServiceClient.GetBlobContainerClient(_configuration["AzureBlobStorage:ContainerName"]);
+            await containerClient.CreateIfNotExistsAsync();
+            await containerClient.SetAccessPolicyAsync(Azure.Storage.Blobs.Models.PublicAccessType.Blob);
+
+            var uniqueFileName = $"{Guid.NewGuid()}{ext}";
+            var blobClient = containerClient.GetBlobClient(uniqueFileName);
+            await blobClient.UploadAsync(memoryStream, overwrite: true);
+
+            Input.MembershipCardURL = blobClient.Uri.ToString();
+            // END UPLOAD membership card
+            //----------------------------------------------------------------------------------------
             if (ModelState.IsValid)
             {
                 var user = CreateUser();

@@ -10,5 +10,8 @@ add ProfilePictureUrl nvarchar(250) null,
 alter table aspnetusers
 add    [MemberVerified] bit not null default 0
 
+alter table aspnetusers
+add MembershipCardUrl nvarchar(250) null
+
 ALTER TABLE [dbo].[AspNetUsers]  
 DROP CONSTRAINT [FK_AspNetUsers_tbl_MasMembers]

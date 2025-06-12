@@ -33,5 +33,6 @@ public class KofCUser : IdentityUser
     public string? Wife { get; set; }
     public int? Council { get; set; }
     public bool? MemberVerified { get; set; }
+    public string? MembershipCardUrl { get; set; }
 }
 
