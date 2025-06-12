@@ -254,12 +254,12 @@ namespace KofCWSCWebsite.Controllers
                         case -1:
                             return Json(new { success = false, message = $"-1 Member Number {KofCMemberID} format is invalid." });
                         case 1:
-                            return Json(new { success = true,message = $"1 Member Number {KofCMemberID} is not found in our database. To continue registration, fill in the Additional Information and Save" });
+                            return Json(new { success = true,message = $"1 Member Number {KofCMemberID} is not found in our database. To continue registration, fill in the Additional Information and Register" });
                         case 2:
                             //2 = is in our data but no profile - ALLOWREG
                             return Json(new { success = true, message = $"2" });
                         case 3:
-                            return Json(new { success = false, message = $"3 Invalid Login" });
+                            return Json(new { success = false, message = $"3 Invalid Login" }); // member is suspended
                         case 4:
                             return Json(new { success = true, message = $"4 {KofCMemberID} is already registered." });
                         default:

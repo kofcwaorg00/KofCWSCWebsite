@@ -1,4 +1,4 @@
-﻿alter FUNCTION dbo.funSYS_IsKofCIDValid(@KofCID int)
+﻿create FUNCTION dbo.funSYS_IsKofCIDValid(@KofCID int)
 RETURNS bit
 AS
 BEGIN

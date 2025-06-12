@@ -26,6 +26,9 @@ using KofCWSCWebsite.Pages.AOI;
 using Serilog;
 using Microsoft.AspNetCore.Http.Extensions;
 using Microsoft.Extensions.Primitives;
+using KofCWSCWebsite.Models;
+//using System.Web.Mvc;
+using Microsoft.AspNetCore.Mvc.Rendering;
 
 
 namespace KofCWSCWebsite.Areas.Identity.Pages.Account
@@ -40,6 +43,8 @@ namespace KofCWSCWebsite.Areas.Identity.Pages.Account
         private readonly ISenderEmail _emailSender;
         private readonly RoleManager<IdentityRole> _roleManager;
         private readonly DataSetService _dataSetService;
+        public List<Microsoft.AspNetCore.Mvc.Rendering.SelectListItem> Councils { get; set; }
+        public ApiHelper _apiHelper { get; set; }
         public RegisterModel(
             UserManager<KofCUser> userManager,
             IUserStore<KofCUser> userStore,
@@ -47,7 +52,8 @@ namespace KofCWSCWebsite.Areas.Identity.Pages.Account
             ILogger<RegisterModel> logger,
             ISenderEmail emailSender,
             RoleManager<IdentityRole> roleManager,
-            DataSetService dataSetService)
+            DataSetService dataSetService,
+            ApiHelper apiHelper)
         {
             _userManager = userManager;
             _userStore = userStore;
@@ -57,6 +63,7 @@ namespace KofCWSCWebsite.Areas.Identity.Pages.Account
             _emailSender = emailSender;
             _roleManager = roleManager;
             _dataSetService = dataSetService;
+            _apiHelper = apiHelper;
         }
 
         /// <summary>
@@ -126,13 +133,14 @@ namespace KofCWSCWebsite.Areas.Identity.Pages.Account
             /// </summary>
             [DataType(DataType.Password)]
             [Display(Name = "Confirm password")]
-            [Compare("Password", ErrorMessage = "The password and confirmation password do not match.")]
+            [System.ComponentModel.DataAnnotations.Compare("Password", ErrorMessage = "The password and confirmation password do not match.")]
             public string ConfirmPassword { get; set; }
             public string Address { get; set; }
             public string City { get; set; }
             public string State { get; set; }
             public string PostalCode { get; set; }
             public string Wife { get; set; }
+            [BindProperty]
             public int Council { get; set; }
             public bool MemberVerified { get; set; }
 
@@ -144,6 +152,15 @@ namespace KofCWSCWebsite.Areas.Identity.Pages.Account
             ReturnUrl = returnUrl;
             ExternalLogins = (await _signInManager.GetExternalAuthenticationSchemesAsync()).ToList();
             RemoteIPAddr = HttpContext.Request.HttpContext.Connection.RemoteIpAddress.ToString();
+
+            // Fetch a list of councils for the council dropdown
+            var iCouncils = await _apiHelper.GetAsync<List<TblValCouncil>>("Councils");
+            Councils = iCouncils.Select(c => new Microsoft.AspNetCore.Mvc.Rendering.SelectListItem
+            {
+                Value = c.CNumber.ToString(),
+                Text = $"{c.CNumber} - {c.CName} (District #{c.District}"
+            }).ToList();
+
         }
 
         public async Task<IActionResult> OnPostAsync(string returnUrl = null)
@@ -164,6 +181,7 @@ namespace KofCWSCWebsite.Areas.Identity.Pages.Account
             // need to validate kofcid again here
             var myType = this.GetType();
             var KofCMemberID = Input.KofCMemberID;
+            int myIAns = 0;
             Uri myURI = new Uri(_dataSetService.GetAPIBaseAddress() + "/VerifyKofCID/" + KofCMemberID);
             using (var client = new HttpClient())
             {
@@ -172,16 +190,57 @@ namespace KofCWSCWebsite.Areas.Identity.Pages.Account
 
                 var result = responseTask.Result;
                 var myAns = result.Content.ReadAsStringAsync().Result;
-
-                if (myAns == "false" || myAns.ToLower().Contains("invalid"))
+                myIAns = int.Parse(myAns);
+                // with the new validation we are retuning an int -1 - 4
+                // set the group to add as Unverified or Member based on -1 - 4
+                string myVError = string.Empty;
+                string myVLogError = string.Empty;
+                switch (int.Parse(myAns))
                 {
-                    string myError = string.Concat("Member Number ",KofCMemberID, " is not found in our database.");
-                    string myLogError = string.Concat("Member Number ", KofCMemberID, " is not found in our database.", "Using IP Address => ", GetClientIpAddress(HttpContext));
-                    
-                    Log.Error(myType + myLogError);
-                    ModelState.AddModelError(string.Empty, myError);
-                    return Page();
+                    case -1:
+                        myVError = string.Concat("Member Number ", KofCMemberID, " format is invalid.");
+                        myVLogError = string.Concat("Member Number ", KofCMemberID, " is not found in our database.", "Using IP Address => ", GetClientIpAddress(HttpContext));
+                        Log.Error(myType + myVLogError);
+                        ModelState.AddModelError(string.Empty, myVError);
+                        return Page();
+                    case 1:
+                        //myVError = string.Concat("Member Number ", KofCMemberID, " is not found in our database. Continue to register with additional information");
+                        //myVLogError = string.Concat("Member Number ", KofCMemberID, " is not found in our database.","Will allow adding a new member.", "Using IP Address => ", GetClientIpAddress(HttpContext));
+                        //Log.Error(myType + myVLogError);
+                        //ModelState.AddModelError(string.Empty, myVError);
+                        //return Page();
+                        // we need to allow this to continue since the screen processing has already dealt with it
+                        break;
+                    case 2: // no error just continue
+                        break;
+                    case 3:
+                        myVError = string.Concat("Member Number ", KofCMemberID, " is invalid.");
+                        myVLogError = string.Concat("Member Number ", KofCMemberID, " is suspended");
+                        Log.Error(myType + myVLogError);
+                        ModelState.AddModelError(string.Empty, myVError);
+                        return Page();
+                    case 4:
+                        myVError = string.Concat("Member Number ", KofCMemberID, " is already registered.");
+                        myVLogError = string.Concat("Member Number ", KofCMemberID, " is already registered");
+                        Log.Error(myType + myVLogError);
+                        ModelState.AddModelError(string.Empty, myVError);
+                        return Page();
+                    default:
+                        myVError = string.Concat("Untrapped Error");
+                        myVLogError = string.Concat("Untrapped Error");
+                        Log.Error(myType + myVLogError);
+                        ModelState.AddModelError(string.Empty, myVError);
+                        return Page();
                 }
+                ////////////if (myAns == "false" || myAns.ToLower().Contains("invalid"))
+                ////////////{
+                ////////////    string myError = string.Concat("Member Number ", KofCMemberID, " is not found in our database.");
+                ////////////    string myLogError = string.Concat("Member Number ", KofCMemberID, " is not found in our database.", "Using IP Address => ", GetClientIpAddress(HttpContext));
+
+                ////////////    Log.Error(myType + myLogError);
+                ////////////    ModelState.AddModelError(string.Empty, myError);
+                ////////////    return Page();
+                ////////////}
             }
             //----------------------------------------------------------------------------------------
             returnUrl ??= Url.Content("~/");
@@ -200,7 +259,7 @@ namespace KofCWSCWebsite.Areas.Identity.Pages.Account
                 user.KofCMemberID = Input.KofCMemberID;
                 user.Address = Input.Address;
                 user.City = Input.City;
-                user.State= Input.State;
+                user.State = Input.State;
                 user.PostalCode = Input.PostalCode;
                 user.Wife = Input.Wife;
                 user.Council = Input.Council;
@@ -232,13 +291,23 @@ namespace KofCWSCWebsite.Areas.Identity.Pages.Account
                             await _userManager.AddToRoleAsync(user, "Admin");
                         }
                         //---------------------------------------------------------------------------------------
-                        var rcode = await _userManager.AddToRoleAsync(user, "Member");
-
+                        // add the new member to Unverifed if new to our database
+                        // or Member if existing
+                        if (myIAns == 1)
+                        {
+                            var rcode = await _userManager.AddToRoleAsync(user, "Unverified");
+                        }
+                        else
+                        {
+                            var rcode = await _userManager.AddToRoleAsync(user, "Member");
+                        }
+                        
+                        // setup for the email message
                         code = WebEncoders.Base64UrlEncode(Encoding.UTF8.GetBytes(code));
                         var callbackUrl = Url.Page(
                             "/Account/ConfirmEmail",
                             pageHandler: null,
-                            values: new { area = "Identity", userId = userId, code = code, returnUrl = returnUrl },
+                            values: new { area = "Identity", userId = userId, code = code, returnUrl = returnUrl, isnewnotinourdb = myIAns },
                             protocol: Request.Scheme);
 
                         await _emailSender.SendEmailAsync(Input.Email, "Confirm your email",
@@ -267,10 +336,10 @@ namespace KofCWSCWebsite.Areas.Identity.Pages.Account
                 catch (Exception ex)
                 {
 
-                    ModelState.AddModelError(string.Empty, "KofC Member ID is already in use. Only 1 registration account is allowed per KofC Member ID");
+                    ModelState.AddModelError(string.Empty, "Registration Failed. Contact the Administrator for more information.");
                     Log.Error(Utils.FormatLogEntry(this, ex));
                 }
-               
+
             }
 
             // If we got this far, something failed, redisplay form
