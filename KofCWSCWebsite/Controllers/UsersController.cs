@@ -104,12 +104,13 @@ namespace KofCWSCWebsite.Controllers
                     float dpiX = image.HorizontalResolution;
                     float dpiY = image.VerticalResolution;
 
-                    if (width > 200 || height > 200)
-                    {
-                        ModelState.AddModelError("Input.ProfilePicture", "Image must be not be larger than 200x200 pixels.");
-                        TempData["HasUser"] = true;
-                        return View("EditPhoto", user);
-                    }
+                    // removed this constraint to allow upload from phone picture
+                    //if (width > 200 || height > 200)
+                    //{
+                    //    ModelState.AddModelError("Input.ProfilePicture", "Image must be not be larger than 200x200 pixels.");
+                    //    TempData["HasUser"] = true;
+                    //    return View("EditPhoto", user);
+                    //}
 
                     if (dpiX < 72 || dpiY < 72)
                     {
