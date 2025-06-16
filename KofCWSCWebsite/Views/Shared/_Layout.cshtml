@@ -230,9 +230,9 @@
                                 Insurance
                             </a>
                             <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
-                                <li><a class="dropdown-item" href="https://kofcpacific.com/?p=WA" target="_blank">Pacific Agency</a></li>
+                                <li><a class="dropdown-item MyMenuLink" href="https://kofcpacific.com/?p=WA" target="_blank">Pacific Agency</a></li>
                                 <li><a class="dropdown-item MyMenuLink" asp-area="" asp-controller="SP" asp-action="GetChairmanInfoBlock" asp-route-id="70" asp-route-nextyear="0">Liability Insurance</a></li>
-                                <li><a class="dropdown-item" href="http://kofc.org/un/en/insurance/index.html" target="kofc-supreme-tab">Supreme Council</a></li>
+                                <li><a class="dropdown-item MyMenuLink" href="http://kofc.org/un/en/insurance/index.html" target="kofc-supreme-tab">Supreme Council</a></li>
                             </ul>
                         </li>
                         <li class="nav-item dropdown">
@@ -277,6 +277,10 @@
                                     <li><a class="dropdown-item MyMenuLink" asp-page="/Forms/Necrology">Necrology Form</a></li>
                                     <li><a class="dropdown-item MyMenuLink" asp-page="/Forms/PrayerRequest">Prayer Request Form</a></li>
                                     <li><a class="dropdown-item MyMenuLink" asp-page="/Forms/DDMidYear">Register for DD Mid Year Meeting</a></li>
+                                    @if (User.IsInRole("StateOfficer") || User.IsInRole("StateChairman") || User.IsInRole("StateMembership"))
+                                    {
+                                        <li><a class="dropdown-item MyMenuLink" href="https://form.jotform.com/232395506067156" target="_blank">WSC Expense Report Form</a></li>
+                                    }
                                     @if (User.IsInRole("Admin") || User.IsInRole("DataAdmin") || User.IsInRole("StateMembership") || User.IsInRole("StateOfficer"))
                                     {
                                         @*<li><a class="dropdown-item MyMenuLink" asp-area="" asp-controller="TblMasMembers" asp-action="Index" asp-route-id="aaa">Lookup Members</a></li>*@
@@ -294,7 +298,7 @@
                                         <li><hr class="dropdown-divider"></li>
                                         <li><a class="dropdown-item MyMenuLink" asp-page="/Councils/PreFSDetails">Update Council Details (FS Only)</a></li>
                                         <li><hr class="dropdown-divider"></li>
-                                        <li><a class="nav-link MyMenuLink" asp-page="/Forms/COE">Certificate of Election (FS Only)</a></li>
+                                        <li><a class="dropdown-item MyMenuLink" asp-page="/Forms/COE">Certificate of Election (FS Only)</a></li>
                                     }
 
                                 </ul>
@@ -363,10 +367,6 @@
                                         <li><a class="dropdown-item MyMenuLink" asp-area="" asp-controller="TblWebTrxAois" asp-action="Index" asp-route-id="">A/OI</a></li>
                                         <li><a class="dropdown-item MyMenuLink" href="~/UploadFile">AOI Graphic File Upload</a></li>
                                         <li><hr class="dropdown-divider"></li>
-                                    }
-                                    @if (User.IsInRole("StateOfficer") || User.IsInRole("StateChairman")) || User.IsInRole("StateMembership")
-                                    {
-                                        <li><a class="dropdown-item MyMenuLink" href="https://form.jotform.com/232395506067156" target="_blank">WSC Expense Report Form</a></li>
                                     }
                                     @if (User.IsInRole("Admin") || User.IsInRole("StateChairman"))
                                     {
