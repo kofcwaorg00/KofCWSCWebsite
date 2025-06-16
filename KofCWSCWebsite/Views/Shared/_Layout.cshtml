@@ -364,6 +364,10 @@
                                         <li><a class="dropdown-item MyMenuLink" href="~/UploadFile">AOI Graphic File Upload</a></li>
                                         <li><hr class="dropdown-divider"></li>
                                     }
+                                    @if (User.IsInRole("StateOfficer") || User.IsInRole("StateChairman")) || User.IsInRole("StateMembership")
+                                    {
+                                        <li><a class="dropdown-item MyMenuLink" href="https://form.jotform.com/232395506067156" target="_blank">WSC Expense Report Form</a></li>
+                                    }
                                     @if (User.IsInRole("Admin") || User.IsInRole("StateChairman"))
                                     {
                                         <li><a class="dropdown-item MyMenuLink" asp-area="" asp-controller="TblWebSelfPublishes" asp-action="Index" asp-route-id="">Web Page Messages</a></li>
