@@ -32,6 +32,8 @@ using Microsoft.AspNetCore.Mvc.Rendering;
 using Azure.Storage.Blobs.Models;
 using Azure.Storage.Blobs;
 using System.IO;
+using sun.swing;
+using Microsoft.CodeAnalysis.VisualBasic.Syntax;
 
 
 namespace KofCWSCWebsite.Areas.Identity.Pages.Account
@@ -49,6 +51,7 @@ namespace KofCWSCWebsite.Areas.Identity.Pages.Account
         private readonly IConfiguration _configuration;
         public List<Microsoft.AspNetCore.Mvc.Rendering.SelectListItem> Councils { get; set; }
         public ApiHelper _apiHelper { get; set; }
+        public Dictionary<string, string> myStates { get; set; }
         public RegisterModel(
             UserManager<KofCUser> userManager,
             IUserStore<KofCUser> userStore,
@@ -70,6 +73,7 @@ namespace KofCWSCWebsite.Areas.Identity.Pages.Account
             _dataSetService = dataSetService;
             _apiHelper = apiHelper;
             _configuration = configuration;
+            myStates = _dataSetService.GetStates();
         }
 
         /// <summary>
@@ -99,12 +103,12 @@ namespace KofCWSCWebsite.Areas.Identity.Pages.Account
         {
             [Required]
             [StringLength(100, ErrorMessage = "The {0} must be at least {2} and at max {1} characters long.", MinimumLength = 1)]
-            [Display(Name = "First name")]
+            [Display(Name = "First name*")]
             public string FirstName { get; set; }
 
             [Required]
             [StringLength(100, ErrorMessage = "The {0} must be at least {2} and at max {1} characters long.", MinimumLength = 1)]
-            [Display(Name = "Last name")]
+            [Display(Name = "Last name*")]
             public string LastName { get; set; }
 
             //[Remote(action: "VerifyKofCID", controller: "Users")]
@@ -150,12 +154,24 @@ namespace KofCWSCWebsite.Areas.Identity.Pages.Account
             public int Council { get; set; }
             public bool MemberVerified { get; set; }
 
-            [BindProperty]
+            [DataType(DataType.Upload)]
+            [Display(Name = "You must upload a picture of your membership card here!")]
             public IFormFile MembershipCardFile { get; set; }
             public string MembershipCardURL { get; set; }
+            [BindProperty]
+            public string FilePath { get; set; } // Store filename temporarily
+
+            public List<SelectListItem> Councils { get; set; } = new();
 
         }
 
+        public void OnPostCapture()
+        {
+            if (Input.MembershipCardFile != null)
+            {
+                Input.FilePath = Input.MembershipCardFile.FileName; // Store filename for later use
+            }
+        }
 
         public async Task OnGetAsync(string returnUrl = null)
         {
@@ -164,12 +180,13 @@ namespace KofCWSCWebsite.Areas.Identity.Pages.Account
             RemoteIPAddr = HttpContext.Request.HttpContext.Connection.RemoteIpAddress.ToString();
 
             // Fetch a list of councils for the council dropdown
-            var iCouncils = await _apiHelper.GetAsync<List<TblValCouncil>>("Councils");
-            Councils = iCouncils.Select(c => new Microsoft.AspNetCore.Mvc.Rendering.SelectListItem
-            {
-                Value = c.CNumber.ToString(),
-                Text = $"{c.CNumber} - {c.CName} (District #{c.District}"
-            }).ToList();
+            await LoadCouncilsAsync();
+            ////////var iCouncils = await _apiHelper.GetAsync<List<TblValCouncil>>("Councils");
+            ////////Councils = iCouncils.Select(c => new Microsoft.AspNetCore.Mvc.Rendering.SelectListItem
+            ////////{
+            ////////    Value = c.CNumber.ToString(),
+            ////////    Text = $"{c.CNumber} - {c.CName} (District #{c.District})"
+            ////////}).ToList();
 
         }
 
@@ -186,6 +203,8 @@ namespace KofCWSCWebsite.Areas.Identity.Pages.Account
             //////////////    return Page();
             //////////////}
             //----------------------------------------------------------------------------------------
+            // need to reload the councils incase of an error
+            await LoadCouncilsAsync();
             //****************************************************************************************
             // 09/21/2024 Tim Philomeno
             // need to validate kofcid again here
@@ -265,27 +284,27 @@ namespace KofCWSCWebsite.Areas.Identity.Pages.Account
             // Get connection details from configuration
             // Upload to Azure Blob Storage (adjust for your Azure config)
 
-            if (MembershipCardFile) == null || Input.MembershipCardURL.Length == 0)
+            if (Input.MembershipCardFile == null || Input.MembershipCardFile.Length == 0)
             {
-                ModelState.AddModelError(string.Empty, "Please select a file.");
+                ModelState.AddModelError(string.Empty, "Please select a membership card file to upload.");
                 return Page();
             }
 
-            using (var stream = Input.MembershipCardURL,OpenReadStream())
-            {
-                await blobClient.UploadAsync(stream, new BlobHttpHeaders { ContentType = Input.MembershipCardURL.ContentType });
-            }
-
-
             KeyVaultHelper kvh = new KeyVaultHelper(_configuration);
             var blobServiceClient = new Azure.Storage.Blobs.BlobServiceClient(kvh.GetSecret("AZBSPCS"));
-            var containerClient = blobServiceClient.GetBlobContainerClient(_configuration["AzureBlobStorage:ContainerName"]);
-            await containerClient.CreateIfNotExistsAsync();
-            await containerClient.SetAccessPolicyAsync(Azure.Storage.Blobs.Models.PublicAccessType.Blob);
-
+            var blobContainerClient = blobServiceClient.GetBlobContainerClient(_configuration["AzureBlobStorage:MCContainerName"]);
+            await blobContainerClient.CreateIfNotExistsAsync();
+            await blobContainerClient.SetAccessPolicyAsync(Azure.Storage.Blobs.Models.PublicAccessType.Blob);
+                       
+            var ext = Path.GetExtension(Input.MembershipCardFile.FileName).ToLowerInvariant();
             var uniqueFileName = $"{Guid.NewGuid()}{ext}";
-            var blobClient = containerClient.GetBlobClient(uniqueFileName);
-            await blobClient.UploadAsync(memoryStream, overwrite: true);
+            var blobClient = blobContainerClient.GetBlobClient(uniqueFileName);
+            using (var stream = Input.MembershipCardFile.OpenReadStream())
+            {
+                await blobClient.UploadAsync(stream, new BlobHttpHeaders { ContentType = Input.MembershipCardFile.ContentType });
+            }
+
+//            await blobClient.UploadAsync(stream, overwrite: true);
 
             Input.MembershipCardURL = blobClient.Uri.ToString();
             // END UPLOAD membership card
@@ -424,6 +443,15 @@ namespace KofCWSCWebsite.Areas.Identity.Pages.Account
             }
 
             return ipAddress;
+        }
+        private async Task LoadCouncilsAsync()
+        {
+            var iCouncils = await _apiHelper.GetAsync<List<TblValCouncil>>("Councils");
+            Councils = iCouncils.Select(c => new SelectListItem
+            {
+                Value = c.CNumber.ToString(),
+                Text = $"{c.CNumber} - {c.CName} (District #{c.District})"
+            }).ToList();
         }
     }
 }

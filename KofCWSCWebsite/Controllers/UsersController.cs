@@ -136,7 +136,7 @@ namespace KofCWSCWebsite.Controllers
                 // Upload to Azure Blob Storage (adjust for your Azure config)
                 KeyVaultHelper kvh = new KeyVaultHelper(_configuration);
                 var blobServiceClient = new Azure.Storage.Blobs.BlobServiceClient(kvh.GetSecret("AZBSPCS"));
-                var containerClient = blobServiceClient.GetBlobContainerClient(_configuration["AzureBlobStorage:ContainerName"]);
+                var containerClient = blobServiceClient.GetBlobContainerClient(_configuration["AzureBlobStorage:PPContainerName"]);
                 await containerClient.CreateIfNotExistsAsync();
                 await containerClient.SetAccessPolicyAsync(Azure.Storage.Blobs.Models.PublicAccessType.Blob);
 

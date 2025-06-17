@@ -1,4 +1,4 @@
-﻿create PROCEDURE [dbo].[uspSYS_ValidateMemberLogin]
+﻿alter PROCEDURE [dbo].[uspSYS_ValidateMemberLogin]
 @MemberLogin VARCHAR (255)
 AS
 BEGIN

@@ -1,6 +1,6 @@
 ﻿alter table aspnetusers
-add ProfilePictureUrl nvarchar(250) null,
-    [Address] NVARCHAR(255) NULL, 
+--add ProfilePictureUrl nvarchar(250) null,
+add    [Address] NVARCHAR(255) NULL, 
     [City] NVARCHAR(50) NULL, 
      [State] NVARCHAR(10) NULL, 
     [PostalCode] NVARCHAR(20) NULL, 
