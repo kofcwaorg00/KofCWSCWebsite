@@ -34,6 +34,7 @@ using Azure.Storage.Blobs;
 using System.IO;
 using sun.swing;
 using Microsoft.CodeAnalysis.VisualBasic.Syntax;
+using Microsoft.EntityFrameworkCore.Diagnostics;
 
 
 namespace KofCWSCWebsite.Areas.Identity.Pages.Account
@@ -239,8 +240,19 @@ namespace KofCWSCWebsite.Areas.Identity.Pages.Account
                         //ModelState.AddModelError(string.Empty, myVError);
                         //return Page();
                         // we need to allow this to continue since the screen processing has already dealt with it
+                        if (Input.Council == 0)
+                        {
+                            ModelState.AddModelError(string.Empty, "You must select a Council!");
+                            return Page();
+                        }
+                        if (Input.MembershipCardFile == null)
+                        {
+                            ModelState.AddModelError(string.Empty, "Membership Card File Must Be Set Below!");
+                            return Page();
+                        }
                         break;
-                    case 2: // no error just continue
+                    case 2: // no error just continue we need to check for required data
+                        
                         break;
                     case 3:
                         myVError = string.Concat("Member Number ", KofCMemberID, " is invalid.");
@@ -284,29 +296,36 @@ namespace KofCWSCWebsite.Areas.Identity.Pages.Account
             // Get connection details from configuration
             // Upload to Azure Blob Storage (adjust for your Azure config)
 
-            if (Input.MembershipCardFile == null || Input.MembershipCardFile.Length == 0)
+            ////////////if (Input.MembershipCardFile == null || Input.MembershipCardFile.Length == 0)
+            ////////////{
+            ////////////    ModelState.AddModelError(string.Empty, "Please select a membership card file to upload.");
+            ////////////    return Page();
+            ////////////}
+            if (Input.MembershipCardFile != null)
             {
-                ModelState.AddModelError(string.Empty, "Please select a membership card file to upload.");
-                return Page();
-            }
+                KeyVaultHelper kvh = new KeyVaultHelper(_configuration);
+                var blobServiceClient = new Azure.Storage.Blobs.BlobServiceClient(kvh.GetSecret("AZBSPCS"));
+                var blobContainerClient = blobServiceClient.GetBlobContainerClient(_configuration["AzureBlobStorage:MCContainerName"]);
+                await blobContainerClient.CreateIfNotExistsAsync();
+                await blobContainerClient.SetAccessPolicyAsync(Azure.Storage.Blobs.Models.PublicAccessType.Blob);
 
-            KeyVaultHelper kvh = new KeyVaultHelper(_configuration);
-            var blobServiceClient = new Azure.Storage.Blobs.BlobServiceClient(kvh.GetSecret("AZBSPCS"));
-            var blobContainerClient = blobServiceClient.GetBlobContainerClient(_configuration["AzureBlobStorage:MCContainerName"]);
-            await blobContainerClient.CreateIfNotExistsAsync();
-            await blobContainerClient.SetAccessPolicyAsync(Azure.Storage.Blobs.Models.PublicAccessType.Blob);
-                       
-            var ext = Path.GetExtension(Input.MembershipCardFile.FileName).ToLowerInvariant();
-            var uniqueFileName = $"{Guid.NewGuid()}{ext}";
-            var blobClient = blobContainerClient.GetBlobClient(uniqueFileName);
-            using (var stream = Input.MembershipCardFile.OpenReadStream())
+                var ext = Path.GetExtension(Input.MembershipCardFile.FileName).ToLowerInvariant();
+                var uniqueFileName = $"{Guid.NewGuid()}{ext}";
+                var blobClient = blobContainerClient.GetBlobClient(uniqueFileName);
+                using (var stream = Input.MembershipCardFile.OpenReadStream())
+                {
+                    await blobClient.UploadAsync(stream, new BlobHttpHeaders { ContentType = Input.MembershipCardFile.ContentType });
+                }
+
+                //            await blobClient.UploadAsync(stream, overwrite: true);
+
+                Input.MembershipCardURL = blobClient.Uri.ToString();
+            }
+            else
             {
-                await blobClient.UploadAsync(stream, new BlobHttpHeaders { ContentType = Input.MembershipCardFile.ContentType });
+                Input.MembershipCardFile = null;
+                Input.Council = 0;
             }
-
-//            await blobClient.UploadAsync(stream, overwrite: true);
-
-            Input.MembershipCardURL = blobClient.Uri.ToString();
             // END UPLOAD membership card
             //----------------------------------------------------------------------------------------
             if (ModelState.IsValid)
@@ -322,7 +341,17 @@ namespace KofCWSCWebsite.Areas.Identity.Pages.Account
                 user.PostalCode = Input.PostalCode;
                 user.Wife = Input.Wife;
                 user.Council = Input.Council;
-                user.MemberVerified = Input.MemberVerified;
+                user.MembershipCardUrl = Input.MembershipCardURL;
+                // if we are adding a new member it will need to be verified
+                if (myIAns == 1)
+                {
+                    user.MemberVerified = false;
+                }
+                else
+                {
+                    user.MemberVerified = true;
+                }
+                
 
                 await _userStore.SetUserNameAsync(user, Input.Email, CancellationToken.None);
                 await _emailStore.SetEmailAsync(user, Input.Email, CancellationToken.None);
@@ -375,7 +404,17 @@ namespace KofCWSCWebsite.Areas.Identity.Pages.Account
                         $"NOTE: This confirmation email expires in 20 minutes.<br /><br /><br /><br />" +
                         $"This email was sent to " + Input.Email + " by Washington State Council, Knights of Columbus.©1995-" + DateTime.Now.Year + " Washington State Council. All Rights Reserved");
 
-
+                        if (myIAns == 1)
+                        {
+                            string baseUrl = $"{Request.Scheme}://{Request.Host}";
+                            string fullUrl = $"{baseUrl}/AspNetUsers";
+                            string myTo = "support@kofc-wa.org";
+                            string mySub = "New Member Profile Verification Needed.";
+                            string myBody = $"A new member, {Input.FirstName} {Input.LastName} ({Input.KofCMemberID}), has registered in our website.< /br>" +
+                                $"Please click <a href={fullUrl} target=_blank>here</a> to validate and approve or reject.";
+                            // email admins
+                            await _emailSender.SendEmailAsync(myTo, mySub, myBody, true);
+                        }
 
                         if (_userManager.Options.SignIn.RequireConfirmedAccount)
                         {

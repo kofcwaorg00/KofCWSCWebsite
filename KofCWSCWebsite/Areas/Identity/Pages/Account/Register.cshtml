@@ -20,7 +20,11 @@
 </style>
 <h1>@ViewData["Title"]</h1>
 @isKOFCE
-
+<div id="overlay-spinner" style="display:none; position:fixed; top:0; left:0; width:100%; height:100%; background-color:rgba(255,255,255,0.7); z-index:9999; text-align:center;">
+    <div style="position:absolute; top:50%; left:50%; transform:translate(-50%, -50%);">
+        <img src="/images/blue loading animate.png" alt="Loading..." width="500"/>
+    </div>
+</div>
 <div class="parent" style="display:grid;grid-template-columns:1fr 1fr;">
     <div>
         <form id="registerForm" asp-route-returnUrl="@Model.ReturnUrl" method="post" enctype="multipart/form-data">
@@ -84,7 +88,7 @@
                         <span asp-validation-for="Input.City" class="text-danger"></span>
                     </div>
                     <div class="form-floating mb-3">
-                        <select id="state" name="SelectedState" class="form-control">
+                        <select asp-for="Input.State" id="state" class="form-control">
                             <option value="">Select</option>
                             @foreach (var state in Model.myStates)
                             {
@@ -110,8 +114,8 @@
                     </div>
                     <div class="form-floating mb-3">
                         <label asp-for="Input.Council">Council<span style="color:red"> *</span></label>
-                        <select asp-for="Input.Council" asp-items="Model.Councils" class="form-control">
-                            <option value="">Select a Council</option>
+                        <select id="ICouncil" asp-for="Input.Council" asp-items="Model.Councils" class="form-control">
+                            <option value="0">Select a Council</option>
                         </select>
                         @*<select id="ICouncil" asp-for="Input.Council" asp-items="Model.Councils" class="form-control" autocomplete="Council" aria-required="true" placeholder="council" />*@
                         @*<label class="required" asp-for="Input.Council">Council</label>*@
@@ -120,7 +124,7 @@
                 </div>
                 <div class="form-group">
                     <label asp-for="Input.MembershipCardFile"></label>
-                    <input asp-for="Input.MembershipCardFile" type="file" class="form-control" />
+                    <input id="IMembershipCardFile" asp-for="Input.MembershipCardFile" type="file" class="form-control" />
                     <span asp-validation-for="Input.MembershipCardFile" class="text-danger"></span>
                 </div>
             </div>
@@ -190,6 +194,13 @@
         $("#IState").prop("required", isNewMember);
         $("#IPostalCode").prop("required", isNewMember);
         $("#ICouncil").prop("required", isNewMember);
+        $("#IMemberShipCardFile").prop("required", isNewMember);
+
+        // Re-parse the form for validation
+        $("form").removeData("validator") // Clear existing validator
+            .removeData("unobtrusiveValidation");
+        $.validator.unobtrusive.parse("form");
+
     }
 
     // this global variable can be accessed by both jquery and javascript
@@ -198,6 +209,10 @@
     var myerror = "";
 
     $(document).ready(function () {
+        $('#registerForm').on('submit', function () {
+            $('#overlay-spinner').show();
+        });
+
         const kofcIdValue = $('#KofCID').val();
         ValidateKofCID(kofcIdValue);
         $("#KofCID").on("blur", function () {

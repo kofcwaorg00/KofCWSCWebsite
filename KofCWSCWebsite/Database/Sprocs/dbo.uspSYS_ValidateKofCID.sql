@@ -26,7 +26,7 @@ AS
 --	 4 = already a member and profile - REG
 /* 
  declare @RetVal int
- exec uspSYS_ValidateKofCID 5555555 ,@RetVal output
+ exec uspSYS_ValidateKofCID 3970136 ,@RetVal output
  Select @RetVal
  */
  -- 3513961
@@ -52,7 +52,7 @@ ELSE
 BEGIN
 	IF EXISTS (SELECT * FROM tblSYS_MasMemberSuspension WHERE KofCId = @KofCID) SET @issus=1
 	IF EXISTS (SELECT * FROM tbl_MasMembers WHERE KofCID = @KofCID) SET @ismem = 1
-	IF EXISTS (SELECT * FROM AspNetUsers WHERE KofCMemberID = @KofCID) SET @ispro = 1
+	IF EXISTS (SELECT * FROM AspNetUsers WHERE KofCMemberID = 3970136@KofCID) SET @ispro = 1
 
 	IF (@ismem = 0) SET @RetVal = 1 -- Member NOT in our db go register with addl info - REGWADDLINFO
 	IF (@ismem = 1 AND @ispro = 0 AND @issus = 0 ) SET @RetVal = 2 -- is in our data but no profile - REG
