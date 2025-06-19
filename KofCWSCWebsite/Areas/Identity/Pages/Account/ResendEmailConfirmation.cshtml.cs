@@ -87,7 +87,7 @@ namespace KofCWSCWebsite.Areas.Identity.Pages.Account
                 await _emailSender.SendEmailAsync(
                     Input.Email,
                     "Confirm your email",
-                    $"You have received this email as a registered member of Washington State Council, Knights of Columbus. For any support questions please email support@kofc-wa.org.<br /><br />" +
+                    $"You have received this email as a registered member of Washington State Council, Knights of Columbus. For any support questions please contact <a href=\"/ContactUs?messageRecipient=Website:%20Technical%20Support\">Technical Support</a>.<br /><br />" +
                     $"Please confirm your account by <a href='{HtmlEncoder.Default.Encode(callbackUrl)}'>clicking here</a>.<br /><br />" +
                     $"NOTE: This confirmation email expires in 20 minutes.<br /><br /><br /><br />" +
                     $"This email was sent to " + Input.Email + " by Washington State Council, Knights of Columbus.©1995-" + DateTime.Now.Year + " Washington State Council. All Rights Reserved"
@@ -101,7 +101,7 @@ namespace KofCWSCWebsite.Areas.Identity.Pages.Account
             catch (Exception ex)
             {
                 Log.Error(ex.Message + " - " + ex.InnerException);
-                ModelState.AddModelError(string.Empty, "Confirmation email was not sent. Please email webmaster@kofc-wa.org to report this.");
+                ModelState.AddModelError(string.Empty, "Confirmation email was not sent. Please contact <a href=\"/ContactUs?messageRecipient=Website:%20Technical%20Support\">Technical Support</a> to report this.");
                 return Page();
             }
 
