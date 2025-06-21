@@ -8,7 +8,7 @@ add    [Address] NVARCHAR(255) NULL,
     [Council] INT NULL
 
 alter table aspnetusers
-add    [MemberVerified] bit not null default 0
+add    [MemberVerified] bit null
 
 alter table aspnetusers
 add MembershipCardUrl nvarchar(250) null

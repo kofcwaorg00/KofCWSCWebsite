@@ -153,7 +153,7 @@ namespace KofCWSCWebsite.Areas.Identity.Pages.Account
             public string Wife { get; set; }
             [BindProperty]
             public int Council { get; set; }
-            public bool MemberVerified { get; set; }
+            public bool? MemberVerified { get; set; }
 
             [DataType(DataType.Upload)]
             [Display(Name = "You must upload a picture of your membership card here!")]
@@ -345,7 +345,7 @@ namespace KofCWSCWebsite.Areas.Identity.Pages.Account
                 // if we are adding a new member it will need to be verified
                 if (myIAns == 1)
                 {
-                    user.MemberVerified = false;
+                    user.MemberVerified = null;
                 }
                 else
                 {

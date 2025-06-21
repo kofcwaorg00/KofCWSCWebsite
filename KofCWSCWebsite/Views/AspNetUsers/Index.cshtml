@@ -29,7 +29,12 @@ Filter by:
         </td>
         <td>
             <span>Member Verified</span>
-            <input type="checkbox" id="memberverifiedFilter" title="Member Verified" style="width:20%">
+            <select id="memberverifiedFilter" style="width:20%">
+                <option value="">Waiting</option>  <!-- represents null -->
+                <option value="false">Rejected</option>
+                <option value="true">Approved</option>
+            </select>
+            @*<input type="checkbox" id="memberverifiedFilter" title="Member Verified" style="width:20%">*@
         </td>
     </tr>
 </table>
@@ -117,8 +122,8 @@ Filter by:
                 @Html.DisplayNameFor(model => model.MemberVerified)
             </th>
             @*<th>
-                @Html.DisplayNameFor(model => model.MembershipCardUrl)
-            </th>*@
+                    @Html.DisplayNameFor(model => model.MembershipCardUrl)
+                </th>*@
             <th></th>
         </tr>
     </thead>
@@ -140,72 +145,79 @@ Filter by:
                     @Html.DisplayFor(modelItem => item.UserName)
                 </td>
                 @*<td style="display:hidden">
-            @Html.DisplayFor(modelItem => item.NormalizedUserName)
-        </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Email)
-            </td>
-            <td>
-            @Html.DisplayFor(modelItem => item.NormalizedEmail)
-        </td>*@
+                        @Html.DisplayFor(modelItem => item.NormalizedUserName)
+                    </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.Email)
+                        </td>
+                        <td>
+                        @Html.DisplayFor(modelItem => item.NormalizedEmail)
+                    </td>*@
                 <td style="text-align:center">
                     @Html.DisplayFor(modelItem => item.EmailConfirmed)
                 </td>
                 @*<td>
-            @Html.DisplayFor(modelItem => item.PasswordHash)
-        </td>
-        <td>
-            @Html.DisplayFor(modelItem => item.SecurityStamp)
-        </td>
-        <td>
-            @Html.DisplayFor(modelItem => item.ConcurrencyStamp)
-        </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.PhoneNumber)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.PhoneNumberConfirmed)
-            </td>
-            <td>
-            @Html.DisplayFor(modelItem => item.TwoFactorEnabled)
-        </td>
-        <td>
-            @Html.DisplayFor(modelItem => item.LockoutEnd)
-        </td>
-        <td>
-            @Html.DisplayFor(modelItem => item.LockoutEnabled)
-        </td>
-        <td>
-            @Html.DisplayFor(modelItem => item.AccessFailedCount)
-        </td>*@
+                        @Html.DisplayFor(modelItem => item.PasswordHash)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.SecurityStamp)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.ConcurrencyStamp)
+                    </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.PhoneNumber)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.PhoneNumberConfirmed)
+                        </td>
+                        <td>
+                        @Html.DisplayFor(modelItem => item.TwoFactorEnabled)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.LockoutEnd)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.LockoutEnabled)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.AccessFailedCount)
+                    </td>*@
 
                 @*<td>
-            @Html.DisplayFor(modelItem => item.ProfilePictureUrl)
-        </td>
-        <td>
-            @Html.DisplayFor(modelItem => item.Address)
-        </td>
-        <td>
-            @Html.DisplayFor(modelItem => item.City)
-        </td>
-        <td>
-            @Html.DisplayFor(modelItem => item.State)
-        </td>
-        <td>
-            @Html.DisplayFor(modelItem => item.PostalCode)
-        </td>
-        <td>
-            @Html.DisplayFor(modelItem => item.Wife)
-        </td>
-        <td>
-            @Html.DisplayFor(modelItem => item.Council)
-        </td>*@
+                        @Html.DisplayFor(modelItem => item.ProfilePictureUrl)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Address)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.City)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.State)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.PostalCode)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Wife)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Council)
+                    </td>*@
                 <td style="text-align:center;">
-                    @Html.DisplayFor(modelItem => item.MemberVerified)
+                    @*@Html.DisplayFor(modelItem => item.MemberVerified)*@
+                    @Html.DropDownListFor(model => item.MemberVerified, new List<SelectListItem>
+    {
+    new SelectListItem { Text = "Waiting", Value = "" },
+    new SelectListItem { Text = "Verified", Value = "true" },
+    new SelectListItem { Text = "Rejected", Value = "false" }
+    }, new { @class = "form-control" })
+
                 </td>
                 @*<td>
-            @Html.DisplayFor(modelItem => item.MembershipCardUrl)
-        </td>*@
+                        @Html.DisplayFor(modelItem => item.MembershipCardUrl)
+                    </td>*@
                 <td style="padding-right:0px">
                     <form asp-action="Edit" asp-route-id="@item.Id" method="get">
                         <button type="submit" class="btn btn-sm btn-primary">
@@ -227,7 +239,7 @@ Filter by:
                         </button>
                     </form>
                 </td>
-                @if (item.MemberVerified == false)
+                @if (item.MemberVerified == null)
                 {
                     <td style="padding-left:0px">
                         <form asp-action="GetNewMemberApproval" asp-route-id="@item.Id" method="get">
@@ -238,11 +250,22 @@ Filter by:
 
                     </td>
                 }
+                @if (item.MemberVerified == false)
+                {
+                    <td style="padding-left:0px">
+                        <form asp-action="GetNewMemberApproval" asp-route-id="@item.Id" method="get">
+                            <button type="submit" class="btn btn-sm btn-warning">
+                                Rejected Member
+                            </button>
+                        </form>
+
+                    </td>
+                }
                 @*<td>
-            <a asp-action="Edit" asp-route-id="@item.Id">Edit</a> |
-            <a asp-action="Details" asp-route-id="@item.Id">Details</a> |
-            <a asp-action="Delete" asp-route-id="@item.Id">Delete</a>
-        </td>*@
+                        <a asp-action="Edit" asp-route-id="@item.Id">Edit</a> |
+                        <a asp-action="Details" asp-route-id="@item.Id">Details</a> |
+                        <a asp-action="Delete" asp-route-id="@item.Id">Delete</a>
+                    </td>*@
             </tr>
         }
     </tbody>
@@ -267,7 +290,7 @@ Filter by:
         kofcidFilter.value = '';
         lastnameFilter.value = '';
         emailconfirmedFilter.checked = false;
-        memberverifiedFilter.checked = false;
+        memberverifiedFilter.checked = null;
         filterTable();
     });
 
@@ -276,7 +299,7 @@ Filter by:
         const lastnameFValue = lastnameFilter.value.toLowerCase();
         const emailconfirmedFValue = emailconfirmedFilter.checked;
         const memberverifiedFValue = memberverifiedFilter.checked;
-        
+
         var myTable = document.getElementById('myTable');
 
         Array.from(myTable.rows).forEach(row => {
@@ -285,10 +308,10 @@ Filter by:
                 const kofcid = row.cells[0].textContent.toLowerCase().trim();
                 const lastname = row.cells[2].textContent.toLowerCase().trim();
                 const emailconfirmed = row.cells[4].querySelector("input[type='checkbox']").checked;
-                const memberverified = row.cells[5].querySelector("input[type='checkbox']").checked;
+                const memberverified = row.cells[5].querySelector('select').value;
 
                 // Check each filter
-                
+
                 const kofcidMatch = kofcidFValue === '' || kofcid.includes(kofcidFValue); // district.includes(kofcidValue);
                 const lastnameMatch = lastnameFValue === '' || lastname.includes(lastnameFValue);
                 const emailconfirmedMatch = emailconfirmed === emailconfirmedFValue; // === '' || emailconfirmed === true; // type.includes(typeValue);
@@ -299,8 +322,8 @@ Filter by:
                 //if (emailconfirmedFValue === '') { emailconfirmedFilter.style.backgroundColor = '' } else { typeFilter.style.backgroundColor = '#e8f0fe' }
                 //if (memberverifiedFValue === '') { memberverifiedFilter.style.backgroundColor = '' } else { nameFilter.style.backgroundColor = '#e8f0fe' }
                 // Show or hide the row based on filters
-                
-                if (kofcidMatch && lastnameMatch && emailconfirmedMatch && memberverifiedMatch) {
+
+                if (kofcidMatch && lastnameMatch && emailconfirmedMatch || memberverifiedMatch) {
                     row.style.display = '';
                 } else {
                     row.style.display = 'none';

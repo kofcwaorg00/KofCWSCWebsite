@@ -55,7 +55,7 @@ public partial class AspNetUser
     public string? Wife {  get; set; }
     public int? Council {  get; set; }
     [Display(Name = "Member Verified")]
-    public bool MemberVerified { get; set; }
+    public bool? MemberVerified { get; set; }
     [Display(Name = "Membership Card URL")]
     public string? MembershipCardUrl { get; set; }
 

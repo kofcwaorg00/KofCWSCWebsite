@@ -204,7 +204,7 @@ namespace KofCWSCWebsite.Areas.Identity.Pages.Account.Manage
                 KeyVaultHelper kvh = new KeyVaultHelper(_configuration);
                 var blobServiceClient = new Azure.Storage.Blobs.BlobServiceClient(kvh.GetSecret("AZBSPCS"));
                 
-                var containerClient = blobServiceClient.GetBlobContainerClient(_configuration["AzureBlobStorage:ContainerName"]);
+                var containerClient = blobServiceClient.GetBlobContainerClient(_configuration["AzureBlobStorage:MCContainerName"]);
                 await containerClient.CreateIfNotExistsAsync();
                 await containerClient.SetAccessPolicyAsync(Azure.Storage.Blobs.Models.PublicAccessType.Blob);
 

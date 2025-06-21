@@ -85,14 +85,14 @@
             </div>
             <div class="parent" style="display:grid;grid-template-columns:1fr 1fr ;padding:20px">
                 @*<div class="form-group form-check">
-                    <label class="form-check-label">
-                        <input class="form-check-input" asp-for="MemberVerified" /> @Html.DisplayNameFor(model => model.MemberVerified)
-                    </label>
-                </div>*@
+                        <label class="form-check-label">
+                            <input class="form-check-input" asp-for="MemberVerified" /> @Html.DisplayNameFor(model => model.MemberVerified)
+                        </label>
+                    </div>*@
                 <div class="form-group">
                     @*<label asp-for="MembershipCardUrl" class="control-label"></label>
-                <input asp-for="MembershipCardUrl" class="form-control" />
-                <span asp-validation-for="MembershipCardUrl" class="text-danger"></span>*@
+                        <input asp-for="MembershipCardUrl" class="form-control" />
+                        <span asp-validation-for="MembershipCardUrl" class="text-danger"></span>*@
                     <a href="@Model.MembershipCardUrl" target="_blank">
                         <img src="@Model.MembershipCardUrl" width="200" />
                     </a>
@@ -100,18 +100,43 @@
             </div>
             <div class="parent" style="display:grid;grid-template-columns:1fr 1fr ;padding:20px;width:19%">
                 <div class="form-group">
-                    <input type="submit" value="Approve" class="btn btn-success" />
+                    <a asp-action="ApproveNewMember" asp-route-id="@Model.Id" class="btn btn-success" style="width:100px;">Approve</a>
                 </div>
                 <div>
-                    <a asp-action="RejectNewMember" class="btn btn-danger" style="width:100px;">Reject</a>
+                    <button type="button" class="btn btn-danger" data-bs-toggle="modal" data-bs-target="#reasonModal">
+                        Reject
+                    </button>
+
                 </div>
             </div>
         </form>
     </div>
-
-
     <div>
         <a asp-action="Index">Back to List</a>
+    </div>
+</div>
+<!-- Reason Modal -->
+<div class="modal fade" id="reasonModal" tabindex="-1" aria-labelledby="reasonModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <form asp-action="RejectNewMember" method="post">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="reasonModalLabel">Rejection Reason</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <input type="hidden" name="Id" value="@Model.Id" />
+                    <div class="mb-3">
+                        <label for="Reason" class="form-label">Reason</label>
+                        <textarea name="Reason" id="Reason" class="form-control" rows="3" required></textarea>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+                    <button type="submit" class="btn btn-danger">Submit Rejection</button>
+                </div>
+            </form>
+        </div>
     </div>
 </div>
 @section Scripts {
