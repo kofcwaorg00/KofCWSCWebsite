@@ -23,16 +23,16 @@ Filter by:
         </td>
     </tr>
     <tr>
-        <td>
+        @*<td>
             <span>Email Verified</span>
             <input type="checkbox" id="emailconfirmedFilter" title="Email Verified" style="width:20%">
-        </td>
+        </td>*@
         <td>
             <span>Member Verified</span>
-            <select id="memberverifiedFilter" style="width:20%">
+            <select id="memberverifiedFilter" style="width:50%">
                 <option value="">Waiting</option>  <!-- represents null -->
                 <option value="false">Rejected</option>
-                <option value="true">Approved</option>
+                <option value="true">Verified</option>
             </select>
             @*<input type="checkbox" id="memberverifiedFilter" title="Member Verified" style="width:20%">*@
         </td>
@@ -208,11 +208,11 @@ Filter by:
                 <td style="text-align:center;">
                     @*@Html.DisplayFor(modelItem => item.MemberVerified)*@
                     @Html.DropDownListFor(model => item.MemberVerified, new List<SelectListItem>
-    {
-    new SelectListItem { Text = "Waiting", Value = "" },
-    new SelectListItem { Text = "Verified", Value = "true" },
-    new SelectListItem { Text = "Rejected", Value = "false" }
-    }, new { @class = "form-control" })
+                        {
+                        new SelectListItem { Text = "Waiting", Value = "" },
+                        new SelectListItem { Text = "Verified", Value = "true" },
+                        new SelectListItem { Text = "Rejected", Value = "false" }
+                        }, new { @class = "form-control" })
 
                 </td>
                 @*<td>
@@ -244,7 +244,7 @@ Filter by:
                     <td style="padding-left:0px">
                         <form asp-action="GetNewMemberApproval" asp-route-id="@item.Id" method="get">
                             <button type="submit" class="btn btn-sm btn-success">
-                                New Member
+                                Verify New Member
                             </button>
                         </form>
 
@@ -255,7 +255,7 @@ Filter by:
                     <td style="padding-left:0px">
                         <form asp-action="GetNewMemberApproval" asp-route-id="@item.Id" method="get">
                             <button type="submit" class="btn btn-sm btn-warning">
-                                Rejected Member
+                                Rejected New Member
                             </button>
                         </form>
 
@@ -273,7 +273,7 @@ Filter by:
 <script>
     const kofcidFilter = document.getElementById('kofcidFilter');
     const lastnameFilter = document.getElementById('lastnameFilter');
-    const emailconfirmedFilter = document.getElementById('emailconfirmedFilter');
+    //const emailconfirmedFilter = document.getElementById('emailconfirmedFilter');
     const memberverifiedFilter = document.getElementById('memberverifiedFilter');
 
     const resetFilters = document.getElementById('resetFilters');
@@ -282,14 +282,14 @@ Filter by:
     // Event listeners
     kofcidFilter.addEventListener('input', filterTable);
     lastnameFilter.addEventListener('input', filterTable);
-    emailconfirmedFilter.addEventListener('change', filterTable);
+    //emailconfirmedFilter.addEventListener('change', filterTable);
     memberverifiedFilter.addEventListener('change', filterTable);
 
     // Reset filters
     resetFilters.addEventListener('click', () => {
         kofcidFilter.value = '';
         lastnameFilter.value = '';
-        emailconfirmedFilter.checked = false;
+        //emailconfirmedFilter.checked = false;
         memberverifiedFilter.checked = null;
         filterTable();
     });
@@ -297,8 +297,8 @@ Filter by:
     function filterTable() {
         const kofcidFValue = kofcidFilter.value.toLowerCase();
         const lastnameFValue = lastnameFilter.value.toLowerCase();
-        const emailconfirmedFValue = emailconfirmedFilter.checked;
-        const memberverifiedFValue = memberverifiedFilter.checked;
+        //const emailconfirmedFValue = emailconfirmedFilter.checked;
+        const memberverifiedFValue = memberverifiedFilter.value;
 
         var myTable = document.getElementById('myTable');
 
@@ -307,14 +307,14 @@ Filter by:
             if (row.parentNode.tagName.toLowerCase() === 'tbody') {
                 const kofcid = row.cells[0].textContent.toLowerCase().trim();
                 const lastname = row.cells[2].textContent.toLowerCase().trim();
-                const emailconfirmed = row.cells[4].querySelector("input[type='checkbox']").checked;
+                //const emailconfirmed = row.cells[4].querySelector("input[type='checkbox']").checked;
                 const memberverified = row.cells[5].querySelector('select').value;
 
                 // Check each filter
 
                 const kofcidMatch = kofcidFValue === '' || kofcid.includes(kofcidFValue); // district.includes(kofcidValue);
                 const lastnameMatch = lastnameFValue === '' || lastname.includes(lastnameFValue);
-                const emailconfirmedMatch = emailconfirmed === emailconfirmedFValue; // === '' || emailconfirmed === true; // type.includes(typeValue);
+                //const emailconfirmedMatch = emailconfirmed === emailconfirmedFValue; // === '' || emailconfirmed === true; // type.includes(typeValue);
                 const memberverifiedMatch = memberverified === memberverifiedFValue; // === '' || memberverified === true;
                 // hightlight the active filter(s)
                 //if (kofcidFValue === '') { kofcidFilter.style.backgroundColor = '' } else { districtFilter.style.backgroundColor = '#e8f0fe' }
@@ -323,7 +323,7 @@ Filter by:
                 //if (memberverifiedFValue === '') { memberverifiedFilter.style.backgroundColor = '' } else { nameFilter.style.backgroundColor = '#e8f0fe' }
                 // Show or hide the row based on filters
 
-                if (kofcidMatch && lastnameMatch && emailconfirmedMatch || memberverifiedMatch) {
+                if (kofcidMatch && lastnameMatch && memberverifiedMatch) {
                     row.style.display = '';
                 } else {
                     row.style.display = 'none';

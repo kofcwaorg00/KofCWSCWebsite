@@ -100,45 +100,56 @@ namespace KofCWSCWebsite.Controllers
 
         public async Task<IActionResult> ApproveNewMember(string id)
         {
-            ////////////---------------------------------------------------------------------------
-            //////////// First get the data
-            //////////var aspnetuser = await _apiHelper.GetAsync<AspNetUser>($"AspNetUsers/{id}");
-            ////////////---------------------------------------------------------------------------
-            //////////// Add the data to tbl_MasMembers
-            //////////var tblmasmember = new TblMasMember
-            //////////{
-            //////////    FirstName = aspnetuser.FirstName,
-            //////////    LastName = aspnetuser.LastName,
-            //////////    Email = aspnetuser.Email,
-            //////////    Address = aspnetuser.Address,
-            //////////    City = aspnetuser.City,
-            //////////    State = aspnetuser.State,
-            //////////    PostalCode = aspnetuser.PostalCode,
-            //////////    KofCid = aspnetuser.KofCmemberId,
-            //////////    Council = (int)aspnetuser.Council
-            //////////};
-            //////////var results = await _apiHelper.PostAsync<TblMasMember, TblMasMember>("Member", tblmasmember);
-            ////////////---------------------------------------------------------------------------
-            //////////// Set MemberVerfied to 1 in AspNetUsers
-            //////////aspnetuser.MemberVerified = true;
-            //////////var results1 = await _apiHelper.PutAsync<AspNetUser, AspNetUser>($"AspNetUsers/{id}", aspnetuser);
-            ////////////---------------------------------------------------------------------------
-            //////////// Add the member to the MEMBER role
-            //////////var user = await _userManager.FindByNameAsync(aspnetuser.UserName);
-            //////////await _userManager.AddToRoleAsync(user, "Member");
-            //////////// Send confirmation email to the new Member
-            //////////await _emailSender.SendEmailAsync(aspnetuser.Email, "Your KofC WSC Registration is complete.",
-            //////////           $"Your registration has been verified and approved. You may now login and use the site as a Member<br /><br />" +
-            //////////           $"If you have any questions please email support@kofc-wa.org.");
-            ////////////---------------------------------------------------------------------------
+            //---------------------------------------------------------------------------
+            // First get the data
+            var aspnetuser = await _apiHelper.GetAsync<AspNetUser>($"AspNetUsers/{id}");
+            //---------------------------------------------------------------------------
+            // Add the data to tbl_MasMembers
+            var tblmasmember = new TblMasMember
+            {
+                FirstName = aspnetuser.FirstName,
+                LastName = aspnetuser.LastName,
+                Email = aspnetuser.Email,
+                Address = aspnetuser.Address,
+                City = aspnetuser.City,
+                State = aspnetuser.State,
+                PostalCode = aspnetuser.PostalCode,
+                KofCid = aspnetuser.KofCmemberId,
+                Council = (int)aspnetuser.Council
+            };
+            var results = await _apiHelper.PostAsync<TblMasMember, TblMasMember>("Member", tblmasmember);
+            //---------------------------------------------------------------------------
+            // Set MemberVerfied to 1 in AspNetUsers
+            aspnetuser.MemberVerified = true;
+            var results1 = await _apiHelper.PutAsync<AspNetUser, AspNetUser>($"AspNetUsers/{id}", aspnetuser);
+            //---------------------------------------------------------------------------
+            // Add the member to the MEMBER role
+            var user = await _userManager.FindByNameAsync(aspnetuser.UserName);
+            await _userManager.AddToRoleAsync(user, "Member");
+            // Send confirmation email to the new Member
+            await _emailSender.SendEmailAsync(aspnetuser.Email, "Your KofC WSC Registration is complete.",
+                $"{aspnetuser.FirstName} {aspnetuser.LastName} <br>" +
+                       $"Your registration has been verified and approved. You may now login and use the site as a Member<br /><br />" +
+                       $"If you have any questions please email support@kofc-wa.org.");
+            //---------------------------------------------------------------------------
             return View();
         }
-        public async Task<IActionResult> RejectNewMember(string id,string reason)
+        public async Task<IActionResult> RejectNewMember(string id, string reason)
         {
+            //---------------------------------------------------------------------------
             // Get the profile information
             var aspnetuser = await _apiHelper.GetAsync<AspNetUser>($"AspNetUsers/{id}");
+            //---------------------------------------------------------------------------
             // set the MemberVerified = 0
+            aspnetuser.MemberVerified = false;
+            await _apiHelper.PutAsync<AspNetUser, AspNetUser>($"AspNetUsers/{id}", aspnetuser);
+            //---------------------------------------------------------------------------
             // Email the member with the reason
+            await _emailSender.SendEmailAsync(aspnetuser.Email, "Your KofC WSC Registration verification.",
+                $"{aspnetuser.FirstName} {aspnetuser.LastName} <br>" +
+                       $"Your registration has been rejected for the following reason:<br> {reason}.<br>" +
+                       $"If you have any questions please email support@kofc-wa.org.");
+            //---------------------------------------------------------------------------
             ViewBag.Reason = reason;
             ViewBag.Email = aspnetuser.Email;
             return View();

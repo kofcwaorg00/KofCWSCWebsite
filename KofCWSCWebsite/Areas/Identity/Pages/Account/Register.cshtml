@@ -123,7 +123,8 @@
                     </div>
                 </div>
                 <div class="form-group">
-                    <label asp-for="Input.MembershipCardFile"></label>
+                    <div style="color:red"><label asp-for="Input.MembershipCardFile"></label></div>
+                    
                     <input id="IMembershipCardFile" asp-for="Input.MembershipCardFile" type="file" class="form-control" />
                     <span asp-validation-for="Input.MembershipCardFile" class="text-danger"></span>
                 </div>

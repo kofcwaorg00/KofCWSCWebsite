@@ -5,13 +5,10 @@ add    [Address] NVARCHAR(255) NULL,
      [State] NVARCHAR(10) NULL, 
     [PostalCode] NVARCHAR(20) NULL, 
     [Wife] NVARCHAR(12) NULL, 
-    [Council] INT NULL
+    [Council] INT NULL,
+    [MemberVerified] bit null,
+    MembershipCardUrl nvarchar(250) null
 
-alter table aspnetusers
-add    [MemberVerified] bit null
-
-alter table aspnetusers
-add MembershipCardUrl nvarchar(250) null
 
 ALTER TABLE [dbo].[AspNetUsers]  
 DROP CONSTRAINT [FK_AspNetUsers_tbl_MasMembers]

@@ -156,7 +156,7 @@ namespace KofCWSCWebsite.Areas.Identity.Pages.Account
             public bool? MemberVerified { get; set; }
 
             [DataType(DataType.Upload)]
-            [Display(Name = "You must upload a picture of your membership card here!")]
+            [Display(Name = "You must upload a picture of your membership card here!*")]
             public IFormFile MembershipCardFile { get; set; }
             public string MembershipCardURL { get; set; }
             [BindProperty]
