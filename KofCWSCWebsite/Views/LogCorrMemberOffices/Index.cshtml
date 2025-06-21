@@ -15,6 +15,15 @@ else
     <table class="table">
         <thead>
             <tr>
+                <td colspan="9">
+                    <form asp-controller="LogCorrMemberOffices" asp-action="UpdateProcessFlag" asp-route-id="0" method="get">
+                        <button type="submit" class="btn btn-sm btn-secondary" title="Toggle Process.">
+                            Process All
+                        </button>
+                    </form>
+                </td>
+            </tr>
+            <tr>
                 <th></th>
                 <th>
                     @Html.DisplayNameFor(model => model.ChangeType)
