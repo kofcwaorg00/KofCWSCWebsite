@@ -73,7 +73,7 @@ namespace KofCWSCWebsite.Areas.Identity.Pages.Account
                     protocol: Request.Scheme);
 
                 await _emailSender.SendEmailAsync(Input.Email, "Reset Password",
-                   $"You have received this email to reset your password as a member of Washington State Council, Knights of Columbus. For any support questions please email webmaster@kofc-wa.org.<br /><br />" +
+                   $"You have received this email to reset your password as a member of Washington State Council, Knights of Columbus. For any support questions please contact <a href=\"https://kofc-wa.org/ContactUs?messageRecipient=Website:%20Technical%20Support\">Technical Support</a>.<br /><br />" +
                    $"Please reset your password by <a href='{HtmlEncoder.Default.Encode(callbackUrl)}'>clicking here</a>.<br />" +
                    $"<br /><br /><br /><br /><br />" +
                    $"This email was sent to " + Input.Email + " by Washington State Council, Knights of Columbus.©1995-" + DateTime.Now.Year + " Washington State Council. All Rights Reserved");

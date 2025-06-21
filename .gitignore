@@ -364,7 +364,7 @@ FodyWeavers.xsd
 /KofCWSCWebsite/GenOutput/Microsoft.CodeAnalysis.Razor.Compiler.SourceGenerators/Microsoft.NET.Sdk.Razor.SourceGenerators.RazorSourceGenerator
 
 # VS Code config files
-.vscode/**
+**/.vscode/**
 
 # Mac meta-files
 .DS_Store
