@@ -1,6 +1,7 @@
 ﻿ALTER PROCEDURE [dbo].[uspRPT_DirectoryPSD]
 @ShortForm INT=0, @NextYear INT=0
 AS
+-- exec [dbo].[uspRPT_DirectoryPSD] 0 ,1
 SELECT   'PAST STATE DEPUTIES' AS GroupName,
          '' AS ReportTitle,
          '' AS ReportSubTitle,
