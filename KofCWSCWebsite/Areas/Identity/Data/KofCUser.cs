@@ -24,6 +24,6 @@ public class KofCUser : IdentityUser
     [Required]
     [MaxLength(100)]
     [DisplayName("KofC Member Number")]
-    public string KofCMemberID { get; set; } = string.Empty;
+    public int KofCMemberID { get; set; }
 }
 
