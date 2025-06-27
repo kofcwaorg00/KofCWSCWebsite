@@ -22,4 +22,5 @@ public partial class TblValAssy
     public string? WebSiteUrl { get; set; }
     [DisplayName("Master")]
     public string? MasterLoc { get; set; }
+    public string? Status { get; set; }
 }

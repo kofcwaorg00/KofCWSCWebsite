@@ -38,6 +38,9 @@
             <th class="MyColHdr" style="text-align:center">
                 @Html.DisplayNameFor(model => model.MasterLoc)
             </th>
+            <th class="MyColHdr" style="text-align:center">
+                @Html.DisplayNameFor(model => model.Status)
+            </th>
             <th class="MyColHdr"></th>
             <th class="MyColHdr"></th>
             <th class="MyColHdr"></th>
@@ -62,9 +65,11 @@
                 <td style="text-align:center">
                     @Html.DisplayFor(modelItem => item.MasterLoc)
                 </td>
-                <td>
-                    @if (User.IsInRole("Admin") || User.IsInRole("DataAdmin"))
-                    {
+                <td style="text-align:center">
+                    @Html.DisplayFor(modelItem => item.Status)
+                </td>
+                @if (User.IsInRole("Admin") || User.IsInRole("DataAdmin"))
+                {
                     <td style="padding-right:0px">
                         @* <a asp-action="Edit" asp-route-id="@item.MemberId">Edit</a>&nbsp;|&nbsp;<a asp-action="Details" asp-route-id="@item.MemberId">Details</a>&nbsp;|&nbsp;<a asp-action="Delete" asp-route-id="@item.MemberId">Delete</a> *@
                         <form asp-action="Edit" asp-route-id="@item.ANumber" method="get">
@@ -86,12 +91,10 @@
                                 Delete
                             </button>
                         </form>
-
                     </td>
                 }
-                    </td>
-                </tr>
-            }
+            </tr>
+        }
     </tbody>
 </table>
 
