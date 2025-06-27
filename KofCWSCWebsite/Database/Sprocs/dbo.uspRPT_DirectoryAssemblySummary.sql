@@ -19,5 +19,5 @@ SELECT   'FOURTH DEGREE ASSEMBLY SUMMARY' AS GroupName,
          '' AS PrintEntity,
          '' AS Meetings
 FROM     tbl_ValAssys AS VA
-WHERE    VA.A_NUMBER > 0
+WHERE    VA.A_NUMBER > 0 AND VA.Status= 'A'
 ORDER BY va.A_NUMBER;
