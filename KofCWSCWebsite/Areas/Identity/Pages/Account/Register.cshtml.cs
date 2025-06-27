@@ -490,7 +490,16 @@ namespace KofCWSCWebsite.Areas.Identity.Pages.Account
             {
                 Value = c.CNumber.ToString(),
                 Text = $"{c.CNumber} - {c.CName} (District #{c.District})"
+           is var fullText && fullText.Length > 50
+           ? fullText.Substring(0, 50) + "..."
+           : fullText
             }).ToList();
+            //var iCouncils = await _apiHelper.GetAsync<List<TblValCouncil>>("Councils");
+            //Councils = iCouncils.Select(c => new SelectListItem
+            //{
+            //    Value = c.CNumber.ToString(),
+            //    Text = $"{c.CNumber} - {c.CName} (District #{c.District})"
+            //}).ToList();
         }
     }
 }

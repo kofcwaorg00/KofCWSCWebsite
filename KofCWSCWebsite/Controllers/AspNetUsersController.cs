@@ -104,7 +104,9 @@ namespace KofCWSCWebsite.Controllers
             // First get the data
             var aspnetuser = await _apiHelper.GetAsync<AspNetUser>($"AspNetUsers/{id}");
             //---------------------------------------------------------------------------
+            ViewBag.Email = aspnetuser.Email;
             // Add the data to tbl_MasMembers
+            //---------------------------------------------------------------------------
             var tblmasmember = new TblMasMember
             {
                 FirstName = aspnetuser.FirstName,
@@ -127,9 +129,11 @@ namespace KofCWSCWebsite.Controllers
             var user = await _userManager.FindByNameAsync(aspnetuser.UserName);
             await _userManager.AddToRoleAsync(user, "Member");
             // Send confirmation email to the new Member
-            await _emailSender.SendEmailAsync(aspnetuser.Email, "Your KofC WSC Registration is complete.",
-                $"{aspnetuser.FirstName} {aspnetuser.LastName} <br>" +
-                       $"Your registration has been verified and approved. You may now login and use the site as a Member<br /><br />" +
+            var request = HttpContext.Request;
+            var siteUrl = $"{request.Scheme}://{request.Host}/Identity/Account/Login";
+            await _emailSender.SendEmailAsync(aspnetuser.Email, $"Your KofC WSC Registration is complete.",
+                $"Brother {aspnetuser.FirstName} {aspnetuser.LastName} <br>" +
+                       $"Your registration has been verified and approved. You may now <a href={siteUrl}>login and use the site</a> as a Member<br /><br />" +
                        $"If you have any questions please email support@kofc-wa.org.");
             //---------------------------------------------------------------------------
             return View();
@@ -146,7 +150,7 @@ namespace KofCWSCWebsite.Controllers
             //---------------------------------------------------------------------------
             // Email the member with the reason
             await _emailSender.SendEmailAsync(aspnetuser.Email, "Your KofC WSC Registration verification.",
-                $"{aspnetuser.FirstName} {aspnetuser.LastName} <br>" +
+                $"Brother {aspnetuser.FirstName} {aspnetuser.LastName} <br>" +
                        $"Your registration has been rejected for the following reason:<br> {reason}.<br>" +
                        $"If you have any questions please email support@kofc-wa.org.");
             //---------------------------------------------------------------------------

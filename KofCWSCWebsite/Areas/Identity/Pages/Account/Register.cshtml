@@ -88,8 +88,9 @@
                         <span asp-validation-for="Input.City" class="text-danger"></span>
                     </div>
                     <div class="form-floating mb-3">
-                        <select asp-for="Input.State" id="state" class="form-control">
-                            <option value="">Select</option>
+                        @*<span>State<span style="color:red">*</span></span>*@
+                        <select asp-for="Input.State" id="state" class="form-select">
+                            <option value="">...</option>
                             @foreach (var state in Model.myStates)
                             {
                                 <option value="@state.Value">@state.Value</option>
@@ -97,7 +98,7 @@
                         </select>
 
                         @*<input id="IState" asp-for="Input.State" class="form-control" autocomplete="State" aria-required="true" placeholder="password" />*@
-                        <label asp-for="Input.State">State<span style="color:red"> *</span></label>
+                        <label class="required" asp-for="Input.State">State</label>
                         <span asp-validation-for="Input.State" class="text-danger"></span>
                     </div>
                     <div class="form-floating mb-3">
@@ -113,13 +114,14 @@
                         <span asp-validation-for="Input.Wife" class="text-danger"></span>
                     </div>
                     <div class="form-floating mb-3">
-                        <label asp-for="Input.Council">Council<span style="color:red"> *</span></label>
-                        <select id="ICouncil" asp-for="Input.Council" asp-items="Model.Councils" class="form-control">
+                        @*<span>Council<span style="color:red">*</span></span>*@
+                        @*<label asp-for="Input.Council">Council<span style="color:red"> *</span></label>*@
+                        <select id="ICouncil" asp-for="Input.Council" asp-items="Model.Councils" class="form-select">
                             <option value="0">Select a Council</option>
                         </select>
                         @*<select id="ICouncil" asp-for="Input.Council" asp-items="Model.Councils" class="form-control" autocomplete="Council" aria-required="true" placeholder="council" />*@
-                        @*<label class="required" asp-for="Input.Council">Council</label>*@
-                        <span asp-validation-for="Input.Council" class="text-danger"></span>
+                        <label class="required" asp-for="Input.Council">Council</label>
+                        @*<span asp-validation-for="Input.Council" class="text-danger"></span>*@
                     </div>
                 </div>
                 <div class="form-group">
