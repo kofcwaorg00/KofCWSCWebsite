@@ -32,6 +32,6 @@ FROM   tbl_MasMembers AS MM
        INNER JOIN
        tbl_ValDistricts AS VD
        ON VC.DISTRICT = VD.DISTRICT
-WHERE  MO.OfficeID IN (223, 224, 225, 226, 228, 229, 251, 286)
+WHERE  MO.OfficeID IN (225,226,227,228,229,230,223,224,286,251)
        AND mo.Year = dbo.funSYS_GetBegFratYearN(@NextYear)
        AND isnull(MM.Deceased, 0) <> 1;
