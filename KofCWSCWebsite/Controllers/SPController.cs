@@ -293,10 +293,10 @@ namespace KofCWSCWebsite.Controllers
         }
 
         // GET: FourthDegreeOfficers
-        [Route("FourthDegreeOfficers")]
-        public IActionResult GetFourthDegreeOfficers()
+        //[Route("GetFourthDegreeOfficers/{NextYear}")]
+        public IActionResult GetFourthDegreeOfficers(int NextYear)
         {
-            Uri myURI = new Uri(_dataSetService.GetAPIBaseAddress() + "/FourthDegreeOfficers");
+            Uri myURI = new Uri(_dataSetService.GetAPIBaseAddress() + $"/FourthDegreeOfficers/{NextYear}");
 
             using (var client = new HttpClient())
             {

@@ -1,4 +1,5 @@
-﻿alter PROCEDURE [dbo].[uspWEB_GetFourthDegreeOfficers]
+﻿alter PROCEDURE [dbo].[uspWEB_GetFourthDegreeOfficers] 
+@NextYear int = 0
 AS
 BEGIN
     SELECT   mm.Phone,
@@ -25,6 +26,6 @@ BEGIN
              LEFT OUTER JOIN tbl_ValOffices AS vo ON mo.OfficeID = vo.OfficeID
              LEFT OUTER JOIN tblWEB_SelfPublish AS sp ON sp.OID = mo.OfficeID
     WHERE    mo.OfficeID IN (133, 54, 31, 184, 193, 248, 192, 246, 247, 191, 110, 156, 262, 134, 250, 289)
-             AND mo.Year = dbo.funSYS_GetBegFratYear()
+             AND mo.Year = dbo.funSYS_GetBegFratYearN(@NextYear)
     ORDER BY vo.DirSortOrder;
 END
