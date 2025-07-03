@@ -89,7 +89,7 @@ namespace KofCWSCWebsite.Areas.Identity.Pages.Account
         ///     directly from your code. This API may change or be removed in future releases.
         /// </summary>
         public string ReturnUrl { get; set; }
-        public string RemoteIPAddr {  get; set; }
+        public string RemoteIPAddr { get; set; }
         /// <summary>
         ///     This API supports the ASP.NET Core Identity default UI infrastructure and is not intended to be used
         ///     directly from your code. This API may change or be removed in future releases.
@@ -252,7 +252,7 @@ namespace KofCWSCWebsite.Areas.Identity.Pages.Account
                         }
                         break;
                     case 2: // no error just continue we need to check for required data
-                        
+
                         break;
                     case 3:
                         myVError = string.Concat("Member Number ", KofCMemberID, " is invalid.");
@@ -351,7 +351,7 @@ namespace KofCWSCWebsite.Areas.Identity.Pages.Account
                 {
                     user.MemberVerified = true;
                 }
-                
+
 
                 await _userStore.SetUserNameAsync(user, Input.Email, CancellationToken.None);
                 await _emailStore.SetEmailAsync(user, Input.Email, CancellationToken.None);
@@ -389,7 +389,7 @@ namespace KofCWSCWebsite.Areas.Identity.Pages.Account
                         {
                             var rcode = await _userManager.AddToRoleAsync(user, "Member");
                         }
-                        
+
                         // setup for the email message
                         code = WebEncoders.Base64UrlEncode(Encoding.UTF8.GetBytes(code));
                         var callbackUrl = Url.Page(
@@ -410,7 +410,7 @@ namespace KofCWSCWebsite.Areas.Identity.Pages.Account
                             string fullUrl = $"{baseUrl}/AspNetUsers";
                             string myTo = "support@kofc-wa.org";
                             string mySub = "New Member Profile Verification Needed.";
-                            string myBody = $"A new member, {Input.FirstName} {Input.LastName} ({Input.KofCMemberID}), has registered in our website.< /br>" +
+                            string myBody = $"A new member, {Input.FirstName} {Input.LastName} ({Input.KofCMemberID}), has registered in our website.<br />" +
                                 $"Please click <a href={fullUrl} target=_blank>here</a> to validate and approve or reject.";
                             // email admins
                             await _emailSender.SendEmailAsync(myTo, mySub, myBody, true);
