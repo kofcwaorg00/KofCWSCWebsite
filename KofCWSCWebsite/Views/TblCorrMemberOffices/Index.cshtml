@@ -7,7 +7,7 @@
 <h3>Manage Offices for @ViewBag.MemberName (@ViewBag.MemberID)</h3>
 
 <form class="d-flex" style="width:40%">
-    <input class="form-control me-2" type="text" id="myInput" placeholder="Filter by Year" title="Filter by Year" style="width:25%" value="2024" onchange="getFilteredData()">
+    <input class="form-control me-2" type="text" id="myInput" placeholder="Filter by Year" title="Filter by Year" style="width:25%" value="@ViewBag.FratYear" onchange="getFilteredData()">
     <button class="btn btn-outline-success" type="button" onclick="getFilteredData()">Search</button>
 </form>
 <p>

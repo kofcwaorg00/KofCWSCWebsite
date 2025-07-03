@@ -81,6 +81,8 @@ namespace KofCWSCWebsite.Controllers
                 }
 
                 ViewBag.MemberID = id;
+                int myY = (DateTime.Now.Month >= 4 && DateTime.Now.Month <= 6) ? 1 : 0;
+                ViewBag.FratYear = GetFratYear(myY).Result;
 
                 // Setup to get the mameber name
                 Uri myURI = new Uri(_dataSetService.GetAPIBaseAddress() + "/GetMemberName/" + id.ToString());
