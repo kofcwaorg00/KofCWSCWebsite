@@ -212,9 +212,9 @@
     var myerror = "";
 
     $(document).ready(function () {
-        $('#registerForm').on('submit', function () {
-            $('#overlay-spinner').show();
-        });
+        //////////$('#registerForm').on('submit', function () {
+        //////////    $('#overlay-spinner').show();
+        //////////});
 
         const kofcIdValue = $('#KofCID').val();
         ValidateKofCID(kofcIdValue);
@@ -309,9 +309,11 @@
                 break;
             case 1: //$"1 Member Number {KofCMemberID} is not found in our database. To continue registration, fill in the Additional Information and Register"
                 //alert("1 allowed it");
+                $('#overlay-spinner').show();
                 break;
             case 2: //is in our data but no profile - ALLOWREG
                 //alert("2 allowed it");
+                $('#overlay-spinner').show();
                 break;
             case 3: //$"3 Invalid Login because member is suspended"
                 //alert("3 stopped it");
@@ -320,14 +322,15 @@
             case 4: //$"4 {KofCMemberID} is already registered."
                 //alert("4 stopped it");
                 e.preventDefault();
-
                 break;
             default: // myGlobalVerfiy defaults to 0. If it is 0 or something else, don't allow save
                 //alert("Default stopped it");
                 e.preventDefault();
                 break;
         }
-
+        if (!$(this).valid()) {
+            $('#overlay-spinner').hide();
+        }
     });
     function ValidateKofCID(kofcid) {
         // if kofcid is blank, then we are loading new or after an error
@@ -340,6 +343,7 @@
                 $("#showAddl").hide();
                 $("#screenInfo").text("");
                 myGlobalVerify = "-1";
+                $('#overlay-spinner').hide();
                 return; // Stop further execution
             }
             $("#KofCIDError").text("");
