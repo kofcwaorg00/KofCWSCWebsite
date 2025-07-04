@@ -1,0 +1,338 @@
+﻿@model IEnumerable<KofCWSCWebsite.Models.AspNetUser>
+
+@{
+    ViewData["Title"] = "Member Profiles";
+}
+
+<h1>Manage Member Profile</h1>
+
+@*<p>
+        <a asp-action="Create">Create New</a>
+    </p>*@
+Filter by:
+<table style="width:50%">
+    <tr>
+        <td>
+            <input type="text" id="kofcidFilter" placeholder="Type in a KofC ID to filter results" title="Type in a number" style="width:100%">
+        </td>
+        <td>
+            <input type="text" id="lastnameFilter" placeholder="Type in a Last Name to filter results" title="Type in a last name" style="width:100%">
+        </td>
+        <td>
+            <button id="resetFilters" class="btn btn-outline-success">Reset Filters</button>
+        </td>
+    </tr>
+    <tr>
+        @*<td>
+            <span>Email Verified</span>
+            <input type="checkbox" id="emailconfirmedFilter" title="Email Verified" style="width:20%">
+        </td>*@
+        <td>
+            <span>Member Verified</span>
+            <select id="memberverifiedFilter" style="width:50%">
+                <option value="">Waiting</option>  <!-- represents null -->
+                <option value="false">Rejected</option>
+                <option value="true">Verified</option>
+            </select>
+            @*<input type="checkbox" id="memberverifiedFilter" title="Member Verified" style="width:20%">*@
+        </td>
+    </tr>
+</table>
+
+<br />
+</p>
+<table id="myTable" class="table">
+    <thead>
+        <tr>
+            <th>
+                @Html.DisplayNameFor(model => model.KofCmemberId)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.FirstName)
+            </th>
+
+            <th>
+                @Html.DisplayNameFor(model => model.LastName)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.UserName)
+            </th>
+            @*<th style="display:hidden">
+                    @Html.DisplayNameFor(model => model.NormalizedUserName)
+                </th>
+                    <th>
+                        @Html.DisplayNameFor(model => model.Email)
+                    </th>
+                    <th>
+                    @Html.DisplayNameFor(model => model.NormalizedEmail)
+                </th>*@
+            <th>
+                @Html.DisplayNameFor(model => model.EmailConfirmed)
+            </th>
+            @*<th>
+                    @Html.DisplayNameFor(model => model.PasswordHash)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.SecurityStamp)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.ConcurrencyStamp)
+                </th>
+                    <th>
+                        @Html.DisplayNameFor(model => model.PhoneNumber)
+                    </th>
+                    <th>
+                        @Html.DisplayNameFor(model => model.PhoneNumberConfirmed)
+                    </th>
+                    <th>
+                    @Html.DisplayNameFor(model => model.TwoFactorEnabled)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.LockoutEnd)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.LockoutEnabled)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.AccessFailedCount)
+                </th>
+
+                    <th>
+                        @Html.DisplayNameFor(model => model.ProfilePictureUrl)
+                    </th>
+                    <th>
+                        @Html.DisplayNameFor(model => model.Address)
+                    </th>
+                    <th>
+                        @Html.DisplayNameFor(model => model.City)
+                    </th>
+                    <th>
+                        @Html.DisplayNameFor(model => model.State)
+                    </th>
+                    <th>
+                        @Html.DisplayNameFor(model => model.PostalCode)
+                    </th>
+                    <th>
+                        @Html.DisplayNameFor(model => model.Wife)
+                    </th>
+                    <th>
+                        @Html.DisplayNameFor(model => model.Council)
+                    </th>*@
+            <th>
+                @Html.DisplayNameFor(model => model.MemberVerified)
+            </th>
+            @*<th>
+                    @Html.DisplayNameFor(model => model.MembershipCardUrl)
+                </th>*@
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var item in Model)
+        {
+            <tr>
+                <td>
+                    @Html.DisplayFor(modelItem => item.KofCmemberId)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.FirstName)
+                </td>
+
+                <td>
+                    @Html.DisplayFor(modelItem => item.LastName)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.UserName)
+                </td>
+                @*<td style="display:hidden">
+                        @Html.DisplayFor(modelItem => item.NormalizedUserName)
+                    </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.Email)
+                        </td>
+                        <td>
+                        @Html.DisplayFor(modelItem => item.NormalizedEmail)
+                    </td>*@
+                <td style="text-align:center">
+                    @Html.DisplayFor(modelItem => item.EmailConfirmed)
+                </td>
+                @*<td>
+                        @Html.DisplayFor(modelItem => item.PasswordHash)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.SecurityStamp)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.ConcurrencyStamp)
+                    </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.PhoneNumber)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.PhoneNumberConfirmed)
+                        </td>
+                        <td>
+                        @Html.DisplayFor(modelItem => item.TwoFactorEnabled)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.LockoutEnd)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.LockoutEnabled)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.AccessFailedCount)
+                    </td>*@
+
+                @*<td>
+                        @Html.DisplayFor(modelItem => item.ProfilePictureUrl)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Address)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.City)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.State)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.PostalCode)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Wife)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Council)
+                    </td>*@
+                <td style="text-align:center;">
+                    @*@Html.DisplayFor(modelItem => item.MemberVerified)*@
+                    @Html.DropDownListFor(model => item.MemberVerified, new List<SelectListItem>
+                        {
+                        new SelectListItem { Text = "Waiting", Value = "" },
+                        new SelectListItem { Text = "Verified", Value = "true" },
+                        new SelectListItem { Text = "Rejected", Value = "false" }
+                        }, new { @class = "form-control" })
+
+                </td>
+                @*<td>
+                        @Html.DisplayFor(modelItem => item.MembershipCardUrl)
+                    </td>*@
+                <td style="padding-right:0px">
+                    <form asp-action="Edit" asp-route-id="@item.Id" method="get">
+                        <button type="submit" class="btn btn-sm btn-primary">
+                            Edit
+                        </button>
+                    </form>
+                </td>
+                <td style="padding-left:0px;padding-right:0px">
+                    <form asp-action="Details" asp-route-id="@item.Id" method="get">
+                        <button type="submit" class="btn btn-sm btn-warning">
+                            Details
+                        </button>
+                    </form>
+                </td>
+                <td style="padding-left:0px;padding-right:0px">
+                    <form asp-action="Delete" asp-route-id="@item.Id" method="get">
+                        <button type="submit" class="btn btn-sm btn-danger">
+                            Delete
+                        </button>
+                    </form>
+                </td>
+                @if (item.MemberVerified == null)
+                {
+                    <td style="padding-left:0px">
+                        <form asp-action="GetNewMemberApproval" asp-route-id="@item.Id" method="get">
+                            <button type="submit" class="btn btn-sm btn-success">
+                                Verify New Member
+                            </button>
+                        </form>
+
+                    </td>
+                }
+                @if (item.MemberVerified == false)
+                {
+                    <td style="padding-left:0px">
+                        <form asp-action="GetNewMemberApproval" asp-route-id="@item.Id" method="get">
+                            <button type="submit" class="btn btn-sm btn-warning">
+                                Rejected New Member
+                            </button>
+                        </form>
+
+                    </td>
+                }
+                @*<td>
+                        <a asp-action="Edit" asp-route-id="@item.Id">Edit</a> |
+                        <a asp-action="Details" asp-route-id="@item.Id">Details</a> |
+                        <a asp-action="Delete" asp-route-id="@item.Id">Delete</a>
+                    </td>*@
+            </tr>
+        }
+    </tbody>
+</table>
+<script>
+    const kofcidFilter = document.getElementById('kofcidFilter');
+    const lastnameFilter = document.getElementById('lastnameFilter');
+    //const emailconfirmedFilter = document.getElementById('emailconfirmedFilter');
+    const memberverifiedFilter = document.getElementById('memberverifiedFilter');
+
+    const resetFilters = document.getElementById('resetFilters');
+    const tableBody = document.getElementById('mytable');
+
+    // Event listeners
+    kofcidFilter.addEventListener('input', filterTable);
+    lastnameFilter.addEventListener('input', filterTable);
+    //emailconfirmedFilter.addEventListener('change', filterTable);
+    memberverifiedFilter.addEventListener('change', filterTable);
+
+    // Reset filters
+    resetFilters.addEventListener('click', () => {
+        kofcidFilter.value = '';
+        lastnameFilter.value = '';
+        //emailconfirmedFilter.checked = false;
+        memberverifiedFilter.checked = null;
+        filterTable();
+    });
+
+    function filterTable() {
+        const kofcidFValue = kofcidFilter.value.toLowerCase();
+        const lastnameFValue = lastnameFilter.value.toLowerCase();
+        //const emailconfirmedFValue = emailconfirmedFilter.checked;
+        const memberverifiedFValue = memberverifiedFilter.value;
+
+        var myTable = document.getElementById('myTable');
+
+        Array.from(myTable.rows).forEach(row => {
+            // only affect the body rows not the header
+            if (row.parentNode.tagName.toLowerCase() === 'tbody') {
+                const kofcid = row.cells[0].textContent.toLowerCase().trim();
+                const lastname = row.cells[2].textContent.toLowerCase().trim();
+                //const emailconfirmed = row.cells[4].querySelector("input[type='checkbox']").checked;
+                const memberverified = row.cells[5].querySelector('select').value;
+
+                // Check each filter
+
+                const kofcidMatch = kofcidFValue === '' || kofcid.includes(kofcidFValue); // district.includes(kofcidValue);
+                const lastnameMatch = lastnameFValue === '' || lastname.includes(lastnameFValue);
+                //const emailconfirmedMatch = emailconfirmed === emailconfirmedFValue; // === '' || emailconfirmed === true; // type.includes(typeValue);
+                const memberverifiedMatch = memberverified === memberverifiedFValue; // === '' || memberverified === true;
+                // hightlight the active filter(s)
+                //if (kofcidFValue === '') { kofcidFilter.style.backgroundColor = '' } else { districtFilter.style.backgroundColor = '#e8f0fe' }
+                //if (lastnameFValue === '') { lastnameFilter.style.backgroundColor = '' } else { councilFilter.style.backgroundColor = '#e8f0fe' }
+                //if (emailconfirmedFValue === '') { emailconfirmedFilter.style.backgroundColor = '' } else { typeFilter.style.backgroundColor = '#e8f0fe' }
+                //if (memberverifiedFValue === '') { memberverifiedFilter.style.backgroundColor = '' } else { nameFilter.style.backgroundColor = '#e8f0fe' }
+                // Show or hide the row based on filters
+
+                if (kofcidMatch && lastnameMatch && memberverifiedMatch) {
+                    row.style.display = '';
+                } else {
+                    row.style.display = 'none';
+                }
+            }
+        });
+
+    }
+    filterTable();
+
+
+</script>

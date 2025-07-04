@@ -26,6 +26,15 @@ using KofCWSCWebsite.Pages.AOI;
 using Serilog;
 using Microsoft.AspNetCore.Http.Extensions;
 using Microsoft.Extensions.Primitives;
+using KofCWSCWebsite.Models;
+//using System.Web.Mvc;
+using Microsoft.AspNetCore.Mvc.Rendering;
+using Azure.Storage.Blobs.Models;
+using Azure.Storage.Blobs;
+using System.IO;
+using sun.swing;
+using Microsoft.CodeAnalysis.VisualBasic.Syntax;
+using Microsoft.EntityFrameworkCore.Diagnostics;
 
 
 namespace KofCWSCWebsite.Areas.Identity.Pages.Account
@@ -40,6 +49,10 @@ namespace KofCWSCWebsite.Areas.Identity.Pages.Account
         private readonly ISenderEmail _emailSender;
         private readonly RoleManager<IdentityRole> _roleManager;
         private readonly DataSetService _dataSetService;
+        private readonly IConfiguration _configuration;
+        public List<Microsoft.AspNetCore.Mvc.Rendering.SelectListItem> Councils { get; set; }
+        public ApiHelper _apiHelper { get; set; }
+        public Dictionary<string, string> myStates { get; set; }
         public RegisterModel(
             UserManager<KofCUser> userManager,
             IUserStore<KofCUser> userStore,
@@ -47,7 +60,9 @@ namespace KofCWSCWebsite.Areas.Identity.Pages.Account
             ILogger<RegisterModel> logger,
             ISenderEmail emailSender,
             RoleManager<IdentityRole> roleManager,
-            DataSetService dataSetService)
+            DataSetService dataSetService,
+            ApiHelper apiHelper,
+            IConfiguration configuration)
         {
             _userManager = userManager;
             _userStore = userStore;
@@ -57,6 +72,9 @@ namespace KofCWSCWebsite.Areas.Identity.Pages.Account
             _emailSender = emailSender;
             _roleManager = roleManager;
             _dataSetService = dataSetService;
+            _apiHelper = apiHelper;
+            _configuration = configuration;
+            myStates = _dataSetService.GetStates();
         }
 
         /// <summary>
@@ -71,7 +89,7 @@ namespace KofCWSCWebsite.Areas.Identity.Pages.Account
         ///     directly from your code. This API may change or be removed in future releases.
         /// </summary>
         public string ReturnUrl { get; set; }
-        public string RemoteIPAddr {  get; set; }
+        public string RemoteIPAddr { get; set; }
         /// <summary>
         ///     This API supports the ASP.NET Core Identity default UI infrastructure and is not intended to be used
         ///     directly from your code. This API may change or be removed in future releases.
@@ -86,15 +104,15 @@ namespace KofCWSCWebsite.Areas.Identity.Pages.Account
         {
             [Required]
             [StringLength(100, ErrorMessage = "The {0} must be at least {2} and at max {1} characters long.", MinimumLength = 1)]
-            [Display(Name = "First name")]
+            [Display(Name = "First name*")]
             public string FirstName { get; set; }
 
             [Required]
             [StringLength(100, ErrorMessage = "The {0} must be at least {2} and at max {1} characters long.", MinimumLength = 1)]
-            [Display(Name = "Last name")]
+            [Display(Name = "Last name*")]
             public string LastName { get; set; }
 
-            [Remote(action: "VerifyKofCID", controller: "Users")]
+            //[Remote(action: "VerifyKofCID", controller: "Users")]
             [Required]
             //[StringLength(50, ErrorMessage = "The {0} must be at least {2} and at max {1} characters long.", MinimumLength = 1)]
             [Display(Name = "KofC Member Number")]
@@ -126,17 +144,51 @@ namespace KofCWSCWebsite.Areas.Identity.Pages.Account
             /// </summary>
             [DataType(DataType.Password)]
             [Display(Name = "Confirm password")]
-            [Compare("Password", ErrorMessage = "The password and confirmation password do not match.")]
+            [System.ComponentModel.DataAnnotations.Compare("Password", ErrorMessage = "The password and confirmation password do not match.")]
             public string ConfirmPassword { get; set; }
+            public string Address { get; set; }
+            public string City { get; set; }
+            public string State { get; set; }
+            public string PostalCode { get; set; }
+            public string Wife { get; set; }
+            [BindProperty]
+            public int Council { get; set; }
+            public bool? MemberVerified { get; set; }
+
+            [DataType(DataType.Upload)]
+            [Display(Name = "You must upload a picture of your membership card here!*")]
+            public IFormFile MembershipCardFile { get; set; }
+            public string MembershipCardURL { get; set; }
+            [BindProperty]
+            public string FilePath { get; set; } // Store filename temporarily
+
+            public List<SelectListItem> Councils { get; set; } = new();
 
         }
 
+        public void OnPostCapture()
+        {
+            if (Input.MembershipCardFile != null)
+            {
+                Input.FilePath = Input.MembershipCardFile.FileName; // Store filename for later use
+            }
+        }
 
         public async Task OnGetAsync(string returnUrl = null)
         {
             ReturnUrl = returnUrl;
             ExternalLogins = (await _signInManager.GetExternalAuthenticationSchemesAsync()).ToList();
             RemoteIPAddr = HttpContext.Request.HttpContext.Connection.RemoteIpAddress.ToString();
+
+            // Fetch a list of councils for the council dropdown
+            await LoadCouncilsAsync();
+            ////////var iCouncils = await _apiHelper.GetAsync<List<TblValCouncil>>("Councils");
+            ////////Councils = iCouncils.Select(c => new Microsoft.AspNetCore.Mvc.Rendering.SelectListItem
+            ////////{
+            ////////    Value = c.CNumber.ToString(),
+            ////////    Text = $"{c.CNumber} - {c.CName} (District #{c.District})"
+            ////////}).ToList();
+
         }
 
         public async Task<IActionResult> OnPostAsync(string returnUrl = null)
@@ -152,11 +204,14 @@ namespace KofCWSCWebsite.Areas.Identity.Pages.Account
             //////////////    return Page();
             //////////////}
             //----------------------------------------------------------------------------------------
+            // need to reload the councils incase of an error
+            await LoadCouncilsAsync();
             //****************************************************************************************
             // 09/21/2024 Tim Philomeno
             // need to validate kofcid again here
             var myType = this.GetType();
             var KofCMemberID = Input.KofCMemberID;
+            int myIAns = 0;
             Uri myURI = new Uri(_dataSetService.GetAPIBaseAddress() + "/VerifyKofCID/" + KofCMemberID);
             using (var client = new HttpClient())
             {
@@ -165,20 +220,114 @@ namespace KofCWSCWebsite.Areas.Identity.Pages.Account
 
                 var result = responseTask.Result;
                 var myAns = result.Content.ReadAsStringAsync().Result;
-
-                if (myAns == "false" || myAns.ToLower().Contains("invalid"))
+                myIAns = int.Parse(myAns);
+                // with the new validation we are retuning an int -1 - 4
+                // set the group to add as Unverified or Member based on -1 - 4
+                string myVError = string.Empty;
+                string myVLogError = string.Empty;
+                switch (int.Parse(myAns))
                 {
-                    string myError = string.Concat("Member Number ",KofCMemberID, " is not found in our database.");
-                    string myLogError = string.Concat("Member Number ", KofCMemberID, " is not found in our database.", "Using IP Address => ", GetClientIpAddress(HttpContext));
-                    
-                    Log.Error(myType + myLogError);
-                    ModelState.AddModelError(string.Empty, myError);
-                    return Page();
+                    case -1:
+                        myVError = string.Concat("Member Number ", KofCMemberID, " format is invalid.");
+                        myVLogError = string.Concat("Member Number ", KofCMemberID, " is not found in our database.", "Using IP Address => ", GetClientIpAddress(HttpContext));
+                        Log.Error(myType + myVLogError);
+                        ModelState.AddModelError(string.Empty, myVError);
+                        return Page();
+                    case 1:
+                        //myVError = string.Concat("Member Number ", KofCMemberID, " is not found in our database. Continue to register with additional information");
+                        //myVLogError = string.Concat("Member Number ", KofCMemberID, " is not found in our database.","Will allow adding a new member.", "Using IP Address => ", GetClientIpAddress(HttpContext));
+                        //Log.Error(myType + myVLogError);
+                        //ModelState.AddModelError(string.Empty, myVError);
+                        //return Page();
+                        // we need to allow this to continue since the screen processing has already dealt with it
+                        if (Input.Council == 0)
+                        {
+                            ModelState.AddModelError(string.Empty, "You must select a Council!");
+                            return Page();
+                        }
+                        if (Input.MembershipCardFile == null)
+                        {
+                            ModelState.AddModelError(string.Empty, "Membership Card File Must Be Set Below!");
+                            return Page();
+                        }
+                        break;
+                    case 2: // no error just continue we need to check for required data
+
+                        break;
+                    case 3:
+                        myVError = string.Concat("Member Number ", KofCMemberID, " is invalid.");
+                        myVLogError = string.Concat("Member Number ", KofCMemberID, " is suspended");
+                        Log.Error(myType + myVLogError);
+                        ModelState.AddModelError(string.Empty, myVError);
+                        return Page();
+                    case 4:
+                        myVError = string.Concat("Member Number ", KofCMemberID, " is already registered.");
+                        myVLogError = string.Concat("Member Number ", KofCMemberID, " is already registered");
+                        Log.Error(myType + myVLogError);
+                        ModelState.AddModelError(string.Empty, myVError);
+                        return Page();
+                    default:
+                        myVError = string.Concat("Untrapped Error");
+                        myVLogError = string.Concat("Untrapped Error");
+                        Log.Error(myType + myVLogError);
+                        ModelState.AddModelError(string.Empty, myVError);
+                        return Page();
                 }
+                ////////////if (myAns == "false" || myAns.ToLower().Contains("invalid"))
+                ////////////{
+                ////////////    string myError = string.Concat("Member Number ", KofCMemberID, " is not found in our database.");
+                ////////////    string myLogError = string.Concat("Member Number ", KofCMemberID, " is not found in our database.", "Using IP Address => ", GetClientIpAddress(HttpContext));
+
+                ////////////    Log.Error(myType + myLogError);
+                ////////////    ModelState.AddModelError(string.Empty, myError);
+                ////////////    return Page();
+                ////////////}
             }
             //----------------------------------------------------------------------------------------
             returnUrl ??= Url.Content("~/");
-            ExternalLogins = (await _signInManager.GetExternalAuthenticationSchemesAsync()).ToList();
+            //----------------------------------------------------------------------------------------
+            // 6/2/2025 Tim Philomeno
+            // I don't believe that this is necessary here.
+            //ExternalLogins = (await _signInManager.GetExternalAuthenticationSchemesAsync()).ToList();
+            //----------------------------------------------------------------------------------------
+            // Next we need to upload the membership card and register the url
+            //----------------------------------------------------------------------------------------
+            // BEGIN UPLOAD membership card
+            // Get connection details from configuration
+            // Upload to Azure Blob Storage (adjust for your Azure config)
+
+            ////////////if (Input.MembershipCardFile == null || Input.MembershipCardFile.Length == 0)
+            ////////////{
+            ////////////    ModelState.AddModelError(string.Empty, "Please select a membership card file to upload.");
+            ////////////    return Page();
+            ////////////}
+            if (Input.MembershipCardFile != null)
+            {
+                KeyVaultHelper kvh = new KeyVaultHelper(_configuration);
+                var blobServiceClient = new Azure.Storage.Blobs.BlobServiceClient(kvh.GetSecret("AZBSPCS"));
+                var blobContainerClient = blobServiceClient.GetBlobContainerClient(_configuration["AzureBlobStorage:MCContainerName"]);
+                await blobContainerClient.CreateIfNotExistsAsync();
+                await blobContainerClient.SetAccessPolicyAsync(Azure.Storage.Blobs.Models.PublicAccessType.Blob);
+
+                var ext = Path.GetExtension(Input.MembershipCardFile.FileName).ToLowerInvariant();
+                var uniqueFileName = $"{Guid.NewGuid()}{ext}";
+                var blobClient = blobContainerClient.GetBlobClient(uniqueFileName);
+                using (var stream = Input.MembershipCardFile.OpenReadStream())
+                {
+                    await blobClient.UploadAsync(stream, new BlobHttpHeaders { ContentType = Input.MembershipCardFile.ContentType });
+                }
+
+                //            await blobClient.UploadAsync(stream, overwrite: true);
+
+                Input.MembershipCardURL = blobClient.Uri.ToString();
+            }
+            else
+            {
+                Input.MembershipCardFile = null;
+                Input.Council = 0;
+            }
+            // END UPLOAD membership card
+            //----------------------------------------------------------------------------------------
             if (ModelState.IsValid)
             {
                 var user = CreateUser();
@@ -186,6 +335,23 @@ namespace KofCWSCWebsite.Areas.Identity.Pages.Account
                 user.FirstName = Input.FirstName;
                 user.LastName = Input.LastName;
                 user.KofCMemberID = Input.KofCMemberID;
+                user.Address = Input.Address;
+                user.City = Input.City;
+                user.State = Input.State;
+                user.PostalCode = Input.PostalCode;
+                user.Wife = Input.Wife;
+                user.Council = Input.Council;
+                user.MembershipCardUrl = Input.MembershipCardURL;
+                // if we are adding a new member it will need to be verified
+                if (myIAns == 1)
+                {
+                    user.MemberVerified = null;
+                }
+                else
+                {
+                    user.MemberVerified = true;
+                }
+
 
                 await _userStore.SetUserNameAsync(user, Input.Email, CancellationToken.None);
                 await _emailStore.SetEmailAsync(user, Input.Email, CancellationToken.None);
@@ -213,13 +379,23 @@ namespace KofCWSCWebsite.Areas.Identity.Pages.Account
                             await _userManager.AddToRoleAsync(user, "Admin");
                         }
                         //---------------------------------------------------------------------------------------
-                        var rcode = await _userManager.AddToRoleAsync(user, "Member");
+                        // add the new member to Unverifed if new to our database
+                        // or Member if existing
+                        if (myIAns == 1)
+                        {
+                            var rcode = await _userManager.AddToRoleAsync(user, "Unverified");
+                        }
+                        else
+                        {
+                            var rcode = await _userManager.AddToRoleAsync(user, "Member");
+                        }
 
+                        // setup for the email message
                         code = WebEncoders.Base64UrlEncode(Encoding.UTF8.GetBytes(code));
                         var callbackUrl = Url.Page(
                             "/Account/ConfirmEmail",
                             pageHandler: null,
-                            values: new { area = "Identity", userId = userId, code = code, returnUrl = returnUrl },
+                            values: new { area = "Identity", userId = userId, code = code, returnUrl = returnUrl, isnewnotinourdb = myIAns },
                             protocol: Request.Scheme);
 
                         await _emailSender.SendEmailAsync(Input.Email, "Confirm your email",
@@ -228,7 +404,17 @@ namespace KofCWSCWebsite.Areas.Identity.Pages.Account
                         $"NOTE: This confirmation email expires in 20 minutes.<br /><br /><br /><br />" +
                         $"This email was sent to " + Input.Email + " by Washington State Council, Knights of Columbus. © 1995 - " + DateTime.Now.Year + " Washington State Council. All Rights Reserved");
 
-
+                        if (myIAns == 1)
+                        {
+                            string baseUrl = $"{Request.Scheme}://{Request.Host}";
+                            string fullUrl = $"{baseUrl}/AspNetUsers";
+                            string myTo = "support@kofc-wa.org";
+                            string mySub = "New Member Profile Verification Needed.";
+                            string myBody = $"A new member, {Input.FirstName} {Input.LastName} ({Input.KofCMemberID}), has registered in our website.<br />" +
+                                $"Please click <a href={fullUrl} target=_blank>here</a> to validate and approve or reject.";
+                            // email admins
+                            await _emailSender.SendEmailAsync(myTo, mySub, myBody, true);
+                        }
 
                         if (_userManager.Options.SignIn.RequireConfirmedAccount)
                         {
@@ -248,10 +434,10 @@ namespace KofCWSCWebsite.Areas.Identity.Pages.Account
                 catch (Exception ex)
                 {
 
-                    ModelState.AddModelError(string.Empty, "Only 1 registration account is allowed per Member");
+                    ModelState.AddModelError(string.Empty, "Registration Failed. Contact the Administrator for more information.");
                     Log.Error(Utils.FormatLogEntry(this, ex));
                 }
-               
+
             }
 
             // If we got this far, something failed, redisplay form
@@ -296,6 +482,24 @@ namespace KofCWSCWebsite.Areas.Identity.Pages.Account
             }
 
             return ipAddress;
+        }
+        private async Task LoadCouncilsAsync()
+        {
+            var iCouncils = await _apiHelper.GetAsync<List<TblValCouncil>>("Councils");
+            Councils = iCouncils.Select(c => new SelectListItem
+            {
+                Value = c.CNumber.ToString(),
+                Text = $"{c.CNumber} - {c.CName} (District #{c.District})"
+           is var fullText && fullText.Length > 50
+           ? fullText.Substring(0, 50) + "..."
+           : fullText
+            }).ToList();
+            //var iCouncils = await _apiHelper.GetAsync<List<TblValCouncil>>("Councils");
+            //Councils = iCouncils.Select(c => new SelectListItem
+            //{
+            //    Value = c.CNumber.ToString(),
+            //    Text = $"{c.CNumber} - {c.CName} (District #{c.District})"
+            //}).ToList();
         }
     }
 }

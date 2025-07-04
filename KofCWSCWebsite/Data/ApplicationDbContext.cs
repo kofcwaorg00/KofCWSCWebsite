@@ -689,5 +689,7 @@ public DbSet<KofCWSCWebsite.Models.CvnImpDelegateIMP> CvnImpDelegateIMP { get; s
 
 public DbSet<KofCWSCWebsite.Models.NecImpNecrology> NecImpNecrology { get; set; } = default!;
 
+public DbSet<KofCWSCWebsite.Models.AspNetUser> AspNetUsers { get; set; } = default!;
+
 }
 

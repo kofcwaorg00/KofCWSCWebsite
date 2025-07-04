@@ -1,35 +1,64 @@
-﻿@page
+﻿
+@page
 @model RegisterModel
 @{
     ViewData["Title"] = "Register";
+    //ViewBag.KofCIDErr will contain KofCVerifyErrors
+    var isKOFCE = ViewBag.KofCIDErr ?? string.Empty;
+
 }
+<style>
+    .parent div {
+        padding: 10px;
+    }
 
+    label.required::after {
+        content: " *";
+        color: red;
+        font-weight: bold;
+    }
+</style>
 <h1>@ViewData["Title"]</h1>
-
-<div class="row">
-    <div class="col-md-4">
-        <form id="registerForm" asp-route-returnUrl="@Model.ReturnUrl" method="post">
+@isKOFCE
+<div id="overlay-spinner" style="display:none; position:fixed; top:0; left:0; width:100%; height:100%; background-color:rgba(255,255,255,0.7); z-index:9999; text-align:center;">
+    <div style="position:absolute; top:50%; left:50%; transform:translate(-50%, -50%);">
+        <img src="/images/blue loading animate.png" alt="Loading..." width="500"/>
+    </div>
+</div>
+<div class="parent" style="display:grid;grid-template-columns:1fr 1fr;">
+    <div>
+        <form id="registerForm" asp-route-returnUrl="@Model.ReturnUrl" method="post" enctype="multipart/form-data">
             <h2>Create a new account.</h2>
             <hr />
             <div asp-validation-summary="ModelOnly" class="text-danger" role="alert"></div>
+            <div style="display:none">
+                <input asp-for="Input.MemberVerified" class="form-control" autocomplete="off" aria-required="true" placeholder="Tom" />
+                <label asp-for="Input.MemberVerified">MemberVerified</label>
+                <span asp-validation-for="Input.MemberVerified" class="text-danger"></span>
+            </div>
             <div class="form-floating mb-3">
                 <input asp-for="Input.FirstName" class="form-control" autocomplete="off" aria-required="true" placeholder="Tom" />
-                <label asp-for="Input.FirstName">First Name</label>
+                <label asp-for="Input.FirstName">First Name<span style="color:red"> *</span></label>
                 <span asp-validation-for="Input.FirstName" class="text-danger"></span>
             </div>
             <div class="form-floating mb-3">
                 <input asp-for="Input.LastName" class="form-control" autocomplete="LastName" aria-required="true" placeholder="Smith" />
-                <label asp-for="Input.LastName">Last Name</label>
+                <label asp-for="Input.LastName">Last Name<span style="color:red"> *</span></label>
                 <span asp-validation-for="Input.LastName" class="text-danger"></span>
             </div>
+
             <div class="form-floating mb-3">
-                <input asp-for="Input.KofCMemberID" class="form-control" autocomplete="KofCMemberID" aria-required="true" placeholder="1234567" />
-                <label asp-for="Input.KofCMemberID">KofC Member ID</label>
-                <span asp-validation-for="Input.KofCMemberID" d class="text-danger"></span>
+                <div id="loadingSpinner" style="display: none; float:left;margin-right: 10px">
+                    <img style="width:75px" src="/images/blue loading animate.png" alt="Please wait..." />
+                </div>
+                <input id="KofCID" asp-for="Input.KofCMemberID" class="form-control" autocomplete="KofCMemberID" aria-required="true" placeholder="1234567" />
+                <label asp-for="Input.KofCMemberID">KofC Member ID<span style="color:red"> *</span></label>
+                <span id="KofCIDError" asp-validation-for="Input.KofCMemberID" d class="text-danger"></span>
+                @*<span id="KofCIDError" class="text-danger"></span>*@
             </div>
             <div class="form-floating mb-3">
                 <input asp-for="Input.Email" class="form-control" autocomplete="username" aria-required="true" placeholder="name@example.com" />
-                <label asp-for="Input.Email">UserID (email)</label>
+                <label asp-for="Input.Email">UserID (email)<span style="color:red"> *</span></label>
                 <span asp-validation-for="Input.Email" class="text-danger"></span>
             </div>
             <div class="form-floating mb-3">
@@ -42,22 +71,84 @@
                 <label asp-for="Input.ConfirmPassword">Confirm Password</label>
                 <span asp-validation-for="Input.ConfirmPassword" class="text-danger"></span>
             </div>
+            <br />
+            <span style="color:red" id="screenInfo" class="text-into"></span>
+            <br />
+            <div id="showAddl" style="display:none;border:solid;border-color:red;float:left;width:100%">
+                <span style="font-weight:bold">Additional Member Information</span>
+                <div class="form-floating mb-lg-3">
+                    <input id="IAddress" asp-for="Input.Address" class="form-control" autocomplete="Address" aria-required="true" placeholder="password" />
+                    <label asp-for="Input.Address">Address<span style="color:red"> *</span></label>
+                    <span asp-validation-for="Input.Address" class="text-danger"></span>
+                </div>
+                <div class="parent" style="display:grid;grid-template-columns:300px 100px 1fr;">
+                    <div class="form-floating mb-3">
+                        <input id="ICity" asp-for="Input.City" class="form-control" autocomplete="City" aria-required="true" placeholder="password" />
+                        <label asp-for="Input.City">City<span style="color:red"> *</span></label>
+                        <span asp-validation-for="Input.City" class="text-danger"></span>
+                    </div>
+                    <div class="form-floating mb-3">
+                        @*<span>State<span style="color:red">*</span></span>*@
+                        <select asp-for="Input.State" id="state" class="form-select">
+                            <option value="">...</option>
+                            @foreach (var state in Model.myStates)
+                            {
+                                <option value="@state.Value">@state.Value</option>
+                            }
+                        </select>
+
+                        @*<input id="IState" asp-for="Input.State" class="form-control" autocomplete="State" aria-required="true" placeholder="password" />*@
+                        <label class="required" asp-for="Input.State">State</label>
+                        <span asp-validation-for="Input.State" class="text-danger"></span>
+                    </div>
+                    <div class="form-floating mb-3">
+                        <input id="IPostalCode" asp-for="Input.PostalCode" class="form-control" autocomplete="PostalCode" aria-required="true" placeholder="password" />
+                        <label asp-for="Input.PostalCode">Postal Code<span style="color:red"> *</span></label>
+                        <span asp-validation-for="Input.PostalCode" class="text-danger"></span>
+                    </div>
+                </div>
+                <div class="parent" style="display:grid;grid-template-columns:200px 1fr;">
+                    <div class="form-floating mb-3">
+                        <input asp-for="Input.Wife" class="form-control" autocomplete="Wife" aria-required="true" placeholder="password" />
+                        <label asp-for="Input.Wife">Wife's Name</label>
+                        <span asp-validation-for="Input.Wife" class="text-danger"></span>
+                    </div>
+                    <div class="form-floating mb-3">
+                        @*<span>Council<span style="color:red">*</span></span>*@
+                        @*<label asp-for="Input.Council">Council<span style="color:red"> *</span></label>*@
+                        <select id="ICouncil" asp-for="Input.Council" asp-items="Model.Councils" class="form-select">
+                            <option value="0">Select a Council</option>
+                        </select>
+                        @*<select id="ICouncil" asp-for="Input.Council" asp-items="Model.Councils" class="form-control" autocomplete="Council" aria-required="true" placeholder="council" />*@
+                        <label class="required" asp-for="Input.Council">Council</label>
+                        @*<span asp-validation-for="Input.Council" class="text-danger"></span>*@
+                    </div>
+                </div>
+                <div class="form-group">
+                    <div style="color:red"><label asp-for="Input.MembershipCardFile"></label></div>
+                    
+                    <input id="IMembershipCardFile" asp-for="Input.MembershipCardFile" type="file" class="form-control" />
+                    <span asp-validation-for="Input.MembershipCardFile" class="text-danger"></span>
+                </div>
+            </div>
+
             <button id="registerSubmit" type="submit" class="w-100 btn btn-lg btn-primary">Register</button>
         </form>
     </div>
-    <div class="col-md-6 col-md-offset-5">
+    <div style="float:right">
         <br />
         <br />
         <h3 style="text-align:center">Welcome to the Knights of Columbus<br />Washington State Council</h3>
         <p>
-            Registration on this site is reserved for members of the Washington State Knights of Columbus Council. 
+            Registration on this site is reserved for members of the Washington State Knights of Columbus Council.
             You must have a valid Knights of Columbus membership and your membership number must be in our database.
-            You will have to list your membership number to register.  If we do not have a record of your membership, i.e. 
-            you are a new member, please contact <a href="/ContactUs?messageRecipient=Website:%20Technical%20Support">Technical Support</a> with your name, phone number, email address, member number
-            and council number.  The webmaster will record this information and then you will be able register on this site.
+            You will have to list your membership number to register.  If we do not have a record of your membership, i.e.
+            you are a new member or a member that has never been added to our database, you will be required to fill out the additional information section and upload a picture of your
+            membership card. Once submitted, you will receive an email to confirm your registrations with further details
+            on how to proceed.
         </p>
         <h3>Password Complexity Rules</h3>
-        <br />
+
         <h5>All passwords must meet the following MINIMUM criteria.</h5>
         <span style="font-weight:bold">Minimum Length:</span> Passwords must be at least 8 characters long.
         <br />
@@ -74,40 +165,257 @@
         </span> At least one uppercase character (‘A’-‘Z’).
         <br />
         <span style="font-weight:bold">Require Non-Alphanumeric:</span> At least one non-alphanumeric character (e.g., symbols like '!', '&commat;', '#').
+        <div id="showAddlt" style="display:none">
+            <br />
+            <br />
+            <br />
+            <br />
+            <br />
+            <br />
+            <span style="font-weight:bold"><== Additional Member Information</span>
+            <p>
+                All Members who wish to register must already exist in our database.  Your information is not and so we will need to collect additional information for you to be added.
+                <br />
+                <br />
+                To do this, please fill in the Additional Member Information to the left.
+                <br />
+                <br />
+                Once sumbitted your request will be reviewed and a verification email will be sent to the email listed.
+            </p>
 
+        </div>
     </div>
 
-    @* <div class="col-md-6 col-md-offset-2">
-            <section>
-                <h3>Use another service to register.</h3>
-                <hr />
-                @{
-                    if ((Model.ExternalLogins?.Count ?? 0) == 0)
-                    {
-                        <div>
-                            <p>
-                                There are no external authentication services configured. See this <a href="https://go.microsoft.com/fwlink/?LinkID=532715">article
-                                about setting up this ASP.NET application to support logging in via external services</a>.
-                            </p>
-                        </div>
-                    }
-                    else
-                    {
-                        <form id="external-account" asp-page="./ExternalLogin" asp-route-returnUrl="@Model.ReturnUrl" method="post" class="form-horizontal">
-                            <div>
-                                <p>
-                                    @foreach (var provider in Model.ExternalLogins!)
-                                    {
-                                        <button type="submit" class="btn btn-primary" name="provider" value="@provider.Name" title="Log in using your @provider.DisplayName account">@provider.DisplayName</button>
-                                    }
-                                </p>
-                            </div>
-                        </form>
-                    }
-                }
-            </section>
-        </div> *@
 </div>
+
+
+<script>
+    // custom validation
+    function updateValidation(isNewMember) {
+        $("#IAddress").prop("required", isNewMember);
+        $("#ICity").prop("required", isNewMember);
+        $("#IState").prop("required", isNewMember);
+        $("#IPostalCode").prop("required", isNewMember);
+        $("#ICouncil").prop("required", isNewMember);
+        $("#IMemberShipCardFile").prop("required", isNewMember);
+
+        // Re-parse the form for validation
+        $("form").removeData("validator") // Clear existing validator
+            .removeData("unobtrusiveValidation");
+        $.validator.unobtrusive.parse("form");
+
+    }
+
+    // this global variable can be accessed by both jquery and javascript
+    // and is necessary to deal with the form submission
+    var myGlobalVerify = "0";
+    var myerror = "";
+
+    $(document).ready(function () {
+        $('#registerForm').on('submit', function () {
+            $('#overlay-spinner').show();
+        });
+
+        const kofcIdValue = $('#KofCID').val();
+        ValidateKofCID(kofcIdValue);
+        $("#KofCID").on("blur", function () {
+            // first we need to validate the value
+            const kofcid = $(this).val();
+            ValidateKofCID(kofcid);
+            //////////// Ensure input is a valid number and within the expected range
+            //////////if (!/^\d+$/.test(kofcid) || kofcid < 10000 || kofcid > 6000000) {
+            //////////    $("#KofCIDError").text("Member ID " + $(this).val() + " is invalid");
+            //////////    $("#showAddlt").hide();
+            //////////    $("#showAddl").hide();
+            //////////    $("#screenInfo").text("");
+            //////////    myGlobalVerify = "-1";
+            //////////    return; // Stop further execution
+            //////////}
+
+            //////////$("#KofCIDError").text("");
+            //////////$("#loadingSpinner").show(); // Show spinner when request starts
+            //////////// disable sumbit button
+            //////////$("#registerSubmit").prop("disabled", true);
+            ////////////alert($(this).val());
+            //////////$.get("/Users/VerifyKofCID", { KofCID: $(this).val() }, function (response) {
+            //////////    $("#loadingSpinner").hide(); // Hide spinner when request completes
+            //////////    // enable submit button
+            //////////    $("#registerSubmit").prop("disabled", false);
+            //////////    const myresponse = response.message;
+            //////////    const mymessage = myresponse.replace(/^-?\d+\s*/, '');
+            //////////    const numberMatch = response.message.match(/^-?\d+/);
+            //////////    //alert(numberMatch);
+            //////////    const enumber = numberMatch ? parseInt(numberMatch[0], 10) : null;
+            //////////    alert(enumber);
+            //////////    // clear messages
+            //////////    $("#KofCIDError").text("");
+            //////////    $("#screenInfo").text("");
+            //////////    switch (enumber) {
+            //////////        case -1:
+            //////////            //alert("in -1");
+            //////////            $("#showAddlt").hide();
+            //////////            $("#showAddl").hide();
+            //////////            $("#KofCIDError").text(mymessage);
+            //////////            $("#screenInfo").text(mymessage);
+            //////////            myGlobalVerify = "-1";
+            //////////            updateValidation(false);
+            //////////            break;
+            //////////        case 1:
+            //////////            //alert("in 1");
+            //////////            $("#showAddlt").show();
+            //////////            $("#showAddl").show();
+            //////////            $("#screenInfo").text(mymessage);
+            //////////            $("#screenInfo").text(mymessage);
+            //////////            myGlobalVerify = "1";
+            //////////            updateValidation(true);
+            //////////            break;
+            //////////        case 2:
+            //////////            $("#showAddlt").hide();
+            //////////            $("#showAddl").hide();
+            //////////            $("#screenInfo").text("");
+            //////////            myGlobalVerify = "2";
+            //////////            updateValidation(false);
+            //////////            break;
+            //////////        case 3:
+            //////////            $("#showAddlt").hide();
+            //////////            $("#showAddl").hide();
+            //////////            $("#KofCIDError").text(mymessage);
+            //////////            $("#screenInfo").text(mymessage);
+            //////////            myGlobalVerify = "3";
+            //////////            updateValidation(false);
+            //////////            break;
+            //////////        case 4:
+            //////////            $("#showAddlt").hide();
+            //////////            $("#showAddl").hide();
+            //////////            $("#KofCIDError").text(mymessage);
+            //////////            $("#screenInfo").text(mymessage);
+            //////////            myGlobalVerify = "4";
+            //////////            updateValidation(false);
+            //////////            break;
+            //////////        default:
+            //////////            $("#showAddlt").hide();
+            //////////            $("#showAddl").hide();
+            //////////            updateValidation(false);
+            //////////            break;
+            //////////    }
+            //////////});
+        });
+    });
+    document.getElementById("registerForm").addEventListener("submit", function (e) {
+        switch (Number(myGlobalVerify)) {
+            case -1: //$"-1 Member Number {KofCMemberID} format is invalid."
+                //alert("-1 stopped it");
+                e.preventDefault();  // Stops form submission
+                break;
+            case 1: //$"1 Member Number {KofCMemberID} is not found in our database. To continue registration, fill in the Additional Information and Register"
+                //alert("1 allowed it");
+                break;
+            case 2: //is in our data but no profile - ALLOWREG
+                //alert("2 allowed it");
+                break;
+            case 3: //$"3 Invalid Login because member is suspended"
+                //alert("3 stopped it");
+                e.preventDefault();
+                break;
+            case 4: //$"4 {KofCMemberID} is already registered."
+                //alert("4 stopped it");
+                e.preventDefault();
+
+                break;
+            default: // myGlobalVerfiy defaults to 0. If it is 0 or something else, don't allow save
+                //alert("Default stopped it");
+                e.preventDefault();
+                break;
+        }
+
+    });
+    function ValidateKofCID(kofcid) {
+        // if kofcid is blank, then we are loading new or after an error
+        if (kofcid) {
+            //alert(kofcid);
+            // Ensure input is a valid number and within the expected range
+            if (!/^\d+$/.test(kofcid) || kofcid < 10000 || kofcid > 6000000) {
+                $("#KofCIDError").text("Member ID " + kofcid + " is invalid");
+                $("#showAddlt").hide();
+                $("#showAddl").hide();
+                $("#screenInfo").text("");
+                myGlobalVerify = "-1";
+                return; // Stop further execution
+            }
+            $("#KofCIDError").text("");
+
+            $("#loadingSpinner").show(); // Show spinner when request starts
+            // disable sumbit button
+
+            $("#registerSubmit").prop("disabled", true);
+
+            $.get("/Users/VerifyKofCID", { KofCID: kofcid }, function (response) {
+                $("#loadingSpinner").hide(); // Hide spinner when request completes
+                // enable submit button
+                $("#registerSubmit").prop("disabled", false);
+                const myresponse = response.message;
+                const mymessage = myresponse.replace(/^-?\d+\s*/, '');
+                const numberMatch = response.message.match(/^-?\d+/);
+                //alert(numberMatch);
+                const enumber = numberMatch ? parseInt(numberMatch[0], 10) : null;
+                //alert(enumber);
+                // clear messages
+                $("#KofCIDError").text("");
+                $("#screenInfo").text("");
+                switch (enumber) {
+                    case -1:
+                        //alert("in -1");
+                        $("#showAddlt").hide();
+                        $("#showAddl").hide();
+                        $("#KofCIDError").text(mymessage);
+                        $("#screenInfo").text(mymessage);
+                        myGlobalVerify = "-1";
+                        updateValidation(false);
+                        break;
+                    case 1:
+                        //alert("in 1");
+                        $("#showAddlt").show();
+                        $("#showAddl").show();
+                        $("#screenInfo").text(mymessage);
+                        $("#screenInfo").text(mymessage);
+                        myGlobalVerify = "1";
+                        updateValidation(true);
+                        break;
+                    case 2:
+                        $("#showAddlt").hide();
+                        $("#showAddl").hide();
+                        $("#screenInfo").text("");
+                        myGlobalVerify = "2";
+                        updateValidation(false);
+                        break;
+                    case 3:
+                        $("#showAddlt").hide();
+                        $("#showAddl").hide();
+                        $("#KofCIDError").text(mymessage);
+                        $("#screenInfo").text(mymessage);
+                        myGlobalVerify = "3";
+                        updateValidation(false);
+                        break;
+                    case 4:
+                        $("#showAddlt").hide();
+                        $("#showAddl").hide();
+                        $("#KofCIDError").text(mymessage);
+                        $("#screenInfo").text(mymessage);
+                        myGlobalVerify = "4";
+                        updateValidation(false);
+                        break;
+                    default:
+                        $("#showAddlt").hide();
+                        $("#showAddl").hide();
+                        updateValidation(false);
+                        break;
+                }
+            });
+        }
+    }
+</script>
+
+
 
 @section Scripts {
     <partial name="_ValidationScriptsPartial" />

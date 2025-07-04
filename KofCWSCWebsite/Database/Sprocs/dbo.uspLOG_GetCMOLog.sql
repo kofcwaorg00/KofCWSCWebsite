@@ -1,4 +1,4 @@
-﻿CREATE PROCEDURE [dbo].[uspLOG_GetCMOLog]
+﻿ALTER PROCEDURE [dbo].[uspLOG_GetCMOLog]
 AS
 BEGIN
 -- select * from tbl_MasMembers where MemberID=18878
@@ -12,7 +12,7 @@ BEGIN
              mm.FirstName + ' ' + mm.LastName AS MemberName,
              mm.KofCID,
              lcmo.Processed,
-             mml.FirstName + ' ' + mml.LastName AS UpdatedBy,
+             CASE WHEN mml.FirstName IS NULL then 'System' else mml.FirstName + ' ' + mml.LastName end AS UpdatedBy,
              lcmo.Updated
     FROM     tblLOG_CorrMemberOffice AS lcmo
              LEFT OUTER JOIN

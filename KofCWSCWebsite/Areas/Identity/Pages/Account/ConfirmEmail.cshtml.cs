@@ -30,7 +30,7 @@ namespace KofCWSCWebsite.Areas.Identity.Pages.Account
         /// </summary>
         [TempData]
         public string StatusMessage { get; set; }
-        public async Task<IActionResult> OnGetAsync(string userId, string code)
+        public async Task<IActionResult> OnGetAsync(string userId, string code, string isnewnotinourdb)
         {
             if (userId == null || code == null)
             {
@@ -42,10 +42,14 @@ namespace KofCWSCWebsite.Areas.Identity.Pages.Account
             {
                 return NotFound($"Unable to load user with ID '{userId}'.");
             }
-
+            string myMess = string.Empty;
+            if (isnewnotinourdb == "1") // a new member not in our database
+            {
+                myMess = "You may now login but your account will need to be verified by an Admin before you have full functionality. You will receive another email notification at that time.";
+            }
             code = Encoding.UTF8.GetString(WebEncoders.Base64UrlDecode(code));
             var result = await _userManager.ConfirmEmailAsync(user, code);
-            StatusMessage = result.Succeeded ? "Thank you for confirming your email." : "Error confirming your email.";
+            StatusMessage = result.Succeeded ? $"Thank you for confirming your email. {myMess}" : "Error confirming your email.";
             return Page();
         }
     }
