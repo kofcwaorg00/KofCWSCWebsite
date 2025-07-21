@@ -157,6 +157,10 @@ namespace KofCWSCWebsite.Controllers
             {
                 try
                 {
+                    memberSuspension.Updated = DateTime.Now;
+                    var userId = User.Identity.Name;
+                    var user = await _userManager.FindByIdAsync(userId);
+                    memberSuspension.UpdatedBy = await Utils.GetUserProp<int>(User, _userManager, "KofCMemberID");
                     await _apiHelper.PutAsync<MemberSuspension, MemberSuspension>($"/Suspensions/{id}", memberSuspension);
                     //_context.Update(memberSuspension);
                     //await _context.SaveChangesAsync();

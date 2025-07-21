@@ -15,7 +15,7 @@ BEGIN
 	DECLARE @Table table(Loc varchar(1000),ObjID integer IDENTITY(1,1))
 
 	INSERT @Table(Loc)
-	SELECT CASE VC.C_LOCATION WHEN 'N/A' THEN 'District Depty Director' ELSE vc.C_LOCATION END as C_LOCATION
+	SELECT CASE VC.C_LOCATION WHEN 'N/A' THEN 'District Deputy Director' ELSE vc.C_LOCATION END as C_LOCATION
 	FROM tbl_ValCouncils VC
 	WHERE VC.District=@District and Status <> 'I'
 	GROUP BY VC.C_LOCATION

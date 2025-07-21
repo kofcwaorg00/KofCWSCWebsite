@@ -8,7 +8,7 @@
     @foreach (var item in Model)
     {
         <h3>@item.FullName</h3>
-        <img src="@item.Photo" />
+        <img src="@item.Photo" width="200" />
         @Html.Raw(item.Data);
     }
     <a href="/">Return Home</a>
