@@ -170,7 +170,10 @@ namespace KofCWSCWebsite.Data
 
             if (!response.IsSuccessStatusCode)
             {
-                throw new HttpRequestException($"DELETE request failed. Status Code: {response.StatusCode}, Reason: {"DeleteAsync - " + response.ReasonPhrase}");
+//                throw new HttpRequestException($"DELETE request failed. Status Code: {response.StatusCode}, Reason: {"DeleteAsync - " + response.ReasonPhrase}");
+                var errorContent = await response.Content.ReadFromJsonAsync<ErrorResponse>();
+                throw new HttpRequestException(errorContent.Details);
+
             }
         }
 

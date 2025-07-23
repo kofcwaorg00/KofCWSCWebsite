@@ -415,9 +415,17 @@ namespace KofCWSCWebsite.Controllers
             }
             catch (Exception ex)
             {
-                ModelState.AddModelError(string.Empty, ex.Message);
+                var myError = ex.Message.Contains("FK")? "Cannot Delete a Council that has Members referenced":"Unknown Error";
+                ModelState.AddModelError(string.Empty, myError);
                 Log.Error(Utils.FormatLogEntry(this, ex));
-                return RedirectToAction(nameof(Index));
+                //return RedirectToAction(nameof(Index));
+                return View();
+                //var ev = new ErrorViewModel
+                //{
+                //    Message = ex.Message
+                //};
+                //TempData["errormessage"] = ex.Message;
+                //return View("Error",ev);
             }
         }
         private bool IsMPDModifed(TblValCouncilMPD mpd)
