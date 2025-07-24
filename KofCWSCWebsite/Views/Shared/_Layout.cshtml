@@ -342,7 +342,7 @@
                                         <li><a class="dropdown-item MyMenuLink" asp-area="" asp-controller="FileStorage" asp-action="Index" asp-route-id="">Upload a Document</a></li>
                                         <li><a class="dropdown-item MyMenuLink" asp-area="" asp-controller="EmailOffices" asp-action="Index" asp-route-id="">View Bulk Emails</a></li>
 
-                                        <li><a class="dropdown-item MyMenuLink" asp-controller="AspNetUsers" asp-action="Index" >Registered Users</a></li>
+                                        <li><a class="dropdown-item MyMenuLink" asp-controller="AspNetUsers" asp-action="Index">Registered Users</a></li>
                                         <li><hr class="dropdown-divider"></li>
                                     }
                                     @if (User.IsInRole("Admin") || User.IsInRole("DataAdmin"))
@@ -382,6 +382,8 @@
                                         <li><a class="dropdown-item MyMenuLink" asp-area="" asp-controller="Users" asp-action="UserRoles" asp-route-userid="tphilomeno1955@gmail.com" title="Test Address Request">List User Roles</a></li>
                                         <li><a class="dropdown-item MyMenuLink" asp-area="" asp-controller="LogCorrMemberOffices" asp-action="Index" title="Manage CMO DL Changes">Manage CMO DL Changes</a></li>
                                         <li><a class="dropdown-item MyMenuLink" asp-page="/Helper/PreEOYProcess" asp-route-id="">EOY Processing</a></li>
+                                        <li><hr class="dropdown-divider"></li>
+                                        <li><a class="dropdown-item MyMenuLink" asp-page="/Councils/MoveCouncil" asp-route-id="">Move/Merge Councils</a></li>
                                     }
                                 </ul>
                             </li>
