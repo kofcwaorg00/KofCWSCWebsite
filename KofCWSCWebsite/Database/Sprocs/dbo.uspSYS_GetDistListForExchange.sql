@@ -8,6 +8,10 @@ BEGIN
 -- exec [uspSYS_GetDistListForExchange] 'AGWG',3,0,0 -- adds the dd groups to all dds
 -- exec [uspSYS_GetDistListForExchange] 'AGWM',14,0,0 -- gets all scs
 -- exec [uspSYS_GetDistListForExchange] 'AGWG',14,0,0 -- gets all scs
+-- exec [uspSYS_GetDistListForExchange] 'AGWM',12,0,0 -- gets all council officers
+-- exec [uspSYS_GetDistListForExchange] 'AGWG',12,0,0 -- gets all council officers
+-- exec [uspSYS_GetDistListForExchange] 'AGWM',16,0,0 -- gets all assembly officers
+-- exec [uspSYS_GetDistListForExchange] 'AGWG',16,0,0 -- gets all assembly officers
 -- select * from tbl_ValOffices where officedescription like '%district deputy%'
 -- select * from tbl_ValGroups
 ----------------------------------------------------------------------------------

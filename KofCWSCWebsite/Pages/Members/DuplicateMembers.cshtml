@@ -1,0 +1,42 @@
+﻿@page
+@model KofCWSCWebsite.Pages.Members.DuplicateMembersModel
+@{
+}
+<h2>Possible Duplicate Members</h2>
+<h3>This is a list of possible duplicate members. This list if for research only and has no KofC ID available.</h3>
+<table class="table" id="myTable">
+    <thead>
+        <tr>
+            <th class="MyColHdr" style="text-align:center">
+                @Html.DisplayNameFor(model => model.Members.FirstOrDefault().FirstName)
+            </th>
+            <th class="MyColHdr">
+                @Html.DisplayNameFor(model => model.Members.FirstOrDefault().LastName)
+            </th>
+            <th class="MyColHdr">
+                @Html.DisplayNameFor(model => model.Members.FirstOrDefault().Address)
+            </th>
+            <th class="MyColHdr" style="text-align:center">
+                @Html.DisplayNameFor(model => model.Members.FirstOrDefault().Number)
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var item in Model.Members)
+        {
+            <tr>
+                <td style="text-align:center">
+                    @Html.DisplayFor(modelItem => item.FirstName)
+                </td>
+                <td>
+                    <a href="/tblMasMembers/Index/?lastname=@item.LastName">@item.LastName</a>
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Address)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Number)
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>

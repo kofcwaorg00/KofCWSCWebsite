@@ -30,6 +30,10 @@ Connect-ExchangeOnline -AppId $clientId -Organization $tenantId -AccessToken $ac
 $stopwatch = [System.Diagnostics.Stopwatch]::StartNew()
 $counter = 1
 ################################################################################################################
+#-- exec [uspSYS_GetDistListForExchange] 'AGWG',3,0,0 -- adds the dd groups to all dds
+#-- exec [uspSYS_GetDistListForExchange] 'AGWG',14,0,0 -- gets all scs
+#-- exec [uspSYS_GetDistListForExchange] 'AGWG',12,0,0 -- gets all council officers
+#-- exec [uspSYS_GetDistListForExchange] 'AGWG',16,0,0 -- gets all assembly officers
 $uri = "https://localhost:7078/GetDistListForExchange/AGWG/14/0/0"
 $response = Invoke-RestMethod -Uri $uri -Method Get
 #$allContacts = Get-MailContact | Select-Object Name,Alias,PrimarySmtpAddress,CustomAttribute1,CustomAttribute2,CustomAttribute3,CustomAttribute4,CustomAttribute5,CustomAttribute6,CustomAttribute7,CustomAttribute8,CustomAttribute9,CustomAttribute10

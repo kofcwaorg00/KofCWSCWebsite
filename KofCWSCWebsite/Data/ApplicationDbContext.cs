@@ -1,12 +1,13 @@
-﻿using System;
-using System.Collections.Generic;
-using Azure.Identity;
+﻿using Azure.Identity;
+using KofCWSC.API.Models;
 using KofCWSCWebsite.Models;
-using Microsoft.Data.SqlClient;
-using Microsoft.EntityFrameworkCore;
-using Microsoft.Data.SqlClient.AlwaysEncrypted.AzureKeyVaultProvider;
-using Serilog;
 using KofCWSCWebsite.Services;
+using Microsoft.Data.SqlClient;
+using Microsoft.Data.SqlClient.AlwaysEncrypted.AzureKeyVaultProvider;
+using Microsoft.EntityFrameworkCore;
+using Serilog;
+using System;
+using System.Collections.Generic;
 
 
 namespace KofCWSCWebsite.Data;
@@ -85,6 +86,7 @@ public partial class ApplicationDbContext : DbContext
     public virtual DbSet<MemberSuspension> TblSysMasMemberSuspensions { get; set; }
     public virtual DbSet<LogCorrMemberOffice> TblLogCorrMemberOffices { get; set; }
     public virtual DbSet<AspNetUserRole> AspNetUserRoles { get; set; }
+    public DbSet<DuplicateMember> DuplicateMembers { get; set; }
     protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
 
     {
@@ -102,6 +104,10 @@ public partial class ApplicationDbContext : DbContext
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
+        modelBuilder.Entity<DuplicateMember>(entity =>
+        {
+            entity.HasNoKey();
+        });
         modelBuilder.Entity<MemberVM>(entity =>
         {
             entity.HasNoKey();
