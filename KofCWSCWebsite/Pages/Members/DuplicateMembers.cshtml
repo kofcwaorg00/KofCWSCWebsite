@@ -4,7 +4,10 @@
     ViewData["Title"] = "Dup Members";
 }
 <h2>Possible Duplicate Members</h2>
-<h3>This is a list of possible duplicate members. This list if for research only and has no KofC ID available.<br /></h3>
+<h3>This is a list of possible duplicate members. This list if for research only and has no KofC ID available.</h3>
+<br />
+<h3>Be sure to check Middle Initials!!!!</h3>
+<br />
 <h3>Click on the LastName link to be taked to Manage Members</h3>
 <table class="table" id="myTable">
     <thead>
@@ -12,9 +15,9 @@
             <th class="MyColHdr" style="text-align:center">
                 @Html.DisplayNameFor(model => model.Members.FirstOrDefault().FirstName)
             </th>
-            <th class="MyColHdr" style="text-align:center">
+            @*<th class="MyColHdr" style="text-align:center">
                 @Html.DisplayNameFor(model => model.Members.FirstOrDefault().MI)
-            </th>
+            </th>*@
             <th class="MyColHdr">
                 @Html.DisplayNameFor(model => model.Members.FirstOrDefault().LastName)
             </th>
@@ -32,9 +35,9 @@
                 <td style="text-align:center">
                     @Html.DisplayFor(modelItem => item.FirstName)
                 </td>
-                <td style="text-align:center">
+                @*<td style="text-align:center">
                     @Html.DisplayFor(modelItem => item.MI)
-                </td>
+                </td>*@
                 <td>
                     <a href="/tblMasMembers/Index/?lastname=@item.LastName">@item.LastName</a>
                 </td>

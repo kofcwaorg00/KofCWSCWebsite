@@ -4,9 +4,13 @@ AS
 
 BEGIN
 
-	select Firstname,Lastname,Address,MI,count(*) as Number from tbl_MasMembers
+	--select Firstname,Lastname,Address,MI,count(*) as Number from tbl_MasMembers
+	--where address is not null
+	--group by firstname,LastName,Address,MI
+	--having count(*) > 1
+	
+	select Firstname,Lastname,Address,'' as MI,count(*) as Number from tbl_MasMembers
 	where address is not null
-	group by firstname,LastName,Address,MI
+	group by firstname,LastName,Address
 	having count(*) > 1
-
 END
