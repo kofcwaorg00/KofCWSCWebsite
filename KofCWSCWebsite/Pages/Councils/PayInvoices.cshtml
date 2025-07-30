@@ -1,0 +1,44 @@
+﻿@page
+@model KofCWSCWebsite.Pages.Councils.PayInvoices
+@{
+    ViewData["Title"] = "Pay Invoices";
+}
+
+<head>
+    <meta charset="utf-8">
+    <meta name="description" content="Pay Invoices to Washington State Council, Columbus Charities, and Pennies For Heaven">
+    <meta name="author" content="webmaster">
+    <meta name="robots" content="index, follow">
+    <style>
+        /* Hide the div by default */
+        #hiddenDiv {
+            display: none;
+        }
+    </style>
+    <title>Pay Invoices</title>
+</head>
+
+<h1 class="MyPageHdr">Pay Invoices</h1>
+<br />
+<p>
+    Councils may use the links below to submit payments electronically. Every payment will be routed to the appropriate entity: Washington State Council, Columbus Charities, or Pennies For Heaven Inc.
+    </p>
+    <p>
+    You will need to enter the amount due shown on your invoice.  Before continuing, have a copy of your invoice handy. Click the appropriate link to begin:
+
+    <ul>
+        <li><a href="#" onclick="changeIframeSrc('https://www.zeffy.com/donation-form/annual-per-capita');document.getElementById('hiddenDiv').style.display = 'block'">Annual Per Capita</a></li>
+        <li><a href="#" onclick="changeIframeSrc('https://www.zeffy.com/donation-form/liability-insurance');document.getElementById('hiddenDiv').style.display = 'block'">Liability Insurance</a></li>
+        <li><a href="#" onclick="changeIframeSrc('https://www.zeffy.com/donation-form/pennies-for-heaven');document.getElementById('hiddenDiv').style.display = 'block'">Pennies For Heaven</a></li>
+    </ul>
+    <div id="hiddenDiv" style="position:relative;overflow:hidden;height:800px;width:100%;">
+        <iframe id="zeffyiFrame" title='Donation form powered by Zeffy' style='position: absolute; border: 0; top:0;left:0;bottom:0;right:0;width:100%;height:100%' src='https://www.zeffy.com/donation-form/annual-per-capita' allowpaymentrequest allowTransparency="true"></iframe>
+    </div>
+    <script>
+        // JavaScript to show the div when the link is clicked and change the iframe source
+         function changeIframeSrc(newSrc) {
+          document.getElementById('zeffyiFrame').src = newSrc;
+         }
+    </script>
+</p>
+

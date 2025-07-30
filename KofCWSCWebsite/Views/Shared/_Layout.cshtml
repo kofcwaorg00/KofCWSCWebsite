@@ -296,8 +296,8 @@
                                     @if (User.IsInRole("CouncilOfficer") || User.IsInRole("Admin"))
                                     {
                                         <li><hr class="dropdown-divider"></li>
+                                        <li><a class="dropdown-item MyMenuLink" href="/Councils/PayInvoices">Pay Invoices</a></li>
                                         <li><a class="dropdown-item MyMenuLink" asp-page="/Councils/PreFSDetails">Update Council Details (FS Only)</a></li>
-                                        <li><hr class="dropdown-divider"></li>
                                         <li><a class="dropdown-item MyMenuLink" asp-page="/Forms/COE">Certificate of Election (FS Only)</a></li>
                                     }
 
