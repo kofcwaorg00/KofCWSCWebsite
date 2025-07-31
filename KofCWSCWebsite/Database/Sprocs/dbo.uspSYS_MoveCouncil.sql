@@ -54,7 +54,7 @@ BEGIN
 		SELECT 'Moving '+ cast(@NoMembersTrue as varchar) + ' Members from Council #' + cast(@FromCouncil as varchar) + ' to Council #' + cast(@ToCouncil as varchar) as MessageText
 		-- If we get here then we should do the deed
 		update mm
-		SET mm.council=@ToCouncil,mm.CouncilUpdated=getdate(),mm.CouncilUpdatedBy='Move Council SPROC',mm.DataChanged=1,mm.LastUpdated=getdate()
+		SET mm.council=@ToCouncil,mm.CouncilUpdated=getdate(),mm.CouncilUpdatedBy='Move Council SPROC',mm.DataChanged=1,mm.LastUpdated=getdate(),mm.LastUpdatedBy='Move Council SPROC'
 		FROM tbl_MasMembers mm
 		WHERE mm.council = @FromCouncil
 

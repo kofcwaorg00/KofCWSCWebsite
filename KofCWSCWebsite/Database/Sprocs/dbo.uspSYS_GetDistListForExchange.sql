@@ -3,16 +3,16 @@
 AS
 BEGIN
 
-
+-- for a single sc, run AGWM,14,<OID>,0 then AGWG,14,0,0
 -- exec [uspSYS_GetDistListForExchange] 'AGWM',3,0,0 -- gets all dds and adds them
 -- exec [uspSYS_GetDistListForExchange] 'AGWG',3,0,0 -- adds the dd groups to all dds
--- exec [uspSYS_GetDistListForExchange] 'AGWM',14,0,0 -- gets all scs
--- exec [uspSYS_GetDistListForExchange] 'AGWG',14,0,0 -- gets all scs
+-- exec [uspSYS_GetDistListForExchange] 'AGWM',14,204,0 -- gets all scs
+-- exec [uspSYS_GetDistListForExchange] 'AGWG',14,204,0 -- gets all scs
 -- exec [uspSYS_GetDistListForExchange] 'AGWM',12,0,0 -- gets all council officers
 -- exec [uspSYS_GetDistListForExchange] 'AGWG',12,0,0 -- gets all council officers
 -- exec [uspSYS_GetDistListForExchange] 'AGWM',16,0,0 -- gets all assembly officers
 -- exec [uspSYS_GetDistListForExchange] 'AGWG',16,0,0 -- gets all assembly officers
--- select * from tbl_ValOffices where officedescription like '%district deputy%'
+-- select * from tbl_ValOffices where officedescription like '%shining%'
 -- select * from tbl_ValGroups
 ----------------------------------------------------------------------------------
 -- 5/20/2025 Tim Philomeno

@@ -9,6 +9,8 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using System.Drawing;
 using KofCWSCWebsite.Data;
+using KofCWSCWebsite.Models;
+using KofCWSCWebsite.Services;
 
 namespace KofCWSCWebsite.Areas.Identity.Pages.Account.Manage
 {
@@ -17,15 +19,17 @@ namespace KofCWSCWebsite.Areas.Identity.Pages.Account.Manage
         private readonly UserManager<KofCUser> _userManager;
         private readonly SignInManager<KofCUser> _signInManager;
         private readonly IConfiguration _configuration;
-
+        private readonly ApiHelper _apiHelper;
         public IndexModel(
             UserManager<KofCUser> userManager,
             SignInManager<KofCUser> signInManager,
-            IConfiguration configuration)
+            IConfiguration configuration,
+            ApiHelper apiHelper)
         {
             _userManager = userManager;
             _signInManager = signInManager;
-            _configuration = configuration; 
+            _configuration = configuration;
+            _apiHelper = apiHelper;
         }
 
         /// <summary>
@@ -80,6 +84,12 @@ namespace KofCWSCWebsite.Areas.Identity.Pages.Account.Manage
             public IFormFile? ProfilePicture { get; set; }
 
             public string? CurrentPicturePath { get; set; }
+            public string Address { get; set; }
+            public string City { get; set; }
+            public string State { get; set; }
+            public string PostalCode { get; set; }
+            public string Wife { get; set; }
+            public int Council { get; set; }
         }
 
         private async Task LoadAsync(KofCUser user)
@@ -88,13 +98,27 @@ namespace KofCWSCWebsite.Areas.Identity.Pages.Account.Manage
             var phoneNumber = await _userManager.GetPhoneNumberAsync(user);
 
             Username = userName;
+            var member = await _apiHelper.GetAsync<TblMasMember>($"Member/KofCID/{user.KofCMemberID}");
 
             Input = new InputModel
             {
-                PhoneNumber = phoneNumber,
+                //**************************************************************************************
+                // 7/30/2025 Tim Philomeno
+                // currently there is no way to validate the phone number as we don't have an
+                // sms server setup
+                //PhoneNumber = phoneNumber,
+                PhoneNumber = member?.Phone ?? phoneNumber,
+                //-------------------------------------------------------------------------------------
                 FirstName = user.FirstName,
                 LastName = user.LastName,
-                KofCMemberID = user.KofCMemberID              
+                KofCMemberID = user.KofCMemberID,
+
+                Address = member?.Address ?? user.Address,
+                City = member?.City ?? user.City,
+                State = member?.State ?? user.State,
+                PostalCode = member?.PostalCode ?? user.PostalCode,
+                Wife = member?.WifesName ?? user.Wife,
+                Council = (int)(member?.Council ?? user.Council)
             };
         }
         public KofCUser? CurrentUser { get; set; }
@@ -123,12 +147,31 @@ namespace KofCWSCWebsite.Areas.Identity.Pages.Account.Manage
                 await LoadAsync(user);
                 return Page();
             }
+            // mymember will contain the current member information that we will modify and save
+            var mymember = await _apiHelper.GetAsync<TblMasMember>($"Member/KofCID/{user.KofCMemberID}");
 
             user.FirstName = Input.FirstName;
             user.LastName = Input.LastName;
             user.KofCMemberID = Input.KofCMemberID;
-            await _userManager.UpdateAsync(user);
+            user.PhoneNumber = Input.PhoneNumber;
+            user.Address = Input.Address;
+            user.City = Input.City;
+            user.State = Input.State;
+            user.PostalCode = Input.PostalCode;
+            user.Wife = Input.Wife;
+            user.Council = Input.Council;
 
+            mymember.LastUpdated = DateTime.Now;
+            mymember.LastUpdatedBy = await Utils.GetUserProp<int>(User, _userManager, "KofCMemberID");
+            mymember.Phone = Input.PhoneNumber;
+            mymember.Address = Input.Address;
+            mymember.City = Input.City;
+            mymember.State = Input.State;
+            mymember.PostalCode = Input.PostalCode;
+            mymember.WifesName = Input.Wife;
+            mymember.Council = Input.Council;
+
+            
             var phoneNumber = await _userManager.GetPhoneNumberAsync(user);
             if (Input.PhoneNumber != phoneNumber)
             {
@@ -203,7 +246,7 @@ namespace KofCWSCWebsite.Areas.Identity.Pages.Account.Manage
                 // Upload to Azure Blob Storage (adjust for your Azure config)
                 KeyVaultHelper kvh = new KeyVaultHelper(_configuration);
                 var blobServiceClient = new Azure.Storage.Blobs.BlobServiceClient(kvh.GetSecret("AZBSPCS"));
-                
+
                 var containerClient = blobServiceClient.GetBlobContainerClient(_configuration["AzureBlobStorage:MCContainerName"]);
                 await containerClient.CreateIfNotExistsAsync();
                 await containerClient.SetAccessPolicyAsync(Azure.Storage.Blobs.Models.PublicAccessType.Blob);
@@ -226,14 +269,29 @@ namespace KofCWSCWebsite.Areas.Identity.Pages.Account.Manage
 
                 // Update user record
                 user.ProfilePictureUrl = blobClient.Uri.ToString();
+               // await _userManager.UpdateAsync(user);
+            }
+            try
+            {
+                //*************************************************************
+                // 7/31/2025 Tim Philomeno
+                // Wait till we are all done then update the database
+                // update DotNetUsers
                 await _userManager.UpdateAsync(user);
+                // update tbl_MasMembers
+                await _apiHelper.PutAsync<TblMasMember, TblMasMember>($"Member/{mymember.MemberId}", mymember);
+                // we should probably do a try/catch just incase????
+
+                await _signInManager.RefreshSignInAsync(user);
+                StatusMessage = "Your profile has been updated";
+                return RedirectToPage();
+            }
+            catch (Exception ex)
+            {
+                StatusMessage = ex.Message;
+                return RedirectToPage();
             }
 
-            await _userManager.UpdateAsync(user);
-
-            await _signInManager.RefreshSignInAsync(user);
-            StatusMessage = "Your profile has been updated";
-            return RedirectToPage();
         }
     }
 }

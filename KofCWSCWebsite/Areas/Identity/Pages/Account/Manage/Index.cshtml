@@ -11,31 +11,67 @@
     <div class="col-md-6">
         <form id="profile-form" method="post" enctype="multipart/form-data">
             <div asp-validation-summary="ModelOnly" class="text-danger" role="alert"></div>
-            <div class="form-floating">
-                <input asp-for="Input.FirstName" class="form-control" />
-                <label asp-for="Input.FirstName"></label>
-                <span asp-validation-for="Input.FirstName" class="text-danger"></span>
-            </div>
-            <div class="form-floating">
-                <input asp-for="Input.LastName" class="form-control" />
-                <label asp-for="Input.LastName"></label>
-                <span asp-validation-for="Input.LastName" class="text-danger"></span>
-            </div>
-            <div class="form-floating">
-                <input asp-for="Input.KofCMemberID" class="form-control" />
-                <label asp-for="Input.KofCMemberID"></label>
-                <span asp-validation-for="Input.KofCMemberID" class="text-danger"></span>
+            <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1rem;">
+                <div class="form-floating">
+                    <input asp-for="Input.FirstName" class="form-control" />
+                    <label asp-for="Input.FirstName"></label>
+                    <span asp-validation-for="Input.FirstName" class="text-danger"></span>
+                </div>
+                <div class="form-floating">
+                    <input asp-for="Input.LastName" class="form-control" />
+                    <label asp-for="Input.LastName"></label>
+                    <span asp-validation-for="Input.LastName" class="text-danger"></span>
+                </div>
+
+                <div class="form-floating">
+                    <input asp-for="Input.KofCMemberID" class="form-control" />
+                    <label asp-for="Input.KofCMemberID"></label>
+                    <span asp-validation-for="Input.KofCMemberID" class="text-danger"></span>
+                </div>
+                <div class="form-floating mb-3">
+                    <input asp-for="Username" class="form-control" placeholder="Please choose your username." disabled />
+                    <label asp-for="Username" class="form-label"></label>
+                </div>
             </div>
             <div class="form-floating mb-3">
-                <input asp-for="Username" class="form-control" placeholder="Please choose your username." disabled />
-                <label asp-for="Username" class="form-label"></label>
+                <input asp-for="Input.Address" class="form-control" placeholder="Please enter your phone number." />
+                <label asp-for="Input.Address" class="form-label"></label>
+                <span asp-validation-for="Input.Address" class="text-danger"></span>
+            </div>
+            <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1rem;">
+                <div class="form-floating mb-3">
+                    <input asp-for="Input.PhoneNumber" class="form-control" placeholder="Please enter your phone number." />
+                    <label asp-for="Input.PhoneNumber" class="form-label"></label>
+                    <span asp-validation-for="Input.PhoneNumber" class="text-danger"></span>
+                </div>
+                <div class="form-floating mb-3">
+                    <input asp-for="Input.Wife" class="form-control" placeholder="Please enter your phone number." />
+                    <label asp-for="Input.Wife" class="form-label"></label>
+                    <span asp-validation-for="Input.Wife" class="text-danger"></span>
+                </div>
+            </div>
+            <div style="display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 1rem;">
+                <div class="form-floating mb-3">
+                    <input asp-for="Input.City" class="form-control" placeholder="Please enter your phone number." />
+                    <label asp-for="Input.City" class="form-label"></label>
+                    <span asp-validation-for="Input.City" class="text-danger"></span>
+                </div>
+                <div class="form-floating mb-3">
+                    <input asp-for="Input.State" class="form-control" placeholder="Please enter your phone number." />
+                    <label asp-for="Input.State" class="form-label"></label>
+                    <span asp-validation-for="Input.State" class="text-danger"></span>
+                </div>
+                <div class="form-floating mb-3">
+                    <input asp-for="Input.PostalCode" class="form-control" placeholder="Please enter your phone number." />
+                    <label asp-for="Input.PostalCode" class="form-label"></label>
+                    <span asp-validation-for="Input.PostalCode" class="text-danger"></span>
+                </div>
             </div>
             <div class="form-floating mb-3">
-                <input asp-for="Input.PhoneNumber" class="form-control" placeholder="Please enter your phone number." />
-                <label asp-for="Input.PhoneNumber" class="form-label"></label>
-                <span asp-validation-for="Input.PhoneNumber" class="text-danger"></span>
+                <input asp-for="Input.Council" class="form-control" placeholder="Please enter your phone number." />
+                <label asp-for="Input.Council" class="form-label"></label>
+                <span asp-validation-for="Input.Council" class="text-danger"></span>
             </div>
-           
             <div class="mb-3">
                 <label asp-for="Input.ProfilePicture" class="form-label"></label>
                 <input asp-for="Input.ProfilePicture" class="form-control" type="file" />

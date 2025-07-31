@@ -108,6 +108,8 @@ namespace KofCWSCWebsite.Controllers
             {
                 if (ModelState.IsValid)
                 {
+                    memberSuspension.Updated = DateTime.Now;
+                    memberSuspension.UpdatedBy = await Utils.GetUserProp<int>(User, _userManager, "KofCMemberID");
                     await _apiHelper.PostAsync<MemberSuspension, MemberSuspension>($"/Suspensions", memberSuspension);
                     //_context.Add(memberSuspension);
                     //await _context.SaveChangesAsync();
