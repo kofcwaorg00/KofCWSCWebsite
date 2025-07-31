@@ -68,9 +68,10 @@
                 </div>
             </div>
             <div class="form-floating mb-3">
-                <input asp-for="Input.Council" class="form-control" placeholder="Please enter your phone number." />
-                <label asp-for="Input.Council" class="form-label"></label>
-                <span asp-validation-for="Input.Council" class="text-danger"></span>
+                <select id="ICouncil" asp-for="Input.Council" asp-items="Model.Councils" class="form-select">
+                    <option value="0">Select a Council</option>
+                </select>
+                <label class="required" asp-for="Input.Council">Council</label>
             </div>
             <div class="mb-3">
                 <label asp-for="Input.ProfilePicture" class="form-label"></label>

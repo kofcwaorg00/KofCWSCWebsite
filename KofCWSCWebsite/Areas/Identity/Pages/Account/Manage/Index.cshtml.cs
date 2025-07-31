@@ -11,15 +11,18 @@ using System.Drawing;
 using KofCWSCWebsite.Data;
 using KofCWSCWebsite.Models;
 using KofCWSCWebsite.Services;
+using Microsoft.AspNetCore.Mvc.Rendering;
 
 namespace KofCWSCWebsite.Areas.Identity.Pages.Account.Manage
 {
+    
     public class IndexModel : PageModel
     {
         private readonly UserManager<KofCUser> _userManager;
         private readonly SignInManager<KofCUser> _signInManager;
         private readonly IConfiguration _configuration;
         private readonly ApiHelper _apiHelper;
+        public List<Microsoft.AspNetCore.Mvc.Rendering.SelectListItem> Councils { get; set; }
         public IndexModel(
             UserManager<KofCUser> userManager,
             SignInManager<KofCUser> signInManager,
@@ -124,6 +127,7 @@ namespace KofCWSCWebsite.Areas.Identity.Pages.Account.Manage
         public KofCUser? CurrentUser { get; set; }
         public async Task<IActionResult> OnGetAsync()
         {
+            await LoadCouncilsAsync();
             var user = await _userManager.GetUserAsync(User);
             if (user == null)
             {
@@ -136,6 +140,7 @@ namespace KofCWSCWebsite.Areas.Identity.Pages.Account.Manage
 
         public async Task<IActionResult> OnPostAsync()
         {
+            await LoadCouncilsAsync();
             var user = await _userManager.GetUserAsync(User);
             if (user == null)
             {
@@ -292,6 +297,24 @@ namespace KofCWSCWebsite.Areas.Identity.Pages.Account.Manage
                 return RedirectToPage();
             }
 
+        }
+        private async Task LoadCouncilsAsync()
+        {
+            var iCouncils = await _apiHelper.GetAsync<List<TblValCouncil>>("Councils");
+            Councils = iCouncils.Select(c => new SelectListItem
+            {
+                Value = c.CNumber.ToString(),
+                Text = $"{c.CNumber} - {c.CName} (District #{c.District})"
+           is var fullText && fullText.Length > 50
+           ? fullText.Substring(0, 50) + "..."
+           : fullText
+            }).ToList();
+            //var iCouncils = await _apiHelper.GetAsync<List<TblValCouncil>>("Councils");
+            //Councils = iCouncils.Select(c => new SelectListItem
+            //{
+            //    Value = c.CNumber.ToString(),
+            //    Text = $"{c.CNumber} - {c.CName} (District #{c.District})"
+            //}).ToList();
         }
     }
 }
