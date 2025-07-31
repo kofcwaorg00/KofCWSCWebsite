@@ -1,9 +1,9 @@
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 
-namespace KofCWSCWebsite.Pages.Membership_Pages
+namespace KofCWSCWebsite.Pages.Councils
 {
-    public class MembershipShiningArmorModel : PageModel
+    public class PayInvoices : PageModel
     {
         public void OnGet()
         {

@@ -221,7 +221,8 @@
                                 <li><a class="dropdown-item MyMenuLink" asp-area="" asp-controller="SP" asp-action="GetChairmanInfoBlock" asp-route-id="219" asp-route-nextyear="0">Council Retention</a></li>
                                 <li><a class="dropdown-item MyMenuLink" asp-area="" asp-controller="SP" asp-action="GetChairmanInfoBlock" asp-route-id="215" asp-route-nextyear="0">Member Retention</a></li>
                                 @*<li><a class="dropdown-item MyMenuLink" asp-area="" asp-controller="SP" asp-action="GetChairmanInfoBlock" asp-route-id="204">Shining Armor Program</a></li>*@
-                                <li><a class="dropdown-item MyMenuLink" asp-area="" asp-controller="SP" asp-action="GetChairmanInfoBlock" asp-route-id="204" asp-route-nextyear="0">Shining Armor Programs</a></li>
+                                <li><a class="dropdown-item MyMenuLink" asp-area="" asp-controller="SP" asp-action="GetChairmanInfoBlock" asp-route-id="204" asp-route-nextyear="0">Shining Armor Award Program</a></li>
+                                <li><a class="dropdown-item MyMenuLink" asp-area="" asp-controller="SP" asp-action="GetChairmanInfoBlock" asp-route-id="199" asp-route-nextyear="0">Silver Knight Award Program</a></li>
                                 @*<li><a class="dropdown-item MyMenuLink" asp-area="" asp-controller="TblMasAwards" asp-action="Index" asp-route-id="0">Membership Awards</a></li>*@
                             </ul>
                         </li>
@@ -296,8 +297,8 @@
                                     @if (User.IsInRole("CouncilOfficer") || User.IsInRole("Admin"))
                                     {
                                         <li><hr class="dropdown-divider"></li>
+                                        <li><a class="dropdown-item MyMenuLink" href="/Councils/PayInvoices">Pay Invoices</a></li>
                                         <li><a class="dropdown-item MyMenuLink" asp-page="/Councils/PreFSDetails">Update Council Details (FS Only)</a></li>
-                                        <li><hr class="dropdown-divider"></li>
                                         <li><a class="dropdown-item MyMenuLink" asp-page="/Forms/COE">Certificate of Election (FS Only)</a></li>
                                     }
 
