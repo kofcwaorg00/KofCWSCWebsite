@@ -79,7 +79,7 @@
             </div>
             <div class="form-group">
                 <label asp-for="Assembly" class="control-label"></label>
-                <input asp-for="Assembly" class="form-control" />
+                <select asp-for="Assembly" class="form-control" asp-items="ViewBag.ListOfAssys"></select>
                 <span asp-validation-for="Assembly" class="text-danger"></span>
             </div>
             <div class="form-group">

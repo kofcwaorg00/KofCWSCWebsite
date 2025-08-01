@@ -96,13 +96,7 @@
                         <span asp-validation-for="WifesName" class="text-danger"></span>
                     </div>
                 </div>
-                <div class="col-sm pb-4">
-                    <div class="form-group">
-                        <label asp-for="Council" class="control-label"></label>
-                        <input asp-for="Council" class="form-control" />
-                        <span asp-validation-for="Council" class="text-danger"></span>
-                    </div>
-                </div>
+                
                 <div class="col-sm pb-4">
                     <div class="form-group">
                         <label asp-for="Phone" class="control-label"></label>
@@ -117,13 +111,7 @@
                         <span asp-validation-for="Email" class="text-danger"></span>
                     </div>
                 </div>
-                <div class="col-sm pb-4">
-                    <div class="form-group">
-                        <label asp-for="Assembly" class="control-label"></label>
-                        <input asp-for="Assembly" class="form-control" />
-                        <span asp-validation-for="Assembly" class="text-danger"></span>
-                    </div>
-                </div>
+                
                 <div class="col-sm pb-4">
                     <div class="form-group">
                         <label asp-for="Deceased" class="control-label"></label><br />
@@ -133,6 +121,22 @@
                         </select>
                         @*<input asp-for="Deceased" class="form-control" />*@
                         <span asp-validation-for="Deceased" class="text-danger"></span>
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-sm pb-4">
+                    <div class="form-group">
+                        <label asp-for="Council" class="control-label"></label>
+                        <select asp-for="Council" class="form-control" asp-items="ViewBag.ListOfCouncils"></select>
+                        <span asp-validation-for="Council" class="text-danger"></span>
+                    </div>
+                </div>
+                <div class="col-sm pb-4">
+                    <div class="form-group">
+                        <label asp-for="Assembly" class="control-label"></label>
+                        <select asp-for="Assembly" class="form-control" asp-items="ViewBag.ListOfAssys"></select>
+                        <span asp-validation-for="Assembly" class="text-danger"></span>
                     </div>
                 </div>
             </div>

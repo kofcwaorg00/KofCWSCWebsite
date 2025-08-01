@@ -89,7 +89,7 @@ namespace KofCWSCWebsite.Controllers
         [Authorize]
         public async Task<IActionResult> Details(int? id)
         {
-            Log.Information("Starting Details of " + id);
+            await LoadCouncilsAsync();
             if (id == null)
             {
                 return NotFound();
@@ -104,6 +104,7 @@ namespace KofCWSCWebsite.Controllers
         public async Task<IActionResult> Create()
         {
             await LoadCouncilsAsync();
+            await LoadAssysAsync();
             return View();
         }
 
@@ -209,6 +210,7 @@ namespace KofCWSCWebsite.Controllers
         public async Task<IActionResult> Edit(int? id)
         {
             await LoadCouncilsAsync();
+            await LoadAssysAsync();
             if (id == null)
             {
                 return NotFound();
@@ -292,6 +294,27 @@ namespace KofCWSCWebsite.Controllers
                 Log.Fatal(ex.Message + " " + ex.InnerException);
                 return NoContent();
             }
+        }
+        private async Task LoadAssysAsync()
+        {
+            var iAssys = await _apiHelper.GetAsync<List<TblValAssy>>("Assys");
+            ViewBag.ListOfAssys = new List<SelectListItem>
+            {
+                new SelectListItem
+                {
+                    Value = "",
+                    Text = "Select an Assembly"
+                }
+            }
+            .Concat(iAssys.Select(c =>
+            {
+                var fullText = $"{c.ANumber} - {c.AName}";
+                return new SelectListItem
+                {
+                    Value = c.ANumber.ToString(),
+                    Text = fullText.Length > 50 ? fullText.Substring(0, 50) + "..." : fullText
+                };
+            })).ToList();
         }
         private async Task LoadCouncilsAsync()
         {
