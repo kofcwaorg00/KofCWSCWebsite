@@ -6,6 +6,8 @@ using System;
 using System.Text;
 using System.Threading.Tasks;
 using KofCWSCWebsite.Areas.Identity.Data;
+using KofCWSCWebsite.Data;
+using KofCWSCWebsite.Models;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
@@ -18,11 +20,13 @@ namespace KofCWSCWebsite.Areas.Identity.Pages.Account
     {
         private readonly UserManager<KofCUser> _userManager;
         private readonly SignInManager<KofCUser> _signInManager;
+        private readonly ApiHelper _apiHelper;
 
-        public ConfirmEmailChangeModel(UserManager<KofCUser> userManager, SignInManager<KofCUser> signInManager)
+        public ConfirmEmailChangeModel(UserManager<KofCUser> userManager, SignInManager<KofCUser> signInManager,ApiHelper apiHelper)
         {
             _userManager = userManager;
             _signInManager = signInManager;
+            _apiHelper = apiHelper;
         }
 
         /// <summary>
@@ -61,8 +65,18 @@ namespace KofCWSCWebsite.Areas.Identity.Pages.Account
                 StatusMessage = "Error changing user name.";
                 return Page();
             }
+            else
+            {
+                // need to update tbl_MasMembers here
+                // fetch the current user
+                var myMember = await _apiHelper.GetAsync<TblMasMember>($"Member/KofCID/{user.KofCMemberID}");
+                // update the email address
+                myMember.Email = email;
+                // save the current user
+                await _apiHelper.PutAsync<TblMasMember,TblMasMember>($"Member/{myMember.MemberId}",myMember);
+            }
 
-            await _signInManager.RefreshSignInAsync(user);
+                await _signInManager.RefreshSignInAsync(user);
             StatusMessage = "Thank you for confirming your email change.";
             return Page();
         }
