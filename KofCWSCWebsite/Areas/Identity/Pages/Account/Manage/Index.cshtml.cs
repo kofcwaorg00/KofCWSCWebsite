@@ -170,6 +170,9 @@ namespace KofCWSCWebsite.Areas.Identity.Pages.Account.Manage
             //mymember.KofCid = Input.KofCMemberID; // the input.kofcmemberid will be zero because of a quirk in razor pages.
             mymember.LastUpdated = DateTime.Now;
             mymember.LastUpdatedBy = await Utils.GetUserProp<int>(User, _userManager, "KofCMemberID");
+            
+            mymember.FirstName = Input.FirstName;
+            mymember.LastName = Input.LastName;
             mymember.Phone = Input.PhoneNumber;
             mymember.Address = Input.Address;
             mymember.City = Input.City;
@@ -177,8 +180,7 @@ namespace KofCWSCWebsite.Areas.Identity.Pages.Account.Manage
             mymember.PostalCode = Input.PostalCode;
             mymember.WifesName = Input.Wife;
             mymember.Council = Input.Council;
-
-            
+                        
             var phoneNumber = await _userManager.GetPhoneNumberAsync(user);
             if (Input.PhoneNumber != phoneNumber)
             {
