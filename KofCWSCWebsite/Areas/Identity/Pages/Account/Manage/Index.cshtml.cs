@@ -105,6 +105,9 @@ namespace KofCWSCWebsite.Areas.Identity.Pages.Account.Manage
 
             Input = new InputModel
             {
+                // we are using the aspnetusers as the source of the approved kofcid
+                KofCMemberID = user.KofCMemberID,
+                // the rest of the profile we are using the member data as the source
                 //**************************************************************************************
                 // 7/30/2025 Tim Philomeno
                 // currently there is no way to validate the phone number as we don't have an
@@ -112,10 +115,8 @@ namespace KofCWSCWebsite.Areas.Identity.Pages.Account.Manage
                 //PhoneNumber = phoneNumber,
                 PhoneNumber = member?.Phone ?? phoneNumber,
                 //-------------------------------------------------------------------------------------
-                FirstName = user.FirstName,
-                LastName = user.LastName,
-                KofCMemberID = user.KofCMemberID,
-
+                FirstName = member?.FirstName ?? user.FirstName,
+                LastName = member?.LastName ?? user.LastName,
                 Address = member?.Address ?? user.Address,
                 City = member?.City ?? user.City,
                 State = member?.State ?? user.State,
@@ -165,7 +166,8 @@ namespace KofCWSCWebsite.Areas.Identity.Pages.Account.Manage
             user.PostalCode = Input.PostalCode;
             user.Wife = Input.Wife;
             user.Council = Input.Council;
-
+            // keep the member table in sync with the profile data
+            //mymember.KofCid = Input.KofCMemberID; // the input.kofcmemberid will be zero because of a quirk in razor pages.
             mymember.LastUpdated = DateTime.Now;
             mymember.LastUpdatedBy = await Utils.GetUserProp<int>(User, _userManager, "KofCMemberID");
             mymember.Phone = Input.PhoneNumber;
@@ -282,7 +284,7 @@ namespace KofCWSCWebsite.Areas.Identity.Pages.Account.Manage
                 // 7/31/2025 Tim Philomeno
                 // Wait till we are all done then update the database
                 // update DotNetUsers
-                await _userManager.UpdateAsync(user);
+                var result = await _userManager.UpdateAsync(user);
                 // update tbl_MasMembers
                 await _apiHelper.PutAsync<TblMasMember, TblMasMember>($"Member/{mymember.MemberId}", mymember);
                 // we should probably do a try/catch just incase????
