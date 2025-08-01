@@ -157,7 +157,7 @@ namespace KofCWSCWebsite.Areas.Identity.Pages.Account.Manage
 
             user.FirstName = Input.FirstName;
             user.LastName = Input.LastName;
-            user.KofCMemberID = Input.KofCMemberID;
+            //user.KofCMemberID = Input.KofCMemberID; // this is readonly and should not change
             user.PhoneNumber = Input.PhoneNumber;
             user.Address = Input.Address;
             user.City = Input.City;

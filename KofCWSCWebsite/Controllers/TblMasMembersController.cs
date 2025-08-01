@@ -7,6 +7,7 @@ using Microsoft.AspNetCore.Authorization;
 using KofCWSCWebsite.Services;
 using KofCWSCWebsite.Areas.Identity.Data;
 using Microsoft.AspNetCore.Identity;
+using Microsoft.AspNetCore.Mvc.Rendering;
 
 namespace KofCWSCWebsite.Controllers
 {
@@ -16,7 +17,7 @@ namespace KofCWSCWebsite.Controllers
         private readonly ApiHelper _apiHelper;
         private readonly UserManager<KofCUser> _userManager;
 
-        public TblMasMembersController(DataSetService dataSetService, ApiHelper apiHelper,UserManager<KofCUser> userManager)
+        public TblMasMembersController(DataSetService dataSetService, ApiHelper apiHelper, UserManager<KofCUser> userManager)
         {
             Log.Information("Creating MembersController");
             _dataSetService = dataSetService;
@@ -32,7 +33,7 @@ namespace KofCWSCWebsite.Controllers
             return RedirectToAction(nameof(Index), new { lastname = results });
         }
 
-            [Authorize(Roles = "Admin,StateOfficer,DataAdmin,StateMembership")]
+        [Authorize(Roles = "Admin,StateOfficer,DataAdmin,StateMembership")]
         public async Task<ActionResult> Index(string lastname)
         {
             //********************************************************************************
@@ -100,8 +101,9 @@ namespace KofCWSCWebsite.Controllers
 
         // GET: TblMasMembers/Create
         [Authorize(Roles = "Admin,DataAdmin")]
-        public IActionResult Create()
+        public async Task<IActionResult> Create()
         {
+            await LoadCouncilsAsync();
             return View();
         }
 
@@ -127,7 +129,7 @@ namespace KofCWSCWebsite.Controllers
         [Authorize(Roles = "Admin,DataAdmin,ConventionAdmin")]
         [HttpPost("AddOrUpdateFromDelImp")]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> AddOrUpdateFromDelImp(CvnImpDelegate cvnImpDelegate,string action,int Id)
+        public async Task<IActionResult> AddOrUpdateFromDelImp(CvnImpDelegate cvnImpDelegate, string action, int Id)
         {
             string[] myactionin = action.Split(" ");
             string myaction = myactionin[0];
@@ -135,7 +137,8 @@ namespace KofCWSCWebsite.Controllers
             TblMasMember tblMasMember = null;
             if (myaction == "Add")
             {
-                switch(mydel){
+                switch (mydel)
+                {
                     case "D1":
                         Utils.FillD1(ref tblMasMember, cvnImpDelegate);
                         await _apiHelper.PostAsync<TblMasMember, TblMasMember>($"Member", tblMasMember);
@@ -160,7 +163,7 @@ namespace KofCWSCWebsite.Controllers
                 {
                     case "D1":
                         tblMasMember = await _apiHelper.GetAsync<TblMasMember>($"Member/KofCID/{cvnImpDelegate.D1MemberID}");
-                        Utils.FillD1( ref tblMasMember, cvnImpDelegate);
+                        Utils.FillD1(ref tblMasMember, cvnImpDelegate);
                         CvnImpDelegateIMP cvnImpDelegateIMPD1 = await _apiHelper.GetAsync<CvnImpDelegateIMP>($"CvnImpDelegate/{cvnImpDelegate.Id}");
                         Utils.FillD1ImpDel(ref cvnImpDelegateIMPD1, cvnImpDelegate);
                         await _apiHelper.PutAsync<TblMasMember, TblMasMember>($"Member/{tblMasMember.MemberId}", tblMasMember);
@@ -199,12 +202,13 @@ namespace KofCWSCWebsite.Controllers
 
             return RedirectToAction("Index", "CvnImpDelegates");
         }
-        
+
 
         // GET: TblMasMembers/Edit/5
         [Authorize(Roles = "Admin,DataAdmin")]
         public async Task<IActionResult> Edit(int? id)
         {
+            await LoadCouncilsAsync();
             if (id == null)
             {
                 return NotFound();
@@ -229,7 +233,7 @@ namespace KofCWSCWebsite.Controllers
             }
             // for return
             string lastname = tblMasMember.LastName;
-            
+
             if (ModelState.IsValid)
             {
                 // validate phone number
@@ -289,6 +293,36 @@ namespace KofCWSCWebsite.Controllers
                 return NoContent();
             }
         }
+        private async Task LoadCouncilsAsync()
+        {
+            var iCouncils = await _apiHelper.GetAsync<List<TblValCouncil>>("Councils");
+            ViewBag.ListOfCouncils = new List<SelectListItem>
+            {
+                new SelectListItem
+                {
+                    Value = "",
+                    Text = "Select a Council"
+                }
+            }
+            .Concat(iCouncils.Select(c =>
+            {
+                var fullText = $"{c.CNumber} - {c.CName} (District #{c.District})";
+                return new SelectListItem
+            {
+                Value = c.CNumber.ToString(),
+                Text = fullText.Length > 50 ? fullText.Substring(0, 50) + "..." : fullText
+            };
+            })).ToList();
+
+            // ViewBag.ListOfCouncils = iCouncils.Select(c => new SelectListItem
+            // {
+            //     Value = c.CNumber.ToString(),
+            //     Text = $"{c.CNumber} - {c.CName} (District #{c.District})"
+            //is var fullText && fullText.Length > 50
+            //? fullText.Substring(0, 50) + "..."
+            //: fullText
+            // }).ToList();
+        }
         //private void CopyMemberFromImpModel(CvnImpDelegate cvnImpDelegate,ref TblMasMember tblMasMember, string del,int memberid = 0)
         //{
         //    string myUpd = "Updated by Delegate Import";
@@ -301,11 +335,11 @@ namespace KofCWSCWebsite.Controllers
         //        tblMasMember.FirstName = cvnImpDelegate.D1FirstName;
         //        tblMasMember.FirstNameUpdated = myDate;
         //        tblMasMember.FirstNameUpdatedBy = myUpd;
-                
+
         //        tblMasMember.Mi = cvnImpDelegate.D1MiddleName;
         //        tblMasMember.Miupdated = myDate;
         //        tblMasMember.MiupdatedBy = myUpd;
-                
+
         //        tblMasMember.LastName = cvnImpDelegate.D1LastName;
         //        tblMasMember.LastNameUpdated = myDate;
         //        tblMasMember.LastNameUpdatedBy = myUpd;
