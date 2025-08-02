@@ -37,11 +37,12 @@
                         // 4 = Lookup Members
                         // 5 = WSC Bylaws
                         var myQS = Request.Query["id"];
-                        var myDocID= Request.Query["docid"];
+                        var myDocID = Request.Query["docid"];
                         switch (myQS)
                         {
                             case "1":
-                                @Html.ActionLink("I agree", "Details", "FileStorage", new { id = myDocID }, new { @class = "btn btn-primary", @id = "myGo" });
+                                //@Html.ActionLink("I agree", "Details", "FileStorage", new { id = myDocID }, new { @class = "btn btn-primary", @id = "myGo" });
+                                <button class="btn btn-primary" id="myGo1" onclick="Do1()">I Agree</button>
                                 break;
                             case "2":
                                 @Html.ActionLink("I agree", "GetEmailAlias", "SP", null, new { @class = "btn btn-primary", @id = "myGo" });
@@ -74,7 +75,10 @@
             //alert(myAgree);
             if (myAgree) {
                 showBusyIndicator();
-                if ($("#myGo3").attr("id")) {
+                if ($("#myGo1").attr("id")) {
+                    Do1();
+                }
+                else if ($("#myGo3").attr("id")) {
                     Do3();
                 }
                 else if ($("#myGo5").attr("id")) {
@@ -123,6 +127,17 @@
             }
             //window.open('https://kofcwa.sharepoint.com/:b:/s/WebsiteStorage/EUqp5s8ZEu1FobDh1NgFv_oBnveYzRySadYchEJ_pfZ0dQ?e=ARGYWC', '_blank');
             //window.location.href = "https://kofcwa.sharepoint.com/:b:/s/WebsiteStorage/EUqp5s8ZEu1FobDh1NgFv_oBnveYzRySadYchEJ_pfZ0dQ?e=ARGYWC";
+        }
+        function Do1() {
+            // set the IAgreeSensitive cookie
+            $.cookie("IAgreeSensitive", "true", { path: '/' });
+            if (pop('https://kofcwscdatastorageblob.blob.core.windows.net/statedirectory/State%20Directory.pdf', 250, 250)) {
+                alert("Popups are blocked, using current window to display document");
+                window.location.href = "https://kofcwscdatastorageblob.blob.core.windows.net/statedirectory/State%20Directory.pdf";
+            } else {
+                window.open('https://kofcwscdatastorageblob.blob.core.windows.net/statedirectory/State%20Directory.pdf', '_blank');
+                hideBusyIndicator();
+            }
         }
         function pop(url, w, h) {
             n = window.open(url, '_blank', 'toolbar=0,location=0,directories=0,status=1,menubar=0,titlebar=0,scrollbars=1,resizable=1,width=' + w + ',height=' + h);
