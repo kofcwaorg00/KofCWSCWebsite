@@ -144,7 +144,7 @@ namespace KofCWSCWebsite.Controllers
             {
                 return NotFound();
             }
-            Uri myURI = new(_dataSetService.GetAPIBaseAddress() + "/SelfPub/" + id);
+            Uri myURI = new(_dataSetService.GetAPIBaseAddress() + "/SelfPub/str/" + id);
 
             using (var client = new HttpClient())
             {
@@ -163,6 +163,34 @@ namespace KofCWSCWebsite.Controllers
                     selfpub = null;
                 }
                 return View(selfpub);
+            }
+        }
+
+        public async Task<IActionResult> EditInt(int id)
+        {
+            //if (id == null || id == "favicon.ico")
+            //{
+            //    return NotFound();
+            //}
+            Uri myURI = new(_dataSetService.GetAPIBaseAddress() + "/SelfPub/int/" + id);
+
+            using (var client = new HttpClient())
+            {
+                var responseTask = client.GetAsync(myURI);
+                responseTask.Wait();
+                var result = responseTask.Result;
+                TblWebSelfPublish? selfpub;
+                if (result.IsSuccessStatusCode)
+                {
+                    string json = await result.Content.ReadAsStringAsync();
+                    selfpub = JsonConvert.DeserializeObject<TblWebSelfPublish>(json);
+                }
+                else
+                {
+                    ModelState.AddModelError(string.Empty, "Server Error.  Please contact administrator.");
+                    selfpub = null;
+                }
+                return View("Edit",selfpub);
             }
         }
 

@@ -12,10 +12,10 @@
 
 @foreach (var item in Model)
 {
- 
-        string myTitle = Utils.GetString(@Html.DisplayFor(modelItem => item.Heading));
-        
- 
+
+    string myTitle = Utils.GetString(@Html.DisplayFor(modelItem => item.Heading));
+
+
     <table class="table">
         <tr>
             <td colspan="3" class="MyColHdr"><h3 style="text-align:center">@Html.Raw(myTitle)</h3></td>
@@ -27,8 +27,8 @@
                 <div>
                     <div style="float:right;padding:5px">
                         <a asp-controller="Users" asp-action="EditPhoto" asp-route-id="@Model.FirstOrDefault().KofCID">
-                            @Html.Raw(@Utils.GetPicImage(Model.FirstOrDefault().Photo, 100, 0, $"{Model.FirstOrDefault().FullName}",Model.FirstOrDefault().KofCID,User))
-                            </a>
+                            @Html.Raw(@Utils.GetPicImage(Model.FirstOrDefault().Photo, 100, 0, $"{Model.FirstOrDefault().FullName}", Model.FirstOrDefault().KofCID, User))
+                        </a>
                     </div>
                     <div>
                         @Html.DisplayFor(modelItem => item.FullName)
@@ -60,17 +60,22 @@
                 if (string.IsNullOrEmpty(mydestURL))
                 {
                     <text>
-                    <td colspan="3">@Html.Raw(item.Data)</td></text>
+                        <td colspan="3">@Html.Raw(item.Data)</td>
+                    </text>
 
                 }
                 else
                 {
                     <text>
-                    <td colspan="3"><a href="@myTransURL">Supreme Resources</a></td></text>
+                        <td colspan="3"><a href="@myTransURL">Supreme Resources</a></td>
+                    </text>
                 }
             }
 
         </tr>
     </table>
-
+    @if (User.IsInRole("Admin") || User.IsInRole("StateChairman"))
+    {
+        <span><a asp-action="EditInt" asp-controller="TblWebSelfPublishes" asp-route-id="@Model.FirstOrDefault().OfficeID">Edit</a></span>
+    }
 }
