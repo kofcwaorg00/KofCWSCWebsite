@@ -199,6 +199,41 @@ namespace KofCWSCWebsite.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
+        public async Task<IActionResult> EditInt(int id, [Bind("Url,Data,OID")] TblWebSelfPublish tblWebSelfPublish)
+        {
+            if (id != tblWebSelfPublish.OID)
+            {
+                return NotFound();
+            }
+            if (ModelState.IsValid)
+            {
+                Uri myURI = new(_dataSetService.GetAPIBaseAddress() + "/SelfPubInt/" + id);
+                try
+                {
+                    using (var client = new HttpClient())
+                    {
+                        client.BaseAddress = myURI;
+                        var response = await client.PutAsJsonAsync(myURI, tblWebSelfPublish);
+                        var returnValue = await response.Content.ReadAsAsync<List<TblWebSelfPublish>>();
+                        Log.Information("Update of Message ID " + id + "Returned " + returnValue);
+                    }
+                }
+                catch (Exception ex)
+                {
+                    Log.Fatal(ex.Message);
+                }
+                Log.Information("Update Success Message ID " + id);
+            }
+            return RedirectToAction(nameof(Index));
+        }
+
+
+
+        // POST: TblWebSelfPublishes/Edit/5
+        // To protect from overposting attacks, enable the specific properties you want to bind to.
+        // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
+        [HttpPost]
+        [ValidateAntiForgeryToken]
         public async Task<IActionResult> Edit(string id, [Bind("Url,Data,OID")] TblWebSelfPublish tblWebSelfPublish)
         {
             if (id != tblWebSelfPublish.Url)
