@@ -41,8 +41,8 @@
                         switch (myQS)
                         {
                             case "1":
-                                //@Html.ActionLink("I agree", "Details", "FileStorage", new { id = myDocID }, new { @class = "btn btn-primary", @id = "myGo" });
-                                <button class="btn btn-primary" id="myGo1" onclick="Do1()">I Agree</button>
+                                @Html.ActionLink("I agree", "ViewStateDir", "Blob", null, new { target = "_blank" });
+                                                                //<button class="btn btn-primary" id="myGo1" onclick="Do1()">I Agree</button>
                                 break;
                             case "2":
                                 @Html.ActionLink("I agree", "GetEmailAlias", "SP", null, new { @class = "btn btn-primary", @id = "myGo" });
