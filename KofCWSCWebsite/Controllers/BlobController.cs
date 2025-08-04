@@ -2,9 +2,11 @@
 using Azure.Storage.Blobs;
 using KofCWSCWebsite.Data;
 using KofCWSCWebsite.Models;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Newtonsoft.Json;
 using System.Web.Helpers;
+//using System.Web.Mvc;
 
 namespace KofCWSCWebsite.Controllers
 {
@@ -28,17 +30,38 @@ namespace KofCWSCWebsite.Controllers
             blobUri = kvh.GetSecret("STATEDIRECTORYBLOBURI");
         }
 
-        public async Task<IActionResult> ViewStateDir()
+        // Serves the layout-enabled view
+        [HttpGet]
+        public IActionResult ViewStateDir()
         {
+            return View(); // Renders ViewWrapper.cshtml with layout
+        }
+
+
+
+        [Authorize(Roles="Member")]
+        //public async Task<IActionResult> ViewStateDir()
+        public Stream GetStateDir()
+        {
+            HttpContext.Response.Cookies.Append("IAgreeSensitive", "true", new CookieOptions
+            {
+                //Expires = DateTimeOffset.UtcNow.AddMinutes(30),
+                Path = "/",
+                HttpOnly = false, // Accessible only by the server
+                IsEssential = true // Required for GDPR compliance
+            });
             var credential = new ClientSecretCredential(tenantId, clientId, clientSecret);
             var blobClient = new BlobClient(new Uri(blobUri), credential);
 
-            using var stream = new MemoryStream();
-            await blobClient.DownloadToAsync(stream);
-            stream.Position = 0;
+            var response = blobClient.DownloadContent();
+            return response.Value.Content.ToStream();
 
-            // Option 1: Return file inline
-            return File(stream.ToArray(), "application/pdf");
+            //using var stream = new MemoryStream();
+            //await blobClient.DownloadToAsync(stream);
+            //stream.Position = 0;
+            
+            //// Option 1: Return file inline
+            //return File(stream, "application/pdf");
         }
 
 

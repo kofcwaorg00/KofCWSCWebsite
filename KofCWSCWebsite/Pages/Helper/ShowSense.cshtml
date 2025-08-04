@@ -29,7 +29,7 @@
                     <span style="font-weight:bold;color:red">NOTE: This process will take time to load.  Please be patient!</span>
                 </div>
                 <div class="modal-footer">
-                    @Html.ActionLink("Close", "Index", "Home", new { }, new { @class = "btn btn-secondary" })
+                    @Html.ActionLink("Close", "Index", "Home", new { }, new { @class = "btn btn-secondary", @id = "myClose" })
                     @{
                         // 1 = State Directory
                         // 2 = Email Alias
@@ -41,8 +41,9 @@
                         switch (myQS)
                         {
                             case "1":
-                                @Html.ActionLink("I agree", "ViewStateDir", "Blob", null, new { target = "_blank" });
-                                                                //<button class="btn btn-primary" id="myGo1" onclick="Do1()">I Agree</button>
+                                @Html.ActionLink("I agree", "ViewStateDir", "Blob", null, new { @id = "myGo" });
+                                //@Html.ActionLink("I agree", "ViewStateDir", "Blob");
+                                //<button class="btn btn-primary" id="myGo1" onclick="Do1()">I Agree</button>
                                 break;
                             case "2":
                                 @Html.ActionLink("I agree", "GetEmailAlias", "SP", null, new { @class = "btn btn-primary", @id = "myGo" });
@@ -72,26 +73,45 @@
     <script type="text/javascript">
         $(window).on('load', function () {
             var myAgree = $.cookie('IAgreeSensitive');
-            //alert(myAgree);
             if (myAgree) {
                 showBusyIndicator();
-                if ($("#myGo1").attr("id")) {
-                    Do1();
-                }
-                else if ($("#myGo3").attr("id")) {
+                if ($("#myGo3").length) {
                     Do3();
-                }
-                else if ($("#myGo5").attr("id")) {
+                } else if ($("#myGo5").length) {
                     Do5();
                 } else {
-                    window.location.href = $("#myGo").attr("href");
+                    hideBusyIndicator();
+                    const fallbackLink = $("#myGo").attr("href");
+                    if (fallbackLink) {
+                        window.location.href = fallbackLink;
+                    } else {
+                        console.warn("Fallback link not found.");
+                    }
                 }
             } else {
-                hideBusyIndicator();
                 $('#printDirModal').modal('show');
             }
         });
+        //document.addEventListener("DOMContentLoaded", function () {
+        //    const link = document.getElementById("myGo");
 
+        //    if (link) {
+        //        link.addEventListener("click", function (e) {
+        //            e.preventDefault();
+
+        //            // Close dialog safely
+        //            const modal = document.getElementById("printDirModal");
+        //            if (modal) {
+        //                $('#printDirModal').modal('hide');
+
+        //            }
+
+        //            // Open PDF in new tab
+        //            window.open(this.href, "_blank");
+        //            window.location.href = $("#myClose").attr("href")
+        //        });
+        //    }
+        //});
         function showBusyIndicator() {
             document.getElementById('busyIndicator').style.display = 'flex';
         }
@@ -127,17 +147,6 @@
             }
             //window.open('https://kofcwa.sharepoint.com/:b:/s/WebsiteStorage/EUqp5s8ZEu1FobDh1NgFv_oBnveYzRySadYchEJ_pfZ0dQ?e=ARGYWC', '_blank');
             //window.location.href = "https://kofcwa.sharepoint.com/:b:/s/WebsiteStorage/EUqp5s8ZEu1FobDh1NgFv_oBnveYzRySadYchEJ_pfZ0dQ?e=ARGYWC";
-        }
-        function Do1() {
-            // set the IAgreeSensitive cookie
-            $.cookie("IAgreeSensitive", "true", { path: '/' });
-            if (pop('https://kofcwscdatastorageblob.blob.core.windows.net/statedirectory/State%20Directory.pdf', 250, 250)) {
-                alert("Popups are blocked, using current window to display document");
-                window.location.href = "https://kofcwscdatastorageblob.blob.core.windows.net/statedirectory/State%20Directory.pdf";
-            } else {
-                window.open('https://kofcwscdatastorageblob.blob.core.windows.net/statedirectory/State%20Directory.pdf', '_blank');
-                hideBusyIndicator();
-            }
         }
         function pop(url, w, h) {
             n = window.open(url, '_blank', 'toolbar=0,location=0,directories=0,status=1,menubar=0,titlebar=0,scrollbars=1,resizable=1,width=' + w + ',height=' + h);
