@@ -66,37 +66,37 @@ namespace KofCWSCWebsite.Controllers
 
 
 
-        [HttpGet]
-        public async Task<IActionResult> GetStateDirectory()
-        {
-            var FSO = await GetFileStreamObjectFromBlob();
-            //return File(fso.Data, fso.ContentType, fso.FileName);
-            //return View(Json(new { FSO.FileName, FSO.ContentType, FSO.Data }), "FileStorage/ShowPDF.cshtml"); // Json(new { FileName = FSO.FileName, ContentType = FSO.ContentType, Data = FSO.Data });
-            return View("/Views/FileStorage/ShowPDF.cshtml",FSO); // Json(new { FileName = FSO.FileName, ContentType = FSO.ContentType, Data = FSO.Data });
-        }
-        private async Task<FileStorage> GetFileStreamObjectFromBlob()
-        {
-            // You can also use KeyVault-integrated credential setup here
-            var credential = new ClientSecretCredential(tenantId, clientId, clientSecret);
-            var blobClient = new BlobClient(new Uri(blobUri), credential);
+        ////////[HttpGet]
+        ////////public async Task<IActionResult> GetStateDirectory()
+        ////////{
+        ////////    var FSO = await GetFileStreamObjectFromBlob();
+        ////////    //return File(fso.Data, fso.ContentType, fso.FileName);
+        ////////    //return View(Json(new { FSO.FileName, FSO.ContentType, FSO.Data }), "FileStorage/ShowPDF.cshtml"); // Json(new { FileName = FSO.FileName, ContentType = FSO.ContentType, Data = FSO.Data });
+        ////////    return View("/Views/FileStorage/ShowPDF.cshtml",FSO); // Json(new { FileName = FSO.FileName, ContentType = FSO.ContentType, Data = FSO.Data });
+        ////////}
+        ////////private async Task<FileStorage> GetFileStreamObjectFromBlob()
+        ////////{
+        ////////    // You can also use KeyVault-integrated credential setup here
+        ////////    var credential = new ClientSecretCredential(tenantId, clientId, clientSecret);
+        ////////    var blobClient = new BlobClient(new Uri(blobUri), credential);
 
-            var download = await blobClient.DownloadAsync();
+        ////////    var download = await blobClient.DownloadAsync();
 
-            byte[] fileBytes = await ConvertStreamToByteArrayAsync(download.Value.Content);
+        ////////    byte[] fileBytes = await ConvertStreamToByteArrayAsync(download.Value.Content);
 
-            return new FileStorage
-            {
-                FileName = "myfile.pdf",
-                ContentType = "application/pdf",
-                Data = fileBytes
-            };
-        }
-        public static async Task<byte[]> ConvertStreamToByteArrayAsync(Stream stream)
-        {
-            using var memoryStream = new MemoryStream();
-            await stream.CopyToAsync(memoryStream);
-            return memoryStream.ToArray();
-        }
+        ////////    return new FileStorage
+        ////////    {
+        ////////        FileName = "myfile.pdf",
+        ////////        ContentType = "application/pdf",
+        ////////        Data = fileBytes
+        ////////    };
+        ////////}
+        ////////public static async Task<byte[]> ConvertStreamToByteArrayAsync(Stream stream)
+        ////////{
+        ////////    using var memoryStream = new MemoryStream();
+        ////////    await stream.CopyToAsync(memoryStream);
+        ////////    return memoryStream.ToArray();
+        ////////}
 
     }
 
