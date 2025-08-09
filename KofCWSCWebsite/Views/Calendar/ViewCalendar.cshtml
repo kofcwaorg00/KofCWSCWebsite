@@ -1,0 +1,342 @@
+﻿@{
+    ViewData["Title"] = "Calendar";
+}
+
+<div id="myCalendarPage" style="text-align:left">
+    <div class="container mt-4" style="display:none">
+        <h2>@ViewData["Title"]</h2>
+
+    </div>
+    
+    <div id="calendar"></div>
+    <!-- Modal for Add/Edit Event -->
+    <div class="modal fade" id="addEventModal" tabindex="-1" aria-labelledby="addEventModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <form id="addEventForm">
+                    <input type="hidden" id="eventId" />
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="addEventModalLabel">Calendar Event</h5>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                    </div>
+                    <div class="modal-body">
+                        <div class="mb-3">
+                            <label for="eventTitle" class="form-label">Title</label>
+                            <input type="text" class="form-control" id="eventTitle" required />
+                        </div>
+                        <div class="mb-3">
+                            <label for="eventDescription" class="form-label">Description</label>
+                            <textarea class="form-control" id="eventDescription"></textarea>
+                        </div>
+
+                        <div id="datetimeFields">
+                            <div id="timeFields">
+                                <div class="row">
+                                    <div class="col-md-6 mb-3">
+                                        <label for="eventStartTime" class="form-label">Start Date & Time</label>
+                                        <input type="datetime-local" class="form-control" id="eventStartTime" />
+                                    </div>
+                                    <div class="col-md-6 mb-3">
+                                        <label for="eventEndTime" class="form-label">End Date & Time</label>
+                                        <input type="datetime-local" class="form-control" id="eventEndTime" />
+                                    </div>
+                                </div>
+                            </div>
+                            <div id="dateFields" style="display: none;">
+                                <div class="row">
+                                    <div class="col-md-6 mb-3">
+                                        <label for="eventStartDate" class="form-label">Start Date</label>
+                                        <input type="date" class="form-control" id="eventStartDate" />
+                                    </div>
+                                    <div class="col-md-6 mb-3">
+                                        <label for="eventEndDate" class="form-label">End Date</label>
+                                        <input type="date" class="form-control" id="eventEndDate" />
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="form-check">
+                            <input class="form-check-input" type="checkbox" id="eventAllDay" />
+                            <label class="form-check-label" for="eventAllDay">All Day</label>
+                        </div>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="submit" class="btn btn-primary" id="saveEventBtn">Save</button>
+                        <button type="button" class="btn btn-danger" id="deleteEventBtn" style="display: none;">Delete</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <style>
+        #calendar {
+            /*max-width: 700px;*/
+            margin: 0 auto;
+        }
+
+        .fc-allday-event {
+            background-color: #5292a3 !important;
+            /*color: #155724 !important;*/
+            border: 1px solid #c3e6cb !important;
+        }
+
+        .fc-timed-event {
+            background-color: #d1ecf1 !important;
+            color: #0c5460 !important;
+            border: 1px solid #bee5eb !important;
+        }
+
+        .fc-event-title-container {
+            overflow: hidden;
+            text-overflow: ellipsis;
+            white-space: nowrap;
+        }
+
+        .fc-daygrid-event .fc-event-title {
+            overflow: hidden;
+            text-overflow: ellipsis;
+            white-space: nowrap;
+            display: block;
+        }
+
+        .fc-event {
+            max-width: 100%;
+        }
+    </style>
+    <script>
+        const apiBaseUrl = '@ViewBag.ApiBaseUrl';
+        let calendar;
+        let selectedInfo = null;
+        document.addEventListener('DOMContentLoaded', function () {
+            const calendarEl = document.getElementById('calendar');
+
+            calendar = new FullCalendar.Calendar(calendarEl, {
+                initialView: 'dayGridMonth',
+                selectable: true,
+                editable: true,
+                //height: 700,
+                dayMaxEventRows: true,
+
+                events: function (fetchInfo, successCallback, failureCallback) {
+                    fetch(`${apiBaseUrl}/Events`)
+                        .then(response => response.json())
+                        .then(data => {
+                            const events = data.map(ev => ({
+                                id: ev.id,
+                                title: ev.title,
+                                start: ev.start,
+                                end: ev.end,
+                                allDay: ev.allDay,
+                                description: ev.description,
+                                className: ev.className
+                            }));
+                            successCallback(events);
+                        })
+                        .catch(error => {
+                            console.error('Error fetching events:', error);
+                            failureCallback(error);
+                        });
+                },
+
+                //------------------------------------------------------------------------
+                // 8/6/2025 Tim Philomeno
+                // when you use eventContent to customize the event display you loose any
+                // FullCalendar classes that are included automically so you have to add
+                // back any that you want.  In this case fc-event-title fixed the issues
+                eventContent: function (arg) {
+                    // Create wrapper element
+                    const innerEl = document.createElement('div');
+
+                    // Combine all classNames (your custom + built-in)
+                    arg.event.classNames.forEach(cn => innerEl.classList.add(cn));
+                    innerEl.classList.add("fc-event-title");
+                    // Add title (you can include time too if needed)
+                    innerEl.innerText = arg.event.title;
+                    return { domNodes: [innerEl] };
+                },
+                //------------------------------------------------------------------------
+                // TODO
+                // trying to set start and end to the same day when you click on a date
+                //dateClick: function (info) {
+                //    alert("in dateClick");
+                //    // Single date click
+                //    let dateStr = info.dateStr;
+                //    document.getElementById('eventStartDate').value = dateStr;
+                //    document.getElementById('eventEndDate').value = dateStr;
+                //    document.getElementById('eventAllDay').checked = info.allDay;
+                //    toggleDateTimeFields(info.allDay);
+
+                //    document.getElementById('deleteEventBtn').style.display = 'none';
+                //    new bootstrap.Modal(document.getElementById('addEventModal')).show();
+                //},
+
+                select: function (info) {
+                    //alert("new item click");
+                    //alert(info.start + ' and ' + info.end);
+
+                    selectedInfo = info;
+                    resetForm();
+                    document.getElementById('eventStartTime').value = formatDateTimeLocal(info.start);
+                    document.getElementById('eventEndTime').value = formatDateTimeLocal(info.end);
+                    document.getElementById('eventStartDate').value = formatDateOnly(info.start);
+                    document.getElementById('eventEndDate').value = formatDateOnly(info.end);
+                    
+                    document.getElementById('eventAllDay').checked = info.allDay;
+                    toggleDateTimeFields(info.allDay);
+
+                    document.getElementById('deleteEventBtn').style.display = 'none';
+                    new bootstrap.Modal(document.getElementById('addEventModal')).show();
+                },
+
+                eventClick: function (info) {
+                    
+                    selectedInfo = null;
+                    const event = info.event;
+                    //alert(event.allDay + ' from select function');
+                    document.getElementById('eventId').value = event.id;
+                    document.getElementById('eventTitle').value = event.title;
+                    document.getElementById('eventDescription').value = event.extendedProps.description || '';
+                    document.getElementById('eventAllDay').checked = event.allDay;
+                    toggleDateTimeFields(event.allDay);
+
+                    if (event.allDay) {
+                        document.getElementById('eventStartDate').value = formatDateOnly(event.start);
+                        const adjustedEnd = new Date(event.end);
+                        adjustedEnd.setDate(adjustedEnd.getDate() - 1);
+                        document.getElementById('eventEndDate').value = formatDateOnly(adjustedEnd);
+                    } else {
+                        document.getElementById('eventStartTime').value = formatDateTimeLocal(event.start);
+                        document.getElementById('eventEndTime').value = formatDateTimeLocal(event.end);
+                    }
+
+                    document.getElementById('deleteEventBtn').style.display = 'inline-block';
+                    new bootstrap.Modal(document.getElementById('addEventModal')).show();
+                },
+
+                eventDrop: function (info) {
+                    updateEvent(info.event);
+                },
+
+                eventResize: function (info) {
+                    updateEvent(info.event);
+                }
+            });
+
+            calendar.render();
+
+            document.getElementById('eventAllDay').addEventListener('change', function () {
+                toggleDateTimeFields(this.checked);
+            });
+
+            function toggleDateTimeFields(isAllDay) {
+                //alert(isAllDay);
+                document.getElementById('timeFields').style.display = isAllDay ? 'none' : 'block';
+                document.getElementById('dateFields').style.display = isAllDay ? 'block' : 'none';
+            }
+
+            function updateEvent(event) {
+                fetch(`${apiBaseUrl}/Event/${event.id}`, {
+                    method: 'PUT',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({
+                        id: event.id,
+                        title: event.title,
+                        startDateTime: event.start.toISOString(),
+                        endDateTime: event.end ? event.end.toISOString() : null,
+                        allDay: event.allDay,
+                        description: event.extendedProps.description
+                    })
+                }).then(() => calendar.refetchEvents());
+            }
+
+            function resetForm() {
+                document.getElementById('eventId').value = '';
+                document.getElementById('eventTitle').value = '';
+                document.getElementById('eventDescription').value = '';
+                document.getElementById('eventStartTime').value = '';
+                document.getElementById('eventEndTime').value = '';
+                document.getElementById('eventStartDate').value = '';
+                document.getElementById('eventEndDate').value = '';
+                document.getElementById('eventAllDay').checked = false;
+                toggleDateTimeFields(false);
+            }
+
+            function formatDateTimeLocal(date) {
+                if (!date) return '';
+                const d = new Date(date);
+                d.setMinutes(d.getMinutes() - d.getTimezoneOffset());
+                return d.toISOString().slice(0, 16);
+            }
+
+            function formatDateOnly(date) {
+                if (!date) return '';
+                const d = new Date(date);
+                d.setMinutes(d.getMinutes() - d.getTimezoneOffset());
+                return d.toISOString().slice(0, 10);
+            }
+
+            document.getElementById('addEventForm').addEventListener('submit', function (e) {
+                e.preventDefault();
+
+                const id = document.getElementById('eventId').value;
+                const title = document.getElementById('eventTitle').value;
+                const description = document.getElementById('eventDescription').value;
+                const allDay = document.getElementById('eventAllDay').checked;
+
+                const body = {
+                    title,
+                    description,
+                    allDay
+                };
+
+                if (allDay) {
+                    const startDate = document.getElementById('eventStartDate').value;
+                    const endDate = document.getElementById('eventEndDate').value;
+
+                    body.startDateTime = `${startDate}T00:00:00`;
+                    const end = new Date(endDate);
+                    end.setDate(end.getDate() + 1);
+                    body.endDateTime = end.toISOString().split('T')[0] + 'T00:00:00';
+                } else {
+                    body.startDateTime = document.getElementById('eventStartTime').value;
+                    body.endDateTime = document.getElementById('eventEndTime').value;
+                }
+                //alert(id);
+                // this handles both PUT and POST if we have and ID we are updateing(PUT) else adding new(POST)
+                const url = id ? `${apiBaseUrl}/Event/${id}` : `${apiBaseUrl}/Event`;
+                const method = id ? 'PUT' : 'POST';
+                //alert(url);
+                //alert(method);
+                //alert(body.startDateTime);
+                //alert(body.endDateTime);
+                if (id) body.id = id;
+
+                fetch(url, {
+                    method,
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify(body)
+                }).then(() => {
+                    calendar.refetchEvents();
+                    bootstrap.Modal.getInstance(document.getElementById('addEventModal')).hide();
+                    resetForm();
+                });
+            });
+
+            document.getElementById('deleteEventBtn').addEventListener('click', function () {
+                const id = document.getElementById('eventId').value;
+                if (!id) return;
+
+                if (confirm('Are you sure you want to delete this event?')) {
+                    fetch(`${apiBaseUrl}/Event/${id}`, {
+                        method: 'DELETE'
+                    }).then(() => {
+                        calendar.refetchEvents();
+                        bootstrap.Modal.getInstance(document.getElementById('addEventModal')).hide();
+                    });
+                }
+            });
+        });
+    </script>
+</div>

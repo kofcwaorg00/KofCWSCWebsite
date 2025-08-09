@@ -11,16 +11,20 @@
     <link rel="stylesheet" href="~/css/site.css" asp-append-version="true" />
     @*------------------------------------------------------------------------------------------------*@
     @*FullCalendar Support*@
-    <link rel='stylesheet' href='https://cdnjs.cloudflare.com/ajax/libs/fullcalendar/3.9.0/fullcalendar.min.css' />
+    @*
+    <link rel='stylesheet' href='https://cdnjs.cloudflare.com/ajax/libs/fullcalendar/3.9.0/fullcalendar.min.css' />*@
+    <link href="https://cdn.jsdelivr.net/npm/fullcalendar@6.1.8/index.global.min.css" rel="stylesheet" />
+
     <link href="https://cdnjs.cloudflare.com/ajax/libs/qtip2/3.0.3/jquery.qtip.min.css" rel="stylesheet" />
     <link href="https://cdnjs.cloudflare.com/ajax/libs/flatpickr/4.5.2/flatpickr.min.css" rel="stylesheet" />
-    @*<link rel="stylesheet" href="~/css/calendar.css" />*@
+    @*
+    <link rel="stylesheet" href="~/css/calendar.css" />*@
     @*************************************************************************************************@
     @*Script Resources*@
     <script src="~/js/site.js" asp-append-version="true"></script>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz" crossorigin="anonymous"></script>
     @*------------------------------------------------------------------------------------------------
-        These have to be loaded in order*@
+    These have to be loaded in order*@
     <script src="~/lib/jquery/dist/jquery.min.js"></script>
     <script src="~/lib/jquery-validation/dist/jquery.validate.min.js"></script>
     <script src="~/lib/jquery-validation-unobtrusive/jquery.validate.unobtrusive.min.js"></script>
@@ -28,11 +32,13 @@
     @*------------------------------------------------------------------------------------------------*@
     @*FullCalendar Support*@
     <script src='https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.22.2/moment.min.js'></script>
-    <script src='https://cdnjs.cloudflare.com/ajax/libs/fullcalendar/3.9.0/fullcalendar.min.js'></script>
+    @*<script src='https://cdnjs.cloudflare.com/ajax/libs/fullcalendar/3.9.0/fullcalendar.min.js'></script>*@
+    <script src="https://cdn.jsdelivr.net/npm/fullcalendar@6.1.8/index.global.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/qtip2/3.0.3/jquery.qtip.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/flatpickr/4.5.2/flatpickr.min.js"></script>
     <script src="https://unpkg.com/axios/dist/axios.min.js"></script>
-    @*<script src="~/js/calendar.js" asp-append-version="true"></script>*@
+    @*
+    <script src="~/js/calendar.js" asp-append-version="true"></script>*@
     @*************************************************************************************************@
     <link rel="icon" type="image/x-icon" href="./favicon.ico" />
 </head>
@@ -359,7 +365,7 @@
                                     }
                                     @if (User.IsInRole("Admin") || User.IsInRole("CalAdmin"))
                                     {
-                                        <li><a class="dropdown-item MyMenuLink" asp-area="" asp-controller="TblSysTrxEvents" asp-action="Index" asp-route-id="">Calendar(future)</a></li>
+                                        <li><a class="dropdown-item MyMenuLink" asp-area="" asp-controller="Calendar" asp-action="ViewCalendar" asp-route-id="">Calendar(future)</a></li>
                                         <li><a class="dropdown-item MyMenuLink" asp-area="" asp-controller="Csv" asp-action="UploadNecrologyS" asp-route-id="0">Import Necrology Data</a></li>
                                         <li><a class="dropdown-item MyMenuLink" asp-area="" asp-controller="NecImpNecrologies" asp-action="Index" asp-route-id="0">Manage Necrology Data</a></li>
                                         <li><hr class="dropdown-divider"></li>
