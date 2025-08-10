@@ -124,6 +124,7 @@
                                 <li><a class="dropdown-item MyMenuLink" href="https://kofcwa.sharepoint.com/:b:/s/WebsiteStorage/EUPgpg_PGwVEpuG8xXW8MfgB-adpQfb7J3kxnEnw04QK7A?e=rG6Icy" target="kofcwa-sharepoint">WA State Council History</a></li>
                                 <li><hr class="dropdown-divider"></li>
                                 <li><a class="dropdown-item MyMenuLink" asp-area="" asp-controller="TblMasAwards" asp-action="Index" asp-route-id="0">Grand Knight Resources</a></li>
+                                <li><a class="dropdown-item MyMenuLink" href="/Councils/PayInvoices">Pay Invoices</a></li>
                                 <li><a class="dropdown-item MyMenuLink" href="https://www.kofc.org/en/for-members/resources/council-leaders/financial-secretary.html" target="kofc-supreme-tab">Financial Secretary Resources</a></li>
                                 @*
                                 <li><a class="dropdown-item MyMenuLink" asp-page="/SFPages/Chancellor">Chancellor Resources</a></li>*@
@@ -306,20 +307,19 @@
                                 <li><a class="dropdown-item MyMenuLink" asp-area="" asp-controller="TblMasMembers" asp-action="Index" asp-route-id="aaa">Lookup Members</a></li>*@
                                 <li><a class="dropdown-item MyMenuLink" asp-page="/Helper/ShowSense" asp-route-id="4">Lookup Members</a></li>
 
-                                }
-                                <li><hr class="dropdown-divider"></li>
-                                <li><a class="dropdown-item MyMenuLink" href="https://kofcwa.sharepoint.com/:f:/s/StateBulletinsArchive/EjO4QlaqbFJCnpwDC5D7IGsBoqS--NpRiRgf8313aEzHnw?e=r6FsIY" target="kofcwa-sharepoint">Bulletin Archive</a></li>
-                                <li><a class="dropdown-item MyMenuLink" asp-page="/Helper/ShowSense" asp-route-id="5">WSC Bylaws Members</a></li>
-                                <li><a class="dropdown-item MyMenuLink" href="/convention">State Convention Info</a></li>
-                                <li><a class="dropdown-item MyMenuLink" href="/AOI/SummerMeeting2025">Summer Leadership Meeting Info</a></li>
-                                <li><a class="dropdown-item MyMenuLink" href="/AOI/122ndConventionProceedingsReports">State Convention Proceedings & Reports</a></li>
-                                @if (User.IsInRole("CouncilOfficer") || User.IsInRole("Admin"))
-                                {
-                                <li><hr class="dropdown-divider"></li>
-                                <li><a class="dropdown-item MyMenuLink" href="/Councils/PayInvoices">Pay Invoices</a></li>
-                                <li><a class="dropdown-item MyMenuLink" asp-page="/Councils/PreFSDetails">Update Council Details (FS Only)</a></li>
-                                <li><a class="dropdown-item MyMenuLink" asp-page="/Forms/COE">Certificate of Election (FS Only)</a></li>
-                                }
+                                    }
+                                    <li><hr class="dropdown-divider"></li>
+                                    <li><a class="dropdown-item MyMenuLink" href="https://kofcwa.sharepoint.com/:f:/s/StateBulletinsArchive/EjO4QlaqbFJCnpwDC5D7IGsBoqS--NpRiRgf8313aEzHnw?e=r6FsIY" target="kofcwa-sharepoint">Bulletin Archive</a></li>
+                                    <li><a class="dropdown-item MyMenuLink" asp-page="/Helper/ShowSense" asp-route-id="5">WSC Bylaws Members</a></li>
+                                    <li><a class="dropdown-item MyMenuLink" href="/convention">State Convention Info</a></li>
+                                    <li><a class="dropdown-item MyMenuLink" href="/AOI/SummerMeeting2025">Summer Leadership Meeting Info</a></li>
+                                    <li><a class="dropdown-item MyMenuLink" href="/AOI/122ndConventionProceedingsReports">State Convention Proceedings & Reports</a></li>
+                                    @if (User.IsInRole("CouncilOfficer") || User.IsInRole("Admin"))
+                                    {
+                                        <li><hr class="dropdown-divider"></li>
+                                        <li><a class="dropdown-item MyMenuLink" asp-page="/Councils/PreFSDetails">Update Council Details (FS Only)</a></li>
+                                        <li><a class="dropdown-item MyMenuLink" asp-page="/Forms/COE">Certificate of Election (FS Only)</a></li>
+                                    }
 
                             </ul>
                         </li>
