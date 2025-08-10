@@ -21,11 +21,22 @@ namespace KofCWSCWebsite.Controllers
         /// <returns> the calendar view</returns>
         /// 
         [Authorize(Roles = "Admin,CalAdmin")]
-        public IActionResult ViewCalendar()
+        public IActionResult ViewCalendar(int id)
         {
+            // id will toggle between local api and cors
+            var myLocalUrl = $"https://{Request.Host.Value}";
+            //var myLocalUrl = $"https://kofc-wa.org:1882";
             var myBaseUrl = _dataSetService.GetAPIBaseAddress();
-            ViewBag.apiBaseUrl = myBaseUrl;
-            return View();
+            if (id == 0)
+            {
+                ViewBag.apiBaseUrl = myLocalUrl;
+            }
+            else
+            {
+                ViewBag.apiBaseUrl = myBaseUrl;
+            }
+
+                return View();
         }
     }
 }

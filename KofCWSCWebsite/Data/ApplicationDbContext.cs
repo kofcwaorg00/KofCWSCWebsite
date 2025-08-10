@@ -87,6 +87,7 @@ public partial class ApplicationDbContext : DbContext
     public virtual DbSet<LogCorrMemberOffice> TblLogCorrMemberOffices { get; set; }
     public virtual DbSet<AspNetUserRole> AspNetUserRoles { get; set; }
     public DbSet<DuplicateMember> DuplicateMembers { get; set; }
+    public DbSet<CalendarEvent> tblCAL_trxEvents { get; set; }
     protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
 
     {
@@ -104,6 +105,15 @@ public partial class ApplicationDbContext : DbContext
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
+        modelBuilder.Entity<CalendarEvent>(entity =>
+        {
+            entity.HasKey(e => e.Id);
+            entity.Property(e => e.Title).IsRequired().HasMaxLength(200);
+            entity.Property(e => e.StartDateTime).IsRequired();
+            entity.Property(e => e.EndDateTime).IsRequired();
+            entity.Property(e => e.Description).HasMaxLength(1000); // optional limit
+            entity.Property(e => e.AllDay).IsRequired();
+        });
         modelBuilder.Entity<DuplicateMember>(entity =>
         {
             entity.HasNoKey();
