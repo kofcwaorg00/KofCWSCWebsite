@@ -12,4 +12,9 @@
         @Html.Raw(item.Data);
     }
     <a href="/">Return Home</a>
+    @if (User.IsInRole("Admin") || User.IsInRole("StateOfficer"))
+    {
+        <span>|</span>
+        <a asp-action="EditInt" asp-route-id="@Model.FirstOrDefault().OID">Edit</a>
+    }
 </div>

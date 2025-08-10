@@ -29,7 +29,7 @@
                     <span style="font-weight:bold;color:red">NOTE: This process will take time to load.  Please be patient!</span>
                 </div>
                 <div class="modal-footer">
-                    @Html.ActionLink("Close", "Index", "Home", new { }, new { @class = "btn btn-secondary" })
+                    @Html.ActionLink("Close", "Index", "Home", new { }, new { @class = "btn btn-secondary", @id = "myClose" })
                     @{
                         // 1 = State Directory
                         // 2 = Email Alias
@@ -37,11 +37,14 @@
                         // 4 = Lookup Members
                         // 5 = WSC Bylaws
                         var myQS = Request.Query["id"];
-                        var myDocID= Request.Query["docid"];
+                        var myDocID = Request.Query["docid"];
                         switch (myQS)
                         {
                             case "1":
-                                @Html.ActionLink("I agree", "Details", "FileStorage", new { id = myDocID }, new { @class = "btn btn-primary", @id = "myGo" });
+                                @Html.ActionLink("I agree", "ViewStateDir", "Blob", null, new { @id = "myGo" });
+                                @Html.ActionLink("I agree", "GetStateDir", "Blob", null, new { @id = "myGo" });
+                                //@Html.ActionLink("I agree", "ViewStateDir", "Blob");
+                                //<button class="btn btn-primary" id="myGo1" onclick="Do1()">I Agree</button>
                                 break;
                             case "2":
                                 @Html.ActionLink("I agree", "GetEmailAlias", "SP", null, new { @class = "btn btn-primary", @id = "myGo" });
@@ -71,23 +74,45 @@
     <script type="text/javascript">
         $(window).on('load', function () {
             var myAgree = $.cookie('IAgreeSensitive');
-            //alert(myAgree);
             if (myAgree) {
                 showBusyIndicator();
-                if ($("#myGo3").attr("id")) {
+                if ($("#myGo3").length) {
                     Do3();
-                }
-                else if ($("#myGo5").attr("id")) {
+                } else if ($("#myGo5").length) {
                     Do5();
                 } else {
-                    window.location.href = $("#myGo").attr("href");
+                    hideBusyIndicator();
+                    const fallbackLink = $("#myGo").attr("href");
+                    if (fallbackLink) {
+                        window.location.href = fallbackLink;
+                    } else {
+                        console.warn("Fallback link not found.");
+                    }
                 }
             } else {
-                hideBusyIndicator();
                 $('#printDirModal').modal('show');
             }
         });
+        //document.addEventListener("DOMContentLoaded", function () {
+        //    const link = document.getElementById("myGo");
 
+        //    if (link) {
+        //        link.addEventListener("click", function (e) {
+        //            e.preventDefault();
+
+        //            // Close dialog safely
+        //            const modal = document.getElementById("printDirModal");
+        //            if (modal) {
+        //                $('#printDirModal').modal('hide');
+
+        //            }
+
+        //            // Open PDF in new tab
+        //            window.open(this.href, "_blank");
+        //            window.location.href = $("#myClose").attr("href")
+        //        });
+        //    }
+        //});
         function showBusyIndicator() {
             document.getElementById('busyIndicator').style.display = 'flex';
         }
