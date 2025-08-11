@@ -16,10 +16,11 @@
         }
     </style>
     <title>Pay Invoices</title>
-    <!-- preload the Zeffy pages -->
-    <link as="document" href="https://www.zeffy.com/donation-form/annual-per-capita" rel="preload" />
-    <link as="document" href="https://www.zeffy.com/donation-form/liability-insurance" rel="preload" />
-    <link as="document" href="https://www.zeffy.com/donation-form/pennies-for-heaven" rel="preload" />
+    <!-- prefetch the Zeffy pages -->
+    <link as="document" href="https://www.zeffy.com/donation-form/annual-per-capita" rel="prefetch" />
+    <link as="document" href="https://www.zeffy.com/donation-form/liability-insurance" rel="prefetch" />
+    <link as="document" href="https://www.zeffy.com/donation-form/pennies-for-heaven" rel="prefetch" />
+    <link as="document" href="https://www.zeffy.com/en-US/donation-form/lamb--1882" rel="prefetch" />
 </head>
 
 <h1 class="MyPageHdr">Pay Invoices</h1>
@@ -34,6 +35,7 @@
         <li><a href="#" onclick="changeIframeSrc('https://www.zeffy.com/donation-form/annual-per-capita');document.getElementById('hiddenDiv').style.display = 'block'">Annual Per Capita</a></li>
         <li><a href="#" onclick="changeIframeSrc('https://www.zeffy.com/donation-form/liability-insurance');document.getElementById('hiddenDiv').style.display = 'block'">Liability Insurance</a></li>
         <li><a href="#" onclick="changeIframeSrc('https://www.zeffy.com/donation-form/pennies-for-heaven');document.getElementById('hiddenDiv').style.display = 'block'">Pennies For Heaven</a></li>
+        <li><a href="#" onclick="changeIframeSrc('https://www.zeffy.com/en-US/donation-form/lamb--1882');document.getElementById('hiddenDiv').style.display = 'block'">LAMB 1882</a></li>
     </ul>
     <div id="hiddenDiv" style="position:relative;overflow:hidden;height:800px;width:100%;">
         <iframe id="zeffyiFrame" title='Donation form powered by Zeffy' style='position: absolute; border: 0; top:0;left:0;bottom:0;right:0;width:100%;height:100%' src='https://www.zeffy.com/donation-form/annual-per-capita' allowpaymentrequest allowTransparency="true"></iframe>
