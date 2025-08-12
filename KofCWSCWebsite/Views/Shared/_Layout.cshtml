@@ -377,8 +377,8 @@
                                 }
                                 @if (User.IsInRole("Admin") || User.IsInRole("CalAdmin"))
                                 {
-                                <li><a class="dropdown-item MyMenuLink" asp-area="" asp-controller="Calendar" asp-action="ViewCalendar" asp-route-id="0">Calendar - LocalAPI(future)</a></li>
-                                <li><a class="dropdown-item MyMenuLink" asp-area="" asp-controller="Calendar" asp-action="ViewCalendar" asp-route-id="1">Calendar - CORSAPI(future)</a></li>
+                                <li><a class="dropdown-item MyMenuLink" asp-area="" asp-controller="Calendar" asp-action="ViewCalendar" asp-route-id="">Calendar</a></li>
+                                @*<li><a class="dropdown-item MyMenuLink" asp-area="" asp-controller="Calendar" asp-action="ViewCalendar" asp-route-id="1">Calendar - CORSAPI(future)</a></li>*@
                                 <li><a class="dropdown-item MyMenuLink" asp-area="" asp-controller="Csv" asp-action="UploadNecrologyS" asp-route-id="0">Import Necrology Data</a></li>
                                 <li><a class="dropdown-item MyMenuLink" asp-area="" asp-controller="NecImpNecrologies" asp-action="Index" asp-route-id="0">Manage Necrology Data</a></li>
                                 <li><hr class="dropdown-divider"></li>

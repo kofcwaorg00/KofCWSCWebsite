@@ -1,5 +1,6 @@
 ﻿using KofCWSCWebsite.Data;
 using KofCWSCWebsite.Models;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 
@@ -16,6 +17,7 @@ namespace KofCWSCWebsite.Controllers
             _context = context;
         }
 
+        
         [HttpGet("Events")]
         public async Task<IActionResult> GetEvents()
         {
@@ -41,6 +43,7 @@ namespace KofCWSCWebsite.Controllers
             return Ok(events);
         }
 
+        [Authorize(Roles = "Admin,CalAdmin")]
         [HttpPost("Event")]
         public async Task<IActionResult> CreateEvent([FromBody] CalendarEvent ev)
         {
@@ -49,6 +52,7 @@ namespace KofCWSCWebsite.Controllers
             return Ok(ev);
         }
 
+        [Authorize(Roles = "Admin,CalAdmin")]
         [HttpPut("Event/{id}")]
         public async Task<IActionResult> UpdateEvent(int id, [FromBody] CalendarEvent ev)
         {
@@ -65,6 +69,7 @@ namespace KofCWSCWebsite.Controllers
             return Ok(existing);
         }
 
+        [Authorize(Roles = "Admin,CalAdmin")]
         [HttpDelete("Event/{id}")]
         public async Task<IActionResult> DeleteEvent(int id)
         {

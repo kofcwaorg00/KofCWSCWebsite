@@ -61,7 +61,7 @@
                             <label class="form-check-label" for="eventAllDay">All Day</label>
                         </div>
                     </div>
-                    <div class="modal-footer">
+                    <div class="modal-footer" id="SDButtons">
                         <button type="submit" class="btn btn-primary" id="saveEventBtn">Save</button>
                         <button type="button" class="btn btn-danger" id="deleteEventBtn" style="display: none;">Delete</button>
                     </div>
@@ -109,7 +109,8 @@
         const apiBaseUrl = '@ViewBag.ApiBaseUrl';
         let calendar;
         let selectedInfo = null;
-        alert(apiBaseUrl);
+        const canEdit = '@ViewBag.CanEdit';
+        //alert(apiBaseUrl);
         document.addEventListener('DOMContentLoaded', function () {
             const calendarEl = document.getElementById('calendar');
 
@@ -174,6 +175,11 @@
                 //},
 
                 select: function (info) {
+                    //alert('in select'+canEdit);
+                    if (canEdit === 'False') {
+                        alert("You do not have permissions to add an event");
+                        return;
+                    }
                     //alert("new item click");
                     //alert(info.start + ' and ' + info.end);
 
@@ -192,7 +198,14 @@
                 },
 
                 eventClick: function (info) {
-                    
+                    //alert('in event click ' + canEdit);
+                    const sdButtons = document.getElementById('SDButtons');
+
+                    if (canEdit === 'False') {
+                        sdButtons.style.display = 'none'; // Hides the element
+                    } else {
+                        sdButtons.style.display = 'block'; // Shows the element
+                    }
                     selectedInfo = null;
                     const event = info.event;
                     //alert(event.allDay + ' from select function');
@@ -217,10 +230,15 @@
                 },
 
                 eventDrop: function (info) {
+                    //alert('in event drop' + canEdit);
+                    if (canEdit === 'False') {
+                        alert("You do not have permission to drag/drop an event.")
+                    }
                     updateEvent(info.event);
                 },
 
                 eventResize: function (info) {
+                    //alert('in resize '+canEdit);
                     updateEvent(info.event);
                 }
             });
@@ -238,6 +256,7 @@
             }
 
             function updateEvent(event) {
+                //alert(canEdit);
                 fetch(`${apiBaseUrl}/Event/${event.id}`, {
                     method: 'PUT',
                     headers: { 'Content-Type': 'application/json' },
@@ -326,6 +345,11 @@
             });
 
             document.getElementById('deleteEventBtn').addEventListener('click', function () {
+                //alert('in delete ' + canEdit);
+                if (canEdit === 'False') {
+                    alert("You do not have permissions to delete an event");
+                    return;
+                }
                 const id = document.getElementById('eventId').value;
                 if (!id) return;
 
