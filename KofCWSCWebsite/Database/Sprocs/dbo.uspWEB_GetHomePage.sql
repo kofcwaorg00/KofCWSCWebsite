@@ -83,7 +83,7 @@ BEGIN
 	GETDATE() as PostedDate,
 	0 as Expired
 FROM tblCAL_trxEvents
-WHERE StartDateTime > GETDATE()
+WHERE StartDateTime >= CAST(GETDATE() AS DATE)
 ORDER BY StartDateTime ASC
     SELECT   *
     FROM     #HomeData

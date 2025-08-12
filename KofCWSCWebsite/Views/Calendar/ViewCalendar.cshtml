@@ -181,7 +181,8 @@
                 select: function (info) {
                     //alert('in select'+canEdit);
                     if (canEdit === 'False') {
-                        alert("You do not have permissions to add an event");
+                        //alert("You do not have permissions to add an event");
+                        showPermMess();
                         return;
                     }
                     //alert("new item click");
@@ -236,7 +237,8 @@
                 eventDrop: function (info) {
                     //alert('in event drop' + canEdit);
                     if (canEdit === 'False') {
-                        alert("You do not have permission to drag/drop an event.")
+                        showPermMess();
+                        //alert("You do not have permission to drag/drop an event.")
                     }
                     updateEvent(info.event);
                 },
@@ -351,7 +353,8 @@
             document.getElementById('deleteEventBtn').addEventListener('click', function () {
                 //alert('in delete ' + canEdit);
                 if (canEdit === 'False') {
-                    alert("You do not have permissions to delete an event");
+                    //alert("You do not have permissions to delete an event");
+                    showPermMess();
                     return;
                 }
                 const id = document.getElementById('eventId').value;
@@ -372,6 +375,24 @@
             return params.get(name);
         }
 
+        function showPermMess() {
+                const alertMessage = `
+    Prior permission is required to add, modify, or delete calendar events. 
+    Please login, or contact <a href="https://kofc-wa.org/ContactUs?MessageRecipient=Website:%20Technical%20Support" target="_blank" style="color: #007bff; text-decoration: underline;">support</a> for help.
+  `;
 
+                const alertDiv = document.createElement('div');
+                alertDiv.innerHTML = alertMessage;
+                alertDiv.style.backgroundColor = '#f8d7da';
+                alertDiv.style.color = '#721c24';
+                alertDiv.style.padding = '10px';
+                alertDiv.style.border = '1px solid #f5c6cb';
+                alertDiv.style.borderRadius = '5px';
+                alertDiv.style.marginBottom = '15px';
+
+                // Insert the alert above the calendar
+                const calendarEl = document.getElementById('calendar');
+                calendarEl.parentNode.insertBefore(alertDiv, calendarEl);
+            }
     </script>
 </div>
