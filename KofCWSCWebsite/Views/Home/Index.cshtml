@@ -21,7 +21,42 @@
         </a>
     }
 
+    @* Calendar of Events section*@
+    <div class="offcanvas offcanvas-start" tabindex="-1" id="EventsPanel" aria-labelledby="offcanvasExampleLabel">
+        <div class="offcanvas-header">
+            <h5 class="offcanvas-title" id="offcanvasExampleLabel">Calendar Events</h5>
+            <button type="button" class="btn-close text-reset" data-bs-dismiss="offcanvas" aria-label="Close"></button>
+        </div>
+        <div style="margin-left:20px">
+            @foreach (var item in Model)
+            {
+                DateTime ANDate = DateTime.Now;
+                if (item.Type == "CA")
+                {
+                    ANDate = item.PostedDate;
+                    <span style="font-size:small;color:lightgray">Last Updated @ANDate.ToShortDateString()</span>
+                    <hr />
+                    break;
+                }
+            }
+        </div>
+        <div class="offcanvas-body">
+            @* Begin Of Interest Loop *@
+            @foreach (var item in Model)
+            {
+                if (item.Type == "CA")
+                {
 
+                    <div style="width:100%;text-align:left">
+                        @Html.ActionLink($"{@item.TagLine} - {@item.Title}", "ViewCalendar", "Calendar")
+                    </div>
+                    <hr />
+                }
+            }
+
+            @* End Of Interest Loop *@
+        </div>
+    </div>
     @* Announcements card section *@
     <div class="offcanvas offcanvas-start" tabindex="-1" id="AnnouncementPanel" aria-labelledby="offcanvasExampleLabel">
         <div class="offcanvas-header">
@@ -153,6 +188,11 @@
                 <a title="Instagram" href="https://www.instagram.com/kofcwashington" target="_blank">
                     <img src="~/images/Instagram_Glyph_Gradient.png" style="width:40px" />
                 </a>
+                <br />
+                <a title="Events" data-bs-toggle="offcanvas" href="#EventsPanel" role="button" aria-controls="offcanvasExample">
+                    <img src="https://cdn-icons-png.flaticon.com/512/747/747310.png" alt="Calendar Icon" width="40">
+                </a>
+                
             </div>
         </div>
     </div>

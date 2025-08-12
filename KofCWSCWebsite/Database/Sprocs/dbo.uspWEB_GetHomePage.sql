@@ -1,4 +1,4 @@
-﻿CREATE PROCEDURE [dbo].[uspWEB_GetHomePage]
+﻿alter PROCEDURE [dbo].[uspWEB_GetHomePage]
 AS
 BEGIN
     CREATE TABLE #HomeData (
@@ -63,6 +63,27 @@ BEGIN
            ON cmol.OfficeID = vo.OfficeID
     WHERE  Processed = 0
            AND vo.ExchangeMailType = 'DistributionList';
+    INSERT INTO #HomeData
+    SELECT top(15)
+	'' as Photo,
+	'' as Email,
+	'' as FullName,
+	'' as OfficeDescription,
+	FORMAT(StartDateTime,'MM/dd/yyyy') as TagLine,
+	Description as Data,
+	'' as Class,
+	0 as SortOrder,
+	'' as URL,
+	0 as OID,
+	'CA' as Type,
+	Title as Title,
+	'' as GraphicURL,
+	'' as LinkUrl,
+	GETDATE() as PostedDate,
+	0 as Expired
+FROM tblCAL_trxEvents
+WHERE StartDateTime > GETDATE()
+ORDER BY StartDateTime DESC
     SELECT   *
     FROM     #HomeData
     ORDER BY PostedDate DESC;
