@@ -157,3 +157,21 @@ body {
     color: #007bff; /* Blue color */
     font-size: 1.2em;
 }
+.logo-desktop {
+    display: block;
+}
+
+.logo-mobile {
+    display: none;
+}
+
+@media (max-width: 768px) {
+    .logo-desktop {
+        display: none;
+    }
+
+    .logo-mobile {
+        display: block;
+    }
+}
+
