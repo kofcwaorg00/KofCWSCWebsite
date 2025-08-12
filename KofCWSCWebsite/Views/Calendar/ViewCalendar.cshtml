@@ -110,12 +110,16 @@
         let calendar;
         let selectedInfo = null;
         const canEdit = '@ViewBag.CanEdit';
+
+        const initDate = getQueryParam("initdate");
+
         //alert(apiBaseUrl);
         document.addEventListener('DOMContentLoaded', function () {
             const calendarEl = document.getElementById('calendar');
 
             calendar = new FullCalendar.Calendar(calendarEl, {
                 initialView: 'dayGridMonth',
+                initialDate: initDate,
                 selectable: true,
                 editable: true,
                 //height: 700,
@@ -363,5 +367,11 @@
                 }
             });
         });
+        function getQueryParam(name) {
+            const params = new URLSearchParams(window.location.search);
+            return params.get(name);
+        }
+
+
     </script>
 </div>

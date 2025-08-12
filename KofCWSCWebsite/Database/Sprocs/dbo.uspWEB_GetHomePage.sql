@@ -69,7 +69,8 @@ BEGIN
 	'' as Email,
 	'' as FullName,
 	'' as OfficeDescription,
-	FORMAT(StartDateTime,'MM/dd/yyyy') as TagLine,
+    CONVERT(VARCHAR(10), CONVERT(DATE,StartDateTime,101), 120) as TagLine,
+	--FORMAT(StartDateTime,'MM/dd/yyyy') as TagLine,
 	Description as Data,
 	'' as Class,
 	0 as SortOrder,
@@ -83,7 +84,7 @@ BEGIN
 	0 as Expired
 FROM tblCAL_trxEvents
 WHERE StartDateTime > GETDATE()
-ORDER BY StartDateTime DESC
+ORDER BY StartDateTime ASC
     SELECT   *
     FROM     #HomeData
     ORDER BY PostedDate DESC;

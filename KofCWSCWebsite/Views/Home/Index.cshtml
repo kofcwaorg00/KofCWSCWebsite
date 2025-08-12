@@ -48,7 +48,7 @@
                 {
 
                     <div style="width:100%;text-align:left">
-                        @Html.ActionLink($"{@item.TagLine} - {@item.Title}", "ViewCalendar", "Calendar")
+                        @Html.ActionLink($"{@item.TagLine} - {@item.Title}", "ViewCalendar", "Calendar",new { initdate = item.TagLine },null)
                     </div>
                     <hr />
                 }
