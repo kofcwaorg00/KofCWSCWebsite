@@ -7,7 +7,7 @@
         <h2>@ViewData["Title"]</h2>
 
     </div>
-    
+
     <div id="calendar"></div>
     <!-- Modal for Add/Edit Event -->
     <div class="modal fade" id="addEventModal" tabindex="-1" aria-labelledby="addEventModalLabel" aria-hidden="true">
@@ -194,7 +194,7 @@
                     document.getElementById('eventEndTime').value = formatDateTimeLocal(info.end);
                     document.getElementById('eventStartDate').value = formatDateOnly(info.start);
                     document.getElementById('eventEndDate').value = formatDateOnly(info.end);
-                    
+
                     document.getElementById('eventAllDay').checked = info.allDay;
                     toggleDateTimeFields(info.allDay);
 
@@ -376,12 +376,18 @@
         }
 
         function showPermMess() {
+                const existingAlert = document.getElementById('calendar-permission-alert');
+                if (existingAlert) {
+                    existingAlert.remove(); // Clear previous alert
+                }
+
                 const alertMessage = `
-    Prior permission is required to add, modify, or delete calendar events. 
+    Prior permission is required to add, modify, or delete calendar events.
     Please login, or contact <a href="https://kofc-wa.org/ContactUs?MessageRecipient=Website:%20Technical%20Support" target="_blank" style="color: #007bff; text-decoration: underline;">support</a> for help.
   `;
 
                 const alertDiv = document.createElement('div');
+                alertDiv.id = 'calendar-permission-alert'; // Unique ID for easy removal
                 alertDiv.innerHTML = alertMessage;
                 alertDiv.style.backgroundColor = '#f8d7da';
                 alertDiv.style.color = '#721c24';
@@ -390,9 +396,25 @@
                 alertDiv.style.borderRadius = '5px';
                 alertDiv.style.marginBottom = '15px';
 
-                // Insert the alert above the calendar
                 const calendarEl = document.getElementById('calendar');
                 calendarEl.parentNode.insertBefore(alertDiv, calendarEl);
+  //////////              const alertMessage = `
+  //////////  Prior permission is required to add, modify, or delete calendar events.
+  //////////  Please login, or contact <a href="https://kofc-wa.org/ContactUs?MessageRecipient=Website:%20Technical%20Support" target="_blank" style="color: #007bff; text-decoration: underline;">support</a> for help.
+  //////////`;
+
+  //////////              const alertDiv = document.createElement('div');
+  //////////              alertDiv.innerHTML = alertMessage;
+  //////////              alertDiv.style.backgroundColor = '#f8d7da';
+  //////////              alertDiv.style.color = '#721c24';
+  //////////              alertDiv.style.padding = '10px';
+  //////////              alertDiv.style.border = '1px solid #f5c6cb';
+  //////////              alertDiv.style.borderRadius = '5px';
+  //////////              alertDiv.style.marginBottom = '15px';
+
+  //////////              // Insert the alert above the calendar
+  //////////              const calendarEl = document.getElementById('calendar');
+  //////////              calendarEl.parentNode.insertBefore(alertDiv, calendarEl);
             }
     </script>
 </div>
