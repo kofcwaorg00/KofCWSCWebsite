@@ -201,13 +201,14 @@ namespace KofCWSCWebsite.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> EditInt(int id, [Bind("Url,Data,OID")] TblWebSelfPublish tblWebSelfPublish)
         {
-            if (id != tblWebSelfPublish.OID)
-            {
-                return NotFound();
-            }
+            // since we are using Url as the unique id, id may not be sent here but OID will always be correct
+            //if (id != tblWebSelfPublish.OID)
+            //{
+            //    return NotFound();
+            //}
             if (ModelState.IsValid)
             {
-                Uri myURI = new(_dataSetService.GetAPIBaseAddress() + "/SelfPubInt/" + id);
+                Uri myURI = new(_dataSetService.GetAPIBaseAddress() + $"/SelfPubInt/{tblWebSelfPublish.OID}" );
                 try
                 {
                     using (var client = new HttpClient())
@@ -224,7 +225,8 @@ namespace KofCWSCWebsite.Controllers
                 }
                 Log.Information("Update Success Message ID " + id);
             }
-            return RedirectToAction(nameof(Index));
+            //return RedirectToAction(nameof(Index));
+            return View("Edit", tblWebSelfPublish);
         }
 
 
