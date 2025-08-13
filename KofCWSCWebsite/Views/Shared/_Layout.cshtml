@@ -43,43 +43,68 @@
         <script src="~/js/calendar.js" asp-append-version="true"></script>*@
     @*************************************************************************************************@
     <link rel="icon" type="image/x-icon" href="./favicon.ico" />
-    <style>
+    @*<style>
         .grid-container {
             /*border: solid;*/
             display: grid;
-            grid-template-columns: 250px 1fr 500px auto auto;
+            grid-template-columns: auto auto auto auto auto;
             align-items: center;
             gap: 10px; /* Optional spacing */
             align-items: center; /* Vertically center items */
         }
-        .grid-item{
+
+        .grid-item {
             /*border:solid;*/
         }
+
         .search-section {
             display: flex;
             align-items: center;
             gap: 10px; /* spacing between icon and search box */
         }
-        .search-section .gcse-search{
-            flex-grow: 1;
-            width: 100%;
-        }
+
+            .search-section .gcse-search {
+                flex-grow: 1;
+                width: 100%;
+            }
+
         .gcse-search {
-            max-width:100% !important;
+            max-width: 100% !important;
             box-sizing: border-box;
         }
+
         .grid-container .grid-item:nth-last-child(2) {
-            min-width: 250px;
+            min-width: 150px;
         }
-    </style>
+    </style>*@
 
 </head>
 <body>
+    @*<div class="grid-container">
+        <div class="grid-item">
+            Item 1
+        </div>
+        <div class="grid-item">
+            Item 2
+        </div>
+        <div class="grid-item">
+            Item 3
+        </div>
+        <div class="grid-item">
+            Item 4
+        </div>
+        <div class="grid-item">
+            Item 5
+        </div>
+    </div>*@
     <div class="grid-container">
-        <div class="grid-item"><a href="/">
-    <img src="/images/LOGO-WA1.jpg" class="logo-desktop" alt="Logo" width="250" height="100" />
-    <img src="/images/LOGO-WA1V.png" class="logo-mobile" alt="Mobile Logo" width="100" />
-</a></div>
+
+        <div class="grid-item">
+            <a href="/">
+                <img src="/images/LOGO-WA1.jpg" class="logo-desktop" alt="Logo" width="250" height="100" />
+                <img src="/images/LOGO-WA1V.png" class="logo-mobile" alt="Mobile Logo" width="100" />
+            </a>
+        </div>
         <div class="grid-item">
             <div style="justify-self:end">
                 <a asp-controller="Calendar" asp-action="ViewCalendar" title="View Calendar">
@@ -88,7 +113,6 @@
             </div>
         </div>
         <div class="grid-item">
-
             <div class="gcse-search"></div>
         </div>
         <partial name="_LoginPartial" />
