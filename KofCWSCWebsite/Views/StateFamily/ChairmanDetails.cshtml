@@ -49,30 +49,29 @@
             </td>
         </tr>
         <tr>
-
-            @{
-                var mysrcURL = Context.Request.GetEncodedUrl();
-                var mydestURL = Utils.GetString(Html.Raw(item.SupremeURL));
-                var host = Context.Request.Host.Value;
-                var myTransURL = "https://" + host + "/" + "TransferToSupreme?srcURL=" + mysrcURL + "&destURL=" + mydestURL;
-            }
-            @{
-                if (string.IsNullOrEmpty(mydestURL))
-                {
-                    <text>
-                        <td colspan="3">@Html.Raw(item.Data)</td>
-                    </text>
-
-                }
-                else
-                {
-                    <text>
-                        <td colspan="3"><a href="@myTransURL">Supreme Resources</a></td>
-                    </text>
-                }
-            }
-
+            <td colspan="3">@Html.Raw(item.Data)</td>
         </tr>
+        @{
+            var mysrcURL = Context.Request.GetEncodedUrl();
+            var mydestURL = Utils.GetString(Html.Raw(item.SupremeURL));
+            var host = Context.Request.Host.Value;
+            var myTransURL = "https://" + host + "/" + "TransferToSupreme?srcURL=" + mysrcURL + "&destURL=" + mydestURL;
+        }
+        @{
+            if (!string.IsNullOrEmpty(mydestURL))
+            {
+                <text>
+                    <tr>
+                        <td colspan="3"><a href="@myTransURL">Supreme Resources</a></td>
+                    </tr>
+                </text>
+
+            }
+        }
+
+        @*<tr>
+                <td colspan="3"><a href="@myTransURL">Supreme Resources</a></td>
+            </tr>*@
     </table>
     @if (User.IsInRole("Admin") || User.IsInRole("StateChairman"))
     {
