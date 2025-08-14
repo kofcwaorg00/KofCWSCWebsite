@@ -1,27 +1,36 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
+﻿using Azure.Communication.Email;
+using KofCWSC.API.Models;
+using KofCWSCWebsite.Areas.Identity.Data;
+using KofCWSCWebsite.Data;
+using KofCWSCWebsite.Models;
+using Microsoft.AspNetCore.Identity;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
-using KofCWSCWebsite.Data;
-using KofCWSCWebsite.Models;
-using Serilog;
-using static com.sun.net.httpserver.Authenticator;
-using Microsoft.AspNetCore.Authorization;
 using Newtonsoft.Json;
+using Serilog;
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Threading.Tasks;
+using static com.sun.net.httpserver.Authenticator;
+using KofCWSCWebsite.Services;
 namespace KofCWSCWebsite.Controllers
 {
     public class EmailOfficesController : Controller
     {
         private readonly IConfiguration _configuration;
         private DataSetService _dataSetService;
+        private ApiHelper _apiHelper;
+        private readonly UserManager<KofCUser> _userManager;
 
-        public EmailOfficesController(IConfiguration configuration, DataSetService dataSetService)
+        public EmailOfficesController(IConfiguration configuration, DataSetService dataSetService,ApiHelper apiHelper,UserManager<KofCUser> userManager)
         {
             _configuration = configuration;
             _dataSetService = dataSetService;
+            _apiHelper = apiHelper;
+            _userManager = userManager;
         }
 
         // GET: EmailOffices
@@ -99,8 +108,32 @@ namespace KofCWSCWebsite.Controllers
 
         // GET: EmailOffices/Create
         [Authorize(Roles = "Admin,StateOfficer,StateChairman")]
-        public IActionResult Create()
+        public async Task<ActionResult> Create()
         {
+            // Need the user KofCID
+            var userId = User.Identity.Name;
+            var user = await _userManager.FindByIdAsync(userId);
+            int KofCID = await Utils.GetUserProp<int>(User, _userManager, "KofCMemberID");
+            KofCID = 4391334;
+            // fetch the list of return email addresses
+            var returnEmails = await _apiHelper.GetAsync<List<SendToEmailAddress>>($"GetEmailSendTo/{KofCID}/0");
+            ViewBag.ListOfEmails = new List<SelectListItem>
+            {
+                new SelectListItem
+                {
+                    Value = "",
+                    Text = "Select a Return Email Address"
+                }
+            }
+             .Concat(returnEmails.Select(e =>
+             {
+                 return new SelectListItem
+                 {
+                     Value = e.Email,
+                     Text = e.Email
+                 };
+             })).ToList();
+            //ViewBag.returnEmails = returnEmails;
             return View();
         }
 

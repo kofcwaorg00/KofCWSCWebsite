@@ -50,8 +50,9 @@
                     <span asp-validation-for="@Model.Subject" class="text-danger"></span>
                 </div>
                 <div class="form-floating mb-3">
-                    <input asp-for="@Model.From" class="form-control" autocomplete="off" aria-required="true" placeholder="Tom" />
-                    <label asp-for="@Model.From">From (i.e. StateDeputy@kofc-wa.org</label>
+                    @*<input asp-for="@Model.From" class="form-control" autocomplete="off" aria-required="true" placeholder="Tom" />*@
+                    @*<label asp-for="@Model.From"></label>*@
+                    <select asp-for="@Model.From" class="form-control" asp-items="ViewBag.ListOfEmails"></select>
                     <span asp-validation-for="@Model.From" class="text-danger"></span>
                 </div>
                 <div class="form-floating mb-3">

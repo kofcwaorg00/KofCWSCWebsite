@@ -1,9 +1,9 @@
-﻿alter PROCEDURE uspSYS_GetEmailAddrForBulkSendTo
+﻿create PROCEDURE uspSYS_GetEmailAddrForBulkSendTo
 @KofCID INT,@NextYear int = 0
 
 AS
 
--- exec uspSYS_GetEmailAddrForBulkSendTo 4533459,0-- 2332439-- 5055438 
+-- exec uspSYS_GetEmailAddrForBulkSendTo 5055438,0-- 2332439-- 5055438 
 --select * from tbl_MasMembers where lastname like '%dunn%'
 --select * from tbl_ValOffices where OfficeDescription like '%communic%'
 
