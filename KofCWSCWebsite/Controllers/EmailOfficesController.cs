@@ -114,7 +114,6 @@ namespace KofCWSCWebsite.Controllers
             var userId = User.Identity.Name;
             var user = await _userManager.FindByIdAsync(userId);
             int KofCID = await Utils.GetUserProp<int>(User, _userManager, "KofCMemberID");
-            KofCID = 4391334;
             // fetch the list of return email addresses
             var returnEmails = await _apiHelper.GetAsync<List<SendToEmailAddress>>($"GetEmailSendTo/{KofCID}/0");
             ViewBag.ListOfEmails = new List<SelectListItem>
