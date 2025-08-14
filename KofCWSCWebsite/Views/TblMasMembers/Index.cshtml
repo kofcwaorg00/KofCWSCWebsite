@@ -5,8 +5,8 @@
     ViewData["Title"] = "Manage Members";
 }
 <style>
-    .container{
-        margin-left:50px!important;
+    .container {
+        margin-left: 50px !important;
     }
 </style>
 <h1>Manage Members</h1>
@@ -43,9 +43,9 @@
             <th style="width:100px">
                 @Html.DisplayNameFor(model => model.FirstName)
             </th>
-            @* <th>
-        @Html.DisplayNameFor(model => model.Mi)
-        </th> *@
+            <th style="width:25px">
+                @Html.DisplayNameFor(model => model.MI)
+            </th>
             <th style="width:100px">
                 @Html.DisplayNameFor(model => model.LastName)
             </th>
@@ -80,8 +80,8 @@
         @foreach (var item in Model)
         {
             bool myBDec = item.Deceased ?? false;
-            
-                string myDec = myBDec == true ? "background-color:red;color:white" : "";
+
+            string myDec = myBDec == true ? "background-color:red;color:white" : "";
 
             <tr>
                 @if (User.IsInRole("Admin") || User.IsInRole("DataAdmin"))
@@ -116,9 +116,9 @@
                 <td>
                     @Html.DisplayFor(modelItem => item.FirstName)
                 </td>
-                @*  <td>
-        @Html.DisplayFor(modelItem => item.Mi)
-        </td> *@
+                <td>
+                    @Html.DisplayFor(modelItem => item.MI)
+                </td>
                 <td>
                     @Html.DisplayFor(modelItem => item.LastName)
                 </td>
@@ -138,14 +138,14 @@
                     @Html.DisplayFor(modelItem => item.Phone)
                 </td>
                 @*  <td>
-        @Html.DisplayFor(modelItem => item.WifesName)
-        </td>
-        <td>
-        @Html.DisplayFor(modelItem => item.Council)
-        </td>
-        <td>
-        @Html.DisplayFor(modelItem => item.Assembly)
-        </td> *@
+                    @Html.DisplayFor(modelItem => item.WifesName)
+                    </td>
+                    <td>
+                    @Html.DisplayFor(modelItem => item.Council)
+                    </td>
+                    <td>
+                    @Html.DisplayFor(modelItem => item.Assembly)
+                    </td> *@
                 <td>
                     @Html.DisplayFor(modelItem => item.Email)
                 </td>
@@ -169,7 +169,7 @@
                     <td>
                         <form asp-controller="TblMasMembers" asp-action="Delete" asp-route-id="@item.MemberId" method="get">
                             <button type="submit" class="btn btn-sm btn-danger">
-                               Delete
+                                Delete
                             </button>
                         </form>
 
@@ -177,28 +177,28 @@
                     <td>
                         <form asp-controller="Users" asp-action="EditPhoto" asp-route-id="@item.KofCid" method="get">
                             <button type="submit">
-                                @Html.Raw(@Utils.GetPicImage(item.ProfilePictureURL, 21, 25, $"{item.FirstName} {item.LastName}",item.KofCid,User))
+                                @Html.Raw(@Utils.GetPicImage(item.ProfilePictureURL, 21, 25, $"{item.FirstName} {item.LastName}", item.KofCid, User))
                                 @*@{
-            string mytitle = string.Empty;
-            string myPicURL = Utils.ProcessPicURL(item.ProfilePictureURL);
-            if (myPicURL.Contains("A"))
-            {
-                mytitle = "Picture does not exist. Upload to Profile or Local wwwroot";
-            }
-            else if (myPicURL.Contains("missing"))
-            {
-                mytitle = "Picture is not in Member's Profile";
-            }
-            else
-            {
-                mytitle = $"{item.FirstName} {item.LastName}";
-            }
-        }
-            <img src="@myPicURL"
-                 alt="Profile Picture"
-                 class="card-img-top"
-                 title="@mytitle"
-                 style="width: 21px; height:25px; object-fit: cover; background-color:white" />*@
+                                        string mytitle = string.Empty;
+                                        string myPicURL = Utils.ProcessPicURL(item.ProfilePictureURL);
+                                        if (myPicURL.Contains("A"))
+                                        {
+                                            mytitle = "Picture does not exist. Upload to Profile or Local wwwroot";
+                                        }
+                                        else if (myPicURL.Contains("missing"))
+                                        {
+                                            mytitle = "Picture is not in Member's Profile";
+                                        }
+                                        else
+                                        {
+                                            mytitle = $"{item.FirstName} {item.LastName}";
+                                        }
+                                    }
+                                        <img src="@myPicURL"
+                                             alt="Profile Picture"
+                                             class="card-img-top"
+                                             title="@mytitle"
+                                             style="width: 21px; height:25px; object-fit: cover; background-color:white" />*@
 
                             </button>
                         </form>
