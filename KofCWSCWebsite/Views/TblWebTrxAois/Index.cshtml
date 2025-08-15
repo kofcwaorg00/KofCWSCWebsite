@@ -45,20 +45,20 @@ else
                     </div>
                 </th>
                 @*<th>
-                        <div style="width:250px">
-                            @Html.DisplayNameFor(model => model.GraphicUrl)
-                        </div>
-                    </th>*@
+            <div style="width:250px">
+                @Html.DisplayNameFor(model => model.GraphicUrl)
+            </div>
+        </th>*@
                 @*<th>
-                        <div style="width:30%">
-                            @Html.DisplayNameFor(model => model.Text)
-                        </div>
-                    </th>*@
+            <div style="width:30%">
+                @Html.DisplayNameFor(model => model.Text)
+            </div>
+        </th>*@
                 @*<th>
-                        <div style="width:20%">
-                            @Html.DisplayNameFor(model => model.LinkUrl)
-                        </div>
-                    </th>*@
+            <div style="width:20%">
+                @Html.DisplayNameFor(model => model.LinkUrl)
+            </div>
+        </th>*@
                 <th class="MyColHdr">
                     <div style="width:30%">
                         @Html.DisplayNameFor(model => model.PostedDate)
@@ -67,6 +67,11 @@ else
                 <th class="MyColHdr">
                     <div style="width:10%">
                         @Html.DisplayNameFor(model => model.Expired)
+                    </div>
+                </th>
+                <th class="MyColHdr">
+                    <div style="width:10%">
+                        @Html.DisplayNameFor(model => model.ExpirationDate)
                     </div>
                 </th>
                 <th class="MyColHdr"></th>
@@ -89,20 +94,20 @@ else
                         </div>
                     </td>
                     @*<td>
-                            <div style="width:250px">
-                                @Html.DisplayFor(modelItem => item.GraphicUrl)
-                            </div>
-                        </td>*@
+            <div style="width:250px">
+                @Html.DisplayFor(modelItem => item.GraphicUrl)
+            </div>
+        </td>*@
                     @*<td>
-                            <div style="width:30%">
-                                @Html.DisplayFor(modelItem => item.Text)
-                            </div>
-                        </td>*@
+            <div style="width:30%">
+                @Html.DisplayFor(modelItem => item.Text)
+            </div>
+        </td>*@
                     @*<td>
-                            <div style="width:20%">
-                                @Html.DisplayFor(modelItem => item.LinkUrl)
-                            </div>
-                        </td>*@
+            <div style="width:20%">
+                @Html.DisplayFor(modelItem => item.LinkUrl)
+            </div>
+        </td>*@
                     <td>
                         <div style="width:10%">
                             @Html.DisplayFor(modelItem => item.PostedDate)
@@ -111,6 +116,11 @@ else
                     <td>
                         <div style="width:10%">
                             @Html.DisplayFor(modelItem => item.Expired)
+                        </div>
+                    </td>
+                    <td>
+                        <div style="width:10%">
+                            @Html.DisplayFor(modelItem => item.ExpirationDate)
                         </div>
                     </td>
                     <td style="padding-right:0px">

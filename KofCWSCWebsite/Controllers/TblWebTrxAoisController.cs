@@ -76,7 +76,7 @@ namespace KofCWSCWebsite.Controllers
         [Authorize(Roles = "Admin,AOIAdmin")]
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("Id,Type,Title,GraphicUrl,Text,LinkUrl,PostedDate,Expired")] TblWebTrxAoi tblWebTrxAoi)
+        public async Task<IActionResult> Create([Bind("Id,Type,Title,GraphicUrl,Text,LinkUrl,PostedDate,Expired,ExpirationDate")] TblWebTrxAoi tblWebTrxAoi)
         {
             if (ModelState.IsValid)
             {
@@ -134,7 +134,7 @@ namespace KofCWSCWebsite.Controllers
         [Authorize(Roles = "Admin,AOIAdmin")]
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("Id,Type,Title,GraphicUrl,Text,LinkUrl,PostedDate,Expired")] TblWebTrxAoi tblWebTrxAoi)
+        public async Task<IActionResult> Edit(int id, [Bind("Id,Type,Title,GraphicUrl,Text,LinkUrl,PostedDate,Expired,ExpirationDate")] TblWebTrxAoi tblWebTrxAoi)
         {
             if (id != tblWebTrxAoi.Id)
             {
