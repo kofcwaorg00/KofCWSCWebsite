@@ -1,0 +1,18 @@
+﻿@page
+@model SuccessModel
+@{
+    ViewData["Title"] = "Message Sent";
+}
+
+<div class="container mt-5">
+    <div class="card shadow-sm">
+        <div class="card-body text-center">
+            <h2 class="text-success"><i class="fas fa-check-circle"></i> Message Sent Successfully</h2>
+            <p class="lead mt-3">Thank you, @Model.UserName! Your message has been sent to Council #@Model.CouncilNo.</p>
+            <p>We’ll get back to you as soon as possible. If you need to follow up, feel free to contact us again.</p>
+
+            <a asp-page="/Index" class="btn btn-primary mt-4">Return to Home</a>
+            <a asp-page="/Councils/ContactCouncil" class="btn btn-outline-secondary mt-4 ml-2">Send Another Message</a>
+        </div>
+    </div>
+</div>
