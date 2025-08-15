@@ -18,6 +18,7 @@ public partial class TblWebTrxAoi
 
     public string? LinkUrl { get; set; }
 
+    [Display(Name = "Posted Date")]
     public DateTime PostedDate { get; set; }
 
     public bool Expired { get; set; }

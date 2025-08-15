@@ -60,7 +60,7 @@ else
             </div>
         </th>*@
                 <th class="MyColHdr">
-                    <div style="width:30%">
+                    <div style="white-space:nowrap; overflow:hidden;text-overflow:ellipsis; max-width:150px" title="Posted Date">
                         @Html.DisplayNameFor(model => model.PostedDate)
                     </div>
                 </th>
@@ -70,8 +70,9 @@ else
                     </div>
                 </th>
                 <th class="MyColHdr">
-                    <div style="white-space:nowrap; overflow:hidden;text-overflow:ellipsis; max-width:100px" title="Expiration Date">
-                        @Html.DisplayNameFor(model => model.ExpirationDate)
+                    <div style="white-space:nowrap; overflow:hidden;text-overflow:ellipsis; max-width:150px" title="Expiration Date">
+                        @*@Html.DisplayNameFor(model => model.ExpirationDate)*@
+                        Expiration Date
                     </div>
                 </th>
                 <th class="MyColHdr"></th>
