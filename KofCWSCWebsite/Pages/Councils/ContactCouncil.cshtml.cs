@@ -46,7 +46,7 @@ namespace KofCWSCWebsite.Pages.Councils
         public string VPhone { get; set; }
         //-----------------------------------------------------------------------------
         [BindProperty]
-        [Display(Name = "Council Number")]
+        [Display(Name = "Recipient's Council Number")]
         [Required(ErrorMessage = "Please select a council.")]
         public int CouncilNo { get; set; }
         //-----------------------------------------------------------------------------
@@ -131,7 +131,7 @@ namespace KofCWSCWebsite.Pages.Councils
                 Dd = false,
                 Subject = EmailSubject,
                 From  = Email,
-                Body = $"{EmailMessage} (This Email Entry was generated using the Council Contact Form - Name = {VName} - Phone = {VPhone} - Council = {CouncilNo} - SendCopy = {SendCopy})",
+                Body = $"{EmailMessage} (This Email Entry was generated using the Council Contact Form - Name = {VName} - TO = {To} - Phone = {VPhone} - Council = {CouncilNo} - SendCopy = {SendCopy})",
                 DateSent = DateTime.Now
             };
             await _apiHelper.PostAsync<EmailOffice, EmailOffice>("Emails", newEmail);
@@ -147,7 +147,7 @@ namespace KofCWSCWebsite.Pages.Councils
                 new SelectListItem
                 {
                     Value = "",
-                    Text = "Select a Council"
+                    Text = "Select a Recipient's Council"
                 }
             }
             .Concat(iCouncils.Select(c =>

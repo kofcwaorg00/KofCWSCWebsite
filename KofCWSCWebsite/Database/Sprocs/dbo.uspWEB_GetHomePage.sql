@@ -39,7 +39,8 @@ BEGIN
            PostedDate,
            Expired
     FROM   tblWEB_TrxAOI
-    WHERE  Expired <> 1;
+    WHERE  Expired <> 1
+        AND ExpirationDate >= GETDATE();
     INSERT INTO #HomeData
     SELECT '' AS Photo,
            '' AS Email,
