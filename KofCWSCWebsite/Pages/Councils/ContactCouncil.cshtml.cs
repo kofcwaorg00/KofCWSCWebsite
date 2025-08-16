@@ -16,42 +16,49 @@ namespace KofCWSCWebsite.Pages.Councils
         {
             _apiHelper = apiHelper;
         }
+        //-----------------------------------------------------------------------------
         [BindProperty]
         [Display(Name = "From (Your Email)")]
         [Required(ErrorMessage = "Email is required.")]
         [EmailAddress(ErrorMessage = "Please enter a valid email address.")]
-        public string FromUser { get; set; }
-
+        public string Email { get; set; }
+        //-----------------------------------------------------------------------------
+        [BindProperty]
+        [Required]
+        [EmailAddress]
+        [Display(Name = "Confirm Email")]
+        [Compare("Email", ErrorMessage = "Email and confirmation must match.")]
+        public string ConfirmEmail { get; set; }
+        //-----------------------------------------------------------------------------
         [BindProperty]
         public string To { get; set; }
-
+        //-----------------------------------------------------------------------------
         [BindProperty]
         [Display(Name = "Your Name")]
         public string VName { get; set; }
-
+        //-----------------------------------------------------------------------------
         [BindProperty]
         [Display(Name = "Your Phone Number")]
         [Required(ErrorMessage = "Phone number is required.")]
         [RegularExpression(@"^(\+?\d{1,2}\s?)?(\(?\d{3}\)?[\s.-]?)?\d{3}[\s.-]?\d{4}$", ErrorMessage = "Enter a valid phone number.")]
-
         [Phone(ErrorMessage = "Please enter a valid phone number.")]
         public string VPhone { get; set; }
-
+        //-----------------------------------------------------------------------------
         [BindProperty]
         [Display(Name = "Council Number")]
         [Required(ErrorMessage = "Please select a council.")]
         public int CouncilNo { get; set; }
-
+        //-----------------------------------------------------------------------------
         [BindProperty]
         [Display(Name = "Subject")]
         [Required(ErrorMessage = "Email Subject is required.")]
         public string EmailSubject { get; set; }
-        
+        //-----------------------------------------------------------------------------
         [BindProperty]
         [Display(Name = "Message")]
         [Required(ErrorMessage = "Email Message is required.")]
         public string EmailMessage { get; set; }
-
+        //-----------------------------------------------------------------------------
         public List<SelectListItem> CouncilOptions { get; set; }
 
         public List<SelectListItem> RecipientRoles { get; set; }
@@ -100,12 +107,13 @@ namespace KofCWSCWebsite.Pages.Councils
 
                 return Page(); // redisplay with validation errors
             }
-
+            //--------------------------------------------------------------------
+            // 8/15/2025 Tim Philomeno
             // Process form data here (e.g., send email, save to DB)
             // check to see if the selected recipient, gk or fs has an email
             // if not, check to see if the council has a dd and send
             // if not, send to state deputy
-
+            //--------------------------------------------------------------------
             //return RedirectToPage("Success"); // or wherever you want to go
             return RedirectToPage("Success", new { userName = VName, councilNo = CouncilNo });
         }
