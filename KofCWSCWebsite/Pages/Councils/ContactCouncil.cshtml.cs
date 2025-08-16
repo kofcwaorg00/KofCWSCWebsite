@@ -1,3 +1,4 @@
+using Azure.Data.AppConfiguration;
 using Humanizer;
 using KofCWSCWebsite.Data;
 using KofCWSCWebsite.Models;
@@ -59,6 +60,9 @@ namespace KofCWSCWebsite.Pages.Councils
         [Required(ErrorMessage = "Email Message is required.")]
         public string EmailMessage { get; set; }
         //-----------------------------------------------------------------------------
+        [BindProperty]
+        public bool SendCopy { get; set; }
+        //-----------------------------------------------------------------------------
         public List<SelectListItem> CouncilOptions { get; set; }
 
         public List<SelectListItem> RecipientRoles { get; set; }
@@ -113,6 +117,24 @@ namespace KofCWSCWebsite.Pages.Councils
             // check to see if the selected recipient, gk or fs has an email
             // if not, check to see if the council has a dd and send
             // if not, send to state deputy
+            //
+            // if check box is checked make the CC the Sender Email address
+            //--------------------------------------------------------------------
+            // log the email
+            var newEmail = new EmailOffice
+            {
+                All = false,
+                Fs = false,
+                Gk = false,
+                Fn = false,
+                Fc = false,
+                Dd = false,
+                Subject = EmailSubject,
+                From  = Email,
+                Body = $"{EmailMessage} (This Email Entry was generated using the Council Contact Form - Name = {VName} - Phone = {VPhone} - Council = {CouncilNo} - SendCopy = {SendCopy})",
+                DateSent = DateTime.Now
+            };
+            await _apiHelper.PostAsync<EmailOffice, EmailOffice>("Emails", newEmail);
             //--------------------------------------------------------------------
             //return RedirectToPage("Success"); // or wherever you want to go
             return RedirectToPage("Success", new { userName = VName, councilNo = CouncilNo });

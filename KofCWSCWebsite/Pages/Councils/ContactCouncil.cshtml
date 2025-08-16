@@ -55,7 +55,10 @@
                     <textarea asp-for="EmailMessage" class="form-control" rows="5"></textarea>
                     <span asp-validation-for="EmailMessage" class="text-danger"></span>
                 </div>
-
+                <div class="form-check">
+                    <input asp-for="SendCopy" class="form-check-input" />
+                    <label asp-for="SendCopy" class="form-check-label">Send me a copy of this email</label>
+                </div>
                 <br />
                 <div>
                     <button type="submit" class="btn btn-primary">Submit</button>
